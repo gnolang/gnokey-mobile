@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { logedOut, useAppDispatch } from "@gno/redux";
 import Button from "@gno/components/button";
-import useOnboarding from "@gno/hooks/use-onboarding";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import Layout from "@gno/components/layout";
 import { LoadingModal } from "@gno/components/loading";
 import { AccountBalance } from "@gno/components/settings";
 import Text from "@gno/components/text";
 import { useSearch } from "@gno/hooks/use-search";
+import { onboarding } from "redux/features/signupSlice";
 
 export default function Page() {
   const [activeAccount, setActiveAccount] = useState<KeyInfo | undefined>(undefined);
@@ -23,8 +23,6 @@ export default function Page() {
   const search = useSearch();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-
-  const onboarding = useOnboarding();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -44,7 +42,7 @@ export default function Page() {
     }
     setLoading(true);
     try {
-      await onboarding.onboard(activeAccount?.name, activeAccount?.address);
+      await dispatch(onboarding({ account: activeAccount })).unwrap();
       fetchAccountData();
     } catch (error) {
       console.log("Error on onboard", JSON.stringify(error));

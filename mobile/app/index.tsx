@@ -12,6 +12,7 @@ import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import Spacer from "@gno/components/spacer";
 import * as Application from "expo-application";
+import AppleSSOButton from "@gno/components/button/apple-sso-button";
 
 export default function Root() {
   const route = useRouter();
@@ -86,7 +87,7 @@ export default function Root() {
         <Layout.BodyAlignedBotton>
           <View style={{ alignItems: "center" }}>
             <Text.Title>gnoKey Mobile</Text.Title>
-            <Text.Body>Decentralized Social Network</Text.Body>
+            <Text.Body>Cryptographic key management application.</Text.Body>
             <Text.Body>Powered by GnoNative</Text.Body>
             <Text.Caption1>v{appVersion}</Text.Caption1>
           </View>
@@ -104,6 +105,9 @@ export default function Root() {
           <Ruller />
           <Spacer />
           <Text.Caption1>Or create a new account:</Text.Caption1>
+          <Spacer />
+          <AppleSSOButton onClick={() => console.log("Apple SSO")} />
+          <Spacer />
           <Button.Link title="Sign up" href="sign-up" />
         </Layout.BodyAlignedBotton>
       </Layout.Container>

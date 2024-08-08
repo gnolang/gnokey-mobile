@@ -57,7 +57,6 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
   const { name, password, phrase } = param;
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
   const search = thunkAPI.extra.search;
-  const push = thunkAPI.extra.push;
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, search, name, phrase);
@@ -112,7 +111,7 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
     await gnonative.setPassword(password);
 
     thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
-    await onboard(gnonative, push, newAccount);
+    await onboard(gnonative, newAccount);
 
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
     return { newAccount, state: SignUpState.account_created };
@@ -122,11 +121,9 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo }, ThunkExtra>("user/onboarding", async (param, thunkAPI) => {
   thunkAPI.dispatch(addProgress(`onboarding "${param.account.name}"`))
 
-  const push = thunkAPI.extra.push;
-
   const { account } = param;
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  await onboard(gnonative, push, account);
+  await onboard(gnonative, account);
 
   thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
   return { newAccount: account, state: SignUpState.account_created };
@@ -192,8 +189,6 @@ const onboard = async (gnonative: GnoNativeApi, account: KeyInfo) => {
     console.log("sent coins %s", response);
 
     await registerAccount(gnonative, name);
-
-    push.registerDevice(address_bech32);
   } catch (error) {
     console.error("onboard error", error);
   }

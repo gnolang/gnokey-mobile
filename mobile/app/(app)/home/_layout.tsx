@@ -13,17 +13,10 @@ export default function AppLayout() {
       }}
     >
       <Tabs.Screen
-        name="feed"
+        name="home"
         options={{
-          title: "Feed",
+          title: "Home",
           tabBarIcon: ({ focused }) => <Icons.Home color={focused ? colors.icon.focus : colors.icon.default} />,
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: "Search",
-          tabBarIcon: ({ focused }) => <Icons.Search color={focused ? colors.icon.focus : colors.icon.default} />,
         }}
       />
       <Tabs.Screen

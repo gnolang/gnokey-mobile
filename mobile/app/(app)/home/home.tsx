@@ -4,7 +4,6 @@ import { useNavigation, useRouter } from "expo-router";
 import { useFeed } from "@gno/hooks/use-feed";
 import Layout from "@gno/components/layout";
 import useScrollToTop from "@gno/components/utils/useScrollToTopWithOffset";
-import Button from "@gno/components/button";
 import { Post } from "@gno/types";
 import { selectAccount, setPostToReply, useAppDispatch, useAppSelector } from "@gno/redux";
 import Alert from "@gno/components/alert";
@@ -99,7 +98,6 @@ export default function Page() {
     <SafeAreaView style={{ flex: 1, paddingTop: Platform.select({ ios: 0, default: 20 }) }}>
       <View style={styles.container}>
         <FeedView totalPosts={totalPosts} onPress={onPress} onGnod={onGnod} address={user.address} type="userFeed" />
-        <Button.TouchableOpacity title="Post" onPress={onPressPost} style={styles.post} variant="primary" />
       </View>
     </SafeAreaView>
   );

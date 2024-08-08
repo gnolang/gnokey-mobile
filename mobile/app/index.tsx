@@ -86,7 +86,7 @@ export default function Root() {
         <Layout.BodyAlignedBotton>
           <View style={{ alignItems: "center" }}>
             <Text.Title>gnoKey Mobile</Text.Title>
-            <Text.Body>Decentralized Social Network</Text.Body>
+            <Text.Body>Key Management Tool</Text.Body>
             <Text.Body>Powered by GnoNative</Text.Body>
             <Text.Caption1>v{appVersion}</Text.Caption1>
           </View>

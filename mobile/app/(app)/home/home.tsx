@@ -1,126 +1,91 @@
-import { ActivityIndicator, FlatList, Platform, StyleSheet, View, Alert as RNAlert, SafeAreaView } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import { useFeed } from "@gno/hooks/use-feed";
+import Button from "@gno/components/button";
 import Layout from "@gno/components/layout";
-import useScrollToTop from "@gno/components/utils/useScrollToTopWithOffset";
-import { Post } from "@gno/types";
-import { selectAccount, setPostToReply, useAppDispatch, useAppSelector } from "@gno/redux";
-import Alert from "@gno/components/alert";
-import { FeedView } from "@gno/components/view";
+import SideMenuAccountList from "@gno/components/list/account/account-list";
+import Text from "@gno/components/text";
+import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@gno/redux";
+import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
+import { useGnoNativeContext } from "@gnolang/gnonative";
+import Spacer from "@gno/components/spacer";
 
 export default function Page() {
-  const [totalPosts, setTotalPosts] = useState(0);
-  const [error, setError] = useState<unknown | Error | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const route = useRouter();
 
-  const router = useRouter();
+  const [accounts, setAccounts] = useState<KeyInfo[]>([]);
+  const [loading, setLoading] = useState<string | undefined>(undefined);
+
+  const { gnonative } = useGnoNativeContext();
   const navigation = useNavigation();
-  const feed = useFeed();
-  const ref = useRef<FlatList>(null);
   const dispatch = useAppDispatch();
-
-  const user = useAppSelector(selectAccount);
-
-  useScrollToTop(ref, Platform.select({ ios: -150, default: 0 }));
+  const masterPassword = useAppSelector(selectMasterPassword)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
-      if (!user) {
-        RNAlert.alert("No user found.");
-        return;
-      }
-      setError(undefined);
-      setIsLoading(true);
       try {
-        const total = await feed.fetchCount(user.address);
-        setTotalPosts(total);
-      } catch (error) {
-        RNAlert.alert("Error while fetching posts.", " " + error);
+        setLoading("Loading accounts...");
+
+        const response = await gnonative.listKeyInfo();
+        setAccounts(response);
+      } catch (error: unknown | Error) {
         console.error(error);
       } finally {
-        setIsLoading(false);
+        setLoading(undefined);
       }
     });
     return unsubscribe;
   }, [navigation]);
 
-  const onPressPost = () => {
-    router.navigate({ pathname: "/post" });
-  };
-
-  const onPress = async (item: Post) => {
-    await dispatch(setPostToReply({ post: item }));
-    router.navigate({ pathname: "/post/[post_id]", params: { post_id: item.id, address: item.user.address } });
-  };
-
-  const onGnod = async (post: Post) => {
-    setIsLoading(true);
-
+  const onChangeAccountHandler = async (keyInfo: KeyInfo) => {
     try {
-      await feed.onGnod(post);
-    } catch (error) {
-      RNAlert.alert("Error", "Error while adding reaction: " + error);
-    } finally {
-      setIsLoading(false);
+      setLoading("Changing account...");
+
+      if (!masterPassword) {
+        throw new Error("No master password defined. Please create one.");
+      }
+
+      await gnonative.selectAccount(keyInfo.name);
+      await gnonative.setPassword(masterPassword);
+
+      setLoading(undefined);
+
+      await dispatch(loggedIn({ keyInfo }));
+    } catch (error: unknown | Error) {
+      setLoading(error?.toString());
+      console.log(error);
     }
   };
 
-  if (isLoading)
+  if (loading) {
     return (
       <Layout.Container>
         <Layout.Body>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </Layout.Body>
-      </Layout.Container>
-    );
-
-  if (error)
-    return (
-      <Layout.Container>
-        <Layout.Body>
-          <Alert severity="error" message="Error while fetching posts, please, check the logs." />
-        </Layout.Body>
-      </Layout.Container>
-    );
-
-  if (!user) {
-    return (
-      <Layout.Container>
-        <Layout.Body>
-          <Alert severity="error" message="No user found." />
+          <Text.Title>{loading}</Text.Title>
         </Layout.Body>
       </Layout.Container>
     );
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: Platform.select({ ios: 0, default: 20 }) }}>
-      <View style={styles.container}>
-        <FeedView totalPosts={totalPosts} onPress={onPress} onGnod={onGnod} address={user.address} type="userFeed" />
-      </View>
-    </SafeAreaView>
+    <>
+      <Layout.Container>
+        <Layout.BodyAlignedBotton>
+          <View style={{ alignItems: "center" }}>
+            <Button.TouchableOpacity title="Add Gno Key" onPress={() => route.push("/add-key")} variant="primary" />
+          </View>
+
+          <ScrollView style={{ marginTop: 24 }}>
+            {accounts && accounts.length > 0 && (
+              <>
+                <Text.Body>Registered keys:</Text.Body>
+                <SideMenuAccountList accounts={accounts} changeAccount={onChangeAccountHandler} />
+                <Spacer />
+              </>
+            )}
+          </ScrollView>
+        </Layout.BodyAlignedBotton>
+      </Layout.Container>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "stretch",
-  },
-  flatListContent: {
-    paddingBottom: 60, // Adjust the value to ensure it's above the app menu
-  },
-  footer: {
-    paddingVertical: 20,
-    alignItems: "center",
-  },
-  post: {
-    position: "absolute",
-    width: 60,
-    height: 60,
-    bottom: 40,
-    right: 20,
-  },
-});

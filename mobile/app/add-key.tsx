@@ -5,7 +5,7 @@ import TextInput from "components/textinput";
 import Button from "components/button";
 import Spacer from "components/spacer";
 import * as Clipboard from "expo-clipboard";
-import { loggedIn, useAppDispatch, useAppSelector } from "@gno/redux";
+import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@gno/redux";
 import Alert from "@gno/components/alert";
 import Layout from "@gno/components/layout";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -22,12 +22,12 @@ import { ProgressViewModal } from "@gno/components/view/progress";
 
 export default function Page() {
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
   const [phrase, setPhrase] = useState<string>("");
   const [error, setError] = useState<string | undefined>(undefined);
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<RNTextInput>(null);
+
+  const masterPassword = useAppSelector(selectMasterPassword);
 
   const navigation = useNavigation();
   const { gnonative } = useGnoNativeContext();
@@ -39,8 +39,6 @@ export default function Page() {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       setName("");
-      setPassword("");
-      setConfirmPassword("");
       setError(undefined);
       dispatch(clearSignUpState())
       inputRef.current?.focus();
@@ -99,7 +97,7 @@ export default function Page() {
   const onCreate = async () => {
     dispatch(clearSignUpState());
     setError(undefined);
-    if (!name || !password) {
+    if (!name) {
       setError("Please fill out all fields");
       return;
     }
@@ -110,21 +108,21 @@ export default function Page() {
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (!masterPassword) {
+      setError("Master password not found.");
       return;
     }
 
     if (signUpState === SignUpState.user_exists_only_on_local_storage && existingAccount) {
       await gnonative.selectAccount(name);
-      await gnonative.setPassword(password);
+      await gnonative.setPassword(masterPassword);
       await dispatch(onboarding({ account: existingAccount })).unwrap();
       return;
     }
 
     try {
       setLoading(true);
-      await dispatch(signUp({ name, password, phrase })).unwrap();
+      await dispatch(signUp({ name, password: masterPassword, phrase })).unwrap();
     } catch (error) {
       RNAlert.alert("Error", "" + error);
       setError("" + error);
@@ -139,24 +137,16 @@ export default function Page() {
       <Layout.Body>
         <ScrollView>
           <View style={styles.main}>
-            <Text style={styles.title}>Create your account</Text>
+            <Text style={styles.title}>Create a new Key</Text>
             <View style={{ minWidth: 200, paddingTop: 8 }}>
               <Spacer />
               <TextInput
                 ref={inputRef}
-                placeholder="Account Name"
+                placeholder="Key name"
                 value={name}
                 onChangeText={setName}
                 autoCapitalize="none"
                 autoCorrect={false}
-              />
-              <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry={true} />
-              <TextInput
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={true}
-                error={error}
               />
             </View>
             <View style={{ minWidth: 200, paddingTop: 8 }}>

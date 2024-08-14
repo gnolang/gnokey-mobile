@@ -1,9 +1,7 @@
 import { Stack } from "expo-router";
-
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Guard } from "@gno/components/auth/guard";
 import { GnoNativeProvider } from "@gnolang/gnonative";
-import { IndexerProvider } from "@gno/provider/indexer-provider";
 import { ReduxProvider } from "redux/redux-provider";
 
 const gnoDefaultConfig = {
@@ -18,21 +16,19 @@ const indexerDefaultConfig = {
 export default function AppLayout() {
   return (
     <GnoNativeProvider config={gnoDefaultConfig}>
-      <IndexerProvider config={indexerDefaultConfig}>
-        <ReduxProvider>
-          <ThemeProvider value={DefaultTheme}>
-            <Guard>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  headerLargeTitle: true,
-                  headerBackVisible: false,
-                }}
-              />
-            </Guard>
-          </ThemeProvider>
-        </ReduxProvider>
-      </IndexerProvider>
+      <ReduxProvider>
+        <ThemeProvider value={DefaultTheme}>
+          <Guard>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                headerLargeTitle: true,
+                headerBackVisible: false,
+              }}
+            />
+          </Guard>
+        </ThemeProvider>
+      </ReduxProvider>
     </GnoNativeProvider>
   );
 }

@@ -1,16 +1,14 @@
 import React from "react";
 import { useRouter, useSegments } from "expo-router";
-import { useAppSelector } from "@gno/redux";
-import { User } from "@gno/types";
-import { selectAccount } from "redux/features/accountSlice";
-import { SharedSegment } from "app/home/_layout";
+import { selectSignedIn, useAppSelector } from "@gno/redux";
+import { SharedSegment } from "app/(app)/home/_layout";
 
 interface PropsWithChildren {
   children: React.ReactNode;
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(user: User | undefined) {
+function useProtectedRoute(signedIn?: boolean) {
   const segments = useSegments();
   const router = useRouter();
   const [segment] = useSegments() as [SharedSegment];
@@ -19,16 +17,16 @@ function useProtectedRoute(user: User | undefined) {
     const inAuthGroup = segments.length == 0 || segments[0] === "sign-up" || segments[0] == "sign-in";
 
     // If the user is not signed in and the initial segment is not anything in the auth group.
-    if (!user && !inAuthGroup) {
+    if (!signedIn && !inAuthGroup) {
       router.replace("/");
     }
-  }, [user, segments]);
+  }, [signedIn, segments]);
 }
 
 export function Guard(props: PropsWithChildren) {
-  const account = useAppSelector(selectAccount);
+  const signedIn = useAppSelector(selectSignedIn);
 
-  useProtectedRoute(account);
+  useProtectedRoute(signedIn);
 
   return props.children;
 }

@@ -2,7 +2,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { logedOut, useAppDispatch } from "@gno/redux";
+import { signOut, useAppDispatch } from "@gno/redux";
 import Button from "@gno/components/button";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import Layout from "@gno/components/layout";
@@ -17,7 +17,6 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [chainID, setChainID] = useState("");
   const [remote, setRemote] = useState("");
-  const [followersCount, setFollowersCount] = useState({ n_followers: 0, n_following: 0 });
 
   const { gnonative } = useGnoNativeContext();
   const search = useSearch();
@@ -58,17 +57,6 @@ export default function Page() {
     setActiveAccount(account.key);
     setChainID(chainId);
     setRemote(remote);
-
-    try {
-      const address = await gnonative.addressToBech32(account?.key?.address!);
-      const followersCount = await search.GetJsonFollowersCount(address);
-
-      setFollowersCount(followersCount);
-
-      console.log("remote: %s chainId %s " + remote, chainId);
-    } catch (error: unknown | Error) {
-      console.log(error);
-    }
   };
 
   const onRemoveAccount = async () => {
@@ -76,7 +64,7 @@ export default function Page() {
   };
 
   const onPressLogout = async () => {
-    dispatch(logedOut());
+    dispatch(signOut());
   };
 
   return (
@@ -84,26 +72,25 @@ export default function Page() {
       <Layout.Container>
         <Layout.Body>
           <>
-            <AccountBalance activeAccount={activeAccount} />
+            {/* Revisit active account feature */}
+            {/* <AccountBalance activeAccount={activeAccount} /> */}
             <Text.Subheadline>Chain ID:</Text.Subheadline>
             <Text.Body>{chainID}</Text.Body>
             <Text.Subheadline>Remote:</Text.Subheadline>
             <Text.Body>{remote}</Text.Body>
-            <Text.Subheadline>Followers:</Text.Subheadline>
-            <Text.Body>{followersCount.n_followers}</Text.Body>
-            <Text.Subheadline>Following:</Text.Subheadline>
-            <Text.Body>{followersCount.n_following}</Text.Body>
             <View></View>
           </>
           <Layout.Footer>
-            <Button.TouchableOpacity title="Onboard the current user" onPress={onboard} variant="primary" />
+            {/* TODO: Revisit this feature */}
+            {/* <Button.TouchableOpacity title="Onboard the current user" onPress={onboard} variant="primary" /> */}
             <Button.TouchableOpacity title="Logout" onPress={onPressLogout} style={styles.logout} variant="primary-red" />
-            <Button.TouchableOpacity
-              title="Remove Account"
+            {/* TODO: Implement remove key */}
+            {/* <Button.TouchableOpacity
+              title="Remove Key on another page"
               onPress={onRemoveAccount}
               style={styles.logout}
               variant="primary-red"
-            />
+            /> */}
           </Layout.Footer>
         </Layout.Body>
       </Layout.Container>

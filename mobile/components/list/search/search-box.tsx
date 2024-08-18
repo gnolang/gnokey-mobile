@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import TextInput from "../../textinput";
-import { colors } from "@gno/styles/colors";
 import Icons from "../../icons";
+import { colors } from "@/assets/styles/colors";
 
 type Props = {
   onChangeText: (text: string) => void;

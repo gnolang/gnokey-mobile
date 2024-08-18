@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
-import { colors } from "@gno/styles/colors";
 import Text from "../text";
+import { colors } from "@/assets/styles/colors";
 
 function TimeStampLabel({ timestamp }: { timestamp: string }) {
   return (

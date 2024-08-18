@@ -1,5 +1,5 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import Text from "@gno/components/text";
+import Text from "@/components/text";
 
 type Props = {
   name: string;

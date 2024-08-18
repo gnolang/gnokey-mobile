@@ -1,6 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import Text from "@gno/components/text";
-import { Following } from "@gno/types";
+import Text from "@/components/text";
+import { Following } from "@/types";
 
 type Props = {
   item: Following;

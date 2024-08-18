@@ -2,14 +2,13 @@ import { Alert, StyleSheet, View } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { signOut, useAppDispatch } from "@gno/redux";
-import Button from "@gno/components/button";
+import { signOut, useAppDispatch } from "@/redux";
+import Button from "@/components/button";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
-import Layout from "@gno/components/layout";
-import { LoadingModal } from "@gno/components/loading";
-import { AccountBalance } from "@gno/components/settings";
-import Text from "@gno/components/text";
-import { useSearch } from "@gno/hooks/use-search";
+import { Layout } from "@/components/index";
+import { LoadingModal } from "@/components/loading";
+import { AccountBalance } from "@/components/settings";
+import Text from "@/components/text";
 import { onboarding } from "redux/features/signupSlice";
 
 export default function Page() {
@@ -19,7 +18,6 @@ export default function Page() {
   const [remote, setRemote] = useState("");
 
   const { gnonative } = useGnoNativeContext();
-  const search = useSearch();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 

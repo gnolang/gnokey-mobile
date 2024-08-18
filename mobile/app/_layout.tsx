@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { Guard } from "@gno/components/auth/guard";
+import { Guard } from "@/components/auth/guard";
 import { GnoNativeProvider } from "@gnolang/gnonative";
 import { ReduxProvider } from "redux/redux-provider";
 

@@ -1,10 +1,10 @@
-import Button from "@gno/components/button";
-import Spacer from "@gno/components/spacer";
-import { GnoAccount } from "@gnolang/gnonative/build/hooks/types";
+import Button from "@/components/button";
+import Spacer from "@/components/spacer";
+import { KeyInfo } from "@gnolang/gnonative";
 
 interface SideMenuAccountItemProps {
-  account: GnoAccount;
-  changeAccount: (account: GnoAccount) => void;
+  account: KeyInfo;
+  changeAccount: (account: KeyInfo) => void;
 }
 
 const SideMenuAccountItem = (props: SideMenuAccountItemProps) => {

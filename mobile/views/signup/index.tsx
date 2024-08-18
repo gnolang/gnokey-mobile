@@ -1,7 +1,7 @@
-import Alert from "@gno/components/alert";
-import Button from "@gno/components/button";
-import Spacer from "@gno/components/spacer";
-import TextInput from "@gno/components/textinput";
+import Alert from "@/components/alert";
+import Button from "@/components/button";
+import Spacer from "@/components/spacer";
+import TextInput from "@/components/textinput";
 import { useState } from "react";
 
 export interface Props {

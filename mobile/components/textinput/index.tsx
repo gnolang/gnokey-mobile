@@ -37,7 +37,7 @@ export const TextInput = React.forwardRef<RNTextInput, Props>((props, ref) => {
 
   return (
     <Container>
-      <TextInputBase {...props} ref={ref} secureTextEntry={isSecureText} />
+      <TextInputBase autoCapitalize="none" autoCorrect={false} {...props} ref={ref} secureTextEntry={isSecureText} />
 
       {props.secureTextEntry ? (
         <ToggleIcon>

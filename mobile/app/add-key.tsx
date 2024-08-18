@@ -5,9 +5,9 @@ import TextInput from "components/textinput";
 import Button from "components/button";
 import Spacer from "components/spacer";
 import * as Clipboard from "expo-clipboard";
-import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@gno/redux";
-import Alert from "@gno/components/alert";
-import Layout from "@gno/components/layout";
+import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
+import Alert from "@/components/alert";
+import { Layout } from "@/components/index";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import {
   SignUpState,
@@ -18,7 +18,7 @@ import {
   signUp,
   signUpStateSelector,
 } from "redux/features/signupSlice";
-import { ProgressViewModal } from "@gno/components/view/progress";
+import { ProgressViewModal } from "@/components/view/progress";
 
 export default function Page() {
   const [name, setName] = useState("");

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Following } from "@gno/types";
+import { Following } from "@/types";
 
 export interface ProfileState {
   following: Following[];

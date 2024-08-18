@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import Layout from "@gno/components/layout";
-import Text from "@gno/components/text";
-import { getInitialState, selectInitialized, selectMasterPassword, signIn, signUp, useAppDispatch, useAppSelector } from "@gno/redux";
+import { Layout } from "@/components/index";
+import Text from "@/components/text";
+import { getInitialState, selectInitialized, selectMasterPassword, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
 import * as Application from "expo-application";
-import SignInView from "@gno/components/view/signin";
-import SignUpView from "@gno/components/view/signup";
+import SignInView from "@/views/signin";
+import SignUpView from "@/views/signup";
 
 export default function Root() {
   const route = useRouter();

@@ -1,8 +1,8 @@
-import Layout from "@gno/components/layout";
-import ModalHeader from "@gno/components/layout/modal-header";
-import FollowsList from "@gno/components/list/follows/follows-list";
-import Text from "@gno/components/text";
-import { Following } from "@gno/types";
+import { Layout } from "@/components/index";
+import ModalHeader from "@/components/layout/modal-header";
+import FollowsList from "@/components/list/follows/follows-list";
+import Text from "@/components/text";
+import { Following } from "@/types";
 import { StyleSheet, View } from "react-native";
 
 interface Props {

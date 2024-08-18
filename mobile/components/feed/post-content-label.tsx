@@ -1,4 +1,4 @@
-import { colors } from "@gno/styles/colors";
+import { colors } from "@/assets/styles/colors";
 import React from "react";
 import Autolink, { CustomMatcher } from "react-native-autolink";
 

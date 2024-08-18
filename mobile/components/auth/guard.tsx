@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter, useSegments } from "expo-router";
-import { selectSignedIn, useAppSelector } from "@gno/redux";
+import { selectSignedIn, useAppSelector } from "@/redux";
 import { SharedSegment } from "app/(app)/home/_layout";
 
 interface PropsWithChildren {

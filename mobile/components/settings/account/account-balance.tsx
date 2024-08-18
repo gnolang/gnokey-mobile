@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
-import Text from "@gno/components/text";
+import Text from "@/components/text";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { useSearch } from "@gno/hooks/use-search";
 import * as Application from "expo-application";
+import { useSearch } from "@/src/hooks/use-search";
 
 interface Props {
   activeAccount: KeyInfo | undefined;

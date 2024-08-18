@@ -1,4 +1,4 @@
-import { User } from "@gno/types";
+import { User } from "@/types";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 
 const usersCache = new Map<string, User>();

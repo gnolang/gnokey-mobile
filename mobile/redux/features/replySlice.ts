@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Post } from "@gno/types";
+import { Post } from "@/types";
 
 export interface State {
   postToReply: Post | undefined;

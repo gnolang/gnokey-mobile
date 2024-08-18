@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet } from "react-native";
 import FollowsItem from "./follows-item";
-import { Following } from "@gno/types";
-import Text from "@gno/components/text";
+import { Following } from "@/types";
+import Text from "@/components/text";
 
 interface Props {
   data: Following[];

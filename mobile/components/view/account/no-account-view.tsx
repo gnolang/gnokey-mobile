@@ -1,5 +1,5 @@
-import Layout from "@gno/components/layout";
-import Text from "@gno/components/text";
+import { Layout } from "@/components/index";
+import Text from "@/components/text";
 import React from "react";
 import styled from "styled-components/native";
 

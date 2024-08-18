@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityIndicator, Modal, StyleSheet, View } from "react-native";
 import Text from "../text";
-import { colors } from "@gno/styles/colors";
+import { colors } from "@/assets/styles/colors";
 
 type Props = {
   visible: boolean;

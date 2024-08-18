@@ -1,5 +1,5 @@
-import Icons from "@gno/components/icons";
-import { colors } from "@gno/styles/colors";
+import { colors } from "@/assets/styles/colors";
+import Icons from "@/components/icons";
 import { Tabs } from "expo-router";
 
 type Group<T extends string> = `(${T})`;

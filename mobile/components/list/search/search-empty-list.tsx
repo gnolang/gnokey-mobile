@@ -1,4 +1,4 @@
-import Text from "@gno/components/text";
+import Text from "@/components/text";
 import { View } from "react-native";
 
 function SearchEmptyList() {

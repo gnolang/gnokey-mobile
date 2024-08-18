@@ -1,4 +1,4 @@
-import { colors } from "@gno/styles/colors";
+import { colors } from "@/assets/styles/colors";
 import { ViewProps } from "react-native";
 import styled from "styled-components/native";
 

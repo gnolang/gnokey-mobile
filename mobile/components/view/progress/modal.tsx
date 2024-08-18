@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Modal, StyleSheet, FlatList, TouchableOpacity, Share } from "react-native";
-import { useAppDispatch, useAppSelector } from "@gno/redux";
-import { colors } from "@gno/styles/colors";
-import Layout from "@gno/components/layout";
+import { useAppDispatch, useAppSelector } from "@/redux";
+import { Layout } from "@/components/index";
 import { clearProgress, selectProgress } from "redux/features/signupSlice";
-import Text from "@gno/components/text";
+import Text from "@/components/text";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "@/assets/styles/colors";
 
 const ProgressViewModal = () => {
   const [modalVisible, setModalVisible] = useState(false);

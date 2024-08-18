@@ -1,7 +1,7 @@
 import { StyleProp, TextStyle, View } from "react-native";
-import { colors } from "@gno/styles/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Text from "../text";
+import { colors } from "@/assets/styles/colors";
 
 interface Props {
   replyCount: number;

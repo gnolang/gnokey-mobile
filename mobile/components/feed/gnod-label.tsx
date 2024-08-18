@@ -1,8 +1,8 @@
 import { StyleProp, TextStyle, TouchableOpacity } from "react-native";
-import { colors } from "@gno/styles/colors";
 import Text from "../text";
 import Icons from "../icons";
-import { Post } from "@gno/types";
+import { Post } from "@/types";
+import { colors } from "@/assets/styles/colors";
 
 interface Props {
   onGnod: (post: Post) => void;

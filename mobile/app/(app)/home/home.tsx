@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import Button from "@gno/components/button";
-import Layout from "@gno/components/layout";
-import SideMenuAccountList from "@gno/components/list/account/account-list";
-import Text from "@gno/components/text";
-import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@gno/redux";
+import Button from "@/components/button";
+import { Layout } from "@/components/index";
+import SideMenuAccountList from "@/components/list/account/account-list";
+import Text from "@/components/text";
+import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import Spacer from "@gno/components/spacer";
+import Spacer from "@/components/spacer";
 
 export default function Page() {
   const route = useRouter();

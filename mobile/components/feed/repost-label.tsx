@@ -1,6 +1,6 @@
-import { colors } from "@gno/styles/colors";
+import { colors } from "@/assets/styles/colors";
 import Text from "../text";
-import { Post } from "@gno/types";
+import { Post } from "@/types";
 
 function RepostLabel({ post }: { post: Post }) {
   if (!post.repost_parent) return null;

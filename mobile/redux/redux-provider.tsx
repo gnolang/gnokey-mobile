@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { accountSlice, profileSlice, replySlice, signinSlice } from "./features";
 import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
 import { signUpSlice } from "./features/signupSlice";
-import { useSearch, UseSearchReturnType } from "@gno/hooks/use-search";
+import { useSearch, UseSearchReturnType } from "@/src/hooks/use-search";
 
 interface Props {
   children: React.ReactNode;

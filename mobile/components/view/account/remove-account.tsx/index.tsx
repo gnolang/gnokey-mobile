@@ -1,10 +1,10 @@
-import Layout from "@gno/components/layout";
-import ModalHeader from "@gno/components/layout/modal-header";
-import Text from "@gno/components/text";
-import { Following, User } from "@gno/types";
-import { selectAccount, useAppSelector } from "@gno/redux";
-import Button from "@gno/components/button";
-import Spacer from "@gno/components/spacer";
+import { Layout } from "@/components/index";
+import ModalHeader from "@/components/layout/modal-header";
+import Text from "@/components/text";
+import { Following, User } from "@/types";
+import { selectAccount, useAppSelector } from "@/redux";
+import Button from "@/components/button";
+import Spacer from "@/components/spacer";
 
 interface Props {
   data: Following[];

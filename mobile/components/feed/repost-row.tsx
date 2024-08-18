@@ -1,11 +1,11 @@
 import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Post } from "../../types";
-import Text from "@gno/components/text";
+import Text from "@/components/text";
 import RepliesLabel from "./replies-label";
 import TimeStampLabel from "./timestamp-label";
 import RepostButton from "./repost-button";
-import { setPostToReply, useAppDispatch } from "@gno/redux";
+import { setPostToReply, useAppDispatch } from "@/redux";
 import { useRouter } from "expo-router";
 import RepostLabel from "./repost-label";
 

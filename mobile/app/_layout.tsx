@@ -7,6 +7,7 @@ import { ReduxProvider } from "redux/redux-provider";
 const gnoDefaultConfig = {
   remote: process.env.EXPO_PUBLIC_GNO_REMOTE!,
   chain_id: process.env.EXPO_PUBLIC_GNO_CHAIN_ID!,
+  start_gnokey_mobile_service: true,
 };
 
 const indexerDefaultConfig = {

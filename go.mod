@@ -9,12 +9,13 @@ require (
 	connectrpc.com/grpchealth v1.3.0
 	connectrpc.com/grpcreflect v1.2.0
 	github.com/gnolang/gno v0.1.1
-	github.com/gnolang/gnonative v1.5.1-0.20240807105100-a8ac8458d07c
+	github.com/gnolang/gnonative v1.5.1-0.20240814142433-69d4f3e915b3
 	github.com/peterbourgon/ff/v3 v3.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/cors v1.11.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.27.0
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/protobuf v1.34.2
 	moul.io/u v1.27.0
 )
@@ -59,7 +60,6 @@ require (
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	golang.org/x/tools v0.23.0 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240701130421-f6361c86f094 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094 // indirect
 	google.golang.org/grpc v1.65.0 // indirect

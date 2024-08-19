@@ -10,10 +10,6 @@ const gnoDefaultConfig = {
   start_gnokey_mobile_service: true,
 };
 
-const indexerDefaultConfig = {
-  remote: process.env.EXPO_PUBLIC_INDEXER_REMOTE!,
-};
-
 export default function AppLayout() {
   return (
     <GnoNativeProvider config={gnoDefaultConfig}>

@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
-import Button from "@/components/button";
 import { Layout } from "@/components/index";
-import SideMenuAccountList from "@/components/list/account/account-list";
 import Text from "@/components/text";
 import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import Spacer from "@/components/spacer";
+import Octicons from '@expo/vector-icons/Octicons';
+import TextInput from "@/components/textinput";
+import { colors } from "@/assets/styles/colors";
+import VaultListItem from "@/components/list/vault-list/VaultListItem";
 
 export default function Page() {
   const route = useRouter();
 
+  const [activeAccount, setActiveAccount] = useState<KeyInfo | undefined>(undefined);
+  const [nameSearch, setNameSearch] = useState<string>("");
   const [accounts, setAccounts] = useState<KeyInfo[]>([]);
+  const [filteredAccounts, setFilteredAccounts] = useState<KeyInfo[]>([]);
   const [loading, setLoading] = useState<string | undefined>(undefined);
 
   const { gnonative } = useGnoNativeContext();
@@ -36,6 +40,14 @@ export default function Page() {
     });
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    if (nameSearch) {
+      setFilteredAccounts(accounts.filter((account) => account.name.includes(nameSearch)));
+    } else {
+      setFilteredAccounts(accounts);
+    }
+  }, [nameSearch, accounts]);
 
   const onChangeAccountHandler = async (keyInfo: KeyInfo) => {
     try {
@@ -71,19 +83,26 @@ export default function Page() {
     <>
       <Layout.Container>
         <Layout.BodyAlignedBotton>
-          <View style={{ alignItems: "center" }}>
-            <Button.TouchableOpacity title="Add Gno Key" onPress={() => route.push("/add-key")} variant="primary" />
+          <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-between", marginHorizontal: 8 }}>
+            <TextInput placeholder="Search Vault" containerStyle={{ width: '86%' }} value={nameSearch} onChangeText={setNameSearch}>
+              <Octicons name="search" size={24} color="gray" />
+            </TextInput>
+            <TouchableOpacity onPress={() => route.push("/add-key")}>
+              <Octicons name="diff-added" size={38} color={colors.primary} />
+            </TouchableOpacity>
           </View>
 
-          <ScrollView style={{ marginTop: 24 }}>
-            {accounts && accounts.length > 0 && (
-              <>
-                <Text.Body>Registered keys:</Text.Body>
-                <SideMenuAccountList accounts={accounts} changeAccount={onChangeAccountHandler} />
-                <Spacer />
-              </>
-            )}
-          </ScrollView>
+          {filteredAccounts && (
+            <FlatList
+              data={filteredAccounts}
+              renderItem={({ item }) => (
+                <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} />
+              )}
+              keyExtractor={(item) => item.name}
+              ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
+            />
+          )}
+          {/* </ScrollView> */}
         </Layout.BodyAlignedBotton>
       </Layout.Container>
     </>

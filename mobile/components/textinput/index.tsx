@@ -1,11 +1,30 @@
 import React from "react";
-import { TextInput as RNTextInput, TextInputProps } from "react-native";
+import { TextInput as RNTextInput, TextInputProps, ViewProps } from "react-native";
 import styled from "styled-components/native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export interface Props extends TextInputProps {
+interface Props extends TextInputProps {
   error?: boolean | string | undefined;
+  containerStyle?: ViewProps["style"];
 }
+
+export const TextInput = React.forwardRef<RNTextInput, Props>((props, ref) => {
+  const { children, ...rest } = props;
+  const [isSecureText, setShowSecureText] = React.useState(props.secureTextEntry);
+
+  return (
+    <Container style={props.containerStyle}>
+      {children ? <LeftChildren>{children}</LeftChildren> : null}
+      <TextInputBase autoCapitalize="none" autoCorrect={false} {...rest} ref={ref} secureTextEntry={isSecureText} />
+
+      {rest.secureTextEntry ? (
+        <ToggleIcon>
+          <FontAwesome size={28} name={isSecureText ? "eye-slash" : "eye"} onPress={() => setShowSecureText((prev) => !prev)} />
+        </ToggleIcon>
+      ) : null}
+    </Container>
+  );
+});
 
 const Container = styled.View<Props>`
   flex-direction: row;
@@ -32,20 +51,8 @@ const ToggleIcon = styled.TouchableOpacity`
   padding: 2px;
 `;
 
-export const TextInput = React.forwardRef<RNTextInput, Props>((props, ref) => {
-  const [isSecureText, setShowSecureText] = React.useState(props.secureTextEntry);
-
-  return (
-    <Container>
-      <TextInputBase autoCapitalize="none" autoCorrect={false} {...props} ref={ref} secureTextEntry={isSecureText} />
-
-      {props.secureTextEntry ? (
-        <ToggleIcon>
-          <FontAwesome size={28} name={isSecureText ? "eye-slash" : "eye"} onPress={() => setShowSecureText((prev) => !prev)} />
-        </ToggleIcon>
-      ) : null}
-    </Container>
-  );
-});
+const LeftChildren = styled.View`
+  padding: 8px;
+`;
 
 export default TextInput;

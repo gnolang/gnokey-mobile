@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -7,7 +7,6 @@ import Button from "@/components/button";
 import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
 import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
-import { AccountBalance } from "@/components/settings";
 import Text from "@/components/text";
 import { onboarding } from "redux/features/signupSlice";
 
@@ -82,13 +81,6 @@ export default function Page() {
             {/* TODO: Revisit this feature */}
             {/* <Button.TouchableOpacity title="Onboard the current user" onPress={onboard} variant="primary" /> */}
             <Button.TouchableOpacity title="Logout" onPress={onPressLogout} style={styles.logout} variant="primary-red" />
-            {/* TODO: Implement remove key */}
-            {/* <Button.TouchableOpacity
-              title="Remove Key on another page"
-              onPress={onRemoveAccount}
-              style={styles.logout}
-              variant="primary-red"
-            /> */}
           </Layout.Footer>
         </Layout.Body>
       </Layout.Container>

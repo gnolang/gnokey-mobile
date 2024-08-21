@@ -10,6 +10,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import TextInput from "@/components/textinput";
 import { colors } from "@/assets/styles/colors";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
+import { setVaultToEdit } from "@/redux/features/vaultEditSlice";
 
 export default function Page() {
   const route = useRouter();
@@ -63,6 +64,10 @@ export default function Page() {
       setLoading(undefined);
 
       await dispatch(loggedIn({ keyInfo }));
+
+      await dispatch(setVaultToEdit({ vault: keyInfo }));
+      route.push("/vault/details");
+
     } catch (error: unknown | Error) {
       setLoading(error?.toString());
       console.log(error);

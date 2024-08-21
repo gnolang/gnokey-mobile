@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { accountSlice, profileSlice, replySlice, signinSlice } from "./features";
+import { accountSlice, profileSlice, vaultSlice, signinSlice } from "./features";
 import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
 import { signUpSlice } from "./features/signupSlice";
 import { useSearch, UseSearchReturnType } from "@/src/hooks/use-search";
@@ -23,7 +23,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
     reducer: {
       [accountSlice.reducerPath]: accountSlice.reducer,
       [profileSlice.reducerPath]: profileSlice.reducer,
-      [replySlice.reducerPath]: replySlice.reducer,
+      [vaultSlice.reducerPath]: vaultSlice.reducer,
       [signUpSlice.reducerPath]: signUpSlice.reducer,
       [signinSlice.reducerPath]: signinSlice.reducer,
     },

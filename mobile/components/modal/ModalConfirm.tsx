@@ -8,22 +8,24 @@ import Text from "components/text";
 
 export type Props = {
   title: string;
+  confirmText?: string;
   message: string;
   visible: boolean;
-  onClose: () => void;
+  onCancel: () => void;
   onConfirm: () => void;
 };
 
-const ModalConfirm = ({ visible, onClose, onConfirm, title, message }: Props) => {
+const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmText = "Confirm" }: Props) => {
   return (
     <NativeModal visible={visible} transparent={true} animationType="slide">
-      <ModalContent>
-        <ModalHeader title={title} onClose={onClose} />
+      <ModalContent >
+        <ModalHeader title={title} onClose={onCancel} />
         <Text.BodyMedium>{message}</Text.BodyMedium>
         <Spacer />
-        <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary-red" />
+        <Button.TouchableOpacity title={confirmText} onPress={onConfirm} variant="primary-red" />
         <Ruller />
-        <Button.TouchableOpacity title="Close" onPress={onClose} variant="secondary" />
+        <Button.TouchableOpacity title="Cancel" onPress={onCancel} variant="secondary" />
+        <Spacer space={16} />
       </ModalContent>
     </NativeModal>
   );

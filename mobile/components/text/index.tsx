@@ -80,6 +80,15 @@ const Subheadline = styled.Text`
   text-align: left;
 `;
 
-const Text = { Title, Body, HeaderSubtitle, HeaderTitle, HeaderTitleText, HeaderSubtitleText, Subheadline, BodyMedium, Caption1 };
+const InputLabel = styled.Text`
+  color: gray;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  text-align: left;
+`;
+
+const Text = { Title, Body, HeaderSubtitle, HeaderTitle, HeaderTitleText, HeaderSubtitleText, Subheadline, BodyMedium, Caption1, InputLabel };
 
 export default Text;

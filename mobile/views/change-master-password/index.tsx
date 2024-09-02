@@ -48,9 +48,23 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
     }
 
     try {
-      setError(undefined);
-      await gnonative.updatePassword(password);
+
+      const response = await gnonative.listKeyInfo();
+
+      if (response.length === 0) {
+        throw new Error("No accounts found.");
+      }
+
+      for (const account of response) {
+        console.log("change password for account", account);
+        await gnonative.selectAccount(account.name);
+        await gnonative.setPassword(password);
+        await gnonative.updatePassword(password);
+      }
+      console.log("done changing password for all accounts");
+
       onClose(true);
+
     } catch (error: any) {
       console.error(error);
       const err = new GRPCError(error);

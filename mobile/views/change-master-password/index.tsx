@@ -17,6 +17,7 @@ import Text from "@/components/text";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
+import { selectMasterPassword, useAppSelector } from "@/redux";
 
 export type Props = {
   visible: boolean;
@@ -28,6 +29,8 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   const [password, setPassword] = useState("");
   const [reenterPassword, setReenterPassword] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
+
+  const masterPassword = useAppSelector(selectMasterPassword)
 
   const inputRef = useRef<RNTextInput>(null);
 
@@ -55,10 +58,14 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
         throw new Error("No accounts found.");
       }
 
+      if (!masterPassword) {
+        throw new Error("Master password not found.");
+      }
+
       for (const account of response) {
         console.log("change password for account", account);
         await gnonative.selectAccount(account.name);
-        await gnonative.setPassword(password);
+        await gnonative.setPassword(masterPassword);
         await gnonative.updatePassword(password);
       }
       console.log("done changing password for all accounts");

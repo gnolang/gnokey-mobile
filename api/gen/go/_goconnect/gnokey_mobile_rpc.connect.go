@@ -60,8 +60,8 @@ type GnokeyMobileServiceClient interface {
 	GetRemote(context.Context, *connect.Request[_go1.GetRemoteRequest]) (*connect.Response[_go1.GetRemoteResponse], error)
 	// Get the information for all keys in the keybase
 	ListKeyInfo(context.Context, *connect.Request[_go1.ListKeyInfoRequest]) (*connect.Response[_go1.ListKeyInfoResponse], error)
-	// Sign the transaction using the active account.
-	// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+	// Sign the transaction using the account with the given address.
+	// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
 	// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
 	SignTx(context.Context, *connect.Request[_go1.SignTxRequest]) (*connect.Response[_go1.SignTxResponse], error)
 }
@@ -127,8 +127,8 @@ type GnokeyMobileServiceHandler interface {
 	GetRemote(context.Context, *connect.Request[_go1.GetRemoteRequest]) (*connect.Response[_go1.GetRemoteResponse], error)
 	// Get the information for all keys in the keybase
 	ListKeyInfo(context.Context, *connect.Request[_go1.ListKeyInfoRequest]) (*connect.Response[_go1.ListKeyInfoResponse], error)
-	// Sign the transaction using the active account.
-	// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+	// Sign the transaction using the account with the given address.
+	// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
 	// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
 	SignTx(context.Context, *connect.Request[_go1.SignTxRequest]) (*connect.Response[_go1.SignTxResponse], error)
 }

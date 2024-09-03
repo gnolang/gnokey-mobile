@@ -120,8 +120,8 @@ namespace Land.Gno.GnokeyMobile.V1 {
       }
 
       /// <summary>
-      /// Sign the transaction using the active account.
-      /// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+      /// Sign the transaction using the account with the given address.
+      /// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
       /// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
@@ -259,8 +259,8 @@ namespace Land.Gno.GnokeyMobile.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_ListKeyInfo, null, options, request);
       }
       /// <summary>
-      /// Sign the transaction using the active account.
-      /// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+      /// Sign the transaction using the account with the given address.
+      /// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
       /// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -274,8 +274,8 @@ namespace Land.Gno.GnokeyMobile.V1 {
         return SignTx(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Sign the transaction using the active account.
-      /// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+      /// Sign the transaction using the account with the given address.
+      /// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
       /// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -287,8 +287,8 @@ namespace Land.Gno.GnokeyMobile.V1 {
         return CallInvoker.BlockingUnaryCall(__Method_SignTx, null, options, request);
       }
       /// <summary>
-      /// Sign the transaction using the active account.
-      /// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+      /// Sign the transaction using the account with the given address.
+      /// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
       /// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -302,8 +302,8 @@ namespace Land.Gno.GnokeyMobile.V1 {
         return SignTxAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// Sign the transaction using the active account.
-      /// If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+      /// Sign the transaction using the account with the given address.
+      /// If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
       /// If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>

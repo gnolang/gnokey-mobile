@@ -134,8 +134,8 @@ export declare const GnokeyMobileService: GenService<{
     output: typeof ListKeyInfoResponseSchema;
   },
   /**
-   * Sign the transaction using the active account.
-   * If no active account has been set with SelectAccount, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
+   * Sign the transaction using the account with the given address.
+   * If there is no activated account with the given address, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrNoActiveAccount.
    * If the password is wrong, return [ErrCode](#land.gno.gnonative.v1.ErrCode).ErrDecryptionFailed.
    *
    * @generated from rpc land.gno.gnokey_mobile.v1.GnokeyMobileService.SignTx

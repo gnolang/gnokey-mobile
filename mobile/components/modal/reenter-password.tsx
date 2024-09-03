@@ -9,9 +9,8 @@ import {
   TextInput as RNTextInput,
 } from "react-native";
 import { GRPCError } from "@gnolang/gnonative/src/grpc/error";
-import { ErrCode } from "@buf/gnolang_gnonative.bufbuild_es/rpc_pb";
 import Alert from "@/components/alert";
-import { useGnoNativeContext } from "@gnolang/gnonative";
+import { ErrCode, useGnoNativeContext } from "@gnolang/gnonative";
 import { ModalView } from ".";
 import TextInput from "../textinput";
 import Text from "../text";

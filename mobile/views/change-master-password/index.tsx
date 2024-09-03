@@ -8,16 +8,13 @@ import {
   Modal,
   TextInput as RNTextInput,
 } from "react-native";
-import { GRPCError } from "@gnolang/gnonative/src/grpc/error";
-import { ErrCode } from "@buf/gnolang_gnonative.bufbuild_es/rpc_pb";
 import Alert from "@/components/alert";
-import { useGnoNativeContext } from "@gnolang/gnonative";
 import { ModalView } from "@/components/modal";
 import Text from "@/components/text";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
-import { selectMasterPassword, useAppSelector } from "@/redux";
+import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
 
 export type Props = {
   visible: boolean;
@@ -25,12 +22,13 @@ export type Props = {
 };
 
 const ChangeMasterPassword = ({ visible, onClose }: Props) => {
-  const { gnonative } = useGnoNativeContext();
+  const [loadingMasterPassword, setLoadingMasterPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [reenterPassword, setReenterPassword] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
 
   const masterPassword = useAppSelector(selectMasterPassword)
+  const dispatch = useAppDispatch();
 
   const inputRef = useRef<RNTextInput>(null);
 
@@ -50,36 +48,19 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
       return;
     }
 
+    if (!masterPassword) {
+      setError("Master password not found.");
+      return;
+    }
+
     try {
-
-      const response = await gnonative.listKeyInfo();
-
-      if (response.length === 0) {
-        throw new Error("No accounts found.");
-      }
-
-      if (!masterPassword) {
-        throw new Error("Master password not found.");
-      }
-
-      for (const account of response) {
-        console.log("change password for account", account);
-        await gnonative.selectAccount(account.name);
-        await gnonative.setPassword(masterPassword);
-        await gnonative.updatePassword(password);
-      }
-      console.log("done changing password for all accounts");
-
+      setLoadingMasterPassword(true);
+      await dispatch(changeMasterPassword({ newPassword: password, masterPassword })).unwrap()
       onClose(true);
-
     } catch (error: any) {
-      console.error(error);
-      const err = new GRPCError(error);
-      if (err.errCode() === ErrCode.ErrDecryptionFailed) {
-        setError("Wrong password, please try again.");
-      } else {
-        setError(JSON.stringify(error));
-      }
+      setError(error.message);
+    } finally {
+      setLoadingMasterPassword(false);
     }
   };
 
@@ -107,7 +88,7 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
               onChangeText={setReenterPassword}
             />
             <Alert severity="error" message={error} />
-            <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" />
+            <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
             <Spacer />
           </ModalView.Content>
         </TouchableWithoutFeedback>

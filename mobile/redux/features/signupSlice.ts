@@ -2,7 +2,7 @@ import { PayloadAction, ThunkDispatch, createAsyncThunk, createSlice } from "@re
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "redux/redux-provider";
 import { Alert } from "react-native";
-import { UseSearchReturnType } from "@gno/hooks/use-search";
+import { UseSearchReturnType } from "@/src/hooks/use-search";
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',

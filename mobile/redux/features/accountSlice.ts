@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { User } from "@/types";
-import { KeyInfo } from "@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb";
-import { GnoNativeApi } from "@gnolang/gnonative";
+import { ErrCode, GnoNativeApi, GRPCError, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "redux/redux-provider";
 
 export interface CounterState {
@@ -16,6 +15,11 @@ interface LoginParam {
   keyInfo: KeyInfo;
 }
 
+interface ChangeMasterParam {
+  newPassword: string
+  masterPassword: string
+}
+
 export const loggedIn = createAsyncThunk<User, LoginParam, ThunkExtra>("user/loggedIn", async (param, config) => {
   const { keyInfo } = param;
 
@@ -26,6 +30,47 @@ export const loggedIn = createAsyncThunk<User, LoginParam, ThunkExtra>("user/log
 
   return user;
 });
+
+export const changeMasterPassword = createAsyncThunk<Boolean, ChangeMasterParam, ThunkExtra>("user/changeMasterPass", async (param, config) => {
+  const { newPassword, masterPassword } = param;
+
+  const gnonative = config.extra.gnonative as GnoNativeApi;
+
+  if (!newPassword) {
+    throw new Error("newPassword is required.")
+  }
+
+  if (!masterPassword) {
+    throw new Error("Master password not found.");
+  }
+
+  try {
+    const response = await gnonative.listKeyInfo();
+
+    if (response.length === 0) {
+      throw new Error("No accounts found.");
+    }
+
+    for (const account of response) {
+      console.log("change password for account", account);
+      await gnonative.selectAccount(account.name);
+      await gnonative.setPassword(masterPassword);
+      await gnonative.updatePassword(newPassword);
+    }
+
+    console.log("done changing password for all accounts");
+    return true
+
+  } catch (error: any) {
+    console.error(error);
+    const err = new GRPCError(error);
+    if (err.errCode() === ErrCode.ErrDecryptionFailed) {
+      throw new Error("Wrong current master password, please try again.");
+    } else {
+      throw new Error(JSON.stringify(error));
+    }
+  }
+})
 
 export const accountSlice = createSlice({
   name: "account",

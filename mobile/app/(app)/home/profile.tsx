@@ -63,7 +63,7 @@ export default function Page() {
         </Layout.Body>
       </Layout.Container>
       <LoadingModal visible={loading} />
-      <ChangeMasterPassword visible={showChangePassModal} onClose={setShowChangePassModal} />
+      <ChangeMasterPassword visible={showChangePassModal} onClose={() => setShowChangePassModal(false)} />
     </>
   );
 }

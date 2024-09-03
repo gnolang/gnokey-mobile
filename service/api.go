@@ -49,7 +49,7 @@ func (s *gnokeyMobileService) SignTx(ctx context.Context, req *connect.Request[g
 		return nil, err
 	}
 
-	signedTx, err := s.gnoNativeService.ClientSignTx(tx, req.Msg.AccountNumber, req.Msg.SequenceNumber)
+	signedTx, err := s.gnoNativeService.ClientSignTx(tx, req.Msg.Address, req.Msg.AccountNumber, req.Msg.SequenceNumber)
 	if err != nil {
 		return nil, err
 	}

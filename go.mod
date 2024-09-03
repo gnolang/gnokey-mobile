@@ -8,8 +8,8 @@ require (
 	connectrpc.com/connect v1.16.2
 	connectrpc.com/grpchealth v1.3.0
 	connectrpc.com/grpcreflect v1.2.0
-	github.com/gnolang/gno v0.1.1
-	github.com/gnolang/gnonative v1.5.1-0.20240814142433-69d4f3e915b3
+	github.com/gnolang/gno v0.1.2-0.20240826090356-651f5aac3706
+	github.com/gnolang/gnonative v1.7.3-0.20240903142546-1a678ad07ce4
 	github.com/peterbourgon/ff/v3 v3.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/cors v1.11.0

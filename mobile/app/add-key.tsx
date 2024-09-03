@@ -5,7 +5,7 @@ import TextInput from "components/textinput";
 import Button from "components/button";
 import Spacer from "components/spacer";
 import * as Clipboard from "expo-clipboard";
-import { loggedIn, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
+import { selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import Alert from "@/components/alert";
 import { Layout } from "@/components/index";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -84,7 +84,6 @@ export default function Page() {
         return;
       }
       if (signUpState === SignUpState.account_created && newAccount) {
-        await dispatch(loggedIn({ keyInfo: newAccount })).unwrap();
         router.push("/home");
       }
     })();

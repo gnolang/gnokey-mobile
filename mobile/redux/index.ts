@@ -1,15 +1,19 @@
+import { configureStore } from "@reduxjs/toolkit";
 import type { TypedUseSelectorHook } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
+import { reducer } from "./redux-provider";
 
+// TODO: calling configureStore with reducer was the only way to make TS types work.
+const storeForTypes = configureStore({ reducer })
 
-// TODO: do not use any type
-export type RootState = ReturnType<any>;
+export type AppStore = typeof storeForTypes
+
+export type RootState = ReturnType<AppStore['getState']>
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
-// TODO: do not use any type
-export type AppDispatch = any;
+export type AppDispatch = AppStore['dispatch']
 
 export * from "./features";

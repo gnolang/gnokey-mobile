@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, RootState } from "@reduxjs/toolkit";
 import { ThunkExtra } from "redux/redux-provider";
 import * as SecureStore from 'expo-secure-store';
+import { ErrCode, GnoNativeApi, GRPCError } from "@gnolang/gnonative";
 
 interface CounterState {
   masterPassword?: string;
@@ -20,6 +21,11 @@ interface SignInParam {
 
 interface SignUpParam {
   masterPassword: string;
+}
+
+interface ChangeMasterParam {
+  newPassword: string
+  masterPassword: string
 }
 
 const MATER_PASS_KEY = "master_password_key_store";
@@ -47,6 +53,51 @@ export const signIn = createAsyncThunk<boolean, SignInParam, ThunkExtra>("signin
 
   return true;
 });
+
+export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, ThunkExtra>("user/changeMasterPass", async (param, config) => {
+  const { newPassword } = param;
+  const { masterPassword } = (config.getState() as RootState).signIn
+
+  const gnonative = config.extra.gnonative as GnoNativeApi;
+
+  if (!newPassword) {
+    throw new Error("newPassword is required.")
+  }
+
+  if (!masterPassword) {
+    throw new Error("Master password not found.");
+  }
+
+  try {
+    const response = await gnonative.listKeyInfo();
+
+    if (response.length === 0) {
+      throw new Error("No accounts found.");
+    }
+
+    for (const account of response) {
+      console.log("change password for account", account);
+      await gnonative.selectAccount(account.name);
+      await gnonative.setPassword(masterPassword);
+      await gnonative.updatePassword(newPassword);
+    }
+
+    console.log("done changing password for all accounts");
+    // update the master password in the secure store
+    await SecureStore.setItemAsync(MATER_PASS_KEY, newPassword);
+
+    return newPassword
+
+  } catch (error: any) {
+    console.error(error);
+    const err = new GRPCError(error);
+    if (err.errCode() === ErrCode.ErrDecryptionFailed) {
+      throw new Error("Wrong current master password.");
+    } else {
+      throw new Error(JSON.stringify(error));
+    }
+  }
+})
 
 export const getInitialState = createAsyncThunk<{ masterPassword: string | null }, void>("signin/getInitialState", async () => {
   return {
@@ -77,6 +128,9 @@ export const signinSlice = createSlice({
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
       state.masterPassword = action.payload.masterPassword ?? undefined;
+    });
+    builder.addCase(changeMasterPassword.fulfilled, (state, action) => {
+      state.masterPassword = action.payload;
     });
   },
 

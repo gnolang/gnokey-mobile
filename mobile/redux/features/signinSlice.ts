@@ -55,8 +55,7 @@ export const signIn = createAsyncThunk<boolean, SignInParam, ThunkExtra>("signin
 });
 
 export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, ThunkExtra>("user/changeMasterPass", async (param, config) => {
-  const { newPassword } = param;
-  const { masterPassword } = (config.getState() as RootState).signIn
+  const { newPassword, masterPassword } = param;
 
   const gnonative = config.extra.gnonative as GnoNativeApi;
 

@@ -24,6 +24,7 @@ export type Props = {
 const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   const [loadingMasterPassword, setLoadingMasterPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [reenterPassword, setReenterPassword] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -53,6 +54,11 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
       return;
     }
 
+    if (currentPassword !== masterPassword) {
+      setError("Current password is incorrect.");
+      return;
+    }
+
     try {
       setLoadingMasterPassword(true);
       await dispatch(changeMasterPassword({ newPassword: password, masterPassword })).unwrap()
@@ -76,6 +82,12 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
             <Spacer />
             <TextInput
               ref={inputRef}
+              placeholder={`Current password`}
+              error={error}
+              secureTextEntry={true}
+              onChangeText={setCurrentPassword}
+            />
+            <TextInput
               placeholder={`New password`}
               error={error}
               secureTextEntry={true}

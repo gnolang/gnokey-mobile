@@ -36,5 +36,5 @@ export const Confirm = (props: Props) => {
     setShowModal(props.visible);
   }, [props.visible]);
 
-  return <ModalConfirm {...props} onClose={() => setShowModal(false)} visible={showModal} />;
+  return <ModalConfirm {...props} onCancel={() => setShowModal(false)} visible={showModal} />;
 };

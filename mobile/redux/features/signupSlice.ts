@@ -181,27 +181,27 @@ const onboard = async (gnonative: GnoNativeApi, account: KeyInfo) => {
 
     if (hasBalance) {
       console.log("user %s already has a balance", name);
-      await registerAccount(gnonative, name);
+      await registerAccount(gnonative, account);
       return;
     }
 
     const response = await sendCoins(address_bech32);
     console.log("sent coins %s", response);
 
-    await registerAccount(gnonative, name);
+    await registerAccount(gnonative, account);
   } catch (error) {
     console.error("onboard error", error);
   }
 };
 
-const registerAccount = async (gnonative: GnoNativeApi, name: string) => {
+const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
   console.log("Registering account %s", name);
   try {
     const gasFee = "10000000ugnot";
-    const gasWanted = 20000000;
+    const gasWanted = BigInt(20000000);
     const send = "200000000ugnot";
-    const args: Array<string> = ["", name, "Profile description"];
-    for await (const response of await gnonative.call("gno.land/r/demo/users", "Register", args, gasFee, gasWanted, send)) {
+    const args: Array<string> = ["", account.name, "Profile description"];
+    for await (const response of await gnonative.call("gno.land/r/demo/users", "Register", args, gasFee, gasWanted, account.address, send)) {
       console.log("response: ", JSON.stringify(response));
     }
   } catch (error) {

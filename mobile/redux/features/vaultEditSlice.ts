@@ -48,14 +48,6 @@ export const vaultSlice = createSlice({
   selectors: {
     selectVaultToEdit: (state) => state.vaultToEdit,
   },
-  extraReducers(builder) {
-    // builder.addCase(setPostToReply.fulfilled, (state, action) => {
-    //   state.postToReply = action.payload.post;
-    // });
-    // builder.addCase(setPostToReply.rejected, (state, action) => {
-    //   console.log("Error while replying a post, please, check the logs. %s", action.error.message);
-    // });
-  },
 });
 
 export const { setVaultToEdit } = vaultSlice.actions;

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "../redux-provider";
+import { ThunkExtra } from "@/src/providers/redux-provider";
 
 export interface State {
   vaultToEdit: KeyInfo | undefined;

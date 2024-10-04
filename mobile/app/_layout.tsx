@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Guard } from "@/components/auth/guard";
 import { GnoNativeProvider } from "@gnolang/gnonative";
-import { ReduxProvider } from "redux/redux-provider";
+import { LinkingProvider, ReduxProvider } from "@/src/providers";
 
 const gnoDefaultConfig = {
   remote: process.env.EXPO_PUBLIC_GNO_REMOTE!,
@@ -15,6 +15,7 @@ export default function AppLayout() {
     <GnoNativeProvider config={gnoDefaultConfig}>
       <ReduxProvider>
         <ThemeProvider value={DefaultTheme}>
+        <LinkingProvider>
           <Guard>
             <Stack
               screenOptions={{
@@ -24,6 +25,7 @@ export default function AppLayout() {
               }}
             />
           </Guard>
+          </LinkingProvider>
         </ThemeProvider>
       </ReduxProvider>
     </GnoNativeProvider>

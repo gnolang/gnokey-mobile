@@ -1,6 +1,6 @@
-import { PayloadAction, ThunkDispatch, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "redux/redux-provider";
+import { ThunkExtra } from "@/src/providers/redux-provider";
 import { Alert } from "react-native";
 import { UseSearchReturnType } from "@/src/hooks/use-search";
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { getInitialState, selectInitialized, selectMasterPassword, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
+import { getInitialState, selectInitialized, selectMasterPassword, selectTxInput, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
 import * as Application from "expo-application";
 import SignInView from "@/views/signin";
 import SignUpView from "@/views/signup";
@@ -13,35 +13,49 @@ export default function Root() {
 
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
   const appVersion = Application.nativeApplicationVersion;
 
   const appInitialized = useAppSelector(selectInitialized)
   const hasMasterPassword = useAppSelector(selectMasterPassword)
+  const txInput = useAppSelector(selectTxInput)
 
   useEffect(() => {
     dispatch(getInitialState())
   }, []);
 
   const onCreateMasterPress = async (masterPassword: string) => {
-    await dispatch(signUp({ masterPassword })).unwrap().then(() => {
-      setTimeout(() => route.replace("/home"));
-    }).catch((error: any) => {
+    try {
+      await dispatch(signUp({ masterPassword })).unwrap()
+
+      naviateTo()
+
+    } catch (error:any) {
       console.log("error", error.message);
       setError(error?.message);
-    })
+    }
   }
 
   const onUnlokPress = async (masterPassword: string) => {
-    await dispatch(signIn({ masterPassword })).unwrap().then(() => {
-      setTimeout(() => route.replace("/home"), 500);
-    }).catch((error: any) => {
+    try {
+      await dispatch(signIn({ masterPassword })).unwrap()
+
+      naviateTo()
+
+    } catch (error:any) {
       console.log("error", error.message);
       setError(error?.message);
-    })
+    }
   };
+
+  const naviateTo = () => {
+    if (txInput) {
+      route.replace("/tosign");
+    } else {
+      route.replace("/home");
+    }
+  }
 
   if (!appInitialized) {
     return (

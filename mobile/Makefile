@@ -75,6 +75,7 @@ clean_install: clean node_modules
 .PHONY: clean_install
 
 release.ios: node_modules
+	npx expo install --chec
 	npm run ts:check
 	eas build --platform ios --profile production
 .PHONY: release.ios

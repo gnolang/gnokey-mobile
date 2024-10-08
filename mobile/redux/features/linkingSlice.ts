@@ -1,17 +1,39 @@
 import { createAsyncThunk, createSlice, PayloadAction, RootState } from "@reduxjs/toolkit";
 import { ThunkExtra } from "@/src/providers/redux-provider";
-import { ErrCode, GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
+import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
+import * as Linking from 'expo-linking';
 
 interface CounterState {
   txInput?: string;
   /* The callback URL to return to after each operation */
   callback?: string;
+  /* The path of the requested screen */
+  path?: string | 'tologin';
 }
 
 const initialState: CounterState = {
   txInput: undefined,
   callback: undefined,
+  path: undefined,
 };
+
+/**
+ * Send the address to the soliciting app
+ */
+export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo }, ThunkExtra>("linking/sendAddressToSoliciting", async ({ keyInfo }, thunkAPI) => {
+  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+  const { callback } = (thunkAPI.getState() as RootState).linking;
+
+  console.log('sendAddressToSoliciting', keyInfo, callback);
+
+  if (!callback) {
+    throw new Error("No callback found.");
+  }
+
+  const bech32 = await gnonative.addressToBech32(keyInfo?.address);
+
+  Linking.openURL(callback + '?address=' + bech32 + '&cachekill=' + new Date().getTime());
+});
 
 export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>("linking/signTx", async ({ keyInfo }, thunkAPI) => {
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
@@ -42,19 +64,21 @@ export const linkingSlice = createSlice({
   name: "linking",
   initialState,
   reducers: {
-    setTxInput: (state, action: PayloadAction<{ txInput: string }>) => {
-      state.txInput = action.payload.txInput;
+    setLinkingData: (state, action: PayloadAction<Linking.ParsedURL>) => {
+      const queryParams = action.payload.queryParams
+
+      state.txInput = queryParams?.tx ? queryParams.tx as string : undefined
+      state.callback = queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined
+      state.path = queryParams?.path as string
     },
-    setCallback: (state, action: PayloadAction<{ callback: string }>) => {
-      state.callback = action.payload.callback;
-    }
   },
   selectors: {
     selectTxInput: (state) => state.txInput,
     selectCallback: (state) => state.callback,
+    selectPath: (state) => state.path,
   },
 });
 
-export const { setTxInput, setCallback } = linkingSlice.actions;
+export const { setLinkingData } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback } = linkingSlice.selectors;
+export const { selectTxInput, selectCallback, selectPath } = linkingSlice.selectors;

@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/redux';
-import { setCallback, setTxInput } from '@/redux/features/linkingSlice';
+import { setLinkingData } from '@/redux/features/linkingSlice';
 import * as Linking from 'expo-linking';
 import { useEffect } from 'react';
 
@@ -10,25 +10,18 @@ const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (url) {
-      const { hostname, path, queryParams } = Linking.parse(url);
+    (async () => {
+      if (url) {
+        const linkingParsedURL = Linking.parse(url);
 
-      console.log("link url", url);
-      console.log("link hostname", hostname);
-      console.log("link path", path);
-      console.log("link queryParams", queryParams);
+        console.log("link url", url);
+        console.log("link hostname", linkingParsedURL.hostname);
+        console.log("link path", linkingParsedURL.path);
+        console.log("link queryParams", linkingParsedURL.queryParams);
 
-      if (queryParams) {
-
-        if (queryParams.tx && typeof queryParams.tx === "string") {
-          dispatch(setTxInput({ txInput: queryParams.tx }));
-        }
-
-        if (queryParams.callback && typeof queryParams.callback === "string") {
-          dispatch(setCallback({ callback: decodeURIComponent(queryParams.callback) }));
-        }
+        dispatch(setLinkingData(linkingParsedURL))
       }
-    }
+    })()
   }, [url]);
 
   return <>{children}</>;

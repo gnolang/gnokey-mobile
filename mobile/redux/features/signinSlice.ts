@@ -77,8 +77,11 @@ export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, 
     for (const account of response) {
       console.log("change password for account", account);
       await gnonative.selectAccount(account.name);
+      console.log("selected account", account);
       await gnonative.setPassword(masterPassword);
+      console.log("set password for account", account);
       await gnonative.updatePassword(newPassword, [account.address]);
+      console.log("updated password for account", account);
     }
 
     console.log("done changing password for all accounts");

@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { selectTxInput, signTx, useAppDispatch, useAppSelector } from "@/redux";
+import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
@@ -18,8 +18,23 @@ export default function Page() {
     const { gnonative } = useGnoNativeContext();
     const navigation = useNavigation();
     const txInput = useAppSelector(selectTxInput);
+    const bech32Address = useAppSelector(selectBech32Address);
+    const [accountName, setAccountName] = useState<string | undefined>(undefined);
+    const clientName = useAppSelector(selectClientName);
+    const reason = useAppSelector(reasonSelector);
 
     console.log('txInput', txInput);
+    console.log('bech32Address', bech32Address);
+    console.log('clientName', clientName);
+    console.log('reason', reason);
+
+    useEffect(() => {
+        (async () => {
+        const accountNameStr = await gnonative.qEval("gno.land/r/demo/users", `GetUserByAddress("${bech32Address}").Name`);
+        setAccountName(accountNameStr);
+        })();
+    }, [bech32Address]);
+
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", async () => {
@@ -55,7 +70,12 @@ export default function Page() {
         <>
             <Layout.Container>
                 <Layout.BodyAlignedBotton>
-                    <Text.Title>Select a key to sign the transaction</Text.Title>
+                    <Text.Title>{clientName} is requiring permission to {reason}.</Text.Title>
+                    <Spacer space={16} />
+                    <Text.Body>In the next version of this app you'll get more details about the transaction dSocial is trying to execute.</Text.Body>
+
+                    <Spacer space={16} />
+                    <Text.Title>For now, please select a key {accountName} to sign the transaction</Text.Title>
                     <Spacer space={16} />
 
                     {accounts && (

@@ -4,6 +4,9 @@ import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from 'expo-linking';
 
 interface CounterState {
+  clientName?: string;
+  reason?: string;
+  bech32Address?: string;
   txInput?: string;
   /* The callback URL to return to after each operation */
   callback?: string;
@@ -12,6 +15,9 @@ interface CounterState {
 }
 
 const initialState: CounterState = {
+  clientName: undefined,
+  reason: undefined,
+  bech32Address: undefined,
   txInput: undefined,
   callback: undefined,
   path: undefined,
@@ -67,6 +73,9 @@ export const linkingSlice = createSlice({
     setLinkingData: (state, action: PayloadAction<Linking.ParsedURL>) => {
       const queryParams = action.payload.queryParams
 
+      state.reason = queryParams?.reason ? queryParams.reason as string : undefined
+      state.clientName = queryParams?.client_name ? queryParams.client_name as string : undefined
+      state.bech32Address = queryParams?.address ? queryParams.address as string : undefined
       state.txInput = queryParams?.tx ? queryParams.tx as string : undefined
       state.callback = queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined
       state.path = queryParams?.path as string
@@ -76,9 +85,12 @@ export const linkingSlice = createSlice({
     selectTxInput: (state) => state.txInput,
     selectCallback: (state) => state.callback,
     selectPath: (state) => state.path,
+    selectBech32Address: (state) => state.bech32Address,
+    selectClientName: (state) => state.clientName,
+    reasonSelector: (state) => state.reason,
   },
 });
 
 export const { setLinkingData } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback, selectPath } = linkingSlice.selectors;
+export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector } = linkingSlice.selectors;

@@ -195,7 +195,7 @@ const onboard = async (gnonative: GnoNativeApi, account: KeyInfo) => {
 };
 
 const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
-  console.log("Registering account %s", name);
+  console.log("Registering account %s", account.name);
   try {
     const gasFee = "10000000ugnot";
     const gasWanted = BigInt(20000000);
@@ -205,8 +205,8 @@ const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
       console.log("response: ", JSON.stringify(response));
     }
   } catch (error) {
-    Alert.alert("Error on registering account", "" + error);
     console.error("error registering account", error);
+    Alert.alert("Error on registering account", "" + error);
   }
 };
 
@@ -223,7 +223,7 @@ const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
 
     return hasBalance;
   } catch (error: any) {
-    console.error("error on hasBalance", error["rawMessage"]);
+    console.log("error on hasBalance", error["rawMessage"]);
     if (error["rawMessage"] === "invoke bridge method error: unknown: ErrUnknownAddress(#206)") return false;
     return false;
   }

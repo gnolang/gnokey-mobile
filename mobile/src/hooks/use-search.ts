@@ -1,4 +1,4 @@
-import { GetJsonFollowersResult, GetJsonFollowingResult, User } from "@gno/types";
+import { GetJsonFollowersResult, GetJsonFollowingResult, User } from "@/types";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 
 const MAX_RESULT = 10;
@@ -11,7 +11,7 @@ export const useSearch = () => {
 
     try {
       const gasFee = "1000000ugnot";
-      const gasWanted = 10000000;
+      const gasWanted = BigInt(10000000);
       const args: Array<string> = [address];
       for await (const response of await gnonative.call("gno.land/r/berty/social", "Follow", args, gasFee, gasWanted)) {
         console.log("response: ", JSON.stringify(response));
@@ -26,7 +26,7 @@ export const useSearch = () => {
 
     try {
       const gasFee = "1000000ugnot";
-      const gasWanted = 10000000;
+      const gasWanted = BigInt(10000000);
       const args: Array<string> = [address];
       for await (const response of await gnonative.call("gno.land/r/berty/social", "Unfollow", args, gasFee, gasWanted)) {
         console.log("response: ", JSON.stringify(response));

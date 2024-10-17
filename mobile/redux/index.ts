@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import type { TypedUseSelectorHook } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
-import { reducer } from "./redux-provider";
+import { reducer } from "@/src/providers/redux-provider";
 
 // TODO: calling configureStore with reducer was the only way to make TS types work.
 const storeForTypes = configureStore({ reducer })

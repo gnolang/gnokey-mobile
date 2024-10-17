@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "../redux-provider";
+import { ThunkExtra } from "@/src/providers/redux-provider";
 
 export interface State {
   vaultToEdit: KeyInfo | undefined;
@@ -47,14 +47,6 @@ export const vaultSlice = createSlice({
   },
   selectors: {
     selectVaultToEdit: (state) => state.vaultToEdit,
-  },
-  extraReducers(builder) {
-    // builder.addCase(setPostToReply.fulfilled, (state, action) => {
-    //   state.postToReply = action.payload.post;
-    // });
-    // builder.addCase(setPostToReply.rejected, (state, action) => {
-    //   console.log("Error while replying a post, please, check the logs. %s", action.error.message);
-    // });
   },
 });
 

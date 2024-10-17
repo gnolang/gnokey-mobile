@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, RootState } from "@reduxjs/toolkit";
-import { ThunkExtra } from "redux/redux-provider";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ThunkExtra } from "@/src/providers/redux-provider";
 import * as SecureStore from 'expo-secure-store';
 import { ErrCode, GnoNativeApi, GRPCError } from "@gnolang/gnonative";
 
@@ -77,8 +77,11 @@ export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, 
     for (const account of response) {
       console.log("change password for account", account);
       await gnonative.selectAccount(account.name);
+      console.log("selected account", account);
       await gnonative.setPassword(masterPassword);
-      await gnonative.updatePassword(newPassword);
+      console.log("set password for account", account);
+      await gnonative.updatePassword(newPassword, [account.address]);
+      console.log("updated password for account", account);
     }
 
     console.log("done changing password for all accounts");

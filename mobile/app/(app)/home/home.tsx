@@ -57,8 +57,8 @@ export default function Page() {
         throw new Error("No master password defined. Please create one.");
       }
 
-      await gnonative.selectAccount(keyInfo.name);
-      await gnonative.setPassword(masterPassword);
+      await gnonative.activateAccount(keyInfo.name);
+      await gnonative.setPassword(masterPassword, keyInfo.address);
 
       setLoading(undefined);
 

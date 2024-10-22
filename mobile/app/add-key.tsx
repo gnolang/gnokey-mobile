@@ -113,8 +113,8 @@ export default function Page() {
     }
 
     if (signUpState === SignUpState.user_exists_only_on_local_storage && existingAccount) {
-      await gnonative.selectAccount(name);
-      await gnonative.setPassword(masterPassword);
+      await gnonative.activateAccount(name);
+      await gnonative.setPassword(masterPassword, existingAccount.address);
       await dispatch(onboarding({ account: existingAccount })).unwrap();
       return;
     }

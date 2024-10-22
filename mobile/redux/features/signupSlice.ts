@@ -107,8 +107,8 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 
     console.log("createAccount response: " + JSON.stringify(newAccount));
 
-    await gnonative.selectAccount(name);
-    await gnonative.setPassword(password);
+    await gnonative.activateAccount(name);
+    await gnonative.setPassword(password, newAccount.address);
 
     thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
     await onboard(gnonative, newAccount);

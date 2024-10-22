@@ -4,14 +4,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { vaultSlice, signinSlice, linkingSlice } from "@/redux/features";
 import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
 import { signUpSlice } from "@/redux/features/signupSlice";
-import { useSearch, UseSearchReturnType } from "@/src/hooks/use-search";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export interface ThunkExtra {
-  extra: { gnonative: GnoNativeApi; search: UseSearchReturnType };
+  extra: { gnonative: GnoNativeApi };
 }
 
 export const reducer = {
@@ -24,7 +23,6 @@ export const reducer = {
 const ReduxProvider: React.FC<Props> = ({ children }) => {
   // Exposing GnoNative API to reduxjs/toolkit
   const { gnonative } = useGnoNativeContext();
-  const search = useSearch();
 
   const store = configureStore({
     reducer,
@@ -36,8 +34,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
           // To make Thunk inject gnonative in all Thunk objects.
           // https://redux.js.org/tutorials/essentials/part-6-performance-normalization#thunk-arguments
           extraArgument: {
-            gnonative,
-            search,
+            gnonative
           },
         },
       }),

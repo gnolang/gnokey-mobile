@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Text from "@/components/text";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import * as Application from "expo-application";
-import { useSearch } from "@/src/hooks/use-search";
 
 interface Props {
   activeAccount: KeyInfo | undefined;
@@ -13,7 +12,6 @@ export function AccountBalance({ activeAccount }: Props) {
   const [balance, setBalance] = useState<string | undefined>(undefined);
 
   const { gnonative } = useGnoNativeContext();
-  const account = useSearch();
 
   useEffect(() => {
     (async () => {

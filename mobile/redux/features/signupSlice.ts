@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/src/providers/redux-provider";
 import { Alert } from "react-native";
-import { UseSearchReturnType } from "@/src/hooks/use-search";
+import { User } from "@/types";
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -56,10 +56,9 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 
   const { name, password, phrase } = param;
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const search = thunkAPI.extra.search;
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
-  const blockchainUser = await checkForUserOnBlockchain(gnonative, search, name, phrase);
+  const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase);
   thunkAPI.dispatch(addProgress(`response: "${JSON.stringify(blockchainUser)}"`))
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
@@ -140,8 +139,8 @@ const checkForUserOnLocalStorage = async (gnonative: GnoNativeApi, name: string)
   return userOnLocalStorage
 }
 
-const checkForUserOnBlockchain = async (gnonative: GnoNativeApi, search: UseSearchReturnType, name: string, phrase: string): Promise<{ address: string, state: SignUpState } | undefined> => {
-  const result = await search.getJsonUserByName(name);
+const checkForUserOnBlockchain = async (gnonative: GnoNativeApi, name: string, phrase: string): Promise<{ address: string, state: SignUpState } | undefined> => {
+  const result = await getJsonUserByName(name, gnonative);
 
   if (result?.address) {
     console.log("user %s already exists on the blockchain under the same name", name);
@@ -169,6 +168,23 @@ const checkForUserOnBlockchain = async (gnonative: GnoNativeApi, search: UseSear
   }
 
   return undefined;
+}
+
+async function getJsonUserByName(username: string, gnonative: GnoNativeApi) {
+  const result = await gnonative.qEval("gno.land/r/berty/social", `GetJsonUserByName("${username}")`);
+  const json = (await convertToJson(result)) as User;
+  return json;
+}
+
+async function convertToJson(result: string | undefined) {
+  if (result === '("" string)') return undefined;
+
+  if (!result || !(result.startsWith("(") && result.endsWith(" string)"))) throw new Error("Malformed GetThreadPosts response");
+  const quoted = result.substring(1, result.length - " string)".length);
+  const json = JSON.parse(quoted);
+  const jsonPosts = JSON.parse(json);
+
+  return jsonPosts;
 }
 
 const onboard = async (gnonative: GnoNativeApi, account: KeyInfo) => {

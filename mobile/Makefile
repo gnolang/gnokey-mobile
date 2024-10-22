@@ -5,15 +5,18 @@ node_modules: package.json package-lock.json
 	(npm install && touch $@) || true
 .PHONY: node_modules
 
-ios: node_modules # Run the iOS app
+ts_check:
+	npm run ts:check
+
+ios: node_modules ts_check # Run the iOS app
 	npx expo run:ios
 .PHONY: ios
 
-ios.release: node_modules # Run the iOS app in release mode
+ios.release: node_modules ts_check # Run the iOS app in release mode
 	npx expo run:ios --configuration Release
 .PHONY: ios.release
 
-android: node_modules # Run the Android app
+android: node_modules ts_check # Run the Android app
 	npx expo run:android
 .PHONY: android
 

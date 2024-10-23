@@ -42,7 +42,7 @@ const TextInputBase = styled.TextInput.attrs<Props>({
   flex: 1;
   padding: 8px;
   font-size: 16px;
-  color: black;
+  color: ${(props) => (props.editable === false ? "gray" : "black")};
   height: 48px;
   border-width: 0;
 `;

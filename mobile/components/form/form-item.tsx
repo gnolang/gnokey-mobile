@@ -21,7 +21,7 @@ const initialStyle = StyleSheet.create({
     width: '100%',
   },
   label: {
-    marginBottom: 8,
+    marginBottom: 0,
   },
 });
 

@@ -4,11 +4,12 @@ import FormItem from "@/components/form/form-item";
 import { ModalConfirm } from "@/components/modal";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { useSelector } from "react-redux";
 import { deleteVault, selectVaultToEdit, useAppDispatch } from "@/redux";
 import { useRouter } from "expo-router";
+import { useGnoNativeContext } from "@gnolang/gnonative";
 
 const Page = () => {
 
@@ -18,6 +19,19 @@ const Page = () => {
 
   const [vaultName, setVaultName] = useState(vault?.name);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [addressBech32, setAddressBech32] = useState('');
+
+  const { gnonative } = useGnoNativeContext();
+
+  useEffect(() => {
+    (
+      async () => {
+        if (!vault) return;
+        const address = await gnonative.addressToBech32(vault.address);
+        setAddressBech32(address);
+      }
+    )()
+  }, [vault]);
 
   const onSave = () => {
     // TODO: VALIDATE THE NAME HERE
@@ -43,6 +57,9 @@ const Page = () => {
         <View style={{ padding: 16 }}>
           <FormItem label="Vault name">
             <TextInput value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
+          </FormItem>
+          <FormItem label="Address">
+            <TextInput value={addressBech32} placeholder="Address" editable={false} />
           </FormItem>
           <View style={{ flex: 1 }}>
             {/* <Button.TouchableOpacity title="Save" onPress={onSave} style={{ marginTop: 16 }} variant="primary" /> */}

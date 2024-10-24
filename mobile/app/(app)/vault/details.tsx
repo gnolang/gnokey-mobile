@@ -59,7 +59,7 @@ const Page = () => {
             <TextInput value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
           </FormItem>
           <FormItem label="Address">
-            <TextInput value={addressBech32} placeholder="Address" editable={false} />
+            <TextInput value={addressBech32} placeholder="Address" style={{ color: 'gray' }} multiline numberOfLines={2} />
           </FormItem>
           <View style={{ flex: 1 }}>
             {/* <Button.TouchableOpacity title="Save" onPress={onSave} style={{ marginTop: 16 }} variant="primary" /> */}

@@ -26,7 +26,8 @@ require (
 	github.com/cosmos/ledger-cosmos-go v0.13.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
-	github.com/gnolang/gnonative v1.8.2-0.20241025160816-f47f15dc5c90 // indirect
+	github.com/gnolang/gno v0.0.0-20241029141810-12bd8da50dc1
+	github.com/gnolang/gnonative v1.8.2-0.20241030091348-c0f18fd181ae
 	github.com/gnolang/overflow v0.0.0-20170615021017-4d914c927216 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect

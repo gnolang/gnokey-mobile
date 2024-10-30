@@ -2,7 +2,7 @@ import { Layout } from "@/components";
 import Button from "@/components/button";
 import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo } from "@/redux";
+import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -48,6 +48,11 @@ export default function Page() {
         router.push("/home")
     }
 
+    const onCancel = () => {
+        dispatch(clearLinking());
+        router.push("/home")
+    }
+
     return (
         <>
             <Layout.Container>
@@ -66,7 +71,7 @@ export default function Page() {
                     <Spacer space={16} />
 
                     <Button.TouchableOpacity title="Approve" variant="primary" onPress={signTxAndReturnToRequester}></Button.TouchableOpacity>
-                    <Button.TouchableOpacity title="Cancel" variant="primary-red" onPress={() => router.push("/home")}></Button.TouchableOpacity>
+                    <Button.TouchableOpacity title="Cancel" variant="primary-red" onPress={onCancel}></Button.TouchableOpacity>
                 </Layout.BodyAlignedBotton>
             </Layout.Container>
         </>

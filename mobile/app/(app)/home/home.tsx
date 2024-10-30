@@ -3,7 +3,7 @@ import { FlatList, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { isToLoginSelector, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
+import { selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import Octicons from '@expo/vector-icons/Octicons';
 import TextInput from "@/components/textinput";

@@ -6,7 +6,7 @@ import Text from "@/components/text";
 import { clearLinking, selectCallback, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
 
 export default function Page() {

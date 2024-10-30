@@ -142,9 +142,10 @@ export const linkingSlice = createSlice({
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
     isToLoginSelector: (state) => state.hostname === 'tologin',
+    selectAction: (state) => state.hostname,
   },
 });
 
 export const { clearLinking } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToLoginSelector } = linkingSlice.selectors;
+export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToLoginSelector, selectAction } = linkingSlice.selectors;

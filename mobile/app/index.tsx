@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { getInitialState, selectInitialized, selectMasterPassword, selectPath, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
+import { getInitialState, isToLoginSelector, selectInitialized, selectMasterPassword, selectPath, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
 import * as Application from "expo-application";
 import SignInView from "@/views/signin";
 import SignUpView from "@/views/signup";
@@ -19,7 +19,7 @@ export default function Root() {
 
   const appInitialized = useAppSelector(selectInitialized)
   const hasMasterPassword = useAppSelector(selectMasterPassword)
-  const path = useAppSelector(selectPath);
+  const isToLogin = useAppSelector(isToLoginSelector);
 
   useEffect(() => {
     dispatch(getInitialState())
@@ -50,9 +50,8 @@ export default function Root() {
   };
 
   const naviateTo = () => {
-    console.log("path", path);
-    if (path) {
-      route.replace(path as string);
+    if (isToLogin) {
+      route.replace('/tologin');
     } else {
       route.replace("/home");
     }

@@ -3,7 +3,7 @@ import { FlatList, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { selectMasterPassword, selectTxInput, useAppDispatch, useAppSelector } from "@/redux";
+import { isToLoginSelector, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import Octicons from '@expo/vector-icons/Octicons';
 import TextInput from "@/components/textinput";
@@ -22,7 +22,6 @@ export default function Page() {
   const { gnonative } = useGnoNativeContext();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const txInput = useAppSelector(selectTxInput);
   const masterPassword = useAppSelector(selectMasterPassword)
 
   useEffect(() => {

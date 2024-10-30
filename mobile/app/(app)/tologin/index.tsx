@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { selectCallback, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
+import { clearLinking, selectCallback, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -41,6 +41,11 @@ export default function Page() {
         router.push("/home")
     }, [callback]);
 
+    const onCancel = () => {
+        dispatch(clearLinking())
+        router.push("/home")
+    }
+
     return (
         <>
             <Layout.Container>
@@ -58,7 +63,7 @@ export default function Page() {
                             ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
                         />
                     )}
-                    <Button.TouchableOpacity title="Cancel" variant="primary" onPress={() => router.push("/home")}></Button.TouchableOpacity>
+                    <Button.TouchableOpacity title="Cancel" variant="primary" onPress={onCancel}></Button.TouchableOpacity>
                 </Layout.BodyAlignedBotton>
             </Layout.Container>
         </>

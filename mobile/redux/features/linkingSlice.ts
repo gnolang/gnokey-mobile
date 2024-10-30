@@ -14,6 +14,7 @@ interface CounterState {
   callback?: string;
   /* The path of the requested screen */
   path?: string | 'tologin';
+  hostname?: string;
 }
 
 const initialState: CounterState = {
@@ -23,6 +24,7 @@ const initialState: CounterState = {
   txInput: undefined,
   callback: undefined,
   path: undefined,
+  hostname: undefined,
 };
 
 /**
@@ -76,6 +78,7 @@ interface SetLinkResponse {
   callback?: string;
   path: string;
   keyinfo?: KeyInfo;
+  hostname?: string;
 }
 
 export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>("linking/setLinkingData", async (parsedURL, thunkAPI) => {
@@ -98,12 +101,13 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
   }
 
   return {
+    hostname: parsedURL.hostname || undefined,
     reason: queryParams?.reason ? queryParams.reason as string : undefined,
     clientName: queryParams?.client_name ? queryParams.client_name as string : undefined,
     bech32Address,
     txInput: queryParams?.tx ? queryParams.tx as string : undefined,
     callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
-    path: queryParams?.path as string,
+    path: queryParams?.path as string || '',
     keyinfo
   }
 });
@@ -111,7 +115,12 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
 export const linkingSlice = createSlice({
   name: "linking",
   initialState,
-  reducers: {},
+  reducers: {
+    clearLinking: (state) => {
+      console.log("clearing linking data");
+      state = { ...initialState };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(setLinkingData.fulfilled, (state, action) => {
       state.reason = action.payload.reason;
@@ -121,6 +130,7 @@ export const linkingSlice = createSlice({
       state.callback = action.payload.callback;
       state.path = action.payload.path;
       state.keyinfo = action.payload.keyinfo;
+      state.hostname = action.payload.hostname;
     })
   },
   selectors: {
@@ -131,7 +141,10 @@ export const linkingSlice = createSlice({
     selectClientName: (state) => state.clientName,
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
+    isToLoginSelector: (state) => state.hostname === 'tologin',
   },
 });
 
-export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo } = linkingSlice.selectors;
+export const { clearLinking } = linkingSlice.actions;
+
+export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToLoginSelector } = linkingSlice.selectors;

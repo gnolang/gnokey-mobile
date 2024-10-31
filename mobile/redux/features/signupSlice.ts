@@ -3,6 +3,7 @@ import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/src/providers/redux-provider";
 import { Alert } from "react-native";
 import { User } from "@/types";
+import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb';
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -215,7 +216,7 @@ const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
   try {
     const gasFee = "10000000ugnot";
     const gasWanted = BigInt(20000000);
-    const send = "200000000ugnot";
+    const send = [new Coin({denom: "ugnot", amount: BigInt(200000000)})];
     const args: Array<string> = ["", account.name, "Profile description"];
     for await (const response of await gnonative.call("gno.land/r/demo/users", "Register", args, gasFee, gasWanted, account.address, send)) {
       console.log("response: ", JSON.stringify(response));

@@ -142,9 +142,12 @@ export const linkingSlice = createSlice({
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
     isToLoginSelector: (state) => state.hostname === 'tologin',
-    selectAction: (state) => state.hostname,
+    selectAction: (state) => state.hostname !== expo_default ? state.hostname : undefined,
   },
 });
+
+// Expo default hostname
+const expo_default = 'expo-development-client';
 
 export const { clearLinking } = linkingSlice.actions;
 

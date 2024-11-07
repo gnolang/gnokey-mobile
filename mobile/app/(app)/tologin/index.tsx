@@ -8,6 +8,7 @@ import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
+import * as Linking from 'expo-linking';
 
 export default function Page() {
     const [loading, setLoading] = useState<string | undefined>(undefined);
@@ -43,7 +44,7 @@ export default function Page() {
 
     const onCancel = () => {
         dispatch(clearLinking())
-        router.push("/home")
+        Linking.openURL(`${callback}?status=cancelled`);
     }
 
     return (

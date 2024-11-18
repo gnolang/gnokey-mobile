@@ -13,7 +13,7 @@ interface CounterState {
   /* The callback URL to return to after each operation */
   callback?: string;
   /* The path of the requested screen */
-  path?: string | 'tologin';
+  path?: string | 'tosignin';
   hostname?: string;
 }
 
@@ -141,7 +141,7 @@ export const linkingSlice = createSlice({
     selectClientName: (state) => state.clientName,
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
-    isToLoginSelector: (state) => state.hostname === 'tologin',
+    isToSignInSelector: (state) => state.hostname === 'tosignin',
     selectAction: (state) => state.hostname !== expo_default ? state.hostname : undefined,
   },
 });
@@ -151,4 +151,4 @@ const expo_default = 'expo-development-client';
 
 export const { clearLinking } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToLoginSelector, selectAction } = linkingSlice.selectors;
+export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToSignInSelector, selectAction } = linkingSlice.selectors;

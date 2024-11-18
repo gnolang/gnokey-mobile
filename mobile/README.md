@@ -135,9 +135,9 @@ So that way you can signin or sign a transaction using Gnokey mobile app.
 
 Example of dSocial asking for sign in
 ```
-land.gno.gnokey://tologin?callback=tech.berty.dsocial%3A%2F%2Flogin-callback
+land.gno.gnokey://tosignin?callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 ```
-- Base url: `land.gno.gnokey://tologin`
+- Base url: `land.gno.gnokey://tosignin`
 - Parameters:
   - callback: the url that Gnokey mobile will call after the user selecting the account.
 

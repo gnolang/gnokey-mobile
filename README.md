@@ -6,7 +6,7 @@ This way, your app can sign in or sign a transaction using the Gnokey Mobile app
 
 ### Sign in
 
-Example of dSocial asking for sign in:
+Example of a dSocial request for sign in:
 ```
 land.gno.gnokey://tosignin?callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 ```
@@ -16,7 +16,7 @@ land.gno.gnokey://tosignin?callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 
 
 ### Sign a transaction
-Example of dSocial asking Gnokey Mobile to sign a transaction (with added newlines for clarity):
+Example of a dSocial request to Gnokey Mobile to sign a transaction (with added newlines for clarity):
 ```
 land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call%22%2C%22caller%22%3A%22g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3%22%2C%22send%22%3A%22%22%2C%22pkg_path%22%3A%22gno.land%2Fr%2Fberty%2Fsocial%22%2C%22func%22%3A%22PostMessage%22%2C%22args%22%3A%5B%22Hello%22%5D%7D%5D%2C%22fee%22%3A%7B%22gas_wanted%22%3A%2210000000%22%2C%22gas_fee%22%3A%221000000ugnot%22%7D%2C%22signatures%22%3Anull%2C%22memo%22%3A%22%22%7D
 &address=g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3
@@ -40,3 +40,18 @@ tech.berty.dsocial://post?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_cal
 - Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://post`
 - Parameters (values are percent-escaped, to be decoded with `decodeURIComponent`):
   - tx: the signed transaction json to pass to `gnonative.broadcastTxCommit(...)`
+
+### Testing on iOS simulator
+
+If you are using `make ios` to run Gnokey Mobile in the iOS simulator, you can send a test transaction simply by
+pasting the request URL into Safari in the simulator. This will open Gnokey Mobile where you can approve. The
+response URL is printed in the terminal running `make ios` .
+
+### Testing on Android simulator
+
+If you are using `make android` to run Gnokey Mobile in the Android simulator, you can use `adb` to send the URL
+of a test transaction. You must change each `&` to `\&` . The following example will open Gnokey Mobile where you can approve. The
+response URL is printed in the terminal running `make android` .
+```
+adb shell am start -a android.intent.action.VIEW -d "land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call%22%2C%22caller%22%3A%22g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3%22%2C%22send%22%3A%22%22%2C%22pkg_path%22%3A%22gno.land%2Fr%2Fberty%2Fsocial%22%2C%22func%22%3A%22PostMessage%22%2C%22args%22%3A%5B%22Hello%22%5D%7D%5D%2C%22fee%22%3A%7B%22gas_wanted%22%3A%2210000000%22%2C%22gas_fee%22%3A%221000000ugnot%22%7D%2C%22signatures%22%3Anull%2C%22memo%22%3A%22%22%7D\&address=g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3\&client_name=dSocial\&reason=Post%20a%20message\&callback=tech.berty.dsocial%3A%2F%2Fpost"
+```

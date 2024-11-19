@@ -50,8 +50,11 @@ export default function Page() {
 
     const onCancel = () => {
         dispatch(clearLinking());
-        // callback to requester
-        Linking.openURL(`${callback}?status=cancelled`);
+        if (callback) {
+            Linking.openURL(`${callback}?status=cancelled`); // callback to requester
+        } else {
+            router.push("/home");
+        }
     }
 
     return (

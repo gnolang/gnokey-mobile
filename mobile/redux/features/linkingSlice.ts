@@ -82,6 +82,7 @@ interface SetLinkResponse {
 }
 
 export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>("linking/setLinkingData", async (parsedURL, thunkAPI) => {
+  console.log('deep link received', parsedURL);
 
   const queryParams = parsedURL.queryParams
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;

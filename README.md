@@ -14,6 +14,14 @@ land.gno.gnokey://tosignin?callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 - Parameters:
   - callback: the URL that Gnokey Mobile will call after the user selects the account.
 
+Example response:
+```
+tech.berty.dsocial://signin-callback?address=g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3&cachekill=1732030818190
+```
+- Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://signin-callback`
+- Parameters:
+  - address: the address of the selected user
+  - cachekill: For testing. Ignore this.
 
 ### Sign a transaction
 Example of a dSocial request to Gnokey Mobile to sign a transaction (with added newlines for clarity):

@@ -43,7 +43,9 @@ export default function Page() {
         const signedTx = await dispatch(signTx({ keyInfo })).unwrap();
 
         const path = callback ? callback : 'tech.berty.dsocial://post';
-        Linking.openURL(`${path}?tx=${encodeURIComponent(signedTx.signedTxJson)}`);
+        const url = `${path}?tx=${encodeURIComponent(signedTx.signedTxJson)}`;
+        console.log("response URL " + url);
+        Linking.openURL(url);
 
         router.push("/home")
     }

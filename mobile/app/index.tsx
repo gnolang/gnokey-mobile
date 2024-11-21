@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { getInitialState, selectAction, selectInitialized, selectMasterPassword, signIn, signUp, useAppDispatch, useAppSelector } from "@/redux";
+import { getInitialState, selectAction, selectInitialized, selectMasterPassword, changeMasterPass, signUp, useAppDispatch, useAppSelector } from "@/redux";
 import * as Application from "expo-application";
 import SignInView from "@/views/signin";
 import SignUpView from "@/views/signup";
@@ -39,7 +39,7 @@ export default function Root() {
 
   const onUnlokPress = async (masterPassword: string) => {
     try {
-      await dispatch(signIn({ masterPassword })).unwrap()
+      await dispatch(changeMasterPass({ masterPassword })).unwrap()
 
       naviateTo()
 

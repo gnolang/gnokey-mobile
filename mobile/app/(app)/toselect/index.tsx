@@ -43,8 +43,7 @@ export default function Page() {
 
         const bech32 = await gnonative.addressToBech32(keyInfo?.address);
 
-        // Linking.openURL(`${callback}?address=${bech32}`);
-        Linking.openURL('tech.berty.dsocial://post?address=' + bech32);
+        Linking.openURL(`${callback}?address=${bech32}`);
 
         router.push("/home")
     }, [callback]);

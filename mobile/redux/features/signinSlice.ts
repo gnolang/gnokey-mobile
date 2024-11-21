@@ -15,11 +15,7 @@ const initialState: CounterState = {
   initialized: false,
 };
 
-interface SignInParam {
-  masterPassword: string;
-}
-
-interface SignUpParam {
+interface CreateMasterParam {
   masterPassword: string;
 }
 
@@ -30,7 +26,7 @@ interface ChangeMasterParam {
 
 const MATER_PASS_KEY = "master_password_key_store";
 
-export const signUp = createAsyncThunk<{ masterPassword: string | null }, SignUpParam, ThunkExtra>("signin/signup", async (param, config) => {
+export const createMasterPass = createAsyncThunk<{ masterPassword: string | null }, CreateMasterParam, ThunkExtra>("signin/createMasterPass", async (param, config) => {
   const { masterPassword } = param;
 
   await SecureStore.setItemAsync(MATER_PASS_KEY, masterPassword);
@@ -38,7 +34,7 @@ export const signUp = createAsyncThunk<{ masterPassword: string | null }, SignUp
   return { masterPassword }
 })
 
-export const signIn = createAsyncThunk<boolean, SignInParam, ThunkExtra>("signin/signin", async (param, config) => {
+export const changeMasterPass = createAsyncThunk<boolean, CreateMasterParam, ThunkExtra>("signin/changeMasterPass", async (param, config) => {
   const { masterPassword } = param;
 
   const storedPass = await SecureStore.getItemAsync(MATER_PASS_KEY);
@@ -125,10 +121,10 @@ export const signinSlice = createSlice({
     builder.addCase(getInitialState.rejected, (_, action) => {
       console.error("getInitialState.rejected", action);
     });
-    builder.addCase(signIn.fulfilled, (state) => {
+    builder.addCase(changeMasterPass.fulfilled, (state) => {
       state.signedIn = true;
     });
-    builder.addCase(signUp.fulfilled, (state, action) => {
+    builder.addCase(createMasterPass.fulfilled, (state, action) => {
       state.masterPassword = action.payload.masterPassword ?? undefined;
     });
     builder.addCase(changeMasterPassword.fulfilled, (state, action) => {

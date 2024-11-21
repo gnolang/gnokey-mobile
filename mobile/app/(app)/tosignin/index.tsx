@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { clearLinking, selectCallback, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
+import { clearLinking, selectCallback, selectClientName, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -18,6 +18,7 @@ export default function Page() {
     const navigation = useNavigation();
 
     const callback = useAppSelector(selectCallback);
+    const clientName = useAppSelector(selectClientName)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function Page() {
         <>
             <Layout.Container>
                 <Layout.BodyAlignedBotton>
-                    <Text.Title>Select a key to sign in into dSocial</Text.Title>
+                    <Text.Title>Select a key to sign in into {clientName}</Text.Title>
                     <Spacer space={16} />
 
                     {accounts && (

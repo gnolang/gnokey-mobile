@@ -6,12 +6,18 @@ This way, your app can sign in or sign a transaction using the Gnokey Mobile app
 
 ### Sign in
 
-Example of a dSocial request for sign in:
+Example of a dSocial request for sign in (with added newlines for clarity):
 ```
-land.gno.gnokey://tosignin?callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
+land.gno.gnokey://tosignin?client_name=dSocial
+&remote=https%3A%2F%2Fapi.gno.berty.io%3A443
+&chain_id=dev
+&callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 ```
 - Base URL: `land.gno.gnokey://tosignin`
 - Parameters:
+  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user.
+  - remote: the connection address for the remote node
+  - chain_id: the chain ID for the remote
   - callback: the URL that Gnokey Mobile will call after the user selects the account.
 
 Example response:
@@ -28,6 +34,8 @@ Example of a dSocial request to Gnokey Mobile to sign a transaction (with added 
 ```
 land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call%22%2C%22caller%22%3A%22g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3%22%2C%22send%22%3A%22%22%2C%22pkg_path%22%3A%22gno.land%2Fr%2Fberty%2Fsocial%22%2C%22func%22%3A%22PostMessage%22%2C%22args%22%3A%5B%22Hello%22%5D%7D%5D%2C%22fee%22%3A%7B%22gas_wanted%22%3A%2210000000%22%2C%22gas_fee%22%3A%221000000ugnot%22%7D%2C%22signatures%22%3Anull%2C%22memo%22%3A%22%22%7D
 &address=g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3
+&remote=https%3A%2F%2Fapi.gno.berty.io%3A443
+&chain_id=dev
 &client_name=dSocial
 &reason=Post%20a%20message
 &callback=tech.berty.dsocial%3A%2F%2Fpost
@@ -37,6 +45,8 @@ land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call
 - Parameters (values should be percent-escaped with `encodeURIComponent`):
   - tx: the json result of `gnonative.makeCallTx(...)`
   - address: bech32 address of whoever you want to sign the transaction.
+  - remote: the connection address for the remote node, used during tosignin
+  - chain_id: the chain ID for the remote, used during tosignin
   - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user.
   - reason: the reason behind this action. It will be displayed to the user.
   - callback: the URL that Gnokey Mobile will call after signing the tx.

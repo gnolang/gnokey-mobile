@@ -4,6 +4,8 @@ import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from 'expo-linking';
 
 interface CounterState {
+  chainId?: string;
+  remote?: string;
   clientName?: string;
   reason?: string;
   bech32Address?: string;
@@ -18,6 +20,8 @@ interface CounterState {
 }
 
 const initialState: CounterState = {
+  chainId: undefined,
+  remote: undefined,
   clientName: undefined,
   reason: undefined,
   bech32Address: undefined,
@@ -71,6 +75,8 @@ export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, Thu
 });
 
 interface SetLinkResponse {
+  chainId?: string;
+  remote?: string;
   reason?: string;
   clientName?: string;
   bech32Address?: string;
@@ -102,6 +108,8 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
   }
 
   return {
+    chainId: queryParams?.chain_id ? queryParams.chain_id as string : undefined,
+    remote: queryParams?.remote ? queryParams.remote as string : undefined,
     hostname: parsedURL.hostname || undefined,
     reason: queryParams?.reason ? queryParams.reason as string : undefined,
     clientName: queryParams?.client_name ? queryParams.client_name as string : undefined,
@@ -124,6 +132,8 @@ export const linkingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setLinkingData.fulfilled, (state, action) => {
+      state.chainId = action.payload.chainId;
+      state.remote = action.payload.remote;
       state.reason = action.payload.reason;
       state.clientName = action.payload.clientName;
       state.bech32Address = action.payload.bech32Address;
@@ -135,6 +145,8 @@ export const linkingSlice = createSlice({
     })
   },
   selectors: {
+    selectChainId: (state) => state.chainId,
+    selectRemote: (state) => state.remote,
     selectTxInput: (state) => state.txInput,
     selectCallback: (state) => state.callback,
     selectPath: (state) => state.path,
@@ -152,4 +164,6 @@ const expo_default = 'expo-development-client';
 
 export const { clearLinking } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToSignInSelector, selectAction } = linkingSlice.selectors;
+export const { selectTxInput, selectCallback, selectPath, selectBech32Address, selectClientName, reasonSelector, selectKeyInfo, isToSignInSelector, selectAction,
+  selectChainId, selectRemote
+ } = linkingSlice.selectors;

@@ -2,11 +2,12 @@ import { Layout } from "@/components";
 import Button from "@/components/button";
 import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking } from "@/redux";
+import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking, selectChainId, selectRemote } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import * as Linking from 'expo-linking';
+import { View } from "react-native";
 
 export default function Page() {
 
@@ -20,6 +21,8 @@ export default function Page() {
     const txInput = useAppSelector(selectTxInput);
     const callback = useAppSelector(selectCallback);
     const keyInfo = useAppSelector(selectKeyInfo);
+    const chainId = useAppSelector(selectChainId);
+    const remote = useAppSelector(selectRemote);
 
     console.log('txInput', txInput);
     console.log('bech32Address', bech32Address);
@@ -28,6 +31,11 @@ export default function Page() {
 
     useEffect(() => {
         (async () => {
+
+            if (!chainId || !remote) throw new Error("No chainId or remote found.");
+            gnonative.setChainID(chainId);
+            gnonative.setRemote(remote);
+
             const accountNameStr = await gnonative.qEval("gno.land/r/demo/users", `GetUserByAddress("${bech32Address}").Name`);
             setAccountName(accountNameStr);
         })();
@@ -71,8 +79,16 @@ export default function Page() {
                     <Text.Body>callback: {callback}</Text.Body>
                     <Text.Body>client_name: {clientName}</Text.Body>
                     <Text.Body>accountName: {accountName}</Text.Body>
-                    <Text.Body>Address: <Text.Caption1>{bech32Address}</Text.Caption1></Text.Body>
-                    <Text.Body>Keyinfo: <Text.Caption1>{keyInfo?.name}</Text.Caption1></Text.Body>
+                    <View style={{ flexDirection: 'row', alignItems:'center' }}>
+                        <Text.Body>Address:</Text.Body>
+                        <Text.Caption1>{bech32Address}</Text.Caption1>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems:'center' }}>
+                        <Text.Body>Keyinfo:</Text.Body>
+                        <Text.Caption1>{keyInfo?.name}</Text.Caption1>
+                    </View>
+                    <Text.Body>remote: {remote}</Text.Body>
+                    <Text.Body>chainId: {chainId}</Text.Body>
 
                     <Spacer space={16} />
 

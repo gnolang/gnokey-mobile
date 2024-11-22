@@ -6,7 +6,7 @@ This way, your app can sign in or sign a transaction using the Gnokey Mobile app
 
 ### Sign in
 
-Example of a dSocial request for sign in (with added newlines for clarity):
+Example of a dSocial request for sign in:
 ```
 land.gno.gnokey://tosignin?client_name=dSocial&callback=tech.berty.dsocial%3A%2F%2Fsignin-callback
 ```

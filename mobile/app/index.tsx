@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { getInitialState, selectAction, selectInitialized, selectMasterPassword, changeMasterPass, signUp, useAppDispatch, useAppSelector } from "@/redux";
+import { getInitialState, selectAction, selectInitialized, selectMasterPassword, changeMasterPass, useAppDispatch, useAppSelector, createMasterPass } from "@/redux";
 import * as Application from "expo-application";
 import SignInView from "@/views/signin";
 import SignUpView from "@/views/signup";
@@ -25,9 +25,9 @@ export default function Root() {
     dispatch(getInitialState())
   }, []);
 
-  const onCreateMasterPress = async (masterPassword: string) => {
+  const onCreateMasterPass = async (masterPassword: string) => {
     try {
-      await dispatch(signUp({ masterPassword })).unwrap()
+      await dispatch(createMasterPass({ masterPassword })).unwrap()
 
       naviateTo()
 
@@ -81,7 +81,7 @@ export default function Root() {
           <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
             style={{ flex: 1 }}>
             {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
-            {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPress} error={error} /> : null}
+            {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
           </ScrollView>
         </Layout.BodyAlignedBotton>
       </Layout.Container>

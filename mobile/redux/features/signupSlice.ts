@@ -141,11 +141,16 @@ const checkForUserOnLocalStorage = async (gnonative: GnoNativeApi, name: string)
 }
 
 const checkForUserOnBlockchain = async (gnonative: GnoNativeApi, name: string, phrase: string): Promise<{ address: string, state: SignUpState } | undefined> => {
-  const result = await getJsonUserByName(name, gnonative);
+  let addressByName: string | undefined = undefined;
+  const byNameStr = await gnonative.qEval("gno.land/r/demo/users", `GetUserByName("${name}")`);
+  if (!byNameStr.startsWith("(nil")) {
+    const addressByNameStr = await gnonative.qEval("gno.land/r/demo/users", `GetUserByName("${name}").Address.String()`);
+    addressByName = convertToJson(addressByNameStr);
+  }
 
-  if (result?.address) {
+  if (addressByName) {
     console.log("user %s already exists on the blockchain under the same name", name);
-    return { address: result?.address, state: SignUpState.user_already_exists_on_blockchain };
+    return { address: addressByName, state: SignUpState.user_already_exists_on_blockchain };
   }
 
   try {
@@ -171,21 +176,14 @@ const checkForUserOnBlockchain = async (gnonative: GnoNativeApi, name: string, p
   return undefined;
 }
 
-async function getJsonUserByName(username: string, gnonative: GnoNativeApi) {
-  const result = await gnonative.qEval("gno.land/r/berty/social", `GetJsonUserByName("${username}")`);
-  const json = (await convertToJson(result)) as User;
-  return json;
-}
-
-async function convertToJson(result: string | undefined) {
+function convertToJson(result: string | undefined) {
   if (result === '("" string)') return undefined;
 
   if (!result || !(result.startsWith("(") && result.endsWith(" string)"))) throw new Error("Malformed GetThreadPosts response");
   const quoted = result.substring(1, result.length - " string)".length);
   const json = JSON.parse(quoted);
-  const jsonPosts = JSON.parse(json);
 
-  return jsonPosts;
+  return json;
 }
 
 const onboard = async (gnonative: GnoNativeApi, account: KeyInfo) => {

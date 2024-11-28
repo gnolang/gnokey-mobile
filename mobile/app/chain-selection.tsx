@@ -5,7 +5,7 @@ import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { Button, Layout, Ruller, Spacer, ModalContent, ModalHeader, NetworkList, Text, TextInput } from "@/components";
 import { NetworkMetainfo } from "@/types";
-import { addCustomChain, selectChainsAvailable } from "@/redux/features/signupSlice";
+import { addCustomChain, selectChainsAvailable } from "@/redux";
 
 function Page() {
   const { gnonative } = useGnoNativeContext();

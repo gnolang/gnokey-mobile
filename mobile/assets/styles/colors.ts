@@ -16,6 +16,7 @@ export const colors = {
   background: {
     default: "#fdfdfd",
   },
+  "background-header": "#535AE4",
 
   modal: {
     backgroundOpaque: "rgba(0,0,0,0.8)",

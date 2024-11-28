@@ -5,11 +5,11 @@ import TextInput from "components/textinput";
 import Button from "components/button";
 import Spacer from "components/spacer";
 import * as Clipboard from "expo-clipboard";
-import { selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import Alert from "@/components/alert";
 import { Layout } from "@/components/index";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import {
+  selectMasterPassword, useAppDispatch, useAppSelector,
   SignUpState,
   clearSignUpState,
   existingAccountSelector,
@@ -18,11 +18,11 @@ import {
   selectChainsAvailable,
   signUp,
   signUpStateSelector,
-} from "redux/features/signupSlice";
+} from "@/redux";
 import { ProgressViewModal, ChainSelectView } from "@/views";
 
 export default function Page() {
-  
+
   const [name, setName] = useState("");
   const [phrase, setPhrase] = useState<string>("");
   const [error, setError] = useState<string | undefined>(undefined);

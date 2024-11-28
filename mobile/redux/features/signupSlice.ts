@@ -2,8 +2,9 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/src/providers/redux-provider";
 import { Alert } from "react-native";
-import { User } from "@/types";
+import { NetworkMetainfo } from "@/types";
 import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb';
+import chains from '@/assets/chains.json'
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -20,6 +21,8 @@ export interface CounterState {
   existingAccount?: KeyInfo;
   loading: boolean;
   progress: string[];
+  chainsAvailable: NetworkMetainfo[];
+  registerAccount?: boolean;
 }
 
 const initialState: CounterState = {
@@ -28,6 +31,7 @@ const initialState: CounterState = {
   existingAccount: undefined,
   loading: false,
   progress: [],
+  chainsAvailable: chains,
 };
 
 interface SignUpParam {
@@ -289,6 +293,12 @@ export const signUpSlice = createSlice({
       state.newAccount = undefined;
       state.existingAccount = undefined;
       state.signUpState = undefined;
+    },
+    addCustomChain: (state, action: PayloadAction<NetworkMetainfo>) => {
+      state.chainsAvailable = [...state.chainsAvailable, action.payload];
+    },
+    setRegisterAccount: (state, action: PayloadAction<boolean>) => {
+      state.registerAccount = action.payload;
     }
   },
   extraReducers(builder) {
@@ -314,9 +324,13 @@ export const signUpSlice = createSlice({
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
     existingAccountSelector: (state) => state.existingAccount,
+    selectChainsAvailable: (state) => state.chainsAvailable,
+    selectRegisterAccount: (state) => state.registerAccount,
   },
 });
 
-export const { addProgress, signUpState, clearProgress, clearSignUpState } = signUpSlice.actions;
+export const { addProgress, signUpState, clearProgress, clearSignUpState, addCustomChain, setRegisterAccount } = signUpSlice.actions;
 
-export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector } = signUpSlice.selectors;
+export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector,
+  selectChainsAvailable, selectRegisterAccount
+ } = signUpSlice.selectors;

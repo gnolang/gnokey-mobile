@@ -15,26 +15,33 @@ import {
   existingAccountSelector,
   newAccountSelector,
   onboarding,
+  selectChainsAvailable,
   signUp,
   signUpStateSelector,
 } from "redux/features/signupSlice";
-import { ProgressViewModal } from "@/components/view/progress";
+import { ProgressViewModal, ChainSelectView } from "@/views";
 
 export default function Page() {
+  
   const [name, setName] = useState("");
   const [phrase, setPhrase] = useState<string>("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+  const [currentRemote, setCurrentRemote] = useState<string | undefined>(undefined);
+
   const inputRef = useRef<RNTextInput>(null);
 
   const masterPassword = useAppSelector(selectMasterPassword);
 
   const navigation = useNavigation();
   const { gnonative } = useGnoNativeContext();
+
   const dispatch = useAppDispatch();
+
   const signUpState = useAppSelector(signUpStateSelector);
   const newAccount = useAppSelector(newAccountSelector);
   const existingAccount = useAppSelector(existingAccountSelector);
+  const chains = useAppSelector(selectChainsAvailable)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
@@ -43,6 +50,7 @@ export default function Page() {
       dispatch(clearSignUpState())
       inputRef.current?.focus();
       try {
+        setCurrentRemote(await gnonative.getRemote());
         setPhrase(await gnonative.generateRecoveryPhrase());
       } catch (error) {
         console.log(error);
@@ -148,12 +156,14 @@ export default function Page() {
                 autoCorrect={false}
               />
             </View>
+            <Spacer />
             <View style={{ minWidth: 200, paddingTop: 8 }}>
               <Text>Your seed phrase:</Text>
               <Spacer />
               <Text>{phrase}</Text>
               <RNButton title="copy" onPress={copyToClipboard} />
               <Spacer />
+              <ChainSelectView chains={chains} currentRemote={currentRemote} />
               <Alert severity="error" message={error} />
               <Spacer />
               <Button.TouchableOpacity title="Create" onPress={onCreate} variant="primary" loading={loading} />

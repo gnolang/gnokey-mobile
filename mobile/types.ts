@@ -37,3 +37,10 @@ export interface GetJsonFollowingResult {
   following: Following[];
   n_following: number;
 }
+
+export type NetworkMetainfo = {
+  chainId: string;
+  chainName: string;
+  gnoAddress: string;
+};
+

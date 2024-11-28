@@ -1,0 +1,27 @@
+[
+  {
+    "chainId": "portal-loop",
+    "chainName": "Portal loop",
+    "gnoAddress": "gno.land:26657"
+  },
+  {
+    "chainId": "test5",
+    "chainName": "Testnet 5",
+    "gnoAddress": "test5.gno.land:36657"
+  },
+  {
+    "chainId": "dev",
+    "chainName": "Berty-Dev",
+    "gnoAddress": "https://api.gno.berty.io:443"
+  },
+  {
+    "chainId": "teritori-1",
+    "chainName": "Teritori-1",
+    "gnoAddress": "testnet.gno.teritori.com:26657"
+  },
+  {
+    "chainId": "dev",
+    "chainName": "localhost",
+    "gnoAddress": "localhost:36657"
+  }
+]

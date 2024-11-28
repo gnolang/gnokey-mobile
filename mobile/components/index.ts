@@ -11,12 +11,12 @@ export * from "./controls/toggle/Toggle"
 export * from "./items"
 export * from "./shared-components/UnifiedText"
 
-export {default as ModalHeader} from "./modal/ModalHeader"
-export {default as ModalContent} from "./modal/ModalContent"
-export {default as Ruller} from "./row/Ruller"
-export {default as Spacer} from "./spacer"
+export { default as ModalHeader } from "./modal/ModalHeader"
+export { default as ModalContent } from "./modal/ModalContent"
+export { default as Ruller } from "./row/Ruller"
+export { default as Spacer } from "./spacer"
 export { default as Button } from "./button"
-export {default as NetworkList} from "./change-network/network-list"
+export { default as NetworkList } from "./change-network/network-list"
 export { default as NetworkListItem } from "./change-network/network-list-item"
 export { default as Icons } from "./icons";
 export { default as Text } from "./text";

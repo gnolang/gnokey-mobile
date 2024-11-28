@@ -8,7 +8,7 @@ const storeForTypes = configureStore({ reducer })
 
 export type AppStore = typeof storeForTypes
 
-export type RootState = ReturnType<AppStore['getState']>
+export type RootState = ReturnType<typeof storeForTypes.getState>
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 

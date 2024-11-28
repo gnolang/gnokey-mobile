@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Toggle } from 'components'
 import { colors } from '@/assets'
 
 import { IconWithTextPriv } from '../IconWithText.priv'
 import { OnToggleProps, PackProps, ToggleMenuItemWithIconProps } from '../interfaces'
 import { MenuItemPriv } from '../MenuItem.priv'
+import { Toggle } from '@/components/controls/toggle/Toggle'
 
 export const MenuToggleWithIconPriv: React.FC<
 	ToggleMenuItemWithIconProps & OnToggleProps & PackProps

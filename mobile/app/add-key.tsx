@@ -17,7 +17,7 @@ import {
   onboarding,
   selectChainsAvailable,
   signUp,
-  signUpStateSelector,
+  signUpStateSelector
 } from "@/redux";
 import { ProgressViewModal, ChainSelectView } from "@/views";
 

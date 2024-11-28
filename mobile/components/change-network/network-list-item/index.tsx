@@ -1,7 +1,8 @@
 import styled from 'styled-components/native';
 import { colors } from '@/assets';
-import { Icons, Text } from '@/components';
 import { NetworkMetainfo } from '@/types';
+import Text from '@/components/text';
+import Icons from '@/components/icons';
 
 export interface Props {
   currentRemote: string | undefined;

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { UnifiedText } from '@/components'
+import { UnifiedText } from '../shared-components/UnifiedText'
 
 export const TextPriv: React.FC<PropsWithChildren> = props => {
 

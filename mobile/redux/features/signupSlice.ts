@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, RootState, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/src/providers/redux-provider";
 import { Alert } from "react-native";
@@ -32,6 +32,7 @@ const initialState: CounterState = {
   loading: false,
   progress: [],
   chainsAvailable: chains,
+  registerAccount: false
 };
 
 interface SignUpParam {
@@ -60,7 +61,27 @@ type SignUpResponse = { newAccount?: KeyInfo, existingAccount?: KeyInfo, state: 
 export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>("user/signUp", async (param, thunkAPI) => {
 
   const { name, password, phrase } = param;
+  const { registerAccount } = (thunkAPI.getState() as RootState).signUp;
+
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+
+  // do not register on chain
+  if (!registerAccount) {
+    thunkAPI.dispatch(addProgress(`registerAccount is false`))
+    const newAccount = await gnonative.createAccount(name, phrase, password);
+    console.log("createAccount response: " + JSON.stringify(newAccount));
+
+    if (!newAccount) {
+      thunkAPI.dispatch(addProgress(`Failed to create account "${name}"`))
+      throw new Error(`Failed to create account "${name}"`);
+    }
+
+    await gnonative.activateAccount(name);
+    await gnonative.setPassword(password, newAccount.address);
+
+    thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
+    return { newAccount, state: SignUpState.account_created };
+  }
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase);
@@ -218,7 +239,7 @@ const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
   try {
     const gasFee = "10000000ugnot";
     const gasWanted = BigInt(20000000);
-    const send = [new Coin({denom: "ugnot", amount: BigInt(200000000)})];
+    const send = [new Coin({ denom: "ugnot", amount: BigInt(200000000) })];
     const args: Array<string> = ["", account.name, "Profile description"];
     for await (const response of await gnonative.call("gno.land/r/demo/users", "Register", args, gasFee, gasWanted, account.address, send)) {
       console.log("response: ", JSON.stringify(response));
@@ -333,4 +354,4 @@ export const { addProgress, signUpState, clearProgress, clearSignUpState, addCus
 
 export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector,
   selectChainsAvailable, selectRegisterAccount
- } = signUpSlice.selectors;
+} = signUpSlice.selectors;

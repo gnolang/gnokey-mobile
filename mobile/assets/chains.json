@@ -2,17 +2,20 @@
   {
     "chainId": "portal-loop",
     "chainName": "Portal loop",
-    "gnoAddress": "gno.land:26657"
+    "gnoAddress": "https://rpc.gno.land:443",
+    "faucetAddress": "https://faucet-api.gno.land"
   },
   {
     "chainId": "test5",
     "chainName": "Testnet 5",
-    "gnoAddress": "test5.gno.land:36657"
+    "gnoAddress": "test5.gno.land:36657",
+    "faucetAddress": "https://faucet-api.test5.gno.land"
   },
   {
     "chainId": "dev",
     "chainName": "Berty-Dev",
-    "gnoAddress": "https://api.gno.berty.io:443"
+    "gnoAddress": "https://api.gno.berty.io:443",
+    "faucetAddress": "https://faucet.gno.berty.io"
   },
   {
     "chainId": "teritori-1",
@@ -22,6 +25,7 @@
   {
     "chainId": "dev",
     "chainName": "localhost",
-    "gnoAddress": "localhost:36657"
+    "gnoAddress": "localhost:36657",
+    "faucetAddress": "http://localhost:8000"
   }
 ]

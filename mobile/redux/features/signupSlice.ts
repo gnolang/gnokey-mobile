@@ -24,6 +24,7 @@ export interface CounterState {
   progress: string[];
   chainsAvailable: NetworkMetainfo[];
   registerAccount?: boolean;
+  keyName?: string;
 }
 
 const initialState: CounterState = {
@@ -326,12 +327,16 @@ export const signUpSlice = createSlice({
       state.newAccount = undefined;
       state.existingAccount = undefined;
       state.signUpState = undefined;
+      state.keyName = "";
     },
     addCustomChain: (state, action: PayloadAction<NetworkMetainfo>) => {
       state.chainsAvailable = [...state.chainsAvailable, action.payload];
     },
     setRegisterAccount: (state, action: PayloadAction<boolean>) => {
       state.registerAccount = action.payload;
+    },
+    setKeyName: (state, action: PayloadAction<string>) => {
+      state.keyName = action.payload
     }
   },
   extraReducers(builder) {
@@ -343,6 +348,7 @@ export const signUpSlice = createSlice({
       state.newAccount = action.payload?.newAccount;
       state.existingAccount = action.payload?.existingAccount;
       state.signUpState = action.payload?.state;
+      state.keyName = "";
     }).addCase(onboarding.fulfilled, (state, action) => {
       state.loading = false;
       state.newAccount = action.payload?.newAccount;
@@ -359,11 +365,12 @@ export const signUpSlice = createSlice({
     existingAccountSelector: (state) => state.existingAccount,
     selectChainsAvailable: (state) => state.chainsAvailable,
     selectRegisterAccount: (state) => state.registerAccount,
+    selectKeyName: (state) => state.keyName
   },
 });
 
-export const { addProgress, signUpState, clearProgress, clearSignUpState, addCustomChain, setRegisterAccount } = signUpSlice.actions;
+export const { addProgress, signUpState, clearProgress, clearSignUpState, addCustomChain, setRegisterAccount, setKeyName } = signUpSlice.actions;
 
 export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector,
-  selectChainsAvailable, selectRegisterAccount
+  selectChainsAvailable, selectRegisterAccount, selectKeyName
 } = signUpSlice.selectors;

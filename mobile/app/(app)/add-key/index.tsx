@@ -17,13 +17,14 @@ import {
   onboarding,
   selectChainsAvailable,
   signUp,
-  signUpStateSelector
+  signUpStateSelector,
+  selectKeyName,
+  setKeyName
 } from "@/redux";
 import { ProgressViewModal, ChainSelectView } from "@/views";
 
 export default function Page() {
 
-  const [name, setName] = useState("");
   const [phrase, setPhrase] = useState<string>("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -42,10 +43,10 @@ export default function Page() {
   const newAccount = useAppSelector(newAccountSelector);
   const existingAccount = useAppSelector(existingAccountSelector);
   const chains = useAppSelector(selectChainsAvailable)
+  const keyName = useAppSelector(selectKeyName);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
-      setName("");
       setError(undefined);
       dispatch(clearSignUpState())
       inputRef.current?.focus();
@@ -110,13 +111,13 @@ export default function Page() {
   const onCreate = async () => {
     dispatch(clearSignUpState());
     setError(undefined);
-    if (!name) {
+    if (!keyName) {
       setError("Please fill out all fields");
       return;
     }
 
     // Use the same regex and error message as r/demo/users
-    if (!name.match(/^[a-z]+[_a-z0-9]{5,16}$/)) {
+    if (!keyName.match(/^[a-z]+[_a-z0-9]{5,16}$/)) {
       setError("Account name must be at least 6 characters, lowercase alphanumeric with underscore");
       return;
     }
@@ -127,7 +128,7 @@ export default function Page() {
     }
 
     if (signUpState === SignUpState.user_exists_only_on_local_storage && existingAccount) {
-      await gnonative.activateAccount(name);
+      await gnonative.activateAccount(keyName);
       await gnonative.setPassword(masterPassword, existingAccount.address);
       await dispatch(onboarding({ account: existingAccount })).unwrap();
       return;
@@ -135,7 +136,7 @@ export default function Page() {
 
     try {
       setLoading(true);
-      await dispatch(signUp({ name, password: masterPassword, phrase })).unwrap();
+      await dispatch(signUp({ name: keyName, password: masterPassword, phrase })).unwrap();
     } catch (error) {
       RNAlert.alert("Error", "" + error);
       setError("" + error);
@@ -144,6 +145,11 @@ export default function Page() {
       setLoading(false);
     }
   };
+
+  const onBack = () => {
+    router.back()
+    dispatch(clearSignUpState());
+  }
 
   return (
     <Layout.Container>
@@ -156,8 +162,8 @@ export default function Page() {
               <TextInput
                 ref={inputRef}
                 placeholder="Key name"
-                value={name}
-                onChangeText={setName}
+                value={keyName}
+                onChangeText={x => dispatch(setKeyName(x))}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
@@ -174,7 +180,7 @@ export default function Page() {
               <Spacer />
               <Button.TouchableOpacity title="Create" onPress={onCreate} variant="primary" loading={loading} />
               <Spacer space={16} />
-              <Button.TouchableOpacity title="Back" onPress={() => router.back()} variant="secondary" disabled={loading} />
+              <Button.TouchableOpacity title="Back" onPress={onBack} variant="secondary" disabled={loading} />
             </View>
           </View>
         </ScrollView>

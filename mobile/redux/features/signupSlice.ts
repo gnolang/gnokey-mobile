@@ -9,6 +9,7 @@ import chains from '@/assets/chains.json'
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
   user_exists_under_differente_key = 'user_exists_under_differente_key',
+  user_exists_under_differente_key_local = 'user_exists_under_differente_key_local',
   user_exists_only_on_local_storage = 'user_exists_only_on_local_storage',
   user_already_exists_on_blockchain_under_different_name = 'user_already_exists_on_blockchain_under_different_name',
   user_already_exists_on_blockchain = 'user_already_exists_on_blockchain',
@@ -67,6 +68,17 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 
   // do not register on chain
   if (!registerAccount) {
+
+    thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
+    const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name);
+    thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
+
+    if (userOnLocalStorage) {
+      thunkAPI.dispatch(addProgress(`SignUpState.user_exists_under_differente_key_local`))
+      // CASE 1.1: Bad case. Choose new name. (Delete name in keystore?)
+      return { newAccount: undefined, state: SignUpState.user_exists_under_differente_key_local }
+    }
+
     thunkAPI.dispatch(addProgress(`registerAccount is false`))
     const newAccount = await gnonative.createAccount(name, phrase, password);
     console.log("createAccount response: " + JSON.stringify(newAccount));

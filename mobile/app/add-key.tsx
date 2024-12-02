@@ -91,6 +91,12 @@ export default function Page() {
         );
         return;
       }
+      if (signUpState === SignUpState.user_exists_under_differente_key_local) {
+        setError(
+          "This name is already registered locally under a different key. Please choose another name."
+        );
+        return;
+      }
       if (signUpState === SignUpState.account_created && newAccount) {
         router.push("/home");
       }

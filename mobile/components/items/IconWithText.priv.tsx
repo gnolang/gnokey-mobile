@@ -15,7 +15,7 @@ export const IconWithTextPriv: React.FC<IconWithTextPrivProps> = props => {
 	return (
 		<View style={styles.row}>
 			<MaterialIcons
-				name={props.iconName.toString()}
+				name={props.iconName.toString() as any}
 				pack={props.pack}
 				width={20}
 				height={20}

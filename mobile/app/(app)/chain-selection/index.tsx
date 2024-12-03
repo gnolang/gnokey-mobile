@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux";
+import { getCurrentChain, selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux";
 import { Modal, StyleSheet } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -12,16 +12,18 @@ function Page() {
   const navigation = useNavigation();
   const router = useRouter();
   const [loading, setLoading] = useState<string | undefined>(undefined);
-  const [currentChainId, setCurrentChainId] = useState<string | undefined>(undefined);
-  const [currentRemote, setCurrentRemote] = useState<string | undefined>(undefined);
 
   const [chainName, setChainName] = useState<string | undefined>(undefined);
   const [chainURL, setChainURL] = useState<string | undefined>(undefined);
   const [chainID, setChainID] = useState<string | undefined>(undefined);
 
+  const [faucetAddress, setFaucetAddress] = useState<string | undefined>(undefined);
+
   const [showCustomChain, setShowCustomChain] = useState(false);
 
   const dispatch = useAppDispatch();
+  
+  const selectedChain = useAppSelector(selectSelectedChain);
   const chains = useAppSelector(selectChainsAvailable)
 
   const onConfirmCustomChain = () => {
@@ -29,11 +31,11 @@ function Page() {
       return;
     }
 
-
     const newChain: NetworkMetainfo = {
       chainName: chainName,
       gnoAddress: chainURL,
       chainId: chainID,
+      faucetAddress,
     };
 
     dispatch(addCustomChain(newChain));
@@ -48,13 +50,14 @@ function Page() {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
       try {
-        setCurrentChainId(undefined);
-        setCurrentRemote(undefined);
+        dispatch(setSelectedChain(undefined));
         setLoading('Loading network...');
-        const chainId = await gnonative.getChainID();
-        const remote = await gnonative.getRemote();
-        setCurrentChainId(chainId);
-        setCurrentRemote(remote);
+        await gnonative.getChainID();
+
+        const currentChain = await dispatch(getCurrentChain()).unwrap();
+        console.log('xxxxx', currentChain);
+        dispatch(setSelectedChain(currentChain));
+
         setLoading(undefined);
       } catch (error: unknown | Error) {
         setLoading(error?.toString());
@@ -70,6 +73,7 @@ function Page() {
       console.log('Changing network', networkMetainfo)
       await gnonative.setChainID(networkMetainfo.chainId);
       await gnonative.setRemote(networkMetainfo.gnoAddress);
+      await dispatch(setSelectedChain(networkMetainfo));
       setLoading(undefined);
       router.back();
     } catch (error: unknown | Error) {
@@ -82,9 +86,9 @@ function Page() {
     <Layout.Container>
       <Layout.Body>
         <Text.Title style={styles.title}>Select a Network</Text.Title>
-        <Text.Subheadline>Current Network: {currentChainId}</Text.Subheadline>
-        <Text.Subheadline>{currentRemote}</Text.Subheadline>
-        <NetworkList currentRemote={currentRemote} networkMetainfos={chains} onNetworkChange={onNetworkChange} />
+        <Text.Subheadline>Current Network: {selectedChain?.chainId}</Text.Subheadline>
+        <Text.Subheadline>{selectedChain?.gnoAddress}</Text.Subheadline>
+        <NetworkList currentRemote={selectedChain?.gnoAddress} networkMetainfos={chains} onNetworkChange={onNetworkChange} />
         <Spacer />
         <Button.TouchableOpacity title="Add a custom chain" onPress={() => setShowCustomChain(true)} variant="primary" />
         <Spacer space={16} />
@@ -98,6 +102,7 @@ function Page() {
             placeholder="name"
             value={chainName}
             onChangeText={setChainName}
+            keyboardType="default"
             autoCapitalize="none"
             autoCorrect={false}
           />
@@ -106,6 +111,7 @@ function Page() {
             placeholder="URL"
             value={chainURL}
             onChangeText={setChainURL}
+            keyboardType="url"
             autoCapitalize="none"
             autoCorrect={false}
           />
@@ -114,7 +120,17 @@ function Page() {
             placeholder="ID"
             value={chainID}
             onChangeText={setChainID}
+            keyboardType="default"
             autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Text.InputLabel>Faucet URL:</Text.InputLabel>
+          <TextInput
+            placeholder="Faucet URL"
+            value={faucetAddress}
+            onChangeText={setFaucetAddress}
+            autoCapitalize="none"
+            keyboardType="url"
             autoCorrect={false}
           />
           <Spacer />

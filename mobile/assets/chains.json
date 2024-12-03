@@ -15,7 +15,7 @@
     "chainId": "dev",
     "chainName": "Berty-Dev",
     "gnoAddress": "https://api.gno.berty.io:443",
-    "faucetAddress": "https://faucet.gno.berty.io"
+    "faucetAddress": "https://faucetpass.gno.berty.io"
   },
   {
     "chainId": "teritori-1",

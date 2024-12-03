@@ -6,11 +6,12 @@ import { Footer } from "./layout/footer";
 export const Layout = { Container, Header, Body, BodyAlignedBotton, Footer };
 
 
-export * from "./alert"
 export * from "./controls/toggle/Toggle"
 export * from "./items"
 export * from "./shared-components/UnifiedText"
 
+export {default as Alert} from "./alert"
+export {default as TextCopy} from "./text/text-copy"
 export { default as ModalHeader } from "./modal/ModalHeader"
 export { default as ModalContent } from "./modal/ModalContent"
 export { default as Ruller } from "./row/Ruller"

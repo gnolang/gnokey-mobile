@@ -14,7 +14,8 @@ const NetworkListItem: React.FC<Props> = ({ networkMetainfo, currentRemote, onPr
   <Row style={{ margin: 4 }} onPress={() => onPress(networkMetainfo)}>
     <LeftItens>
       <Text.BodyMedium style={{ color: colors.white }}>{networkMetainfo.chainName}</Text.BodyMedium>
-      <Text.Caption1 style={{ color: colors.white }}>{networkMetainfo.gnoAddress}</Text.Caption1>
+      <Text.Caption1 style={{ color: colors.white }}>Address: {networkMetainfo.gnoAddress}</Text.Caption1>
+      <Text.Caption1 style={{ color: colors.white }}>Faucet:   {networkMetainfo.faucetAddress}</Text.Caption1>
     </LeftItens>
     <RightItens>{currentRemote && networkMetainfo.gnoAddress.includes(currentRemote) && <InUse />}</RightItens>
   </Row>

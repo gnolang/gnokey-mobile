@@ -3,7 +3,7 @@ import { FlatList, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
+import { initSignUpState, selectMasterPassword, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import Octicons from '@expo/vector-icons/Octicons';
 import TextInput from "@/components/textinput";
@@ -70,6 +70,11 @@ export default function Page() {
     }
   };
 
+  const navigateToAddKey = () => {
+    dispatch(initSignUpState());
+    route.push("/add-key");
+  }
+
   if (loading) {
     return (
       <Layout.Container>
@@ -88,7 +93,7 @@ export default function Page() {
             <TextInput placeholder="Search Vault" containerStyle={{ width: '86%' }} value={nameSearch} onChangeText={setNameSearch}>
               <Octicons name="search" size={24} color="gray" />
             </TextInput>
-            <TouchableOpacity onPress={() => route.push("/add-key")}>
+            <TouchableOpacity onPress={navigateToAddKey}>
               <Octicons name="diff-added" size={38} color={colors.primary} />
             </TouchableOpacity>
           </View>

@@ -159,9 +159,9 @@ export default function Page() {
             <View style={{ minWidth: 200, paddingTop: 8, paddingBottom: 8 }}>
               <TextCopy text={phrase}>
                 <Text style={{ flexDirection: "row" }}>
-                  <Text >Your seed phrase: </Text>
-                  <Text style={{ fontWeight: 700 }}>{phrase}  </Text>
                   <Octicons name="copy" size={12} color={colors.primary} />
+                  <Text > Your seed phrase: </Text>
+                  <Text style={{ fontWeight: 700 }}>{phrase}</Text>
                 </Text>
               </TextCopy>
               <Spacer />

@@ -22,7 +22,7 @@ function Page() {
   const [showCustomChain, setShowCustomChain] = useState(false);
 
   const dispatch = useAppDispatch();
-  
+
   const selectedChain = useAppSelector(selectSelectedChain);
   const chains = useAppSelector(selectChainsAvailable)
 
@@ -94,7 +94,7 @@ function Page() {
         <Spacer space={16} />
         <Button.TouchableOpacity title="Back" onPress={() => router.back()} variant="secondary" />
       </Layout.Body>
-      <Modal visible={showCustomChain} animationType="slide" transparent>
+      <Modal visible={showCustomChain} animationType="slide">
         <ModalContent>
           <ModalHeader title="Add a custom Chain" onClose={() => setShowCustomChain(false)} />
           <Text.InputLabel>Chain name:</Text.InputLabel>

@@ -32,9 +32,9 @@ function Page() {
     }
 
     const newChain: NetworkMetainfo = {
+      chainId: chainID,
       chainName: chainName,
       gnoAddress: chainURL,
-      chainId: chainID,
       faucetAddress,
     };
 
@@ -106,21 +106,21 @@ function Page() {
             autoCapitalize="none"
             autoCorrect={false}
           />
-          <Text.InputLabel>Chain URL:</Text.InputLabel>
-          <TextInput
-            placeholder="URL"
-            value={chainURL}
-            onChangeText={setChainURL}
-            keyboardType="url"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
           <Text.InputLabel>Chain ID:</Text.InputLabel>
           <TextInput
             placeholder="ID"
             value={chainID}
             onChangeText={setChainID}
             keyboardType="default"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Text.InputLabel>Chain URL:</Text.InputLabel>
+          <TextInput
+            placeholder="URL"
+            value={chainURL}
+            onChangeText={setChainURL}
+            keyboardType="url"
             autoCapitalize="none"
             autoCorrect={false}
           />

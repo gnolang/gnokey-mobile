@@ -1,6 +1,6 @@
 # Welcome to Gnokey Mobile
 
-Gnokey Mobile is a mobile (D)app that helps users manage their Gnoland keys and sign thier (D)app transactions initiated from other Gnoland mobile (D)apps. 
+Gnokey Mobile is a mobile (D)app that helps users manage their Gnoland keys and sign their (D)app transactions initiated from other Gnoland mobile (D)apps. 
 
 ### What problem does it solve? 
 

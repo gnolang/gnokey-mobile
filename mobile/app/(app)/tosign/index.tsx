@@ -62,9 +62,8 @@ export default function Page() {
         dispatch(clearLinking());
         if (callback) {
             Linking.openURL(`${callback}?status=cancelled`); // callback to requester
-        } else {
-            router.push("/home");
         }
+        router.replace("/home");
     }
 
     return (

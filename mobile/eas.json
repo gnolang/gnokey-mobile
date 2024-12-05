@@ -21,13 +21,5 @@
     "production": {
       "autoIncrement": true
     }
-  },
-  "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./dsocial-fed6b-firebase-adminsdk-7sjg7-b2b5c052c3.json",
-        "track": "internal"
-      }
-    }
   }
 }

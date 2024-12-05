@@ -81,6 +81,7 @@ release.ios: node_modules
 	npx expo install --chec
 	npm run ts:check
 	eas build --platform ios --profile production
+	@echo "iOS build done. Now it's time to run `eas submit --platform ios` or user Transporter https://apps.apple.com/us/app/transporter/id1450874784?mt=12"
 .PHONY: release.ios
 
 release.android: node_modules

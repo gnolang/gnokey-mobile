@@ -126,8 +126,10 @@ export const linkingSlice = createSlice({
   initialState,
   reducers: {
     clearLinking: (state) => {
-      console.log("clearing linking data");
       state = { ...initialState };
+      state.hostname = undefined;
+      state.txInput = undefined;
+      state.callback = undefined;
     },
   },
   extraReducers: (builder) => {

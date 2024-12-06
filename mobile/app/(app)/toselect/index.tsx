@@ -20,7 +20,7 @@ export default function Page() {
     const callback = useAppSelector(selectCallback);
     const txInput = useAppSelector(selectTxInput);
 
-    console.log('txInput', txInput);
+    console.log('txInput at page', txInput);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", async () => {

@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Guard } from "@/components/auth/guard";
 import { GnoNativeProvider } from "@gnolang/gnonative";
-import { LinkingProvider, ReduxProvider } from "@/src/providers";
+import { LinkingProvider, ReduxProvider } from "@/providers";
 
 const gnoDefaultConfig = {
   // @ts-ignore

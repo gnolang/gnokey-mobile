@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { ThunkExtra } from "@/providers/redux-provider";
 import * as SecureStore from 'expo-secure-store';
 import { ErrCode, GnoNativeApi, GRPCError } from "@gnolang/gnonative";
 

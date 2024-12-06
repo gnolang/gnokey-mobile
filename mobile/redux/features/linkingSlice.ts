@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction, RootState } from "@reduxjs/toolkit";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { ThunkExtra } from "@/providers/redux-provider";
 import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from 'expo-linking';
 

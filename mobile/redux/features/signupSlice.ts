@@ -1,6 +1,6 @@
 import { PayloadAction, RootState, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { ThunkExtra } from "@/providers/redux-provider";
 import { Alert } from "react-native";
 import { NetworkMetainfo } from "@/types";
 import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb';

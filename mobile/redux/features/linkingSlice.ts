@@ -1,9 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction, RootState } from "@reduxjs/toolkit";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ThunkExtra } from "@/providers/redux-provider";
 import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from 'expo-linking';
+import { RootState } from "../root-reducer";
 
-interface CounterState {
+export interface LinkingState {
   chainId?: string;
   remote?: string;
   clientName?: string;
@@ -19,7 +20,7 @@ interface CounterState {
   hostname?: string;
 }
 
-const initialState: CounterState = {
+const initialState: LinkingState = {
   chainId: undefined,
   remote: undefined,
   clientName: undefined,
@@ -58,7 +59,7 @@ export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, Thu
     throw new Error("No keyInfo found.");
   }
 
-  const txJson = decodeURIComponent(txInput);
+  const txJson = decodeURIComponent(txInput || "");
   console.log('txJson', txJson);
   console.log('keyInfo', JSON.stringify(keyInfo));
 

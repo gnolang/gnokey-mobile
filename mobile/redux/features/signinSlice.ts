@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { ThunkExtra } from "@/providers/redux-provider";
 import * as SecureStore from 'expo-secure-store';
 import { ErrCode, GnoNativeApi, GRPCError } from "@gnolang/gnonative";
 
-interface CounterState {
+export interface SignInState {
   masterPassword?: string;
   signedIn?: boolean;
   initialized?: boolean;
 }
 
-const initialState: CounterState = {
+const initialState: SignInState = {
   masterPassword: undefined,
   signedIn: false,
   initialized: false,

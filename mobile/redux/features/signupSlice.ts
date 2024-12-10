@@ -1,10 +1,11 @@
-import { PayloadAction, RootState, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "@/src/providers/redux-provider";
+import { ThunkExtra } from "@/providers/redux-provider";
 import { Alert } from "react-native";
 import { NetworkMetainfo } from "@/types";
 import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb';
 import chains from '@/assets/chains.json'
+import { RootState } from "../root-reducer";
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -16,27 +17,28 @@ export enum SignUpState {
   account_created = 'account_created',
 }
 
-export interface CounterState {
+export interface SignupState {
   signUpState?: SignUpState
   newAccount?: KeyInfo;
   existingAccount?: KeyInfo;
   loading: boolean;
   progress: string[];
-  chainsAvailable: NetworkMetainfo[];
+  customChains: NetworkMetainfo[];
   selectedChain?: NetworkMetainfo;
   registerAccount: boolean;
   keyName?: string;
   phrase?: string;
 }
 
-const initialState: CounterState = {
+const initialState: SignupState = {
   signUpState: undefined,
   newAccount: undefined,
   existingAccount: undefined,
   loading: false,
   progress: [],
-  chainsAvailable: chains,
-  registerAccount: false
+  customChains: [],
+  selectedChain: undefined,
+  registerAccount: false,
 };
 
 interface SignUpParam {
@@ -68,6 +70,10 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
   const { registerAccount, selectedChain } = (thunkAPI.getState() as RootState).signUp;
 
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+
+  if (!selectedChain) {
+    throw new Error("No chain selected");
+  }
 
   // do not register on chain
   if (!registerAccount) {
@@ -150,8 +156,12 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
     await gnonative.activateAccount(name);
     await gnonative.setPassword(password, newAccount.address);
 
-    thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
-    await onboard(gnonative, newAccount, selectedChain?.faucetAddress);
+    if (!selectedChain.faucetAddress) {
+      thunkAPI.dispatch(addProgress(`no faucetAddress set for chain "${selectedChain.chainName}"`))
+    } else {
+      thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
+      await onboard(gnonative, newAccount, selectedChain.faucetAddress);
+    }
 
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
     return { newAccount, state: SignUpState.account_created };
@@ -163,9 +173,13 @@ export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo },
 
   const { selectedChain } = (thunkAPI.getState() as RootState).signUp;
 
+  if (!selectedChain) {
+    throw new Error("No chain selected");
+  }
+
   const { account } = param;
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  await onboard(gnonative, account, selectedChain?.faucetAddress);
+  await onboard(gnonative, account, selectedChain.faucetAddress);
 
   thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
   return { newAccount: account, state: SignUpState.account_created };
@@ -176,7 +190,7 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo, void, ThunkExtr
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
   const remote = await gnonative.getRemote();
 
-  const currentChain = chains.find((chain) => chain.gnoAddress === remote);
+  const currentChain = chains.find((chain: NetworkMetainfo) => chain.gnoAddress === remote);
   if (!currentChain) {
     throw new Error("Current chain not found");
   }
@@ -248,7 +262,7 @@ function convertToJson(result: string | undefined) {
   return json;
 }
 
-const onboard = async (gnonative: GnoNativeApi, account: KeyInfo, faucetRemote: string) => {
+const onboard = async (gnonative: GnoNativeApi, account: KeyInfo, faucetRemote?: string) => {
   const { name, address } = account
   const address_bech32 = await gnonative.addressToBech32(address);
   console.log("onboarding %s, with address: %s", name, address_bech32);
@@ -262,10 +276,14 @@ const onboard = async (gnonative: GnoNativeApi, account: KeyInfo, faucetRemote: 
       return;
     }
 
-    const response = await sendCoins(address_bech32, faucetRemote);
-    console.log("coins sent, response: %s", response);
+    if (faucetRemote) {
+      const response = await sendCoins(address_bech32, faucetRemote);
+      console.log("coins sent, response: %s", response);
+      await registerAccount(gnonative, account);
+    } else {
+      console.log("no faucet remote address set");
+    }
 
-    await registerAccount(gnonative, account);
   } catch (error) {
     console.error("onboard error", error);
   }
@@ -346,7 +364,7 @@ export const signUpSlice = createSlice({
       state.progress = [];
     },
     addCustomChain: (state, action: PayloadAction<NetworkMetainfo>) => {
-      state.chainsAvailable = [...state.chainsAvailable, action.payload];
+      state.customChains = state.customChains ? [...state.customChains, action.payload] : [action.payload];
     },
     setRegisterAccount: (state, action: PayloadAction<boolean>) => {
       state.registerAccount = action.payload;
@@ -390,7 +408,7 @@ export const signUpSlice = createSlice({
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
     existingAccountSelector: (state) => state.existingAccount,
-    selectChainsAvailable: (state) => state.chainsAvailable,
+    selectChainsAvailable: (state) => (state.customChains ? chains.concat(state.customChains) : chains) as NetworkMetainfo[],
     selectRegisterAccount: (state) => state.registerAccount,
     selectKeyName: (state) => state.keyName,
     selectSelectedChain: (state) => state.selectedChain,

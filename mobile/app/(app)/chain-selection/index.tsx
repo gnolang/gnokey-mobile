@@ -3,7 +3,7 @@ import { getCurrentChain, selectSelectedChain, setSelectedChain, useAppDispatch,
 import { Modal, StyleSheet } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { Button, Layout, Ruller, Spacer, ModalContent, ModalHeader, NetworkList, Text, TextInput } from "@/components";
+import { Button, Layout, Ruller, Spacer, ModalContent, ModalHeader, NetworkList, Text, TextInput, Alert } from "@/components";
 import { NetworkMetainfo } from "@/types";
 import { addCustomChain, selectChainsAvailable } from "@/redux";
 
@@ -11,12 +11,13 @@ function Page() {
   const { gnonative } = useGnoNativeContext();
   const navigation = useNavigation();
   const router = useRouter();
+
+  const [error, setError] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<string | undefined>(undefined);
 
   const [chainName, setChainName] = useState<string | undefined>(undefined);
   const [chainURL, setChainURL] = useState<string | undefined>(undefined);
   const [chainID, setChainID] = useState<string | undefined>(undefined);
-
   const [faucetAddress, setFaucetAddress] = useState<string | undefined>(undefined);
 
   const [showCustomChain, setShowCustomChain] = useState(false);
@@ -27,7 +28,15 @@ function Page() {
   const chains = useAppSelector(selectChainsAvailable)
 
   const onConfirmCustomChain = () => {
+    setError(undefined);
+
     if (!chainName || !chainURL || !chainID) {
+      setError('Please fill all fields');
+      return;
+    }
+
+    if (chains.find((chain) => chain.chainName === chainName)) {
+      setError('Chain Name already exists');
       return;
     }
 
@@ -134,6 +143,7 @@ function Page() {
             autoCorrect={false}
           />
           <Spacer />
+          {error ? <Alert severity="error" message={error} /> : null}
           <Button.TouchableOpacity title="Save" onPress={onConfirmCustomChain} variant="primary" />
           <Ruller />
           <Button.TouchableOpacity title="Cancel" onPress={onCancelCustomChain} variant="secondary" />

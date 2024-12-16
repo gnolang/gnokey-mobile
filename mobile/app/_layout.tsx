@@ -9,7 +9,6 @@ const gnoDefaultConfig = {
   remote: process.env.EXPO_PUBLIC_GNO_REMOTE!,
   // @ts-ignore
   chain_id: process.env.EXPO_PUBLIC_GNO_CHAIN_ID!,
-  start_gnokey_mobile_service: true,
 };
 
 export default function AppLayout() {

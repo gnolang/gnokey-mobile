@@ -11,8 +11,6 @@
     "ts:check": "tsc"
   },
   "dependencies": {
-    "@buf/gnolang_dsocial-indexer.bufbuild_es": "^1.10.0-20240621073300-3f8442294fd1.1",
-    "@buf/gnolang_dsocial-indexer.connectrpc_es": "^1.4.0-20240621073300-3f8442294fd1.3",
     "@bufbuild/protobuf": "^1.6.0",
     "@connectrpc/connect": "^1.2.1",
     "@connectrpc/connect-web": "^1.2.1",

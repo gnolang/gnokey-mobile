@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
@@ -31,7 +31,7 @@ export default function Root() {
 
       naviateTo()
 
-    } catch (error:any) {
+    } catch (error: any) {
       console.log("error", error.message);
       setError(error?.message);
     }
@@ -43,7 +43,7 @@ export default function Root() {
 
       naviateTo()
 
-    } catch (error:any) {
+    } catch (error: any) {
       console.log("error", error.message);
       setError(error?.message);
     }
@@ -78,11 +78,13 @@ export default function Root() {
             <Text.Caption1>Build Version: {appVersion}</Text.Caption1>
           </View>
 
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-            style={{ flex: 1 }}>
-            {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
-            {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
-          </ScrollView>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+              style={{ flex: 1 }}>
+              {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
+              {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
+            </ScrollView>
+          </KeyboardAvoidingView>
         </Layout.BodyAlignedBotton>
       </Layout.Container>
     </>

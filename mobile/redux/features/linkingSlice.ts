@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from "expo-linking";
-import { RootState } from "../root-reducer";
+import { RootState } from "..";
 
 export interface LinkingState {
   chainId?: string;
@@ -86,6 +86,7 @@ export const estimateGas = createAsyncThunk<bigint, { signedTxJson: string }, Th
   async ({ signedTxJson }, thunkAPI) => {
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
 
+    // @ts-ignore
     const estimateGasResponse = await gnonative.estimateGas(signedTxJson);
     const estimateGas = estimateGasResponse.amount;
     console.log("estimateGas: ", estimateGas);

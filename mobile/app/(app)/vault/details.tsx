@@ -6,14 +6,13 @@ import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
-import { useSelector } from "react-redux";
-import { deleteVault, selectVaultToEdit, useAppDispatch } from "@/redux";
+import { deleteVault, selectVaultToEdit, useAppDispatch, useAppSelector} from "@/redux";
 import { useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 
 const Page = () => {
 
-  const vault = useSelector(selectVaultToEdit)
+  const vault = useAppSelector(selectVaultToEdit)
   const dispatch = useAppDispatch();
   const router = useRouter();
 

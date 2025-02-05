@@ -13,6 +13,7 @@ const gnoDefaultConfig = {
 };
 
 const indexerConfig = {
+  // @ts-ignore
   remote: process.env.EXPO_PUBLIC_TXINDEXER_REMOTE!,
 };
 

@@ -5,7 +5,7 @@ import { ThunkExtra } from "@/providers/redux-provider";
 import { Alert } from "react-native";
 import { NetworkMetainfo } from "@/types";
 import chains from "@/assets/chains.json";
-import { RootState } from "../root-reducer";
+import { RootState } from "..";
 
 export enum SignUpState {
   user_exists_on_blockchain_and_local_storage = "user_exists_on_blockchain_and_local_storage",

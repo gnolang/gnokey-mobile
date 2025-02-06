@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ThunkExtra } from "@/providers/redux-provider";
-import { EstimateGasResponse, GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
+import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
 import * as Linking from "expo-linking";
 import { RootState } from "../root-reducer";
 

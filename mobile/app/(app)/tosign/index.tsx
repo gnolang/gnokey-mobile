@@ -31,7 +31,8 @@ export default function Page() {
   const [accountName, setAccountName] = useState<string | undefined>(undefined);
   const clientName = useAppSelector(selectClientName);
   const [signedTx, setSignedTx] = useState<string | undefined>(undefined);
-  const [gasFee, setGasFee] = useState<bigint>(BigInt(0));
+  const [gasUsed, setGasUsed] = useState<bigint>(BigInt(0));
+  const [gasPrice, setGasPrice] = useState<bigint>(BigInt(0));
 
   const reason = useAppSelector(reasonSelector);
   const bech32Address = useAppSelector(selectBech32Address);
@@ -61,20 +62,15 @@ export default function Page() {
     (async () => {
       try {
         console.log("onChangeAccountHandler", keyInfo);
-        console.log("remi: before signing and gas estimation");
 
         if (!txInput || !keyInfo) {
           throw new Error("No transaction input or keyInfo found.");
         }
 
         const signedTx = await dispatch(signTx({ keyInfo })).unwrap();
-        const gasUsed = await dispatch(estimateGas({ signedTxJson: signedTx.signedTxJson })).unwrap();
-        const gasPrice = await getGasPrice();
-
-        const gasFee = gasUsed * gasPrice.average;
-
         setSignedTx(signedTx.signedTxJson);
-        setGasFee(gasFee);
+        setGasUsed(await dispatch(estimateGas({ signedTxJson: signedTx.signedTxJson })).unwrap());
+        setGasPrice((await getGasPrice()).average);
       } catch (error: unknown | Error) {
         console.error(error);
       }
@@ -82,12 +78,12 @@ export default function Page() {
   }, [txInput, keyInfo]);
 
   const returnSignedTxToRequester = async () => {
-    if (!signedTx || !gasFee) {
-      throw new Error("No signedTx or gasEstimation found.");
+    if (!signedTx) {
+      throw new Error("No signedTx found.");
     }
 
     const path = callback ? callback : "tech.berty.dsocial://post";
-    const url = `${path}?tx=${encodeURIComponent(signedTx)}?gas=${gasFee.toString()}`;
+    const url = `${path}?tx=${encodeURIComponent(signedTx)}&gaswanted=${gasUsed.toString()}&gasfee=${gasPrice.toString()}`;
     console.log("response URL " + url);
     Linking.openURL(url);
 
@@ -125,8 +121,16 @@ export default function Page() {
             <Text.Caption1>{keyInfo?.name}</Text.Caption1>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text.Body>Gas estimation:</Text.Body>
-            <Text.Caption1>{gasFee?.toString()} ugnot</Text.Caption1>
+            <Text.Body>Gas wanted:</Text.Body>
+            <Text.Caption1>{gasUsed?.toString()}</Text.Caption1>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text.Body>Gas price unit:</Text.Body>
+            <Text.Caption1>{gasPrice?.toString()} ugnot</Text.Caption1>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text.Body>Gas fee:</Text.Body>
+            <Text.Caption1>{(gasUsed * gasPrice).toString()} ugnot</Text.Caption1>
           </View>
           <Text.Body>remote: {remote}</Text.Body>
           <Text.Body>chainId: {chainId}</Text.Body>

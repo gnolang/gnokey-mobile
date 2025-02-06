@@ -53,6 +53,7 @@ const IndexerProvider: React.FC<IndexerProviderProps> = ({ children, config }) =
 
     for (const item of data) {
       if (item.denom == "ugnot") {
+        console.log("getGasPrice found: ", item);
         return item;
       }
     }

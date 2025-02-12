@@ -72,8 +72,9 @@ export default function Root() {
     <Container>
       <Layout.Container>
         <Layout.BodyAlignedBotton>
-          <View style={{ alignItems: "center" }}>
-            <Text.H1  style={{textAlign: "center" }} >GnoKey Mobile</Text.H1>
+          <View style={{ alignItems: "center", paddingTop:100 }}>
+            <Text.H1  style={{textAlign: "center", color: "#E5E5E5"}}>GnoKey</Text.H1>
+            <Text.H1  style={{textAlign: "center"}}>Mobile</Text.H1>
             <Text.Body>The Gno Key Management Tool</Text.Body>
           </View>
 

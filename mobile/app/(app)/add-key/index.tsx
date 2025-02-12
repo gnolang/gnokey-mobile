@@ -154,7 +154,7 @@ export default function Page() {
             <Text.H1>My New</Text.H1>
             <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
               <Text.H1>Vault&nbsp;</Text.H1>
-              <Text.H1 style={{ color: 'white' }}>Info</Text.H1>
+              <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
             </View>
             <View style={{ minWidth: 200, paddingTop: 8 }}>
               <Spacer />

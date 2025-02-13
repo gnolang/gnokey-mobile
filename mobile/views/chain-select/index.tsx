@@ -1,35 +1,34 @@
-import { View } from "react-native";
+import {  View } from "react-native";
 import React from "react";
-import { useRouter } from "expo-router";
-import { NetworkListItem, MenuToggle, Ruller } from "@/components";
-import { selectChainsAvailable, selectRegisterAccount, selectSelectedChain, setRegisterAccount, useAppDispatch, useAppSelector } from "@/redux"
+import { selectChainsAvailable, selectRegisterAccount, selectSelectedChain, setRegisterAccount, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux"
+import { Select, Spacer, Text } from "@/modules/ui-components";
+import { NetworkMetainfo } from "@/types";
+import { useTheme } from "styled-components";
 
 const ChainSelectView = () => {
-
-  const isChecked = useAppSelector(selectRegisterAccount)
-
-  const router = useRouter();
   const dispatch = useAppDispatch()
+  const theme = useTheme()
 
   const chains = useAppSelector(selectChainsAvailable)
   const currentNetwork = useAppSelector(selectSelectedChain)
 
-  const currentNetworkMetainfo = chains.filter(x => x.gnoAddress === currentNetwork?.gnoAddress)[0]
+  const double = [...chains, ...chains]
+
+  const onNetworkChange = (chain: NetworkMetainfo | undefined) => {
+    dispatch(setSelectedChain(chain))
+  }
 
   return (
-    <View >
-      <MenuToggle isToggleOn={isChecked} onPress={() => dispatch(setRegisterAccount(!isChecked))} >
-        Register on `r/demo/users` realm:
-      </MenuToggle>
-      {currentNetwork ?
-        <NetworkListItem
-          disabled={!isChecked}
-          onPress={() => router.push("/chain-selection")}
-          networkMetainfo={currentNetworkMetainfo}
-          currentRemote={currentNetwork.gnoAddress}
-        /> : null}
-    </View>
-  );
+    <>
+      <Spacer />
+      <View style={{ flexDirection: 'row' }}>
+        <Text.Body>Select Network to</Text.Body>
+        <Text.Body style={{color: theme.colors.white}}>&nbsp;Register Username</Text.Body>
+      </View>
+      <Spacer />
+      <Select items={double} selectedItem={currentNetwork} onChange={onNetworkChange} />
+    </>
+  )
 }
 
 export default ChainSelectView;

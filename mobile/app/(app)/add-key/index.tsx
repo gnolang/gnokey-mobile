@@ -15,11 +15,11 @@ import {
   setKeyName,
   selectPhrase,
 } from "@/redux";
-import { ProgressViewModal, ChainSelectView } from "@/views";
+import { ProgressViewModal, ChainSelectView, } from "@/views";
 import { TextCopy, Layout, Alert, Spacer, TextInput } from "@/components";
 import { FontAwesome6, Octicons } from "@expo/vector-icons";
 import { colors } from "@/assets";
-import { AppBar, Button, Text, TextField } from "@/modules/ui-components";
+import { AppBar, Button, Select, Text, TextField, MenuItem } from "@/modules/ui-components";
 
 export default function Page() {
 

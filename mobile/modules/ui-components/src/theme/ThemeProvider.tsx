@@ -17,6 +17,8 @@ const ThemeProvider = ({ children }: Props) => {
 
       black: '#000000',
       white: '#ffffff',
+
+      gray: '#A1A1A1',
     },
 
     textinputs: {

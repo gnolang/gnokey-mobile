@@ -30,6 +30,8 @@ declare module 'styled-components/native' {
 
 			black: string
 			white: string
+
+      gray: string
 		}
 	}
 }

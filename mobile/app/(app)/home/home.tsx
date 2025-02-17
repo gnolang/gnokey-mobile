@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
 import Text from "@/components/text";
-import { checkForKeyOnChains, initSignUpState, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains } from "@/redux";
+import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import { setVaultToEdit } from "@/redux";

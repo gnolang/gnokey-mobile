@@ -11,7 +11,7 @@ export const BottonPanel = styled.View`
 	padding-top: 20px;
 	padding-bottom: 50px;
 	min-height: 120px;
-	border-top-right-radius: ${(props: DefaultTheme) => props.theme.borderRadius * 2 || 40}px;
-	border-top-left-radius: ${(props: DefaultTheme) => props.theme.borderRadius * 2 || 40}px;
-	background-color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.white};
+	border-top-right-radius: ${(props) => props.theme.borderRadius * 2 || 40}px;
+	border-top-left-radius: ${(props) => props.theme.borderRadius * 2 || 40}px;
+	background-color: ${({ theme }) => theme.colors.white};
 `

@@ -32,10 +32,13 @@ const ThemeProvider = ({ children }: Props) => {
       primary: '#000000',
       secondary: '#E5E5E5',
       tertirary: '#4c8ae7',
+      danger: 'red',
+
       label: {
         primary: '#ffffff',
         secondary: '#000000',
         tertirary: '#000000',
+        danger: '#ffffff',
       },
     },
   }

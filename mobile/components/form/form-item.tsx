@@ -1,28 +1,32 @@
 import React from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
-import Text from '../text';
+import { ViewProps } from 'react-native';
+import styled from 'styled-components/native';
+import Spacer from '../spacer';
+import { Text } from '@/modules/ui-components';
 
 type Prop = ViewProps & {
   label: string;
   labelColor?: string;
 };
 
-const FormItem: React.FC<Prop> = ({ children, label, style = initialStyle.view, labelColor = 'gray' }) => {
+const FormItem: React.FC<Prop> = ({ children, label, style, labelColor = 'gray' }) => {
   return (
-    <View style={style}>
-      <Text.InputLabel style={{ color: labelColor, ...initialStyle.label }}>{label}</Text.InputLabel>
+    <Wrapper>
+      <Spacer />
+      <Spacer />
+      <TextLabel>{label}</TextLabel>
+      <Spacer />
       {children}
-    </View>
+    </Wrapper>
   );
 };
 
-const initialStyle = StyleSheet.create({
-  view: {
-    width: '100%',
-  },
-  label: {
-    marginBottom: 0,
-  },
-});
+const TextLabel = styled(Text.Body)`
+  color: ${({ theme }) => theme.colors.white};
+`;
+
+const Wrapper = styled.View`
+  min-height: 40px;
+`
 
 export default FormItem;

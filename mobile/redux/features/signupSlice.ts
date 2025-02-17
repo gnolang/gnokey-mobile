@@ -200,7 +200,7 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, voi
   return currentChain;
 })
 
-export const initSignUpState = createAsyncThunk<{ phrase: string }, void, ThunkExtra>("user/initSignUpState", async (_, thunkAPI) => {
+export const generateNewPhrase = createAsyncThunk<{ phrase: string }, void, ThunkExtra>("user/generateNewPhrase", async (_, thunkAPI) => {
 
   let newPhrase = "";
   try {
@@ -397,7 +397,7 @@ export const signUpSlice = createSlice({
       state.newAccount = action.payload?.newAccount;
       state.existingAccount = action.payload?.existingAccount;
       state.signUpState = action.payload?.state;
-    }).addCase(initSignUpState.fulfilled, (state, action) => {
+    }).addCase(generateNewPhrase.fulfilled, (state, action) => {
       state.phrase = action.payload.phrase;
       state.loading = false;
       state.newAccount = undefined;

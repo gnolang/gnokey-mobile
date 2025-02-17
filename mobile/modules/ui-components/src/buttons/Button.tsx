@@ -13,6 +13,8 @@ export interface Button extends TouchableOpacityProps {
   loading?: boolean
 }
 
+
+
 export const Button: React.FC<Button> = props => {
 	const isChildrenString = typeof props.children === 'string'
 
@@ -32,12 +34,16 @@ const EndIconWrapper = styled.View`
 	margin-left: 8px;
 `
 
-const ButtonWrapper = styled(TouchableOpacity)`
+interface ButtonWrapperProps extends TouchableOpacityProps {
+	$color?: ButtonColor;
+}
+
+const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
 	height: 40px;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 	padding-horizontal: 16px;
 	border-radius: ${(props) => props.theme.borderRadius || 20}px;
-	background-color: ${(props: DefaultTheme) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
+	background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
 `

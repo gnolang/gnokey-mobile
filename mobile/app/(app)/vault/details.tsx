@@ -1,15 +1,17 @@
-import { Layout } from "@/components";
-import Button from "@/components/button";
+import { Layout, TextCopy } from "@/components";
 import FormItem from "@/components/form/form-item";
 import { ModalConfirm } from "@/components/modal";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useSelector } from "react-redux";
 import { deleteVault, selectVaultToEdit, useAppDispatch } from "@/redux";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
+import { AppBar, SafeAreaView, Button, Text, Container, TextField } from "@/modules/ui-components";
+import { FontAwesome6, Octicons } from "@expo/vector-icons";
+import { useTheme } from "styled-components/native";
 
 const Page = () => {
 
@@ -21,7 +23,10 @@ const Page = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [addressBech32, setAddressBech32] = useState('');
 
+  const navigation = useNavigation();
+
   const { gnonative } = useGnoNativeContext();
+  const theme = useTheme();
 
   useEffect(() => {
     (
@@ -51,36 +56,52 @@ const Page = () => {
   }
 
   return (
-    <Layout.Container>
-      <Layout.Header title="Vault Details" />
-      <Layout.Body>
-        <View style={{ padding: 16 }}>
+    <>
+      <SafeAreaView style={{ flex: 1 }}>
+        <AppBar>
+          <View />
+          <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
+            Cancel
+          </Button>
+        </AppBar>
+
+        <Container style={{ flex: 1 }}>
+          <Text.H1>Vault Details</Text.H1>
+
+          <Spacer />
+
           <FormItem label="Vault name">
-            <TextInput value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
+            <TextField value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
           </FormItem>
+
           <FormItem label="Address">
-            <TextInput value={addressBech32} placeholder="Address" style={{ color: 'gray' }} multiline numberOfLines={2} />
+            <TextCopy text={addressBech32} style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text.Body style={{ color: theme.colors.white, flexWrap: 'wrap' }} numberOfLines={2}>{addressBech32.substring(0, 20)}\n{addressBech32.substring(20)}&nbsp;
+                &nbsp;
+                <Octicons name="copy" size={12} color={theme.colors.white} />
+              </Text.Body>
+            </TextCopy>
           </FormItem>
-          <View style={{ flex: 1 }}>
-            {/* <Button.TouchableOpacity title="Save" onPress={onSave} style={{ marginTop: 16 }} variant="primary" /> */}
-            <Spacer />
-            <Button.TouchableOpacity
-              title="Destroy Key"
-              onPress={onDeleteVault}
-              variant="primary-red"
-            />
+
+          <Spacer />
+
+          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+            <Button color="danger" onPress={onDeleteVault}>Destroy Key</Button>
           </View>
-        </View>
-      </Layout.Body>
-      <ModalConfirm
-        visible={showDeleteModal}
-        title="Delete Vault"
-        confirmText="Delete this vault forever"
-        message="Are you sure you want to delete this vault?"
-        onConfirm={onConfirmDelete}
-        onCancel={() => setShowDeleteModal(false)}
-      />
-    </Layout.Container>
+
+
+        </Container>
+
+        <ModalConfirm
+          visible={showDeleteModal}
+          title="Delete Vault"
+          confirmText="Delete this vault forever"
+          message="Are you sure you want to delete this vault?"
+          onConfirm={onConfirmDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      </SafeAreaView>
+    </>
   );
 }
 

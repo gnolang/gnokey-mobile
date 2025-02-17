@@ -5,7 +5,6 @@ import { useGnoNativeContext } from "@gnolang/gnonative";
 import {
   selectMasterPassword, useAppDispatch, useAppSelector,
   SignUpState,
-  initSignUpState,
   existingAccountSelector,
   newAccountSelector,
   onboarding,
@@ -14,12 +13,14 @@ import {
   selectKeyName,
   setKeyName,
   selectPhrase,
+  generateNewPhrase,
 } from "@/redux";
 import { ProgressViewModal, ChainSelectView, } from "@/views";
-import { TextCopy, Layout, Alert, Spacer, TextInput } from "@/components";
-import { FontAwesome6, Octicons } from "@expo/vector-icons";
+import { TextCopy, Layout, Alert, TextInput } from "@/components";
+import { Feather, FontAwesome, FontAwesome6, Octicons } from "@expo/vector-icons";
 import { colors } from "@/assets";
-import { AppBar, Button, Select, Text, TextField, MenuItem } from "@/modules/ui-components";
+import { AppBar, Button, Select, Text, TextField, MenuItem, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, ErrorBox } from "@/modules/ui-components";
+import { useTheme } from "styled-components/native";
 
 export default function Page() {
 
@@ -40,8 +41,11 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName);
   const phrase = useAppSelector(selectPhrase);
 
+  const theme = useTheme();
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
+      dispatch(generateNewPhrase());
       setError(undefined);
       inputRef.current?.focus();
     });
@@ -136,61 +140,67 @@ export default function Page() {
 
   const onBack = () => {
     console.log("onBack");
-    dispatch(initSignUpState());
     router.back()
   }
 
   return (
-    <Layout.Container>
-      <AppBar>
-        <View />
-        <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
-          Cancel
-        </Button>
-      </AppBar>
-      <Layout.Body>
-        <ScrollView>
+    <>
+      <SafeAreaView>
+        <AppBar>
+          <View />
+          <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
+            Cancel
+          </Button>
+        </AppBar>
+
+        <Container>
+
           <View>
             <Text.H1>My New</Text.H1>
-            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text.H1>Vault&nbsp;</Text.H1>
               <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
             </View>
-            <View style={{ minWidth: 200, paddingTop: 8 }}>
-              <Spacer />
-              <TextField
-                placeholder="Vault name"
-                value={keyName}
-                onChangeText={x => dispatch(setKeyName(x))}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            </View>
-            <Spacer />
-            <View style={{ minWidth: 200, paddingTop: 8, paddingBottom: 8 }}>
-
-              <ChainSelectView />
-
-              <TextCopy text={phrase}>
-                <Text.Body style={{ flexDirection: "row" }}>
-                  <Octicons name="copy" size={12} color={colors.primary} />
-                  <Text.Body > Your seed phrase: </Text.Body>
-                  <Text.Body style={{ fontWeight: 700 }}>{phrase}</Text.Body>
-                </Text.Body>
-              </TextCopy>
-              <Spacer />
-
-              <Alert severity="error" message={error} />
-              <Spacer />
-              <Button onPress={onCreate} color="primary" loading={loading} >Create</Button>
-              <Spacer space={8} />
-              <Button onPress={onBack} color="secondary" disabled={loading}>Back</Button>
-            </View>
           </View>
-        </ScrollView>
-        <ProgressViewModal />
-      </Layout.Body>
-    </Layout.Container >
+
+          <Spacer />
+          <TextField
+            placeholder="Vault name"
+            value={keyName}
+            onChangeText={x => dispatch(setKeyName(x))}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Spacer />
+          <ChainSelectView />
+
+        </Container>
+
+      </SafeAreaView>
+
+      <BottonPanel>
+        <Text.H2>Seed Phrase</Text.H2>
+        <Spacer />
+        <TextCopy text={phrase} >
+
+          <Text.Body style={{ textAlign: 'center' }}>
+            {phrase} &nbsp;
+            <Octicons name="copy" size={12} color={theme.colors.primary} />
+          </Text.Body>
+
+        </TextCopy>
+        <Spacer />
+        <ErrorBox>{error}</ErrorBox>
+        <Spacer />
+        <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between' }}>
+          <Button color='secondary'>Import Vault</Button>
+          <ButtonIcon size={60} color='primary' onPress={() => dispatch(generateNewPhrase())}>
+            <Feather name="refresh-cw" size={30} color='white' />
+          </ButtonIcon>
+          <Button onPress={onCreate} endIcon={<FontAwesome6 name='add' size={16} color='white' />}>New Vault</Button>
+        </View>
+      </BottonPanel>
+    </>
   );
 }
 

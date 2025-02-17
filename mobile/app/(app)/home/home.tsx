@@ -74,7 +74,6 @@ export default function Page() {
   };
 
   const navigateToAddKey = () => {
-    dispatch(initSignUpState());
     route.push("/add-key");
   }
 

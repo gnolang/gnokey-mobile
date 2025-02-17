@@ -66,7 +66,6 @@ export const Select: React.FC<SelectProps> = (props) => {
 }
 
 const SelectWrapper = styled.TouchableOpacity<{ hasItem?: boolean }>`
-  flex: 1;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;

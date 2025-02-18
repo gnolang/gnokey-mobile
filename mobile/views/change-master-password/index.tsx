@@ -7,6 +7,7 @@ import {
   Keyboard,
   Modal,
   TextInput as RNTextInput,
+  View,
 } from "react-native";
 import Alert from "@/components/alert";
 import { ModalView } from "@/components/modal";
@@ -15,6 +16,8 @@ import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
+import { useTheme } from "styled-components/native";
+import { SafeAreaView } from "@/modules/ui-components";
 
 export type Props = {
   visible: boolean;
@@ -32,6 +35,8 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<RNTextInput>(null);
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -73,10 +78,13 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   if (!visible) return null;
 
   return (
-    <Modal>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ height: "100%" }}>
-          <ModalView.Content>
+    <Modal transparent animationType="slide">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1, justifyContent: "flex-end", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <SafeAreaView style={{ width: '100%', alignItems: "center"   }}>
+          <View style={{ width: '100%', backgroundColor: theme.colors.white, borderRadius: theme.borderRadius, padding: 20 }}>
+
+            {/* <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}> */}
+            {/* <ModalView.Content> */}
             <ModalView.Header title="Change master password" onClose={() => onClose(false)} />
             <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
             <Spacer />
@@ -102,9 +110,13 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
             <Alert severity="error" message={error} />
             <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
             <Spacer />
-          </ModalView.Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+            {/* </ModalView.Content> */}
+
+            {/* </KeyboardAvoidingView> */}
+          </View>
+
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

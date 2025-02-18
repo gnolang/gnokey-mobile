@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -7,8 +7,9 @@ import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
 import Text from "@/components/text";
 import ChangeMasterPassword from "@/views/change-master-password";
-import { AppBar, Button } from "@/modules/ui-components";
+import { AppBar, Button, Container, SafeAreaView, Spacer } from "@/modules/ui-components";
 import { FontAwesome6 } from "@expo/vector-icons";
+import FormItem from "@/components/form/form-item";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -48,49 +49,35 @@ export default function Page() {
 
   return (
     <>
-      <Layout.Container>
+      <SafeAreaView style={{ flex: 1 }}>
         <AppBar>
-          <View/>
+          <View />
           <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
             Cancel
           </Button>
         </AppBar>
-        <Layout.Body>
-          <>
-            <Text.Subheadline>Chain ID:</Text.Subheadline>
+
+        <Container style={{ flex: 1 }}>
+
+          <FormItem label="Chain ID">
             <Text.Body>{chainID}</Text.Body>
-            <Text.Subheadline>Remote:</Text.Subheadline>
+          </FormItem>
+
+          <FormItem label="Remote">
             <Text.Body>{remote}</Text.Body>
-            <View></View>
-          </>
+          </FormItem>
+
           <Layout.Footer>
-            <Button onPress={onPressChangePass} style={styles.logout} color="tertirary">Change master password</Button>
-            <Button onPress={onPressLogout} style={styles.logout} color="tertirary">Logout</Button>
+            <Button onPress={onPressChangePass} color="danger">Change master password</Button>
+            <Spacer />
+            <Button onPress={onPressLogout} color="danger">Logout</Button>
           </Layout.Footer>
-        </Layout.Body>
-      </Layout.Container>
-      <LoadingModal visible={loading} />
+
+        </Container>
+
+        <LoadingModal visible={loading} />
+      </SafeAreaView>
       <ChangeMasterPassword visible={showChangePassModal} onClose={() => setShowChangePassModal(false)} />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  logout: {
-    color: "#007AFF",
-    marginTop: 10,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});

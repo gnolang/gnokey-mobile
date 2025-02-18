@@ -95,7 +95,7 @@ const Page = () => {
         <ModalConfirm
           visible={showDeleteModal}
           title="Delete Vault"
-          confirmText="Delete this vault forever"
+          confirmText="Delete"
           message="Are you sure you want to delete this vault?"
           onConfirm={onConfirmDelete}
           onCancel={() => setShowDeleteModal(false)}

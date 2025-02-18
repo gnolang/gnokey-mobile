@@ -14,6 +14,7 @@ import {
   setKeyName,
   selectPhrase,
   generateNewPhrase,
+  resetState
 } from "@/redux";
 import { ProgressViewModal, ChainSelectView, } from "@/views";
 import { TextCopy, Layout, Alert, TextInput } from "@/components";
@@ -45,6 +46,7 @@ export default function Page() {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
+      dispatch(resetState());
       dispatch(generateNewPhrase());
       setError(undefined);
       inputRef.current?.focus();

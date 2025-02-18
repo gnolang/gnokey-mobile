@@ -204,7 +204,6 @@ export const generateNewPhrase = createAsyncThunk<{ phrase: string }, void, Thun
 
   let newPhrase = "";
   try {
-    await thunkAPI.dispatch(getCurrentChain()).unwrap(); // to force update on redux store
     newPhrase = await (thunkAPI.extra.gnonative as GnoNativeApi).generateRecoveryPhrase()
   } catch (error) {
     console.error("error on qEval", error);
@@ -381,6 +380,13 @@ export const signUpSlice = createSlice({
     },
     setSelectedChain: (state, action: PayloadAction<NetworkMetainfo | undefined>) => {
       state.selectedChain = action.payload
+    },
+    resetState: (state) => {
+      state.loading = false;
+      state.newAccount = undefined;
+      state.existingAccount = undefined;
+      state.signUpState = undefined;
+      state.keyName = "";
     }
   },
   extraReducers(builder) {
@@ -399,11 +405,6 @@ export const signUpSlice = createSlice({
       state.signUpState = action.payload?.state;
     }).addCase(generateNewPhrase.fulfilled, (state, action) => {
       state.phrase = action.payload.phrase;
-      state.loading = false;
-      state.newAccount = undefined;
-      state.existingAccount = undefined;
-      state.signUpState = undefined;
-      state.keyName = "";
     }).addCase(getCurrentChain.fulfilled, (state, action) => {
       state.selectedChain = action.payload;
     })
@@ -428,7 +429,7 @@ export const selectChainsAvailable = createSelector(
 );
 
 export const { addProgress, signUpState, clearProgress, addCustomChain, setRegisterAccount, setKeyName,
-  setSelectedChain
+  setSelectedChain, resetState
 } = signUpSlice.actions;
 
 export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector,

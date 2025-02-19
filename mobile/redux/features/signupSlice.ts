@@ -72,12 +72,15 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
 
-  if (!selectedChain) {
-    throw new Error("No chain selected");
+  console.log("selectedChain in signUp", selectedChain);
+
+  if (selectedChain) {
+    await gnonative.setRemote(selectedChain.gnoAddress);
+    await gnonative.setChainID(selectedChain.chainId);
   }
 
   // do not register on chain
-  if (!registerAccount) {
+  if (!selectedChain) {
 
     thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
     const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name);
@@ -200,11 +203,10 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, voi
   return currentChain;
 })
 
-export const initSignUpState = createAsyncThunk<{ phrase: string }, void, ThunkExtra>("user/initSignUpState", async (_, thunkAPI) => {
+export const generateNewPhrase = createAsyncThunk<{ phrase: string }, void, ThunkExtra>("user/generateNewPhrase", async (_, thunkAPI) => {
 
   let newPhrase = "";
   try {
-    await thunkAPI.dispatch(getCurrentChain()).unwrap(); // to force update on redux store
     newPhrase = await (thunkAPI.extra.gnonative as GnoNativeApi).generateRecoveryPhrase()
   } catch (error) {
     console.error("error on qEval", error);
@@ -381,6 +383,13 @@ export const signUpSlice = createSlice({
     },
     setSelectedChain: (state, action: PayloadAction<NetworkMetainfo | undefined>) => {
       state.selectedChain = action.payload
+    },
+    resetState: (state) => {
+      state.loading = false;
+      state.newAccount = undefined;
+      state.existingAccount = undefined;
+      state.signUpState = undefined;
+      state.keyName = "";
     }
   },
   extraReducers(builder) {
@@ -397,13 +406,8 @@ export const signUpSlice = createSlice({
       state.newAccount = action.payload?.newAccount;
       state.existingAccount = action.payload?.existingAccount;
       state.signUpState = action.payload?.state;
-    }).addCase(initSignUpState.fulfilled, (state, action) => {
+    }).addCase(generateNewPhrase.fulfilled, (state, action) => {
       state.phrase = action.payload.phrase;
-      state.loading = false;
-      state.newAccount = undefined;
-      state.existingAccount = undefined;
-      state.signUpState = undefined;
-      state.keyName = "";
     }).addCase(getCurrentChain.fulfilled, (state, action) => {
       state.selectedChain = action.payload;
     })
@@ -424,11 +428,11 @@ export const signUpSlice = createSlice({
 
 export const selectChainsAvailable = createSelector(
   (state: RootState) => state.signUp.customChains,
-  (customChains) => customChains ? chains.concat(customChains) : chains
+  (customChains) => customChains ? (chains as NetworkMetainfo[]).concat(customChains) : chains
 );
 
 export const { addProgress, signUpState, clearProgress, addCustomChain, setRegisterAccount, setKeyName,
-  setSelectedChain
+  setSelectedChain, resetState
 } = signUpSlice.actions;
 
 export const { selectLoading, selectProgress, signUpStateSelector, newAccountSelector, existingAccountSelector,

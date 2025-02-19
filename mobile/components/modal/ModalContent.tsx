@@ -1,13 +1,12 @@
 import { colors } from "@/assets/styles/colors";
-import { ViewProps } from "react-native";
+import { View, ViewProps } from "react-native";
 import styled from "styled-components/native";
 
 const ModalContainer = styled.View`
   flex: 1;
-  background-color: ${colors.modal.backgroundOpaque};
+  background-color: ${({ theme }) => theme.colors.white};
   justify-content: flex-end;
   background-color: gray;
-  opacity: 0.8;
 `;
 
 const ModalView = styled.View`
@@ -24,9 +23,19 @@ const ModalView = styled.View`
 `;
 
 const ModalContent: React.FC<ViewProps> = (props: ViewProps) => (
-  <ModalContainer style={props.style}>
+  <View
+    style={{
+      height: '25%',
+      width: '100%',
+      backgroundColor: '#25292e',
+      borderTopRightRadius: 18,
+      borderTopLeftRadius: 18,
+      position: 'absolute',
+      bottom: 0,
+    }}
+  >
     <ModalView>{props.children}</ModalView>
-  </ModalContainer>
+  </View>
 );
 
 export default ModalContent;

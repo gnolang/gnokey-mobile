@@ -16,16 +16,5 @@
     "chainName": "Berty-Dev",
     "gnoAddress": "https://api.gno.berty.io:443",
     "faucetAddress": "https://faucetpass.gno.berty.io"
-  },
-  {
-    "chainId": "teritori-1",
-    "chainName": "Teritori-1",
-    "gnoAddress": "testnet.gno.teritori.com:26657"
-  },
-  {
-    "chainId": "dev",
-    "chainName": "localhost",
-    "gnoAddress": "localhost:26657",
-    "faucetAddress": "http://localhost:8545"
   }
 ]

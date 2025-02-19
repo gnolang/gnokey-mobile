@@ -63,8 +63,8 @@ function Page() {
         setLoading('Loading network...');
         await gnonative.getChainID();
 
-        const currentChain = await dispatch(getCurrentChain()).unwrap();
-        dispatch(setSelectedChain(currentChain));
+        // const currentChain = await dispatch(getCurrentChain()).unwrap();
+        // dispatch(setSelectedChain(currentChain));
 
         setLoading(undefined);
       } catch (error: unknown | Error) {

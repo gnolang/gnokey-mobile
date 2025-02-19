@@ -1,7 +1,7 @@
 import { FlatList } from 'react-native';
 import NetworkListItem from '../network-list-item';
 import { NetworkMetainfo } from '@/types';
-import Text from '@/components/text';
+import Text from '../../text/index';
 
 interface Props {
   currentRemote: string | undefined;

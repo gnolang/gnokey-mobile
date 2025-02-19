@@ -428,7 +428,7 @@ export const signUpSlice = createSlice({
 
 export const selectChainsAvailable = createSelector(
   (state: RootState) => state.signUp.customChains,
-  (customChains) => customChains ? chains.concat(customChains) : chains
+  (customChains) => customChains ? (chains as NetworkMetainfo[]).concat(customChains) : chains
 );
 
 export const { addProgress, signUpState, clearProgress, addCustomChain, setRegisterAccount, setKeyName,

@@ -3,7 +3,7 @@ import { KeyInfo } from "@gnolang/gnonative";
 import { TouchableOpacity, View } from "react-native";
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome6 } from "@expo/vector-icons";
-import { Chip, Text } from "@/modules/ui-components";
+import { ButtonIcon, Chip, Text } from "@/modules/ui-components";
 
 interface Props {
   vault: KeyInfo;
@@ -23,14 +23,16 @@ const VaultListItem = ({ vault, onVaultPress, chains = [] }: Props) => {
           <Text.Caption style={{ color: '#A1A1A1' }}>Not registered</Text.Caption>
         </Chip>}
         <View />
-        <FontAwesome6 name="bookmark" size={24} color="black" />
+        <TouchableOpacity onPress={() => console.log('bookmark')}>
+          <FontAwesome6 name="bookmark" size={24} color="black" />
+        </TouchableOpacity>
       </View>
 
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 }}>
         <PlaceHolder />
         <View style={{ flex: 1, paddingLeft: 16 }}>
           <Text.H3>{vault.name}</Text.H3>
-          <Text.Caption style={{ textAlign: 'left', color: '#A1A1A1' }}>Created on 2025-XX-XX</Text.Caption>
+          <Text.Caption style={{ textAlign: 'left', color: '#A1A1A1' }}>Created at 2025-02-19</Text.Caption>
         </View>
       </View>
 

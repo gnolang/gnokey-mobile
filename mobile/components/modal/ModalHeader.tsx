@@ -1,4 +1,4 @@
-import { Spacer, Text } from "@/modules/ui-components";
+import { Spacer, Text } from "../../modules/ui-components";
 import Icons from "components/icons";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";

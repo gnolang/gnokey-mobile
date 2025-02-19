@@ -93,6 +93,7 @@ export default function Page() {
         return;
       }
       if (signUpState === SignUpState.account_created && newAccount) {
+        dispatch(resetState());
         onBack()
       }
     })();

@@ -72,12 +72,15 @@ export const signUp = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>(
 
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
 
-  if (!selectedChain) {
-    throw new Error("No chain selected");
+  console.log("selectedChain in signUp", selectedChain);
+
+  if (selectedChain) {
+    await gnonative.setRemote(selectedChain.gnoAddress);
+    await gnonative.setChainID(selectedChain.chainId);
   }
 
   // do not register on chain
-  if (!registerAccount) {
+  if (!selectedChain) {
 
     thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
     const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name);

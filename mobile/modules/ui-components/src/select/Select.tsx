@@ -4,7 +4,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Button } from "../buttons";
 import * as Text from "../text";
 import { FlatList, Modal, SafeAreaView, TouchableOpacityProps, View } from "react-native";
-import { NetworkListItem } from "@/components";
+import { NetworkListItem } from "../../../../components";
 import { NetworkMetainfo } from "@/types";
 
 export type SelectProps = {

@@ -18,6 +18,7 @@ import Button from "@/components/button";
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
 import { useTheme } from "styled-components/native";
 import { SafeAreaView } from "@/modules/ui-components";
+import { ModalHeaderTitle } from "@/components/modal/ModalHeader";
 
 export type Props = {
   visible: boolean;
@@ -79,43 +80,44 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
 
   return (
     <Modal transparent animationType="slide">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1, justifyContent: "flex-end", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" }}>
-        <SafeAreaView style={{ width: '100%', alignItems: "center"   }}>
-          <View style={{ width: '100%', backgroundColor: theme.colors.white, borderRadius: theme.borderRadius, padding: 20 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContent}>
 
-            {/* <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}> */}
-            {/* <ModalView.Content> */}
-            <ModalView.Header title="Change master password" onClose={() => onClose(false)} />
-            <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
-            <Spacer />
-            <TextInput
-              ref={inputRef}
-              placeholder={`Current password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setCurrentPassword}
-            />
-            <TextInput
-              placeholder={`New password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setPassword}
-            />
-            <TextInput
-              placeholder={`Reenter password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setReenterPassword}
-            />
-            <Alert severity="error" message={error} />
-            <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
-            <Spacer />
-            {/* </ModalView.Content> */}
+              <ModalHeaderTitle title="Change Master Password" />
 
-            {/* </KeyboardAvoidingView> */}
-          </View>
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
 
-        </SafeAreaView>
+                <Spacer />
+                <TextInput
+                  ref={inputRef}
+                  placeholder={`Current password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setCurrentPassword}
+                />
+                <Spacer />
+                <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
+
+                <TextInput
+                  placeholder={`New password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setPassword}
+                />
+                <TextInput
+                  placeholder={`Reenter password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setReenterPassword}
+                />
+                <Alert severity="error" message={error} />
+                <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -124,6 +126,24 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
 export default ChangeMasterPassword;
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    minHeight: '30%',
+    width: '100%',
+    borderTopRightRadius: 18,
+    borderTopLeftRadius: 18,
+    position: 'absolute',
+    bottom: 0,
+
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
   container: {
     flex: 1,
   },

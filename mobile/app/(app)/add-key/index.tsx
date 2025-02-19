@@ -196,7 +196,7 @@ export default function Page() {
         <Spacer />
         <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between' }}>
           {/* <Button color='secondary'>Import Vault</Button> */}
-          <View style={{ width: 110 }} />
+          <View style={{ width: 120 }} />
           <ButtonIcon size={60} color='primary' onPress={() => dispatch(generateNewPhrase())}>
             <Feather name="refresh-cw" size={30} color='white' />
           </ButtonIcon>

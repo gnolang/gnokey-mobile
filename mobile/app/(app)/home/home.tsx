@@ -115,6 +115,7 @@ export default function Page() {
           {filteredAccounts && (
             <FlatList
               data={filteredAccounts}
+              contentContainerStyle={{ paddingBottom: 120 }}
               renderItem={({ item }) => (
                 <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} chains={getChainNamePerKey(item)} />
               )}
@@ -122,7 +123,6 @@ export default function Page() {
               ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
             />
           )}
-          {/* </ScrollView> */}
         </BodyAlignedBotton>
       </Layout.Container>
     </>

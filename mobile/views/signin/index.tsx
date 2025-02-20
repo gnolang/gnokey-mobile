@@ -19,8 +19,9 @@ const SignInView: React.FC<Props> = ({ onUnlokPress, error }) => {
     <>
       <TextField placeholder={`Master password`}
         autoCorrect={false}
+        type="password"
         autoCapitalize="none"
-        secureTextEntry={true} onChangeText={setPassword} />
+        onChangeText={setPassword} />
       {/* <TextInput
         ref={inputRef}
         placeholder={`Master password`}

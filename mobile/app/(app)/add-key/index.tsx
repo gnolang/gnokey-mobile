@@ -168,6 +168,7 @@ export default function Page() {
 
           <Spacer />
           <TextField
+            label="Vault name"
             placeholder="Vault name"
             value={keyName}
             onChangeText={x => dispatch(setKeyName(x))}

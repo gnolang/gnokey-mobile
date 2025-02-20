@@ -1,8 +1,6 @@
-import { Layout, TextCopy } from "@/components";
-import FormItem from "@/components/form/form-item";
+import { TextCopy } from "@/components";
 import { ModalConfirm } from "@/components/modal";
 import Spacer from "@/components/spacer";
-import TextInput from "@/components/textinput";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useSelector } from "react-redux";
@@ -66,27 +64,39 @@ const Page = () => {
         </AppBar>
 
         <Container style={{ flex: 1 }}>
-          <Text.H1>Vault Details</Text.H1>
+
+          <Text.H1>Update the</Text.H1>
+          <View style={{ flexDirection: 'row' }}>
+            <Text.H1>Vault </Text.H1>
+            <Text.H1 style={{ color: 'white' }} >Data</Text.H1>
+          </View>
+
+          <Spacer space={32} />
+
+          <TextField label="Vault name" value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
+
+          <Spacer />
+          <Spacer />
+
+          <TextCopy text={addressBech32} style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row' }}>
+              <TextField label="Address" value={addressBech32} style={{ height: 50 }} multiline editable={false} />
+            </View>
+            <Octicons name="copy" size={12} color={theme.colors.white} style={{ paddingTop: 20 }} />
+          </TextCopy>
+
 
           <Spacer />
 
-          <FormItem label="Vault name">
-            <TextField value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
-          </FormItem>
-
-          <FormItem label="Address">
-            <TextCopy text={addressBech32} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text.Body style={{ color: theme.colors.white, flexWrap: 'wrap' }} numberOfLines={2}>{addressBech32.substring(0, 20)}\n{addressBech32.substring(20)}&nbsp;
-                &nbsp;
-                <Octicons name="copy" size={12} color={theme.colors.white} />
-              </Text.Body>
-            </TextCopy>
-          </FormItem>
-
-          <Spacer />
-
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-            <Button color="danger" onPress={onDeleteVault}>Destroy Key</Button>
+          <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'flex-end' }}>
+            <Button style={{ width: 110 }} color="tertirary" onPress={onDeleteVault}
+              endIcon={
+                <FontAwesome6 name='trash-can' size={16} color='black' />
+              }>Delete</Button>
+            {/* <Button style={{  width: 110 }} color="primary" onPress={onDeleteVault}>Delete</Button> */}
+            {/* <Button style={{  width: 110 }} color="primary" onPress={onDeleteVault}>Delete</Button> */}
+            <View style={{ width: 110 }} />
+            <View style={{ width: 110 }} />
           </View>
 
 

@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
-import Text from "@/components/text";
 import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import { setVaultToEdit } from "@/redux";
-import { AppBar, ButtonIcon, Button, TextField, Spacer } from "@/modules/ui-components";
+import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from "@/modules/ui-components";
 import { FontAwesome6 } from "@expo/vector-icons";
 import styled from "styled-components/native";
 
@@ -87,7 +86,7 @@ export default function Page() {
     return (
       <Layout.Container>
         <Layout.Body>
-          <Text.Title>{loading}</Text.Title>
+          <Text.Body>{loading}</Text.Body>
         </Layout.Body>
       </Layout.Container>
     );

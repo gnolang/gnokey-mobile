@@ -16,4 +16,6 @@ export * from './buttons/index'
 
 export * from './ui/SafeAreaView'
 
+export { FormItem } from './form/FormItem'
+
 export { ThemeProvider, DefaultTheme, TextField, Container, BottonPanel, Spacer, ErrorBox, Text }

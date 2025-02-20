@@ -70,23 +70,21 @@ export default function Root() {
 
   return (
     <Container>
-      <Layout.Container>
-        <Layout.BodyAlignedBotton>
-          <View style={{ alignItems: "center", paddingTop:100 }}>
-            <Text.H1  style={{textAlign: "center", color: "#E5E5E5"}}>GnoKey</Text.H1>
-            <Text.H1  style={{textAlign: "center"}}>Mobile</Text.H1>
-            <Text.Body>The Gno Key Management Tool</Text.Body>
-          </View>
+      <>
+        <View style={{ alignItems: "center", paddingTop: 100 }}>
+          <Text.H1 style={{ textAlign: "center", color: "#E5E5E5" }}>GnoKey</Text.H1>
+          <Text.H1 style={{ textAlign: "center" }}>Mobile</Text.H1>
+          <Text.Body>The Gno Key Management Tool</Text.Body>
+        </View>
 
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-              style={{ flex: 1 }}>
-              {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
-              {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </Layout.BodyAlignedBotton>
-      </Layout.Container>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+            style={{ flex: 1 }}>
+            {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
+            {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </>
     </Container>
   );
 }

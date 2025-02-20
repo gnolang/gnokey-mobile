@@ -24,7 +24,7 @@ const ThemeProvider = ({ children }: Props) => {
     textinputs: {
       background: '#5999fa',
       placeholder: {
-        color: '#535AE4',
+        color: '#000000',
       },
     },
 

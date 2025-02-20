@@ -5,11 +5,10 @@ import { useGnoNativeContext } from "@gnolang/gnonative";
 import { signOut, useAppDispatch } from "@/redux";
 import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
-import Text from "@/components/text";
 import ChangeMasterPassword from "@/views/change-master-password";
-import { AppBar, Button, Container, SafeAreaView, Spacer } from "@/modules/ui-components";
+import { AppBar, Button, Container, FormItem, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
 import { FontAwesome6 } from "@expo/vector-icons";
-import FormItem from "@/components/form/form-item";
+import { FormTextValue } from "@/modules/ui-components/src/form/FormItem";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -59,18 +58,25 @@ export default function Page() {
 
         <Container style={{ flex: 1 }}>
 
-          <FormItem label="Chain ID">
-            <Text.Body>{chainID}</Text.Body>
+          <Text.H1>My Profile</Text.H1>
+          <View style={{ flexDirection: 'row' }}>
+            <Text.H1 style={{ color: 'white' }}>Information</Text.H1>
+          </View>
+
+          <Spacer />
+
+          <FormItem label="Chain ID" labelStyle={{ minWidth: 90 }}>
+            <FormTextValue>{chainID}</FormTextValue>
           </FormItem>
 
-          <FormItem label="Remote">
-            <Text.Body>{remote}</Text.Body>
+          <FormItem label="Remote" labelStyle={{ minWidth: 90 }}>
+            <FormTextValue>{remote}</FormTextValue>
           </FormItem>
 
           <Layout.Footer>
-            <Button onPress={onPressChangePass} color="danger">Change master password</Button>
+            <Button onPress={onPressChangePass}>Change master password</Button>
             <Spacer />
-            <Button onPress={onPressLogout} color="danger">Logout</Button>
+            <Button onPress={onPressLogout}>Logout</Button>
           </Layout.Footer>
 
         </Container>

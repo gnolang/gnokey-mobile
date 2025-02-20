@@ -13,8 +13,6 @@ export interface Button extends TouchableOpacityProps {
   loading?: boolean
 }
 
-
-
 export const Button: React.FC<Button> = props => {
 	const isChildrenString = typeof props.children === 'string'
 

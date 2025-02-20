@@ -6,8 +6,8 @@ import { signOut, useAppDispatch } from "@/redux";
 import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
 import ChangeMasterPassword from "@/views/change-master-password";
-import { AppBar, Button, Container, FormItem, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { AppBar, Button, ButtonProfile, Container, FormItem, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
+import { AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 import { FormTextValue } from "@/modules/ui-components/src/form/FormItem";
 
 export default function Page() {
@@ -73,11 +73,17 @@ export default function Page() {
             <FormTextValue>{remote}</FormTextValue>
           </FormItem>
 
-          <Layout.Footer>
-            <Button onPress={onPressChangePass}>Change master password</Button>
-            <Spacer />
-            <Button onPress={onPressLogout}>Logout</Button>
-          </Layout.Footer>
+          <Spacer />
+
+          <ButtonProfile onPress={onPressChangePass} endIcon={<Feather name='lock' size={16} color='black' />}>
+            Change master password
+          </ButtonProfile>
+
+          <Spacer />
+
+          <ButtonProfile onPress={onPressLogout} endIcon={<AntDesign name='logout' size={16} color='black' />}>
+            Logout
+          </ButtonProfile>
 
         </Container>
 

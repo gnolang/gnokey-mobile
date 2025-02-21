@@ -6,6 +6,8 @@ import Spacer from "components/spacer";
 import { useState } from "react";
 import { useTheme } from "styled-components/native";
 import { Text, Button } from "@/modules/ui-components";
+import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
+
 export type Props = {
   title: string;
   confirmText?: string;
@@ -26,12 +28,44 @@ const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, conf
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
               <ModalHeaderTitle title={title} color={theme.error.text} />
-              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Text.Body>{message}</Text.Body>
+              <Spacer space={16} />
+              <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
+                <Text.Body style={{ textAlign: 'center' }} >{message}</Text.Body>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 16 }}>
                 <Button onPress={onCancel} color="secondary">Cancel</Button>
                 <Button onPress={onConfirm} color="danger">{confirmText}</Button>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </NativeModal>
+  )
+}
+
+const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmText = "Confirm" }: Props) => {
+
+  const theme = useTheme();
+
+  return (
+    <NativeModal visible={visible} transparent animationType="slide">
+      <TouchableWithoutFeedback onPress={onCancel}>
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContent}>
+              <ModalHeaderTitle title={title} color={theme.colors.primary} />
+              <Spacer space={16} />
+              <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}>
+                <Text.Body style={{ textAlign: 'center' }} >{message}</Text.Body>
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 16 }}>
+                <Button onPress={onCancel} color="secondary" style={{ width: 100 }}
+                  endIcon={<MaterialCommunityIcons name="cancel" size={16} color="black" />}
+                >Cancel</Button>
+                <Button onPress={onConfirm} color="primary" style={{ width: 120 }}
+                  endIcon={<FontAwesome6 name='plus' size={16} color='white' />}
+                >{confirmText}</Button>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -51,11 +85,10 @@ const styles = StyleSheet.create({
   modalContent: {
     minHeight: '30%',
     width: '100%',
-    borderTopRightRadius: 18,
-    borderTopLeftRadius: 18,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
     position: 'absolute',
     bottom: 0,
-
     backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
@@ -84,41 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const ModalConfirm2 = ({ visible, onCancel, onConfirm, title, message, confirmText = "Confirm" }: Props) => {
-
-  const [count, setCount] = useState(0);
-  const onPress = () => {
-    setCount(count + 1);
-  };
-
-  return (
-    <NativeModal visible={visible} transparent={true} animationType="slide">
-      <TouchableWithoutFeedback
-        style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'blue' }}
-
-        onPress={() => {
-          onPress();
-          Keyboard.dismiss();
-          onCancel();
-        }}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'red' }}>
-
-
-          <>
-
-            <ModalContent >
-              <ModalHeader title={title} onClose={onCancel} />
-              <Text.Body>{message}</Text.Body>
-              <Spacer />
-              <Button onPress={onConfirm} color="danger">{confirmText}</Button>
-              <Ruller />
-              <Button onPress={onCancel} color="secondary">Cancel</Button>
-            </ModalContent>
-          </>
-        </View>
-      </TouchableWithoutFeedback>
-    </NativeModal>
-  );
-};
-
-export default ModalConfirmDelete;
+export { ModalConfirmDelete, ModalConfirm };

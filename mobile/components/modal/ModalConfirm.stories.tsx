@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import React, { useEffect } from 'react';
-import ModalConfirmDelete, { Props } from './ModalConfirm';
+import { Props, ModalConfirmDelete } from './ModalConfirm';
 
 export default {
   title: 'ModalConfirm',

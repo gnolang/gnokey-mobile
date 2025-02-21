@@ -1,5 +1,5 @@
 import { TextCopy } from "@/components";
-import { ModalConfirm } from "@/components/modal";
+import { ModalConfirmDelete } from "@/components/modal";
 import Spacer from "@/components/spacer";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
@@ -99,10 +99,9 @@ const Page = () => {
             <View style={{ width: 110 }} />
           </View>
 
-
         </Container>
 
-        <ModalConfirm
+        <ModalConfirmDelete
           visible={showDeleteModal}
           title="Delete Vault"
           confirmText="Delete"

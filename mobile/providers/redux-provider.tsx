@@ -27,8 +27,8 @@ export interface ThunkExtra {
 }
 
 const persistConfig = {
-  key: 'root',
-  version: 1,
+  key: 'root-3',
+  version: 2,
   storage: AsyncStorage,
 }
 

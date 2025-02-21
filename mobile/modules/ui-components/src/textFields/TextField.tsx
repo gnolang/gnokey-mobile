@@ -1,0 +1,95 @@
+import React, { useEffect } from 'react'
+import { TextInputProps, Animated } from 'react-native'
+import styled, { DefaultTheme } from 'styled-components/native'
+import { FontAwesome } from '@expo/vector-icons'
+
+export type Props = {
+  label?: string
+  type?: 'password' | 'text'
+} & TextInputProps
+
+type PropsWithTheme = Props & { theme: DefaultTheme }
+
+export const TextField: React.FC<Props> = ({ type = 'text', label, value, ...rest }) => {
+
+  const [isSecureText, setShowSecureText] = React.useState(type === 'password')
+  const [inputValue, setInputValue] = React.useState<string | undefined>(value)
+  const fadeAnim = React.useRef(new Animated.Value(0)).current
+
+  const handleChangeText = (text: string) => {
+    setInputValue(text)
+    if (rest.onChangeText) {
+      rest.onChangeText(text)
+    }
+  }
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: inputValue ? 1 : 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start()
+  }, [inputValue])
+
+  return (
+    <Container>
+      <AnimatedLabel style={{ opacity: fadeAnim }}>{label}</AnimatedLabel>
+      <Content>
+        <TextFieldStyled
+          {...rest}
+          value={inputValue}
+          secureTextEntry={isSecureText}
+          onChangeText={handleChangeText}
+        />
+        {type === 'password' ? (
+          <ToggleIcon>
+            <FontAwesome size={28} name={isSecureText ? 'eye-slash' : 'eye'} onPress={() => setShowSecureText(prev => !prev)} />
+          </ToggleIcon>
+        ) : null}
+      </Content>
+    </Container>
+  )
+}
+
+const Container = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+`
+
+const Content = styled.View<Props>`
+	flex-direction: row;
+	align-items: center;
+  border-bottom-width: 1px;
+	color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
+	background-color: ${({ theme }: { theme: DefaultTheme }) => theme.textinputs?.background};
+`
+
+const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
+  placeholderTextColor: props.theme.textinputs?.placeholder.color || props.theme.textinputs.placeholder.color,
+}))`
+	flex: 1;
+	height: 40px;
+	width: 100%;
+	font-weight: 500;
+	line-height: 20px;
+	font-size: 18px;
+	placeholder: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
+	border-style: solid;
+`
+
+const ToggleIcon = styled.TouchableOpacity`
+	color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
+	padding: 2px;
+`
+
+const AnimatedLabel = styled(Animated.Text)`
+  color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.white};
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+`

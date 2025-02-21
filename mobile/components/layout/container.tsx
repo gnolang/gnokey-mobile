@@ -1,12 +1,19 @@
-import React, { ReactNode } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React from 'react';
+import { SafeAreaView } from 'react-native';
+import styled, { DefaultTheme } from 'styled-components/native'
 
-interface Props {
-  children: ReactNode;
+const Wrapper = styled.View`
+	flex: 1;
+	padding: 8px;
+	background-color: ${({ theme }: { theme: DefaultTheme }) => theme.textinputs?.background};
+`
+
+const Container = ({ children }: React.PropsWithChildren) => {
+  return <Wrapper>
+    <SafeAreaView>
+      {children}
+    </SafeAreaView>
+  </Wrapper>
 }
-
-const Container: React.FC<Props> = ({ children }) => {
-  return <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>;
-};
 
 export default Container;

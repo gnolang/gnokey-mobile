@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
-import Text from "@/components/text";
-import { checkForKeyOnChains, initSignUpState, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains } from "@/redux";
+import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains, selectVaults } from "@/redux";
 import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
-import Octicons from '@expo/vector-icons/Octicons';
-import TextInput from "@/components/textinput";
-import { colors } from "@/assets/styles/colors";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
-import { setVaultToEdit } from "@/redux";
+import { setVaultToEdit, fetchVaults } from "@/redux";
+import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from "@/modules/ui-components";
+import { FontAwesome6 } from "@expo/vector-icons";
+import styled from "styled-components/native";
+import { ModalConfirm } from "@/components/modal/ModalConfirm";
 
 export default function Page() {
   const route = useRouter();
 
   const [nameSearch, setNameSearch] = useState<string>("");
-  const [accounts, setAccounts] = useState<KeyInfo[]>([]);
   const [filteredAccounts, setFilteredAccounts] = useState<KeyInfo[]>([]);
   const [loading, setLoading] = useState<string | undefined>(undefined);
 
@@ -26,14 +25,16 @@ export default function Page() {
 
   const keyInfoChains = useAppSelector(selectKeyInfoChains)
 
+  const vaults = useAppSelector(selectVaults)
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       try {
         setLoading("Loading accounts...");
 
-        const response = await gnonative.listKeyInfo();
-        setAccounts(response);
-        dispatch(checkForKeyOnChains())
+        await dispatch(fetchVaults()).unwrap();
+
+        await dispatch(checkForKeyOnChains()).unwrap();
       } catch (error: unknown | Error) {
         console.error(error);
       } finally {
@@ -45,11 +46,11 @@ export default function Page() {
 
   useEffect(() => {
     if (nameSearch) {
-      setFilteredAccounts(accounts.filter((account) => account.name.includes(nameSearch)));
+      setFilteredAccounts(vaults ? vaults.filter((account) => account.name.includes(nameSearch)) : []);
     } else {
-      setFilteredAccounts(accounts);
+      setFilteredAccounts(vaults || []);
     }
-  }, [nameSearch, accounts]);
+  }, [nameSearch, vaults]);
 
   const onChangeAccountHandler = async (keyInfo: KeyInfo) => {
     try {
@@ -74,12 +75,11 @@ export default function Page() {
   };
 
   const navigateToAddKey = () => {
-    dispatch(initSignUpState());
     route.push("/add-key");
   }
 
   const getChainNamePerKey = (keyInfo: KeyInfo): string[] | undefined => {
-    if (keyInfoChains instanceof Map &&  keyInfoChains?.has(keyInfo.address.toString())) {
+    if (keyInfoChains instanceof Map && keyInfoChains?.has(keyInfo.address.toString())) {
       return keyInfoChains.get(keyInfo.address.toString())
     }
   }
@@ -88,7 +88,7 @@ export default function Page() {
     return (
       <Layout.Container>
         <Layout.Body>
-          <Text.Title>{loading}</Text.Title>
+          <Text.Body>{loading}</Text.Body>
         </Layout.Body>
       </Layout.Container>
     );
@@ -97,29 +97,63 @@ export default function Page() {
   return (
     <>
       <Layout.Container>
-        <Layout.BodyAlignedBotton>
-          <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "space-between", marginHorizontal: 8 }}>
-            <TextInput placeholder="Search Vault" containerStyle={{ width: '86%' }} value={nameSearch} onChangeText={setNameSearch}>
-              <Octicons name="search" size={24} color="gray" />
-            </TextInput>
-            <TouchableOpacity onPress={navigateToAddKey}>
-              <Octicons name="diff-added" size={38} color={colors.primary} />
-            </TouchableOpacity>
+        <AppBar>
+          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color='tertirary'>
+            <FontAwesome6 name='user' size={20} color='black' />
+          </ButtonIcon>
+
+          <Button onPress={navigateToAddKey} color='tertirary' endIcon={<FontAwesome6 name='add' size={16} color='black' />}>
+            New Vault
+          </Button>
+        </AppBar>
+
+        <BodyAlignedBotton>
+          <Text.H1>Your Safe</Text.H1>
+          <View style={{ flexDirection: 'row' }}>
+            <Text.H1 style={{ color: 'white' }}>Vault List</Text.H1>
           </View>
+
+          <TextField placeholder='Search Vault' value={nameSearch} onChangeText={setNameSearch} autoCapitalize="none" autoCorrect={false} />
+
+          <Spacer />
+          <Text.Body style={{ textAlign: 'center' }} >{filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}</Text.Body>
+          <Spacer />
 
           {filteredAccounts && (
             <FlatList
               data={filteredAccounts}
+              contentContainerStyle={{ paddingBottom: 120 }}
               renderItem={({ item }) => (
                 <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} chains={getChainNamePerKey(item)} />
               )}
               keyExtractor={(item) => item.name}
-              ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
+              ListEmptyComponent={<ShowModal onConfirm={navigateToAddKey} />}
             />
           )}
-          {/* </ScrollView> */}
-        </Layout.BodyAlignedBotton>
+        </BodyAlignedBotton>
       </Layout.Container>
     </>
   );
 }
+
+const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
+  const [loading, setLoading] = useState<string | undefined>(undefined);
+  const [visible, setVisible] = useState<boolean>(true);
+  return (
+    <ModalConfirm visible={visible}
+      onCancel={() => setVisible(false)}
+      onConfirm={() => { onConfirm(); setVisible(false) }}
+      title="Not Found"
+      confirmText="Add Vault"
+      message="Your Vault doesn't exist. Do you want to create a new one?" />)
+}
+
+
+export const BodyAlignedBotton = styled.View`
+  width: 100%;
+  height: 100%;
+  padding-top: 4px;
+  padding-horizontal: 8px;
+  justify-content: flex-end;
+  padding-bottom: 12px;
+`;

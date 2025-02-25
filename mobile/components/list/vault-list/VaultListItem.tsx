@@ -1,17 +1,18 @@
 import { colors } from "@/assets/styles/colors";
-import { KeyInfo } from "@gnolang/gnonative";
 import { TouchableOpacity, View } from "react-native";
 import styled, { DefaultTheme } from 'styled-components/native'
-import { FontAwesome6 } from "@expo/vector-icons";
-import { ButtonIcon, Chip, Text } from "@/modules/ui-components";
+import { FontAwesome } from "@expo/vector-icons";
+import { Chip, Text } from "@/modules/ui-components";
+import { KeyInfoBookmark } from "@reduxjs/toolkit";
 
 interface Props {
-  vault: KeyInfo;
+  vault: KeyInfoBookmark;
   chains?: string[];
-  onVaultPress: (vault: KeyInfo) => void;
+  onVaultPress: (vault: KeyInfoBookmark) => void;
+  onBookmarkPress?: (vault: KeyInfoBookmark) => void;
 }
 
-const VaultListItem = ({ vault, onVaultPress, chains = [] }: Props) => {
+const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Props) => {
 
   return (
     <Wrapper onPress={() => onVaultPress(vault)}>
@@ -23,15 +24,16 @@ const VaultListItem = ({ vault, onVaultPress, chains = [] }: Props) => {
           <Text.Caption style={{ color: '#A1A1A1' }}>Not registered</Text.Caption>
         </Chip>}
         <View />
-        <TouchableOpacity onPress={() => console.log('bookmark')}>
-          <FontAwesome6 name="bookmark" size={24} color="black" />
-        </TouchableOpacity>
+        {onBookmarkPress ?
+          <TouchableOpacity onPress={() => onBookmarkPress(vault)}>
+            <FontAwesome name={vault.bookmarked ? 'star-o' : 'star'} size={24} color="black" />
+          </TouchableOpacity> : null}
       </View>
 
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 }}>
         <PlaceHolder />
         <View style={{ flex: 1, paddingLeft: 16 }}>
-          <Text.H3>{vault.name}</Text.H3>
+          <Text.H3>{vault.keyInfo.name}</Text.H3>
           <Text.Caption style={{ textAlign: 'left', color: '#A1A1A1' }}>Created at 2025-02-19</Text.Caption>
         </View>
       </View>

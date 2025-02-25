@@ -30,9 +30,9 @@ const SignInView: React.FC<Props> = ({ onUnlokPress, error }) => {
         onChangeText={setPassword}
         /> */}
       <Spacer space={16} />
-      <Button style={{ width: "100%" }} onPress={() => onUnlokPress(password)} color="primary">Unlock</Button>
-      <Spacer space={8} />
       <Alert severity="error" message={error} />
+      <Spacer space={8} />
+      <Button style={{ width: "100%" }} onPress={() => onUnlokPress(password)} color="primary">Unlock</Button>
     </>
   );
 }

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
-import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains, selectVaults } from "@/redux";
-import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
+import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains, selectVaults, setBookmark, KeyInfoBookmark } from "@/redux";
+import { useGnoNativeContext } from "@gnolang/gnonative";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import { setVaultToEdit, fetchVaults } from "@/redux";
 import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from "@/modules/ui-components";
@@ -15,7 +15,7 @@ export default function Page() {
   const route = useRouter();
 
   const [nameSearch, setNameSearch] = useState<string>("");
-  const [filteredAccounts, setFilteredAccounts] = useState<KeyInfo[]>([]);
+  const [filteredAccounts, setFilteredAccounts] = useState<KeyInfoBookmark[]>([]);
   const [loading, setLoading] = useState<string | undefined>(undefined);
 
   const { gnonative } = useGnoNativeContext();
@@ -46,13 +46,13 @@ export default function Page() {
 
   useEffect(() => {
     if (nameSearch) {
-      setFilteredAccounts(vaults ? vaults.filter((account) => account.name.includes(nameSearch)) : []);
+      setFilteredAccounts(vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : []);
     } else {
       setFilteredAccounts(vaults || []);
     }
   }, [nameSearch, vaults]);
 
-  const onChangeAccountHandler = async (keyInfo: KeyInfo) => {
+  const onChangeAccountHandler = async (keyInfo: KeyInfoBookmark) => {
     try {
       setLoading("Changing account...");
 
@@ -60,8 +60,8 @@ export default function Page() {
         throw new Error("No master password defined. Please create one.");
       }
 
-      await gnonative.activateAccount(keyInfo.name);
-      await gnonative.setPassword(masterPassword, keyInfo.address);
+      await gnonative.activateAccount(keyInfo.keyInfo.name);
+      await gnonative.setPassword(masterPassword, keyInfo.keyInfo.address);
 
       setLoading(undefined);
 
@@ -78,10 +78,15 @@ export default function Page() {
     route.push("/add-key");
   }
 
-  const getChainNamePerKey = (keyInfo: KeyInfo): string[] | undefined => {
-    if (keyInfoChains instanceof Map && keyInfoChains?.has(keyInfo.address.toString())) {
-      return keyInfoChains.get(keyInfo.address.toString())
+  const getChainNamePerKey = (keyInfo: KeyInfoBookmark): string[] | undefined => {
+    if (keyInfoChains instanceof Map && keyInfoChains?.has(keyInfo.keyInfo.address.toString())) {
+      return keyInfoChains.get(keyInfo.keyInfo.address.toString())
     }
+  }
+
+  const onBookmarkPress = (keyInfo: KeyInfoBookmark) => async () => {
+    console.log('Bookmark pressed', keyInfo.keyInfo.address)
+    dispatch(setBookmark({ keyAddress: keyInfo.keyInfo.address, value: !keyInfo.bookmarked }))
   }
 
   if (loading) {
@@ -124,9 +129,12 @@ export default function Page() {
               data={filteredAccounts}
               contentContainerStyle={{ paddingBottom: 120 }}
               renderItem={({ item }) => (
-                <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} chains={getChainNamePerKey(item)} />
+                <VaultListItem vault={item}
+                  onVaultPress={onChangeAccountHandler}
+                  chains={getChainNamePerKey(item)}
+                  onBookmarkPress={onBookmarkPress(item)} />
               )}
-              keyExtractor={(item) => item.name}
+              keyExtractor={(item) => item.keyInfo.name}
               ListEmptyComponent={<ShowModal onConfirm={navigateToAddKey} />}
             />
           )}

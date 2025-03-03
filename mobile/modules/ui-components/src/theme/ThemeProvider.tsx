@@ -11,6 +11,7 @@ const ThemeProvider = ({ children }: Props) => {
     borderRadius: 20,
 
     error: { background: '#FFE5E6', text: '#FA262A' },
+    success: { background: '#E5F9E5', text: '#00A86B' },
 
     colors: {
       primary: '#5999fa',

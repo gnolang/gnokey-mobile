@@ -1,28 +1,30 @@
 import { Text, View } from 'react-native'
-import styled, { DefaultTheme } from 'styled-components/native'
+import styled from 'styled-components/native'
 
-export const ErrorBox = ({ children }: { children: React.ReactNode }) => {
+type Props = {
+  children?: string
+} & React.ComponentProps<typeof View>
 
-  if (!children) return <View style={{ height: 40 }} />
+export const ErrorBox = ({ children, style, ...rest }: Props) => {
+
+  if (!children) return <View style={[{ height: 30 }, style]} {...rest}/>
 
   return (
-    <ErrorBoxWrapper>
+    <ErrorBoxWrapper style={style} {...rest}>
       <Text>{children}</Text>
     </ErrorBoxWrapper>
   )
 }
 
-
-
- const ErrorBoxWrapper = styled.View`
+const ErrorBoxWrapper = styled.View`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	text-align: center;
 	font-size: 14px;
-	min-height: 40px;
-	padding: 12px;
+  height: 30px;
+  padding-horizontal: 8px;
 	color: black;
-	border-radius: ${(props) => props.theme.borderRadius || 40}px;
+	border-radius: ${(props) => props.theme.borderRadius || 20}px;
 	background-color: ${({ theme }) => theme.error.background};
 `

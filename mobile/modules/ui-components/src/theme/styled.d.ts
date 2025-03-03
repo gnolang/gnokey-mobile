@@ -5,6 +5,7 @@ declare module 'styled-components/native' {
 		borderRadius: number
 
 		error: { background: string; text: string }
+    success: { background: string; text: string }
 
 		buttons: {
 			primary: string

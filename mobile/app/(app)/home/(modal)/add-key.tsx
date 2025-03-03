@@ -19,7 +19,7 @@ import {
 import { ChainSelectView, } from "@/views";
 import { TextCopy } from "@/components";
 import { Feather, FontAwesome6, Octicons } from "@expo/vector-icons";
-import { AppBar, Button, Select, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, ErrorBox } from "@/modules/ui-components";
+import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, TopModalBar } from "@/modules/ui-components";
 import { useTheme } from "styled-components/native";
 
 export default function Page() {
@@ -93,7 +93,7 @@ export default function Page() {
       }
       if (signUpState === SignUpState.account_created && newAccount) {
         dispatch(resetState());
-        onBack()
+        router.replace({ pathname: "home/add-key-sucess" });
       }
     })();
   }, [signUpState, newAccount]);
@@ -140,20 +140,10 @@ export default function Page() {
     }
   };
 
-  const onBack = () => {
-    console.log("onBack");
-    router.back()
-  }
-
   return (
     <>
       <SafeAreaView>
-        <AppBar>
-          <View />
-          <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
-            Cancel
-          </Button>
-        </AppBar>
+        <TopModalBar />
 
         <Container>
 
@@ -173,8 +163,9 @@ export default function Page() {
             onChangeText={x => dispatch(setKeyName(x))}
             autoCapitalize="none"
             autoCorrect={false}
+            error={error}
           />
-          <Spacer />
+          <Spacer space={4} />
           <ChainSelectView />
 
         </Container>
@@ -193,9 +184,7 @@ export default function Page() {
 
         </TextCopy>
         <Spacer />
-        <ErrorBox>{error}</ErrorBox>
-        <Spacer />
-        <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* <Button color='secondary'>Import Vault</Button> */}
           <View style={{ width: 120 }} />
           <ButtonIcon size={60} color='primary' onPress={() => dispatch(generateNewPhrase())}>

@@ -1,10 +1,11 @@
 import {  View } from "react-native";
 import React from "react";
 import { selectChainsAvailable, selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux"
-import { Select, Spacer, Text } from "@/modules/ui-components";
+import { Spacer, Text } from "@/modules/ui-components";
 import { NetworkMetainfo } from "@/types";
 import { useTheme } from "styled-components";
 import { useRouter } from "expo-router";
+import { Select } from "@/components/select";
 
 const ChainSelectView = () => {
   const dispatch = useAppDispatch()
@@ -25,7 +26,6 @@ const ChainSelectView = () => {
 
   return (
     <>
-      <Spacer />
       <View style={{ flexDirection: 'row' }}>
         <Text.Body>Select Network to </Text.Body>
         <Text.Body style={{color: theme.colors.white}}>&nbsp;Register Username</Text.Body>

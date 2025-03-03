@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react'
-import { TextInputProps, Animated } from 'react-native'
+import { TextInputProps, Animated, View } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
+import { ErrorBox } from '../alert'
+import { Spacer } from '../layout'
 
 export type Props = {
   label?: string
   type?: 'password' | 'text'
+  error?: string
 } & TextInputProps
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
-export const TextField: React.FC<Props> = ({ type = 'text', label, value, ...rest }) => {
+export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, ...rest }) => {
 
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
@@ -36,24 +39,36 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, value, ...res
   }, [inputValue])
 
   return (
-    <Container>
-      <AnimatedLabel style={{ opacity: fadeAnim }}>{label}</AnimatedLabel>
-      <Content>
-        <TextFieldStyled
-          {...rest}
-          value={inputValue}
-          secureTextEntry={isSecureText}
-          onChangeText={handleChangeText}
-        />
-        {type === 'password' ? (
-          <ToggleIcon>
-            <FontAwesome size={28} name={isSecureText ? 'eye-slash' : 'eye'} onPress={() => setShowSecureText(prev => !prev)} />
-          </ToggleIcon>
-        ) : null}
-      </Content>
-    </Container>
+    <>
+      <Container>
+        <AnimatedLabel style={{ opacity: fadeAnim }}>{label}</AnimatedLabel>
+        <Content>
+          <TextFieldStyled
+            {...rest}
+            value={inputValue}
+            secureTextEntry={isSecureText}
+            onChangeText={handleChangeText}
+          />
+          {type === 'password' ? (
+            <ToggleIcon>
+              <FontAwesome size={28} name={isSecureText ? 'eye-slash' : 'eye'} onPress={() => setShowSecureText(prev => !prev)} />
+            </ToggleIcon>
+          ) : null}
+        </Content>
+        <Spacer space={8} />
+      </Container>
+      <ErrorBox>{error}</ErrorBox>
+    </>
   )
 }
+
+const ErrorText = styled.Text`
+  color: #FF6B6B;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+  font-size: 12px;
+  margin-top: 5px;
+`
 
 const Container = styled.View`
   flex-direction: column;

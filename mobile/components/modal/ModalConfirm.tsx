@@ -2,10 +2,9 @@ import { Keyboard, Modal as NativeModal, TouchableWithoutFeedback, View, StyleSh
 import ModalHeader, { ModalHeaderTitle } from "./ModalHeader";
 import ModalContent from "./ModalContent";
 import Ruller from "components/row/Ruller";
-import Spacer from "components/spacer";
 import { useState } from "react";
 import { useTheme } from "styled-components/native";
-import { Text, Button } from "@/modules/ui-components";
+import { Text, Button, Spacer } from "@/modules/ui-components";
 import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type Props = {

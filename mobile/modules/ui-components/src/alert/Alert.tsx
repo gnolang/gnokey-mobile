@@ -1,7 +1,7 @@
 
 import { colors } from "@/assets/styles/colors";
 import styled from "styled-components/native";
-import Spacer from "../../../../components/spacer";
+import { Spacer } from "../layout";
 
 export interface Props {
   message?: string;

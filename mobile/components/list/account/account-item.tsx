@@ -1,5 +1,5 @@
 import Button from "@/components/button";
-import Spacer from "@/components/spacer";
+import { Spacer } from "@/modules/ui-components";
 import { KeyInfo } from "@gnolang/gnonative";
 
 interface SideMenuAccountItemProps {

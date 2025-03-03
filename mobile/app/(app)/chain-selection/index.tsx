@@ -3,10 +3,10 @@ import { selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector }
 import { KeyboardAvoidingView, Modal, Platform, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { Button, Layout, Ruller, Spacer, ModalContent, ModalHeader, NetworkList, Text, TextInput } from "@/components";
+import { Button, Layout, Ruller, ModalContent, ModalHeader, NetworkList, Text, TextInput } from "@/components";
 import { NetworkMetainfo } from "@/types";
 import { addCustomChain, selectChainsAvailable } from "@/redux";
-import { Alert } from "@/modules/ui-components";
+import { Alert, Spacer } from "@/modules/ui-components";
 
 function Page() {
   const { gnonative } = useGnoNativeContext();

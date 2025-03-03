@@ -1,7 +1,6 @@
 import { Layout } from "@/components";
 import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
-import Spacer from "@/components/spacer";
 import Text from "@/components/text";
 import { clearLinking, KeyInfoBookmark, selectCallback, selectClientName, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -9,6 +8,7 @@ import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import * as Linking from 'expo-linking';
+import { Spacer } from "@/modules/ui-components";
 
 export default function Page() {
     const [loading, setLoading] = useState<string | undefined>(undefined);

@@ -8,12 +8,11 @@ import {
   View,
 } from "react-native";
 import Text from "@/components/text";
-import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
 import { useTheme } from "styled-components/native";
-import { Alert } from "@/modules/ui-components";
+import { Alert, Spacer } from "@/modules/ui-components";
 import { ModalHeaderTitle } from "@/components/modal/ModalHeader";
 
 export type Props = {

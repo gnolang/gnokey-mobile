@@ -1,13 +1,12 @@
 import { TextCopy } from "@/components";
 import { ModalConfirmDelete } from "@/components/modal";
-import Spacer from "@/components/spacer";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useSelector } from "react-redux";
 import { deleteVault, selectVaultToEdit, useAppDispatch } from "@/redux";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { AppBar, SafeAreaView, Button, Text, Container, TextField } from "@/modules/ui-components";
+import { AppBar, SafeAreaView, Button, Text, Container, TextField, Spacer } from "@/modules/ui-components";
 import { FontAwesome6, Octicons } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 

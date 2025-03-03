@@ -1,4 +1,4 @@
-import * as Text from "../text"
+import * as Text from "../../modules/ui-components/src/text"
 
 export type MenuItemProps = {
   value: any,

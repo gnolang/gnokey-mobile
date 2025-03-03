@@ -6,7 +6,7 @@ import * as Text from './text/index'
 import { TextField } from './textFields/TextField'
 import { ThemeProvider, DefaultTheme } from './theme/ThemeProvider'
 
-export * from './select/index'
+export * from '../../../components/select/index'
 
 export * from './chip/index'
 

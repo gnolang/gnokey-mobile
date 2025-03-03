@@ -1,11 +1,10 @@
 import React from "react";
 import styled, { DefaultTheme, useTheme } from "styled-components/native"
 import { FontAwesome6 } from "@expo/vector-icons";
-import { Button } from "../buttons";
-import * as Text from "../text";
 import { FlatList, Modal, SafeAreaView, TouchableOpacityProps, View } from "react-native";
-import { NetworkListItem } from "../../../../components";
+import { NetworkListItem } from "..";
 import { NetworkMetainfo } from "@/types";
+import { Button, Text } from "@/modules/ui-components";
 
 export type SelectProps = {
   items: NetworkMetainfo[],

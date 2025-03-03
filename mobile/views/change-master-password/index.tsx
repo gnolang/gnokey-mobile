@@ -1,23 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
-  Platform,
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
   TextInput as RNTextInput,
   View,
 } from "react-native";
-import Alert from "@/components/alert";
-import { ModalView } from "@/components/modal";
 import Text from "@/components/text";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
 import { useTheme } from "styled-components/native";
-import { SafeAreaView } from "@/modules/ui-components";
+import { Alert } from "@/modules/ui-components";
 import { ModalHeaderTitle } from "@/components/modal/ModalHeader";
 
 export type Props = {

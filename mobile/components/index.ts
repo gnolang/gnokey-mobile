@@ -10,7 +10,6 @@ export * from "./controls/toggle/Toggle"
 export * from "./items"
 export * from "./shared-components/UnifiedText"
 
-export {default as Alert} from "./alert"
 export {default as TextCopy} from "./text/text-copy"
 export { default as ModalHeader } from "./modal/ModalHeader"
 export { default as ModalContent } from "./modal/ModalContent"

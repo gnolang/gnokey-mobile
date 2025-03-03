@@ -1,7 +1,7 @@
-import Alert from "@/components/alert";
 import Button from "@/components/button";
 import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
+import { Alert } from "@/modules/ui-components";
 import { useState } from "react";
 
 export interface Props {

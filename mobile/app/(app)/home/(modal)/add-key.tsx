@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, TextInput as RNTextInput, Alert as RNAlert } from "react-native";
+import { StyleSheet, View, TextInput as RNTextInput, Alert as RNAlert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -16,11 +16,10 @@ import {
   generateNewPhrase,
   resetState
 } from "@/redux";
-import { ProgressViewModal, ChainSelectView, } from "@/views";
-import { TextCopy, Layout, Alert, TextInput } from "@/components";
-import { Feather, FontAwesome, FontAwesome6, Octicons } from "@expo/vector-icons";
-import { colors } from "@/assets";
-import { AppBar, Button, Select, Text, TextField, MenuItem, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, ErrorBox } from "@/modules/ui-components";
+import { ChainSelectView, } from "@/views";
+import { TextCopy } from "@/components";
+import { Feather, FontAwesome6, Octicons } from "@expo/vector-icons";
+import { AppBar, Button, Select, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, ErrorBox } from "@/modules/ui-components";
 import { useTheme } from "styled-components/native";
 
 export default function Page() {

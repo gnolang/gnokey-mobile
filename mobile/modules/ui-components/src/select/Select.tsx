@@ -11,10 +11,11 @@ export type SelectProps = {
   items: NetworkMetainfo[],
   selectedItem?: NetworkMetainfo,
   onChange: (item: NetworkMetainfo | undefined) => void
+  onAddChainPress: () => void
 } & TouchableOpacityProps & React.PropsWithChildren
 
 export const Select: React.FC<SelectProps> = (props) => {
-  const { selectedItem, items, onChange } = props
+  const { selectedItem, items, onChange, onAddChainPress } = props
 
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
@@ -54,6 +55,7 @@ export const Select: React.FC<SelectProps> = (props) => {
                 }}
                 endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>Not Register</Button>
               <Button color="secondary"
+                onPress={onAddChainPress}
                 endIcon={<FontAwesome6 name='plus' size={16} color='black' />}>Add a Chain</Button>
             </View>
           </View>

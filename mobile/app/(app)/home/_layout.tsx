@@ -10,5 +10,11 @@ export default function AppLayout() {
       headerLargeTitle: true,
       headerBackVisible: false,
     }}
-  />;
+  >
+    <Stack.Screen name="home" />
+    <Stack.Screen name="profile" />
+    <Stack.Screen name="(modal)/add-key" options={{
+      presentation: 'modal'
+    }} />
+  </Stack>
 }

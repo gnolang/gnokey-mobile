@@ -75,7 +75,7 @@ export default function Page() {
   };
 
   const navigateToAddKey = () => {
-    route.push("/add-key");
+    route.push("/home/add-key");
   }
 
   const getChainNamePerKey = (keyInfo: KeyInfoBookmark): string[] | undefined => {

@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { selectChainsAvailable } from "./signupSlice";
+import { selectChainsAvailable } from "./vaultAddSlice";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { RootState } from "../root-reducer";
 
-export interface VaultState {
+export interface VaultEditState {
   vaultToEdit: KeyInfo | undefined;
   keyInfoChains?: Map<string, string[]>;
 }
 
-const initialState: VaultState = {
+const initialState: VaultEditState = {
   vaultToEdit: undefined,
 };
 
@@ -89,8 +89,8 @@ const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
   }
 };
 
-export const vaultSlice = createSlice({
-  name: "vault",
+export const vaultEditSlice = createSlice({
+  name: "vaultEdit",
   initialState,
   reducers: {
     setVaultToEdit: (state, action) => {
@@ -112,6 +112,6 @@ export const vaultSlice = createSlice({
   },
 });
 
-export const { setVaultToEdit } = vaultSlice.actions;
+export const { setVaultToEdit } = vaultEditSlice.actions;
 
-export const { selectVaultToEdit, selectKeyInfoChains } = vaultSlice.selectors;
+export const { selectVaultToEdit, selectKeyInfoChains } = vaultEditSlice.selectors;

@@ -3,7 +3,7 @@ import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { RootState } from "../root-reducer";
 
-export interface VaultsState {
+export interface VaultListState {
   vaults?: KeyInfoBookmark[]; // will be overriden by the fetchVaults action. TODO: evict this field to be stored in redux.
   bookmarkedAddresses: string[];
   loading: boolean;
@@ -15,7 +15,7 @@ export type KeyInfoBookmark = {
   keyInfo: KeyInfo;
 }
 
-const initialState: VaultsState = {
+const initialState: VaultListState = {
   vaults: undefined,
   bookmarkedAddresses: [],
   loading: false,
@@ -43,8 +43,8 @@ interface Prop {
   value?: boolean;
 }
 
-export const vaultsSlice = createSlice({
-  name: "vaults",
+export const vaultListSlice = createSlice({
+  name: "vaultList",
   initialState,
   reducers: {
     setBookmark: (state, action: PayloadAction<Prop>) => {
@@ -76,7 +76,7 @@ export const vaultsSlice = createSlice({
         if ((a.bookmarked === b.bookmarked) || (a.bookmarked === undefined && b.bookmarked === undefined)) {
           return a.keyInfo.name.localeCompare(b.keyInfo.name);
         }
-        return a.bookmarked ? 1 : -1;
+        return a.bookmarked ? -1 : 1;
       });
     });
     builder.addCase(fetchVaults.rejected, (state, action) => {
@@ -90,5 +90,5 @@ export const vaultsSlice = createSlice({
   },
 });
 
-export const { setBookmark } = vaultsSlice.actions;
-export const { selectVaults, selectBookmarkedAddresses } = vaultsSlice.selectors;
+export const { setBookmark } = vaultListSlice.actions;
+export const { selectVaults, selectBookmarkedAddresses } = vaultListSlice.selectors;

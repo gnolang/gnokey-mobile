@@ -150,7 +150,7 @@ const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
   return (
     <ModalConfirm visible={visible}
       onCancel={() => setVisible(false)}
-      onConfirm={() => { onConfirm(); setVisible(false) }}
+      onConfirm={() => { onConfirm() }}
       title="Not Found"
       confirmText="Add Vault"
       message="Your Vault doesn't exist. Do you want to create a new one?" />)

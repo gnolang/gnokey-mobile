@@ -1,19 +1,19 @@
 import { combineSlices, configureStore, LinkingState } from "@reduxjs/toolkit";
-import { vaultSlice, signinSlice, signUpSlice, linkingSlice, VaultState, SignupState, SignInState, vaultsSlice, VaultsState } from "@/redux/features";
+import { vaultEditSlice, signinSlice, vaultAddSlice, linkingSlice, VaultEditState, VaultAddState, SignInState, vaultListSlice, VaultListState } from "@/redux/features";
 
 const rootReducer = combineSlices({
-  [vaultSlice.reducerPath]: vaultSlice.reducer,
-  [signUpSlice.reducerPath]: signUpSlice.reducer,
-  [signinSlice.reducerPath]: signinSlice.reducer,
-  [linkingSlice.reducerPath]: linkingSlice.reducer,
-  [vaultsSlice.reducerPath]: vaultsSlice.reducer,
+  [vaultAddSlice.name]: vaultAddSlice.reducer,
+  [vaultEditSlice.name]: vaultEditSlice.reducer,
+  [vaultListSlice.name]: vaultListSlice.reducer,
+  [signinSlice.name]: signinSlice.reducer,
+  [linkingSlice.name]: linkingSlice.reducer,
 });
 
 export type RootState = {
-  vault: VaultState;
-  vaults: VaultsState;
+  vaultAdd: VaultAddState;
+  vaultEdit: VaultEditState;
+  vaultList: VaultListState;
   signIn: SignInState;
-  signUp: SignupState;
   linking: LinkingState;
 };
 

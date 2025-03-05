@@ -5,14 +5,13 @@ import Text from "@/components/text";
 import { fetchVaults, KeyInfoBookmark, selectCallback, selectTxInput, selectVaults, useAppDispatch, useAppSelector } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import * as Linking from 'expo-linking';
 import { Spacer } from "@/modules/ui-components";
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined);
-  const [accounts, setAccounts] = useState<KeyInfoBookmark[]>([]);
 
   const { gnonative } = useGnoNativeContext();
   const navigation = useNavigation();
@@ -22,14 +21,6 @@ export default function Page() {
   const vaults = useAppSelector(selectVaults);
   const callback = useAppSelector(selectCallback);
   const txInput = useAppSelector(selectTxInput);
-
-  console.log('txInput at page', txInput);
-
-  useEffect(() => {
-    if (vaults) {
-      setAccounts(vaults);
-    }
-  }, [vaults]);
 
 
   useEffect(() => {
@@ -64,9 +55,9 @@ export default function Page() {
           <Text.Title>Select a key to create the transaction</Text.Title>
           <Spacer space={16} />
 
-          {accounts && (
+          {vaults && (
             <FlatList
-              data={accounts}
+              data={vaults}
               renderItem={({ item }) => (
                 <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} />
               )}

@@ -1,9 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { vaultSlice, signinSlice, linkingSlice } from "@/redux/features";
+import { vaultEditSlice, signinSlice, linkingSlice } from "@/redux/features";
 import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
-import { signUpSlice } from "@/redux/features/signupSlice";
+import { vaultAddSlice } from "@/redux/features/vaultAddSlice";
 import {
   persistStore,
   persistReducer,

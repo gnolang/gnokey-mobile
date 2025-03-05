@@ -26,7 +26,7 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
         <View />
         {onBookmarkPress ?
           <TouchableOpacity onPress={() => onBookmarkPress(vault)}>
-            <FontAwesome name={vault.bookmarked ? 'star-o' : 'star'} size={24} color="black" />
+            <FontAwesome name={vault.bookmarked ? 'star' : 'star-o'} size={24} color="black" />
           </TouchableOpacity> : null}
       </View>
 

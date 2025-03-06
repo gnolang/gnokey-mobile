@@ -389,6 +389,7 @@ export const vaultAddSlice = createSlice({
       state.newAccount = undefined;
       state.existingAccount = undefined;
       state.signUpState = undefined;
+      state.selectedChain = undefined;
       state.keyName = "";
     }
   },

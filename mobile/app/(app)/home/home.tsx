@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
-import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectKeyInfoChains, selectVaults, setBookmark, KeyInfoBookmark } from "@/redux";
+import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectVaults, setBookmark, KeyInfoBookmark } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import { setVaultToEdit, fetchVaults } from "@/redux";
@@ -22,8 +22,6 @@ export default function Page() {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const masterPassword = useAppSelector(selectMasterPassword)
-
-  const keyInfoChains = useAppSelector(selectKeyInfoChains)
 
   const vaults = useAppSelector(selectVaults)
 
@@ -78,12 +76,6 @@ export default function Page() {
     route.push("/home/add-key");
   }
 
-  const getChainNamePerKey = (keyInfo: KeyInfoBookmark): string[] | undefined => {
-    if (keyInfoChains instanceof Map && keyInfoChains?.has(keyInfo.keyInfo.address.toString())) {
-      return keyInfoChains.get(keyInfo.keyInfo.address.toString())
-    }
-  }
-
   const onBookmarkPress = (keyInfo: KeyInfoBookmark) => async () => {
     console.log('Bookmark pressed', keyInfo.keyInfo.address)
     dispatch(setBookmark({ keyAddress: keyInfo.keyInfo.address, value: !keyInfo.bookmarked }))
@@ -124,6 +116,7 @@ export default function Page() {
           <Text.Body style={{ textAlign: 'center' }} >{filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}</Text.Body>
           <Spacer />
 
+
           {filteredAccounts && (
             <FlatList
               data={filteredAccounts}
@@ -131,7 +124,7 @@ export default function Page() {
               renderItem={({ item }) => (
                 <VaultListItem vault={item}
                   onVaultPress={onChangeAccountHandler}
-                  chains={getChainNamePerKey(item)}
+                  chains={item.chains}
                   onBookmarkPress={onBookmarkPress(item)} />
               )}
               keyExtractor={(item) => item.keyInfo.name}

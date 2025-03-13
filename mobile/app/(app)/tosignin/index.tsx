@@ -2,7 +2,7 @@ import { Layout } from "@/components";
 import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Text from "@/components/text";
-import { clearLinking, KeyInfoBookmark, selectCallback, selectClientName, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
+import { clearLinking, KeyInfoBookmark, selectCallback, selectClientName, selectVaults, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -12,7 +12,7 @@ import { Spacer } from "@/modules/ui-components";
 
 export default function Page() {
     const [loading, setLoading] = useState<string | undefined>(undefined);
-    const [accounts, setAccounts] = useState<KeyInfoBookmark[]>([]);
+    const accounts = useAppSelector(selectVaults)
 
     const { gnonative } = useGnoNativeContext();
     const navigation = useNavigation();

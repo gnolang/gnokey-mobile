@@ -1,18 +1,18 @@
 import { Layout } from "@/components";
 import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
-import Spacer from "@/components/spacer";
 import Text from "@/components/text";
-import { clearLinking, selectCallback, selectClientName, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
-import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
+import { clearLinking, KeyInfoBookmark, selectCallback, selectClientName, selectVaults, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
+import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import * as Linking from 'expo-linking';
+import { Spacer } from "@/modules/ui-components";
 
 export default function Page() {
     const [loading, setLoading] = useState<string | undefined>(undefined);
-    const [accounts, setAccounts] = useState<KeyInfo[]>([]);
+    const accounts = useAppSelector(selectVaults)
 
     const { gnonative } = useGnoNativeContext();
     const navigation = useNavigation();
@@ -26,8 +26,7 @@ export default function Page() {
             try {
                 setLoading("Loading accounts...");
 
-                const response = await gnonative.listKeyInfo();
-                setAccounts(response);
+                dispatch
             } catch (error: unknown | Error) {
                 console.error(error);
             } finally {
@@ -37,8 +36,8 @@ export default function Page() {
         return unsubscribe;
     }, [navigation]);
 
-    const returnKeyAddressToSoliciting = useCallback(async (keyInfo: KeyInfo) => {
-        await dispatch(sendAddressToSoliciting({ keyInfo })).unwrap();
+    const returnKeyAddressToSoliciting = useCallback(async (keyInfo: KeyInfoBookmark) => {
+        await dispatch(sendAddressToSoliciting({ keyInfo: keyInfo.keyInfo })).unwrap();
 
         router.push("/home")
     }, [callback]);
@@ -62,7 +61,7 @@ export default function Page() {
                             renderItem={({ item }) => (
                                 <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} />
                             )}
-                            keyExtractor={(item) => item.name}
+                            keyExtractor={(item) => item.keyInfo.name}
                             ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
                         />
                     )}

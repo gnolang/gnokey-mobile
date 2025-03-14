@@ -1,7 +1,7 @@
 
 import { colors } from "@/assets/styles/colors";
 import styled from "styled-components/native";
-import Spacer from "../spacer";
+import { Spacer } from "../layout";
 
 export interface Props {
   message?: string;
@@ -61,4 +61,4 @@ const Alert = ({ message, severity }: Props) => {
   );
 };
 
-export default Alert;
+export { Alert };

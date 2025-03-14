@@ -1,24 +1,26 @@
-import { StyleSheet, Text, View, ScrollView, TextInput as RNTextInput, Alert as RNAlert } from "react-native";
+import { StyleSheet, View, TextInput as RNTextInput, Alert as RNAlert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import {
   selectMasterPassword, useAppDispatch, useAppSelector,
-  SignUpState,
-  initSignUpState,
+  VaultCreationState,
   existingAccountSelector,
   newAccountSelector,
   onboarding,
-  signUp,
+  addVault,
   signUpStateSelector,
   selectKeyName,
   setKeyName,
   selectPhrase,
+  generateNewPhrase,
+  resetState
 } from "@/redux";
-import { ProgressViewModal, ChainSelectView } from "@/views";
-import { TextCopy, Layout, Alert, Spacer, Button, TextInput } from "@/components";
-import { Octicons } from "@expo/vector-icons";
-import { colors } from "@/assets";
+import { ChainSelectView, } from "@/views";
+import { TextCopy } from "@/components";
+import { Feather, FontAwesome6, Octicons } from "@expo/vector-icons";
+import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView, TopModalBar } from "@/modules/ui-components";
+import { useTheme } from "styled-components/native";
 
 export default function Page() {
 
@@ -39,8 +41,12 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName);
   const phrase = useAppSelector(selectPhrase);
 
+  const theme = useTheme();
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
+      dispatch(resetState());
+      dispatch(generateNewPhrase());
       setError(undefined);
       inputRef.current?.focus();
     });
@@ -51,42 +57,43 @@ export default function Page() {
     (async () => {
       // console.log("signUpState ->", signUpState);
 
-      if (signUpState === SignUpState.user_exists_on_blockchain_and_local_storage) {
+      if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {
         setError(
           "This name is already registered on the blockchain and on this device. Please choose another name."
         );
         return;
       }
-      if (signUpState === SignUpState.user_already_exists_on_blockchain) {
+      if (signUpState === VaultCreationState.user_already_exists_on_blockchain) {
         setError("This name is already registered on the blockchain. Please, choose another name.");
         return;
       }
-      if (signUpState === SignUpState.user_already_exists_on_blockchain_under_different_name) {
+      if (signUpState === VaultCreationState.user_already_exists_on_blockchain_under_different_name) {
         setError(
           "This account is already registered on the blockchain under a different name. Please press Back and sign up again with another Seed Phrase, or for a normal sign in with a different account if available."
         );
         return;
       }
-      if (signUpState === SignUpState.user_exists_only_on_local_storage) {
+      if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
         setError(
           "This name is already registered locally on this device but NOT on chain. If you want to register your account on the Gno Blockchain, please press Create again. Your seed phrase will be the same."
         );
         return;
       }
-      if (signUpState === SignUpState.user_exists_under_differente_key) {
+      if (signUpState === VaultCreationState.user_exists_under_differente_key) {
         setError(
           "This name is already registered locally and on the blockchain under a different key. Please choose another name."
         );
         return;
       }
-      if (signUpState === SignUpState.user_exists_under_differente_key_local) {
+      if (signUpState === VaultCreationState.user_exists_under_differente_key_local) {
         setError(
           "This name is already registered locally under a different key. Please choose another name."
         );
         return;
       }
-      if (signUpState === SignUpState.account_created && newAccount) {
-        onBack()
+      if (signUpState === VaultCreationState.account_created && newAccount) {
+        dispatch(resetState());
+        router.replace({ pathname: "home/add-key-sucess" });
       }
     })();
   }, [signUpState, newAccount]);
@@ -114,7 +121,7 @@ export default function Page() {
       return;
     }
 
-    if (signUpState === SignUpState.user_exists_only_on_local_storage && existingAccount) {
+    if (signUpState === VaultCreationState.user_exists_only_on_local_storage && existingAccount) {
       await gnonative.activateAccount(keyName);
       await gnonative.setPassword(masterPassword, existingAccount.address);
       await dispatch(onboarding({ account: existingAccount })).unwrap();
@@ -123,7 +130,7 @@ export default function Page() {
 
     try {
       setLoading(true);
-      await dispatch(signUp({ name: keyName, password: masterPassword, phrase })).unwrap();
+      await dispatch(addVault({ name: keyName, password: masterPassword, phrase })).unwrap();
     } catch (error) {
       RNAlert.alert("Error", "" + error);
       setError("" + error);
@@ -133,51 +140,60 @@ export default function Page() {
     }
   };
 
-  const onBack = () => {
-    console.log("onBack");
-    dispatch(initSignUpState());
-    router.back()
-  }
-
   return (
-    <Layout.Container>
-      <Layout.Body>
-        <ScrollView>
-          <View style={styles.main}>
-            <Text style={styles.title}>Create a new Key</Text>
-            <View style={{ minWidth: 200, paddingTop: 8 }}>
-              <Spacer />
-              <TextInput
-                ref={inputRef}
-                placeholder="Key name"
-                value={keyName}
-                onChangeText={x => dispatch(setKeyName(x))}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            </View>
-            <Spacer />
-            <View style={{ minWidth: 200, paddingTop: 8, paddingBottom: 8 }}>
-              <TextCopy text={phrase}>
-                <Text style={{ flexDirection: "row" }}>
-                  <Octicons name="copy" size={12} color={colors.primary} />
-                  <Text > Your seed phrase: </Text>
-                  <Text style={{ fontWeight: 700 }}>{phrase}</Text>
-                </Text>
-              </TextCopy>
-              <Spacer />
-              <ChainSelectView />
-              <Alert severity="error" message={error} />
-              <Spacer />
-              <Button.TouchableOpacity title="Create" onPress={onCreate} variant="primary" loading={loading} />
-              <Spacer space={8} />
-              <Button.TouchableOpacity title="Back" onPress={onBack} variant="secondary" disabled={loading} />
+    <>
+      <SafeAreaView>
+        <TopModalBar />
+
+        <Container>
+
+          <View>
+            <Text.H1>My New</Text.H1>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text.H1>Vault&nbsp;</Text.H1>
+              <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
             </View>
           </View>
-        </ScrollView>
-        <ProgressViewModal />
-      </Layout.Body>
-    </Layout.Container >
+
+          <Spacer />
+          <TextField
+            label="Vault name"
+            placeholder="Vault name"
+            value={keyName}
+            onChangeText={x => dispatch(setKeyName(x))}
+            autoCapitalize="none"
+            autoCorrect={false}
+            error={error}
+          />
+          <Spacer space={4} />
+          <ChainSelectView />
+
+        </Container>
+
+      </SafeAreaView>
+
+      <BottonPanel>
+        <Text.H2>Seed Phrase</Text.H2>
+        <Spacer />
+        <TextCopy text={phrase} >
+
+          <Text.Body style={{ textAlign: 'center' }}>
+            {phrase} &nbsp;
+            <Octicons name="copy" size={12} color={theme.colors.primary} />
+          </Text.Body>
+
+        </TextCopy>
+        <Spacer />
+        <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+          {/* <Button color='secondary'>Import Vault</Button> */}
+          <View style={{ width: 120 }} />
+          <ButtonIcon size={60} color='primary' onPress={() => dispatch(generateNewPhrase())}>
+            <Feather name="refresh-cw" size={30} color='white' />
+          </ButtonIcon>
+          <Button onPress={onCreate} endIcon={<FontAwesome6 name='add' size={16} color='white' />}>New Vault</Button>
+        </View>
+      </BottonPanel>
+    </>
   );
 }
 

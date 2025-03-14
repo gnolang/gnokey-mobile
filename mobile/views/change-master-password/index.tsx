@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
-  Platform,
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
   TextInput as RNTextInput,
+  View,
 } from "react-native";
-import Alert from "@/components/alert";
-import { ModalView } from "@/components/modal";
 import Text from "@/components/text";
-import Spacer from "@/components/spacer";
 import TextInput from "@/components/textinput";
 import Button from "@/components/button";
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from "@/redux";
+import { useTheme } from "styled-components/native";
+import { Alert, Spacer } from "@/modules/ui-components";
+import { ModalHeaderTitle } from "@/components/modal/ModalHeader";
 
 export type Props = {
   visible: boolean;
@@ -32,6 +31,8 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<RNTextInput>(null);
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -73,38 +74,46 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
   if (!visible) return null;
 
   return (
-    <Modal>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ height: "100%" }}>
-          <ModalView.Content>
-            <ModalView.Header title="Change master password" onClose={() => onClose(false)} />
-            <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
-            <Spacer />
-            <TextInput
-              ref={inputRef}
-              placeholder={`Current password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setCurrentPassword}
-            />
-            <TextInput
-              placeholder={`New password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setPassword}
-            />
-            <TextInput
-              placeholder={`Reenter password`}
-              error={error}
-              secureTextEntry={true}
-              onChangeText={setReenterPassword}
-            />
-            <Alert severity="error" message={error} />
-            <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
-            <Spacer />
-          </ModalView.Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+    <Modal transparent animationType="slide">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.modalContainer}>
+          <TouchableWithoutFeedback>
+            <View style={styles.modalContent}>
+
+              <ModalHeaderTitle title="Change Master Password" />
+
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+
+                <Spacer />
+                <TextInput
+                  ref={inputRef}
+                  placeholder={`Current password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setCurrentPassword}
+                />
+                <Spacer />
+                <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
+
+                <TextInput
+                  placeholder={`New password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setPassword}
+                />
+                <TextInput
+                  placeholder={`Reenter password`}
+                  error={error}
+                  secureTextEntry={true}
+                  onChangeText={setReenterPassword}
+                />
+                <Alert severity="error" message={error} />
+                <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -112,6 +121,24 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
 export default ChangeMasterPassword;
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    minHeight: '30%',
+    width: '100%',
+    borderTopRightRadius: 18,
+    borderTopLeftRadius: 18,
+    position: 'absolute',
+    bottom: 0,
+
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+  },
   container: {
     flex: 1,
   },

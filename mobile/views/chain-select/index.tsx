@@ -1,36 +1,39 @@
-import { View } from "react-native";
+import {  View } from "react-native";
 import React from "react";
+import { selectChainsAvailable, selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux"
+import { Spacer, Text } from "@/modules/ui-components";
+import { NetworkMetainfo } from "@/types";
+import { useTheme } from "styled-components";
 import { useRouter } from "expo-router";
-import { NetworkListItem, MenuToggle, Ruller } from "@/components";
-import { selectChainsAvailable, selectRegisterAccount, selectSelectedChain, setRegisterAccount, useAppDispatch, useAppSelector } from "@/redux"
+import { Select } from "@/components/select";
 
 const ChainSelectView = () => {
+  const dispatch = useAppDispatch()
+  const theme = useTheme()
+  const router = useRouter()
 
-    const isChecked = useAppSelector(selectRegisterAccount)
+  const chains = useAppSelector(selectChainsAvailable)
+  const currentNetwork = useAppSelector(selectSelectedChain)
 
-    const router = useRouter();
-    const dispatch = useAppDispatch()
+  const onNetworkChange = (chain: NetworkMetainfo | undefined) => {
+    dispatch(setSelectedChain(chain))
+  }
 
-    const chains = useAppSelector(selectChainsAvailable)
-    const currentNetwork = useAppSelector(selectSelectedChain)
 
-    const currentNetworkMetainfo = chains.filter(x => x.gnoAddress === currentNetwork?.gnoAddress)[0]
+  const onAddChainPress = () => {
+    // dispatch()
+  }
 
-    return (
-        <View style={{ borderColor: 'black', borderWidth: 1, borderRadius: 4 }}>
-            <MenuToggle isToggleOn={isChecked} onPress={() => dispatch(setRegisterAccount(!isChecked))} >
-                Register on `r/demo/users` realm:
-            </MenuToggle>
-            <Ruller />
-            {currentNetwork ?
-                <NetworkListItem
-                    disabled={!isChecked}
-                    onPress={() => router.push("/chain-selection")}
-                    networkMetainfo={currentNetworkMetainfo}
-                    currentRemote={currentNetwork.gnoAddress}
-                /> : null}
-        </View>
-    );
+  return (
+    <>
+      <View style={{ flexDirection: 'row' }}>
+        <Text.Body>Select Network to </Text.Body>
+        <Text.Body style={{color: theme.colors.white}}>&nbsp;Register Username</Text.Body>
+      </View>
+      <Spacer />
+      <Select items={chains} selectedItem={currentNetwork} onChange={onNetworkChange} onAddChainPress={onAddChainPress} />
+    </>
+  )
 }
 
 export default ChainSelectView;

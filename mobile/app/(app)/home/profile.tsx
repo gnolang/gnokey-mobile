@@ -1,13 +1,14 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { signOut, useAppDispatch } from "@/redux";
-import Button from "@/components/button";
 import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
-import Text from "@/components/text";
 import ChangeMasterPassword from "@/views/change-master-password";
+import { AppBar, Button, ButtonProfile, Container, FormItem, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
+import { AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
+import { FormTextValue } from "@/modules/ui-components/src/form/FormItem";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
@@ -47,43 +48,48 @@ export default function Page() {
 
   return (
     <>
-      <Layout.Container>
-        <Layout.Body>
-          <>
-            <Text.Subheadline>Chain ID:</Text.Subheadline>
-            <Text.Body>{chainID}</Text.Body>
-            <Text.Subheadline>Remote:</Text.Subheadline>
-            <Text.Body>{remote}</Text.Body>
-            <View></View>
-          </>
-          <Layout.Footer>
-            <Button.TouchableOpacity title="Change master password" onPress={onPressChangePass} style={styles.logout} variant="primary-red" />
-            <Button.TouchableOpacity title="Logout" onPress={onPressLogout} style={styles.logout} variant="primary-red" />
-          </Layout.Footer>
-        </Layout.Body>
-      </Layout.Container>
-      <LoadingModal visible={loading} />
+      <SafeAreaView style={{ flex: 1 }}>
+        <AppBar>
+          <View />
+          <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
+            Cancel
+          </Button>
+        </AppBar>
+
+        <Container style={{ flex: 1 }}>
+
+          <Text.H1>My Profile</Text.H1>
+          <View style={{ flexDirection: 'row' }}>
+            <Text.H1 style={{ color: 'white' }}>Information</Text.H1>
+          </View>
+
+          <Spacer />
+
+          <FormItem label="Chain ID" labelStyle={{ minWidth: 90 }}>
+            <FormTextValue>{chainID}</FormTextValue>
+          </FormItem>
+
+          <FormItem label="Remote" labelStyle={{ minWidth: 90 }}>
+            <FormTextValue>{remote}</FormTextValue>
+          </FormItem>
+
+          <Spacer />
+
+          <ButtonProfile onPress={onPressChangePass} endIcon={<Feather name='lock' size={16} color='black' />}>
+            Change master password
+          </ButtonProfile>
+
+          <Spacer />
+
+          <ButtonProfile onPress={onPressLogout} endIcon={<AntDesign name='logout' size={16} color='black' />}>
+            Logout
+          </ButtonProfile>
+
+        </Container>
+
+        <LoadingModal visible={loading} />
+      </SafeAreaView>
       <ChangeMasterPassword visible={showChangePassModal} onClose={() => setShowChangePassModal(false)} />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  logout: {
-    color: "#007AFF",
-    marginTop: 10,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});

@@ -1,42 +1,61 @@
 import { colors } from "@/assets/styles/colors";
-import Text from "@/components/text";
-import { KeyInfo } from "@gnolang/gnonative";
 import { TouchableOpacity, View } from "react-native";
-import styled from "styled-components/native";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Row from "@/components/row";
+import styled, { DefaultTheme } from 'styled-components/native'
+import { FontAwesome } from "@expo/vector-icons";
+import { Chip, Text } from "@/modules/ui-components";
+import { KeyInfoBookmark } from "@reduxjs/toolkit";
 
 interface Props {
-  vault: KeyInfo;
+  vault: KeyInfoBookmark;
   chains?: string[];
-  onVaultPress: (vault: KeyInfo) => void;
+  onVaultPress: (vault: KeyInfoBookmark) => void;
+  onBookmarkPress?: (vault: KeyInfoBookmark) => void;
 }
 
-const VaultListItem = ({ vault, onVaultPress, chains = [] }: Props) => {
+const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Props) => {
 
   return (
-    <Container onPress={() => onVaultPress(vault)}>
-      <View style={{ flex: 1, height: 40 }}>
-        <View style={{ flex: 1 }}>
-          <Text.BodyMedium>{vault.name}</Text.BodyMedium>
-        </View>
-        <View style={{ flex: 1 }}>
-          {chains ? <Text.Caption1 style={{ textAlign: 'left', paddingTop: 4 }}>{chains.join(', ')}</Text.Caption1> : null}
+    <Wrapper onPress={() => onVaultPress(vault)}>
+
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+        {chains && chains.length > 0 ? <Chip>
+          <Text.Caption style={{ color: '#A1A1A1' }}>{chains.join(', ')}</Text.Caption>
+        </Chip> : <Chip>
+          <Text.Caption style={{ color: '#A1A1A1' }}>Not registered</Text.Caption>
+        </Chip>}
+        <View />
+        {onBookmarkPress ?
+          <TouchableOpacity onPress={() => onBookmarkPress(vault)}>
+            <FontAwesome name={vault.bookmarked ? 'star' : 'star-o'} size={24} color="black" />
+          </TouchableOpacity> : null}
+      </View>
+
+      <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 }}>
+        <PlaceHolder />
+        <View style={{ flex: 1, paddingLeft: 16 }}>
+          <Text.H3>{vault.keyInfo.name}</Text.H3>
+          <Text.Caption style={{ textAlign: 'left', color: '#A1A1A1' }}>Created at 2025-02-19</Text.Caption>
         </View>
       </View>
-      <AntDesign name="edit" size={24} color="black" />
-    </Container>
+
+    </Wrapper>
   )
 }
 
-const Container = styled(TouchableOpacity)`
-  border-width: 1px;
+const PlaceHolder = styled.View`
+  height: 48px;
+  width: 48px;
+  background-color: #E5E5E5;
   border-color: ${colors.grayscale[500]};
-  margin: 4px;
-  height: 64px;
-  padding: 16px;
-  flex-direction: row;
+  border-radius:  ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};
+`;
+
+const Wrapper = styled(TouchableOpacity)`
   space-between: space-between;
+  padding: 12px 12px 8px 12px;
+  margin: 4px;
+  background-color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.white};
+  border-radius:  ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};
 `;
 
 export default VaultListItem

@@ -1,10 +1,10 @@
 import { View } from 'react-native';
 import React, { useEffect } from 'react';
-import ModalConfirm, { Props } from './ModalConfirm';
+import { Props, ModalConfirmDelete } from './ModalConfirm';
 
 export default {
   title: 'ModalConfirm',
-  component: ModalConfirm,
+  component: ModalConfirmDelete,
   decorators: [
     (Story: React.FC) => (
       <View style={{ width: '90%', height: '90%' }}>
@@ -36,5 +36,5 @@ export const Confirm = (props: Props) => {
     setShowModal(props.visible);
   }, [props.visible]);
 
-  return <ModalConfirm {...props} onCancel={() => setShowModal(false)} visible={showModal} />;
+  return <ModalConfirmDelete {...props} onCancel={() => setShowModal(false)} visible={showModal} />;
 };

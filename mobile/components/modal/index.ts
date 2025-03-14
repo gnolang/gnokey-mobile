@@ -1,5 +1,4 @@
 import ModalHeader from './ModalHeader';
-import ModalConfirm from './ModalConfirm';
 import ModalContent from './ModalContent';
 
 export const ModalView = {
@@ -7,4 +6,4 @@ export const ModalView = {
   Content: ModalContent,
 };
 
-export { ModalConfirm };
+export { ModalConfirmDelete } from './ModalConfirm';

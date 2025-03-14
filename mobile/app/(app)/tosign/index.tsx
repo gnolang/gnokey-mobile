@@ -1,6 +1,5 @@
 import { Layout } from "@/components";
 import Button from "@/components/button";
-import Spacer from "@/components/spacer";
 import Text from "@/components/text";
 import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking, selectChainId, selectRemote } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -8,6 +7,7 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import * as Linking from 'expo-linking';
 import { View } from "react-native";
+import { Spacer } from "@/modules/ui-components";
 
 export default function Page() {
 

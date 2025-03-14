@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { getCurrentChain, selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux";
+import { selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from "@/redux";
 import { KeyboardAvoidingView, Modal, Platform, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { Button, Layout, Ruller, Spacer, ModalContent, ModalHeader, NetworkList, Text, TextInput, Alert } from "@/components";
+import { Button, Layout, Ruller, ModalContent, ModalHeader, NetworkList, Text, TextInput } from "@/components";
 import { NetworkMetainfo } from "@/types";
 import { addCustomChain, selectChainsAvailable } from "@/redux";
+import { Alert, Spacer } from "@/modules/ui-components";
 
 function Page() {
   const { gnonative } = useGnoNativeContext();
@@ -63,8 +64,8 @@ function Page() {
         setLoading('Loading network...');
         await gnonative.getChainID();
 
-        const currentChain = await dispatch(getCurrentChain()).unwrap();
-        dispatch(setSelectedChain(currentChain));
+        // const currentChain = await dispatch(getCurrentChain()).unwrap();
+        // dispatch(setSelectedChain(currentChain));
 
         setLoading(undefined);
       } catch (error: unknown | Error) {

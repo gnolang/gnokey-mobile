@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Modal, StyleSheet, FlatList, TouchableOpacity, Share } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/redux";
 import { Layout } from "@/components/index";
-import { clearProgress, selectProgress } from "redux/features/signupSlice";
+import { clearProgress, selectProgress } from "@/redux/features/vaultAddSlice";
 import Text from "@/components/text";
 import { EvilIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";

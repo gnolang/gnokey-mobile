@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 import { deleteVault, selectVaultToEdit, useAppDispatch } from "@/redux";
 import { useNavigation, useRouter } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
-import { AppBar, SafeAreaView, Button, Text, Container, TextField, Spacer } from "@/modules/ui-components";
-import { FontAwesome6, Octicons } from "@expo/vector-icons";
+import { AppBar, SafeAreaView, Button, Text, Container, TextField, Spacer, TopModalBar } from "@/modules/ui-components";
+import { AntDesign, FontAwesome6, Octicons } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 
 const Page = () => {
@@ -16,7 +16,7 @@ const Page = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const [vaultName, setVaultName] = useState(vault?.name);
+  const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [addressBech32, setAddressBech32] = useState('');
 
@@ -29,7 +29,7 @@ const Page = () => {
     (
       async () => {
         if (!vault) return;
-        const address = await gnonative.addressToBech32(vault.address);
+        const address = await gnonative.addressToBech32(vault.keyInfo.address);
         setAddressBech32(address);
       }
     )()
@@ -47,7 +47,7 @@ const Page = () => {
 
   const onConfirmDelete = async () => {
     if (!vault) return;
-    await dispatch(deleteVault({ vault })).unwrap()
+    await dispatch(deleteVault({ vault: vault.keyInfo })).unwrap()
     setShowDeleteModal(false);
     router.replace("/home");
   }
@@ -55,12 +55,7 @@ const Page = () => {
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
-        <AppBar>
-          <View />
-          <Button onPress={() => navigation.goBack()} color='tertirary' endIcon={<FontAwesome6 name='xmark' size={16} color='black' />}>
-            Cancel
-          </Button>
-        </AppBar>
+        <TopModalBar />
 
         <Container style={{ flex: 1 }}>
 
@@ -92,10 +87,10 @@ const Page = () => {
               endIcon={
                 <FontAwesome6 name='trash-can' size={16} color='black' />
               }>Delete</Button>
-            {/* <Button style={{  width: 110 }} color="primary" onPress={onDeleteVault}>Delete</Button> */}
-            {/* <Button style={{  width: 110 }} color="primary" onPress={onDeleteVault}>Delete</Button> */}
             <View style={{ width: 110 }} />
-            <View style={{ width: 110 }} />
+            <Button onPress={() => navigation.goBack()} color='primary' endIcon={<AntDesign name="reload1" size={16} color="white" />}>
+              Cancel
+            </Button>
           </View>
 
         </Container>

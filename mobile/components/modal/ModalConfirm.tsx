@@ -5,7 +5,7 @@ import Ruller from "components/row/Ruller";
 import { useState } from "react";
 import { useTheme } from "styled-components/native";
 import { Text, Button, Spacer } from "@/modules/ui-components";
-import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type Props = {
   title: string;
@@ -32,8 +32,14 @@ const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, conf
                 <Text.Body style={{ textAlign: 'center' }} >{message}</Text.Body>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 16 }}>
-                <Button onPress={onCancel} color="secondary">Cancel</Button>
-                <Button onPress={onConfirm} color="danger">{confirmText}</Button>
+                <Button onPress={onCancel} color="secondary" style={{ width: 110 }}
+                  endIcon={<AntDesign name="reload1" size={16} color="black" />}>
+                    Cancel
+                </Button>
+                <Button onPress={onConfirm} color="danger" style={{ width: 110 }}
+                  endIcon={<FontAwesome6 name='trash-alt' size={16} color='white' />}
+                >{confirmText}</Button>
+
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -59,10 +65,11 @@ const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmTex
                 <Text.Body style={{ textAlign: 'center' }} >{message}</Text.Body>
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 16 }}>
-                <Button onPress={onCancel} color="secondary" style={{ width: 100 }}
-                  endIcon={<MaterialCommunityIcons name="cancel" size={16} color="black" />}
-                >Cancel</Button>
-                <Button onPress={onConfirm} color="primary" style={{ width: 120 }}
+                <Button onPress={onCancel} color="secondary"
+                  endIcon={<AntDesign name="reload1" size={16} color="black" />}>
+                    Cancel
+                </Button>
+                <Button onPress={onConfirm} color="primary"
                   endIcon={<FontAwesome6 name='plus' size={16} color='white' />}
                 >{confirmText}</Button>
               </View>

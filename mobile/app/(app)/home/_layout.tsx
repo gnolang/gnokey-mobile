@@ -19,5 +19,8 @@ export default function AppLayout() {
     <Stack.Screen name="(modal)/add-key-sucess" options={{
       presentation: 'modal'
     }} />
+    <Stack.Screen name="(modal)/vault-detail" options={{
+      presentation: 'modal'
+    }} />
   </Stack>
 }

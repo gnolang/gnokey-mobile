@@ -32,7 +32,7 @@ export default function Page() {
 
         await dispatch(fetchVaults()).unwrap();
 
-        await dispatch(checkForKeyOnChains()).unwrap();
+        dispatch(checkForKeyOnChains()).unwrap();
       } catch (error: unknown | Error) {
         console.error(error);
       } finally {
@@ -52,19 +52,8 @@ export default function Page() {
 
   const onChangeAccountHandler = async (keyInfo: KeyInfoBookmark) => {
     try {
-      setLoading("Changing account...");
-
-      if (!masterPassword) {
-        throw new Error("No master password defined. Please create one.");
-      }
-
-      await gnonative.activateAccount(keyInfo.keyInfo.name);
-      await gnonative.setPassword(masterPassword, keyInfo.keyInfo.address);
-
-      setLoading(undefined);
-
       await dispatch(setVaultToEdit({ vault: keyInfo }));
-      route.push("/vault/details");
+      route.push("/home/vault-detail");
 
     } catch (error: unknown | Error) {
       setLoading(error?.toString());

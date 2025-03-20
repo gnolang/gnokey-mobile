@@ -17,8 +17,7 @@ export const Button: React.FC<Button> = props => {
   const isChildrenString = typeof props.children === 'string'
 
   return (
-    <ButtonWrapper {...props} $color={props.color} style={[props.style]} disabled={props.loading}
-      hasIcon={Boolean(props.startIcon) || Boolean(props.endIcon)}>
+    <ButtonWrapper {...props} $color={props.color} style={[props.style]} disabled={props.loading}>
       {props.startIcon ? <StartIconWrapper>{props.startIcon}</StartIconWrapper> : null}
       {isChildrenString ? <Text.ButtonLabel $color={props.color}>{props.children}</Text.ButtonLabel> : props.children}
       {props.endIcon ? <EndIconWrapper>{props.endIcon}</EndIconWrapper> : null}
@@ -47,13 +46,12 @@ const EndIconWrapper = styled.View`
 
 interface ButtonWrapperProps extends TouchableOpacityProps {
   $color?: ButtonColor;
-  hasIcon?: boolean;
 }
 
 const ButtonWrapper = styled(TouchableOpacity) <ButtonWrapperProps>`
 	height: 40px;
 	flex-direction: row;
-	justify-content: ${(props) => (props.hasIcon ? 'space-between' : 'center')};
+	justify-content: center;
 	align-items: center;
 	padding-horizontal: 16px;
 	border-radius: ${(props) => props.theme.borderRadius || 20}px;

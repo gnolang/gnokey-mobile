@@ -22,10 +22,15 @@ declare module 'styled-components/native' {
 		}
 
 		textinputs: {
-			background: string
-			placeholder: {
-				color: string
-			}
+      primary: {
+        background: string
+        placeholder: {
+          color: string
+        }
+      }
+      secondary: {
+        background: string
+      }
 		}
 
 		colors: {

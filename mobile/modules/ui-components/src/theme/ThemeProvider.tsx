@@ -23,9 +23,14 @@ const ThemeProvider = ({ children }: Props) => {
     },
 
     textinputs: {
-      background: '#5999fa',
-      placeholder: {
-        color: '#000000',
+      primary: {
+        placeholder: {
+          color: '#000000',
+        },
+        background: '#5999fa',
+      },
+      secondary: {
+        background: '#ffffff',
       },
     },
 

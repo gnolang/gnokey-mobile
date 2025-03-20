@@ -1,30 +1,31 @@
 import styled, { useTheme } from 'styled-components/native';
 import { colors } from '@/assets';
-import { NetworkMetainfo } from '@/types';
 import Icons from '@/components/icons';
 import * as Text from '../../../modules/ui-components/src/text';
 import { View } from 'react-native';
 
 export interface Props {
   disabled?: boolean;
-  currentRemote: string | undefined;
-  networkMetainfo: NetworkMetainfo;
-  onPress: (item: NetworkMetainfo) => void;
+  title: string;
+  address?: string;
+  faucet?: string;
+  inUse?: boolean;
+  onPress: () => void;
 }
 
-const NetworkListItem: React.FC<Props> = ({ networkMetainfo, currentRemote, onPress, disabled }: Props) => {
+const NetworkListItem: React.FC<Props> = ({ title, address, faucet, inUse, onPress, disabled }: Props) => {
 
   const theme = useTheme()
 
   return (
-    <Row disabled={disabled} onPress={() => disabled ? null : onPress(networkMetainfo)}>
+    <Row disabled={disabled} onPress={() => disabled ? null : onPress()}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text.H3>{networkMetainfo.chainName}</Text.H3>
-        <RightItens>{currentRemote && networkMetainfo.gnoAddress.includes(currentRemote) && <InUse />}</RightItens>
+        <Text.H3>{title}</Text.H3>
+        <RightItens>{inUse && <InUse />}</RightItens>
       </View>
       <LeftItens>
-        <Text.Caption style={{ color: theme.colors.gray }}>Address: {networkMetainfo.gnoAddress}</Text.Caption>
-        <Text.Caption style={{ color: theme.colors.gray }}>Faucet:   {networkMetainfo.faucetAddress}</Text.Caption>
+        {address && <Text.Caption style={{ color: theme.colors.gray }}>Address: {address}</Text.Caption>}
+        {faucet && <Text.Caption style={{ color: theme.colors.gray }}>Faucet:   {faucet}</Text.Caption>}
       </LeftItens>
     </Row>
   )

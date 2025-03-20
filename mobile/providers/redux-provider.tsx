@@ -13,6 +13,7 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  Persistor,
 } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import rootReducer from "@/redux/root-reducer";
@@ -27,10 +28,12 @@ export interface ThunkExtra {
 }
 
 const persistConfig = {
-  key: 'root-5',
-  version: 2,
+  key: 'root-6',
+  version: 3,
   storage: AsyncStorage,
 }
+
+let persistor:Persistor
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
@@ -53,7 +56,7 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
       }),
   })
 
-  let persistor = persistStore(store)
+  persistor = persistStore(store)
 
   return <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
@@ -62,4 +65,4 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
   </Provider>;
 };
 
-export { ReduxProvider };
+export { ReduxProvider, persistor };

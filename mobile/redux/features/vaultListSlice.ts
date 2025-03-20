@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { RootState } from "../root-reducer";
-import { selectChainsAvailable } from "./vaultAddSlice";
-import { NetworkMetainfo } from "@/types";
+import { selectChainsAvailable } from "./chainsSlice";
 
 export interface VaultListState {
   vaults?: KeyInfoBookmark[]; // will be overriden by the fetchVaults action. TODO: evict this field to be stored in redux.

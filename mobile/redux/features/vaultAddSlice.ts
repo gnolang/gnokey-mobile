@@ -1,11 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { createSelector } from 'reselect'
 import { ThunkExtra } from "@/providers/redux-provider";
 import { Alert } from "react-native";
 import { NetworkMetainfo } from "@/types";
 import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb';
-import chains from '@/assets/chains.json'
 import { RootState } from "../root-reducer";
 
 export enum VaultCreationState {
@@ -24,7 +22,6 @@ export interface VaultAddState {
   existingAccount?: KeyInfo;
   loading: boolean;
   progress: string[];
-  customChains: NetworkMetainfo[];
   selectedChain?: NetworkMetainfo;
   registerAccount: boolean;
   keyName?: string;
@@ -37,7 +34,6 @@ const initialState: VaultAddState = {
   existingAccount: undefined,
   loading: false,
   progress: [],
-  customChains: [],
   selectedChain: undefined,
   registerAccount: false,
 };
@@ -187,20 +183,6 @@ export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo },
 
   thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
   return { newAccount: account, state: VaultCreationState.account_created };
-})
-
-export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, void, ThunkExtra>("user/getCurrentChain", async (_, thunkAPI) => {
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const remote = await gnonative.getRemote();
-  const combinedChains = selectChainsAvailable(thunkAPI.getState() as RootState);
-  const currentChain = combinedChains.find((chain: NetworkMetainfo) => chain.gnoAddress === remote);
-  if (!currentChain) {
-    // chain not fuond can indicate some changed on gnoAddress. So, we need to update the current selection.
-    // TODO: inform the user that the current chain is not available anymore.
-    return undefined;
-  }
-  console.log("currentChain", currentChain);
-  return currentChain;
 })
 
 export const generateNewPhrase = createAsyncThunk<{ phrase: string }, void, ThunkExtra>("user/generateNewPhrase", async (_, thunkAPI) => {
@@ -372,9 +354,6 @@ export const vaultAddSlice = createSlice({
     clearProgress: (state) => {
       state.progress = [];
     },
-    addCustomChain: (state, action: PayloadAction<NetworkMetainfo>) => {
-      state.customChains = state.customChains ? [...state.customChains, action.payload] : [action.payload];
-    },
     setRegisterAccount: (state, action: PayloadAction<boolean>) => {
       state.registerAccount = action.payload;
     },
@@ -409,8 +388,6 @@ export const vaultAddSlice = createSlice({
       state.signUpState = action.payload?.state;
     }).addCase(generateNewPhrase.fulfilled, (state, action) => {
       state.phrase = action.payload.phrase;
-    }).addCase(getCurrentChain.fulfilled, (state, action) => {
-      state.selectedChain = action.payload;
     })
   },
 
@@ -427,12 +404,9 @@ export const vaultAddSlice = createSlice({
   },
 });
 
-export const selectChainsAvailable = createSelector(
-  (state: RootState) => state.vaultAdd.customChains,
-  (customChains) => customChains ? (chains as NetworkMetainfo[]).concat(customChains) : chains
-);
 
-export const { addProgress, signUpState, clearProgress, addCustomChain, setRegisterAccount, setKeyName,
+
+export const { addProgress, signUpState, clearProgress, setRegisterAccount, setKeyName,
   setSelectedChain, resetState
 } = vaultAddSlice.actions;
 

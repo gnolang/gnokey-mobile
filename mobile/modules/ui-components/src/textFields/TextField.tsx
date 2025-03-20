@@ -9,6 +9,7 @@ export type Props = {
   label?: string
   type?: 'password' | 'text'
   error?: string
+  color?: 'secondary'
 } & TextInputProps
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
@@ -41,8 +42,8 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
   return (
     <>
       <Container>
-        <AnimatedLabel style={{ opacity: fadeAnim }}>{label}</AnimatedLabel>
-        <Content>
+        <AnimatedLabel {...rest} style={{ opacity: fadeAnim }}>{label}</AnimatedLabel>
+        <Content {...rest}>
           <TextFieldStyled
             {...rest}
             value={inputValue}
@@ -76,16 +77,16 @@ const Container = styled.View`
   width: 100%;
 `
 
-const Content = styled.View<Props>`
+const Content = styled.View<PropsWithTheme>`
 	flex-direction: row;
 	align-items: center;
   border-bottom-width: 1px;
-	color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
-	background-color: ${({ theme }: { theme: DefaultTheme }) => theme.textinputs?.background};
+	color: ${(p => p.theme.colors.black)};
+	background-color: ${p => p.color ? p.theme.textinputs.secondary.background : p.theme.textinputs.primary.background};
 `
 
 const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
-  placeholderTextColor: props.theme.textinputs?.placeholder.color || props.theme.textinputs.placeholder.color,
+  placeholderTextColor: props.theme.textinputs.primary.placeholder.color || props.theme.textinputs.primary.placeholder.color,
 }))`
 	flex: 1;
 	height: 40px;
@@ -93,17 +94,17 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
 	font-weight: 500;
 	line-height: 20px;
 	font-size: 18px;
-	placeholder: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
+	placeholder: ${(p) => p.theme.colors.black};
 	border-style: solid;
 `
 
 const ToggleIcon = styled.TouchableOpacity`
-	color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.black};
+	color: ${(p) => p.theme.colors.black};
 	padding: 2px;
 `
 
-const AnimatedLabel = styled(Animated.Text)`
-  color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.white};
+const AnimatedLabel = styled(Animated.Text)<PropsWithTheme>`
+  color: ${(p) => p.color ? p.theme.colors.gray : p.theme.colors.white};
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 500;

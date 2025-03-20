@@ -110,8 +110,8 @@ export default function Page() {
       return
     }
 
-    // Use the same regex and error message as r/demo/users
-    if (!keyName.match(/^[a-z]+[_a-z0-9]{5,16}$/)) {
+    // Use the same regex and error message as r/gnoland/users/v1
+    if (!keyName.match("^[a-z]{3}[_a-z0-9]{0,14}[0-9]{3}$")) {
       setError("Account name must be at least 6 characters, lowercase alphanumeric with underscore");
       return;
     }

@@ -36,7 +36,7 @@ export default function Page() {
             gnonative.setChainID(chainId);
             gnonative.setRemote(remote);
 
-            const accountNameStr = await gnonative.qEval("gno.land/r/demo/users", `GetUserByAddress("${bech32Address}").Name`);
+            const accountNameStr = await gnonative.qEval("gno.land/r/sys/users", `GetUserByAddress("${bech32Address}").Name`);
             setAccountName(accountNameStr);
         })();
     }, [bech32Address]);

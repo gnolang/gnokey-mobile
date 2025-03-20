@@ -3,15 +3,14 @@ import { GnoNativeApi } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { RootState } from "../root-reducer";
 import { NetworkMetainfo } from "@/types";
-import chains from '@/assets/chains.json'
-import { createSelector } from "reselect";
+import defaultChains from '@/assets/chains.json'
 
 export interface ChainsState {
-  customChains: NetworkMetainfo[];
+  chains: NetworkMetainfo[];
 }
 
 const initialState: ChainsState = {
-  customChains: chains,
+  chains: defaultChains,
 }
 
 export const chainsSlice = createSlice({
@@ -19,12 +18,12 @@ export const chainsSlice = createSlice({
   initialState,
   reducers: {
     addCustomChain: (state, action: PayloadAction<NetworkMetainfo>) => {
-      state.customChains = state.customChains ? [...state.customChains, action.payload] : [action.payload];
+      state.chains = state.chains ? [...state.chains, action.payload] : [action.payload];
     },
   },
-  // selectors: {
-  //   selectChainsAvailable: (state) => state.customChains ? (chains as NetworkMetainfo[]).concat(state.customChains) : chains,
-  // },
+  selectors: {
+    selectChainsAvailable: (state) => state.chains,
+  },
 })
 
 export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, void, ThunkExtra>("user/getCurrentChain", async (_, thunkAPI) => {
@@ -41,12 +40,6 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, voi
   return currentChain;
 })
 
-const selectCustomOnly = (state: RootState) => state.chains.customChains;
-
-export const selectChainsAvailable = createSelector([selectCustomOnly], (customChains) => {
-  return (chains as NetworkMetainfo[]).concat(customChains);
-})
-
-// export const { selectChainsAvailable } = chainsSlice.selectors;
+export const { selectChainsAvailable } = chainsSlice.selectors;
 export const { addCustomChain } = chainsSlice.actions;
 export const { } = chainsSlice.selectors;

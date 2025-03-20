@@ -3,16 +3,27 @@ import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { RootState } from "../root-reducer";
 import { selectChainsAvailable } from "./chainsSlice";
+import { OverrideThunkApiConfigs } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 export interface VaultListState {
-  vaults?: KeyInfoBookmark[]; // will be overriden by the fetchVaults action. TODO: evict this field to be stored in redux.
-  keyInfoChains?: Map<string, string[]>;
-  bookmarkedAddresses: string[];
-  loading: boolean;
-  error?: Error;
+  /** vaults fetched from gnonative */
+  vaults?: Vault[]
+
+  /** chains where the vaults have coins */
+  vaultsChains?: Map<vaultAddress, vaultChains>
+
+  /** addresses of the vaults that are bookmarked */
+  bookmarkedAddresses: string[]
+
+  loading: boolean
+
+  error?: Error
 }
 
-export type KeyInfoBookmark = {
+type vaultAddress = string
+type vaultChains = string[]
+
+export type Vault = {
   bookmarked?: boolean;
   keyInfo: KeyInfo;
   chains?: string[];
@@ -29,17 +40,32 @@ const initialState: VaultListState = {
  * Fetch the vaults from the gnonative.
  * The vaults will be stored in the ´vaults´ state.
  */
-export const fetchVaults = createAsyncThunk<KeyInfoBookmark[], void, ThunkExtra>("vaults/fetchVaults", async (_, thunkAPI) => {
+export const fetchVaults = createAsyncThunk<Vault[], void, ThunkExtra>("vaults/fetchVaults", async (_, thunkAPI) => {
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const keys = await gnonative.listKeyInfo();
   const bookmarks = selectBookmarkedAddresses(thunkAPI.getState() as RootState);
+  const vaultsChains = selectVaultsChains(thunkAPI.getState() as RootState);
+  const vaults = selectVaults(thunkAPI.getState() as RootState);
+  const keyinfoList = await gnonative.listKeyInfo();
 
-  const keysBooked: KeyInfoBookmark[] = keys.map((keyInfo) => {
-    return { keyInfo, bookmarked: Boolean(bookmarks?.includes(String.fromCharCode(...keyInfo.address))) }
-  });
+  let updatedVaults = enrichData(keyinfoList, bookmarks, vaultsChains);
 
-  return keysBooked;
+  return updatedVaults;
 });
+
+const enrichData = (keyinfoList: KeyInfo[], bookmarks: string[], vaultsChains?: Map<vaultAddress, vaultChains>) => {
+
+  if (!keyinfoList || !bookmarks) return [];
+
+  return keyinfoList.map((keyInfo) => (
+    {
+      keyInfo,
+      bookmarked: Boolean(bookmarks?.includes(String.fromCharCode(...keyInfo.address))),
+      chains: vaultsChains instanceof Map ? vaultsChains.get(keyInfo.address.toString()) : []
+    }
+  )) as Vault[]
+
+
+}
 
 const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
   try {
@@ -60,8 +86,7 @@ const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
   }
 };
 
-
-type CheckOnChain = { keyInfoChains: Map<string, string[]> } | undefined;
+type CheckOnChain = { infoOnChains: Map<vaultAddress, vaultChains> } | undefined;
 /**
  * Check if each key is present in which chain.
  * */
@@ -70,7 +95,7 @@ export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExt
   const vaults = await selectVaults(thunkAPI.getState() as RootState);
   const chains = await selectChainsAvailable(thunkAPI.getState() as RootState);
 
-  const keyInfoChains = new Map<string, string[]>();
+  const infoOnChains = new Map<string, string[]>();
 
   if (!chains || !vaults) {
     return undefined;
@@ -87,11 +112,11 @@ export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExt
       console.log(`Key ${vault.keyInfo.name} on chain ${chain.chainName} has coins: ${keyHasCoins}`);
 
       if (keyHasCoins) {
-        keyInfoChains.has(vault.keyInfo.address.toString()) ? keyInfoChains.get(vault.keyInfo.address.toString())?.push(chain.chainName) : keyInfoChains.set(vault.keyInfo.address.toString(), [chain.chainName]);
+        infoOnChains.has(vault.keyInfo.address.toString()) ? infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName) : infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName]);
       }
     }
   }
-  return { keyInfoChains };
+  return { infoOnChains };
 });
 
 interface Prop {
@@ -144,22 +169,25 @@ export const vaultListSlice = createSlice({
     });
     builder.addCase(checkForKeyOnChains.fulfilled, (state, action) => {
       if (!action.payload) return;
-      state.keyInfoChains = action.payload.keyInfoChains;
+      state.vaultsChains = action.payload.infoOnChains;
 
       // update vaults with chains
       state.vaults?.forEach((vault) => {
-        const chains = state.keyInfoChains?.get(vault.keyInfo.address.toString());
+        const chains = state.vaultsChains?.get(vault.keyInfo.address.toString());
         if (chains) {
           vault.chains = chains;
+        } else {
+          vault.chains = [];
         }
       });
     })
   },
   selectors: {
     selectVaults: (state) => state.vaults,
+    selectVaultsChains: (state) => state.vaultsChains,
     selectBookmarkedAddresses: (state) => state.bookmarkedAddresses,
   },
 });
 
 export const { setBookmark } = vaultListSlice.actions;
-export const { selectVaults, selectBookmarkedAddresses } = vaultListSlice.selectors;
+export const { selectVaults, selectBookmarkedAddresses, selectVaultsChains } = vaultListSlice.selectors;

@@ -2,7 +2,7 @@ import { Layout } from "@/components";
 import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Text from "@/components/text";
-import { fetchVaults, KeyInfoBookmark, selectCallback, selectTxInput, selectVaults, useAppDispatch, useAppSelector } from "@/redux";
+import { fetchVaults, Vault, selectCallback, selectTxInput, selectVaults, useAppDispatch, useAppSelector } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export default function Page() {
     return unsubscribe;
   }, [navigation]);
 
-  const returnKeyAddressToSoliciting = useCallback(async (keyInfo: KeyInfoBookmark) => {
+  const returnKeyAddressToSoliciting = useCallback(async (keyInfo: Vault) => {
     console.log('returnKeyAddressToSoliciting', keyInfo, callback);
 
     const bech32 = await gnonative.addressToBech32(keyInfo?.keyInfo?.address);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Layout } from "@/components/index";
-import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectVaults, setBookmark, KeyInfoBookmark } from "@/redux";
+import { checkForKeyOnChains, selectMasterPassword, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import { setVaultToEdit, fetchVaults } from "@/redux";
@@ -15,7 +15,7 @@ export default function Page() {
   const route = useRouter();
 
   const [nameSearch, setNameSearch] = useState<string>("");
-  const [filteredAccounts, setFilteredAccounts] = useState<KeyInfoBookmark[]>([]);
+  const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([]);
   const [loading, setLoading] = useState<string | undefined>(undefined);
 
   const { gnonative } = useGnoNativeContext();
@@ -50,7 +50,7 @@ export default function Page() {
     }
   }, [nameSearch, vaults]);
 
-  const onChangeAccountHandler = async (keyInfo: KeyInfoBookmark) => {
+  const onChangeAccountHandler = async (keyInfo: Vault) => {
     try {
       await dispatch(setVaultToEdit({ vault: keyInfo }));
       route.push("/home/vault-detail");
@@ -65,7 +65,7 @@ export default function Page() {
     route.push("/home/add-key");
   }
 
-  const onBookmarkPress = (keyInfo: KeyInfoBookmark) => async () => {
+  const onBookmarkPress = (keyInfo: Vault) => async () => {
     console.log('Bookmark pressed', keyInfo.keyInfo.address)
     dispatch(setBookmark({ keyAddress: keyInfo.keyInfo.address, value: !keyInfo.bookmarked }))
   }

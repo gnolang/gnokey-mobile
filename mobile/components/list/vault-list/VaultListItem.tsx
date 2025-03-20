@@ -3,13 +3,13 @@ import { TouchableOpacity, View } from "react-native";
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from "@expo/vector-icons";
 import { Chip, Text } from "@/modules/ui-components";
-import { KeyInfoBookmark } from "@reduxjs/toolkit";
+import { Vault } from "@reduxjs/toolkit";
 
 interface Props {
-  vault: KeyInfoBookmark;
+  vault: Vault;
   chains?: string[];
-  onVaultPress: (vault: KeyInfoBookmark) => void;
-  onBookmarkPress?: (vault: KeyInfoBookmark) => void;
+  onVaultPress: (vault: Vault) => void;
+  onBookmarkPress?: (vault: Vault) => void;
 }
 
 const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Props) => {

@@ -2,7 +2,7 @@ import { Layout } from "@/components";
 import Button from "@/components/button";
 import VaultListItem from "@/components/list/vault-list/VaultListItem";
 import Text from "@/components/text";
-import { clearLinking, KeyInfoBookmark, selectCallback, selectClientName, selectVaults, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
+import { clearLinking, Vault, selectCallback, selectClientName, selectVaults, sendAddressToSoliciting, useAppDispatch, useAppSelector } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export default function Page() {
         return unsubscribe;
     }, [navigation]);
 
-    const returnKeyAddressToSoliciting = useCallback(async (keyInfo: KeyInfoBookmark) => {
+    const returnKeyAddressToSoliciting = useCallback(async (keyInfo: Vault) => {
         await dispatch(sendAddressToSoliciting({ keyInfo: keyInfo.keyInfo })).unwrap();
 
         router.push("/home")

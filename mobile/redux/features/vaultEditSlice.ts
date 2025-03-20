@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice, KeyInfoBookmark } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, Vault } from "@reduxjs/toolkit";
 import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
 import { ThunkExtra } from "@/providers/redux-provider";
 
 export interface VaultEditState {
-  vaultToEdit: KeyInfoBookmark | undefined;
+  vaultToEdit: Vault | undefined;
 }
 
 const initialState: VaultEditState = {

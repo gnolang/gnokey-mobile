@@ -39,6 +39,32 @@ tech.berty.dsocial://signin-callback?address=g19h0el2p7z8thtqy4rze0n6en94xux9faz
   - address: the address of the selected user
   - cachekill: For testing. Ignore this.
 
+### New session key
+Example of a dSocial request to Gnokey Mobile to create a new session key (with added newlines for clarity):
+```
+land.gno.gnokey://newsession?address=g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3
+&remote=https%3A%2F%2Fapi.gno.berty.io%3A443
+&chain_id=dev
+&client_name=dSocial
+&callback=tech.berty.dsocial%3A%2F%2Fnewsession
+```
+
+- Base URL: `land.gno.gnokey://newsession`
+- Parameters (values should be percent-escaped with `encodeURIComponent`):
+  - address: bech32 address of the primary key to which the session key belongs
+  - remote: the connection address for the remote node where request for a session key will be sent
+  - chain_id: the chain ID for the remote
+  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user
+  - callback: the URL that Gnokey Mobile will call after creating the session key
+
+Example response:
+```
+tech.berty.dsocial://newsession?session=%7B%22expires_at%22%3A%222025-03-24T14%3A35%3A16.970Z%22%2C%22key%22%3A%22673768235734692%22%7D
+```
+- Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://newsession`
+- Parameters (values are percent-escaped, to be decoded with `decodeURIComponent`):
+  - session: the session key json to use in `tosign`. Example: `{"expires_at":"2025-03-24T14:35:16.970Z","key":"673768235734692"}`
+
 ### Sign a transaction
 
 Example of a dSocial request to Gnokey Mobile to sign a transaction (with added newlines for clarity):
@@ -59,19 +85,22 @@ land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call
   - address: bech32 address of whoever you want to sign the transaction.
   - remote: the connection address for the remote node where the transaction will be sent
   - chain_id: the chain ID for the remote
-  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user.
-  - reason: the reason behind this action. It will be displayed to the user.
+  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user (if no session).
+  - reason: the reason behind this action. It will be displayed to the user (if no session).
   - callback: the URL that Gnokey Mobile will call after signing the tx.
+  - session (optional): the session key json from the call to `newsession`. If present, sign immediately and return
 
 Example response:
 
 ```bash
 tech.berty.dsocial://post?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call%22%2C%22caller%22%3A%22g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3%22%2C%22send%22%3A%22%22%2C%22pkg_path%22%3A%22gno.land%2Fr%2Fberty%2Fsocial%22%2C%22func%22%3A%22PostMessage%22%2C%22args%22%3A%5B%22Hello%22%5D%7D%5D%2C%22fee%22%3A%7B%22gas_wanted%22%3A%2210000000%22%2C%22gas_fee%22%3A%221000000ugnot%22%7D%2C%22signatures%22%3A%5B%7B%22pub_key%22%3A%7B%22%40type%22%3A%22%2Ftm.PubKeySecp256k1%22%2C%22value%22%3A%22A6YT26ehhjN7YXx%2BLZza2Gp31yP5bJ6INfeGf%2FrumHFR%22%7D%2C%22signature%22%3A%226KAdOO2YXyZmp8ehiin6Rsz%2Bhxu30W0pB00%2Bv1xnpzMSZ%2BBIVdZbo1gdlVGp0E24ZLRyPrsKtb0Q4%2FkdD57qGg%3D%3D%22%7D%5D%2C%22memo%22%3A%22%22%7D
+&status=success
 ```
 
 - Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://post`
 - Parameters (values are percent-escaped, to be decoded with `decodeURIComponent`):
   - tx: the signed transaction json to pass to `gnonative.broadcastTxCommit(...)`
+  - status: either "success" or an error such as "session expired"
 
 ### Testing on iOS simulator
 

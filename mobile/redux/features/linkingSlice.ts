@@ -18,6 +18,9 @@ export interface LinkingState {
   /* The path of the requested screen */
   path?: string | 'tosignin';
   hostname?: string;
+  /* The session key info */
+  session?: string;
+  session_wanted?: boolean;
 }
 
 const initialState: LinkingState = {
@@ -30,6 +33,8 @@ const initialState: LinkingState = {
   callback: undefined,
   path: undefined,
   hostname: undefined,
+  session: undefined,
+  session_wanted: false,
 };
 
 /**
@@ -87,11 +92,14 @@ interface SetLinkResponse {
   path: string;
   keyinfo?: KeyInfo;
   hostname?: string;
+  session?: string;
+  session_wanted: boolean;
 }
 
+/**
+ * Set the linking data from the parsed URL received from the linking event
+ */
 export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>("linking/setLinkingData", async (parsedURL, thunkAPI) => {
-  console.log('deep link received', parsedURL);
-
   const queryParams = parsedURL.queryParams
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
 
@@ -119,7 +127,9 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
     txInput: queryParams?.tx ? queryParams.tx as string : undefined,
     callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
     path: queryParams?.path as string || '',
-    keyinfo
+    keyinfo,
+    session: queryParams?.session ? queryParams.session as string : undefined,
+    session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false,
   }
 });
 
@@ -146,6 +156,8 @@ export const linkingSlice = createSlice({
       state.path = action.payload.path;
       state.keyinfo = action.payload.keyinfo;
       state.hostname = action.payload.hostname;
+      state.session = action.payload.session;
+      state.session_wanted = action.payload.session_wanted
     })
   },
   selectors: {
@@ -158,6 +170,8 @@ export const linkingSlice = createSlice({
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
     selectAction: (state) => state.hostname !== expo_default ? state.hostname : undefined,
+    selectSession: (state) => state.session,
+    selectSessionWanted: (state) => state.session_wanted,
   },
 });
 
@@ -167,5 +181,6 @@ const expo_default = 'expo-development-client';
 export const { clearLinking } = linkingSlice.actions;
 
 export const { selectTxInput, selectCallback, selectBech32Address, selectClientName,
-  reasonSelector, selectKeyInfo, selectAction, selectChainId, selectRemote
+  reasonSelector, selectKeyInfo, selectAction, selectChainId, selectRemote,
+  selectSession, selectSessionWanted
  } = linkingSlice.selectors;

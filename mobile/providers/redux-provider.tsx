@@ -1,9 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { vaultEditSlice, signinSlice, linkingSlice } from "@/redux/features";
 import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
-import { vaultAddSlice } from "@/redux/features/vaultAddSlice";
 import {
   persistStore,
   persistReducer,
@@ -28,8 +26,8 @@ export interface ThunkExtra {
 }
 
 const persistConfig = {
-  key: 'root-8',
-  version: 4,
+  key: 'root-9',
+  version: 5,
   storage: AsyncStorage,
 }
 

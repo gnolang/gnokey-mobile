@@ -4,3 +4,4 @@ export * from "./linkingSlice";
 export * from "./vaultAddSlice";
 export * from "./vaultListSlice";
 export * from "./chainsSlice";
+export * from "./sessionKeySlice";

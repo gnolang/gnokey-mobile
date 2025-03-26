@@ -1,4 +1,4 @@
-import { StyleSheet, View, TextInput as RNTextInput, Alert as RNAlert } from "react-native";
+import { StyleSheet, View, TextInput as RNTextInput, Alert as RNAlert, Modal, ActivityIndicator } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { useGnoNativeContext } from "@gnolang/gnonative";
@@ -102,6 +102,7 @@ export default function Page() {
 
   const onCreate = async () => {
     setError(undefined);
+
     if (!keyName) {
       setError("Please fill out all fields");
       return;
@@ -123,6 +124,8 @@ export default function Page() {
       return;
     }
 
+    setLoading(true);
+
     if (signUpState === VaultCreationState.user_exists_only_on_local_storage && existingAccount) {
       await gnonative.activateAccount(keyName);
       await gnonative.setPassword(masterPassword, existingAccount.address);
@@ -131,7 +134,6 @@ export default function Page() {
     }
 
     try {
-      setLoading(true);
 
       await dispatch(addVault({ name: keyName, password: masterPassword, phrase })).unwrap();
       await dispatch(fetchVaults()).unwrap();
@@ -149,6 +151,11 @@ export default function Page() {
 
   return (
     <>
+      <Modal visible={loading} transparent>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      </Modal>
       <SafeAreaView>
         <TopModalBar />
 

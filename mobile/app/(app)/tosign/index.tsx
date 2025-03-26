@@ -1,7 +1,7 @@
 import { Layout } from "@/components";
 import Button from "@/components/button";
 import Text from "@/components/text";
-import { setKeyInfo, selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking, selectChainId, selectRemote, selectSession, selectSessionWanted, newSessionKey, SessionKeyInfo } from "@/redux";
+import { selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch, useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking, selectChainId, selectRemote, selectSession, selectSessionWanted, newSessionKey, SessionKeyInfo } from "@/redux";
 import { useGnoNativeContext } from "@gnolang/gnonative";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";

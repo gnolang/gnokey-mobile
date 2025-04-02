@@ -12,9 +12,9 @@ export const H1 = styled.Text`
 
 export const H2 = styled.Text`
 	font-weight: 400;
-	font-size: 22px;
+	font-size: 32px;
 	letter-spacing: -0.32px;
-	color: ${(props) => props.theme.colors.primary};
+	color: ${(props) => props.theme.colors.black};
 `
 export type H2 = typeof H2
 
@@ -29,7 +29,6 @@ export type H3 = typeof H3
 export const Body = styled.Text<TextProps>`
 	font-weight: 400;
 	font-size: 16px;
-	letter-spacing: -0.32px;
 	color: ${(props) => props.theme.colors.black};
 `
 
@@ -46,4 +45,8 @@ export const ButtonLabel = styled.Text<{ $color?: ButtonColor }>`
 	line-height: 19px;
 	letter-spacing: -0.32px;
 	color: ${(props) => (props.$color ? props.theme.buttons.label[props.$color] : props.theme.buttons.label.primary)};
+`
+
+export const ButtonLabelBlack = styled(ButtonLabel)`
+	color: ${(props) => props.theme.colors.black};
 `

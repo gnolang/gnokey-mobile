@@ -6,7 +6,7 @@ import { signOut, useAppDispatch } from "@/redux";
 import { Layout } from "@/components/index";
 import { LoadingModal } from "@/components/loading";
 import ChangeMasterPassword from "@/views/change-master-password";
-import { AppBar, Button, ButtonProfile, Container, FormItem, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
+import { AppBar, Button, ButtonProfile, Container, FormItemInline, SafeAreaView, Spacer, Text } from "@/modules/ui-components";
 import { AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 import { FormTextValue } from "@/modules/ui-components/src/form/FormItem";
 
@@ -65,13 +65,13 @@ export default function Page() {
 
           <Spacer />
 
-          <FormItem label="Chain ID" labelStyle={{ minWidth: 90 }}>
+          <FormItemInline label="Chain ID" labelStyle={{ minWidth: 90 }}>
             <FormTextValue>{chainID}</FormTextValue>
-          </FormItem>
+          </FormItemInline>
 
-          <FormItem label="Remote" labelStyle={{ minWidth: 90 }}>
+          <FormItemInline label="Remote" labelStyle={{ minWidth: 90 }}>
             <FormTextValue>{remote}</FormTextValue>
-          </FormItem>
+          </FormItemInline>
 
           <Spacer />
 

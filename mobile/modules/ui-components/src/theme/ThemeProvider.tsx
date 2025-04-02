@@ -14,7 +14,7 @@ const ThemeProvider = ({ children }: Props) => {
     success: { background: '#E5F9E5', text: '#00A86B' },
 
     colors: {
-      primary: '#5999fa',
+      primary: '#4690FF',
 
       black: '#000000',
       white: '#ffffff',
@@ -27,7 +27,7 @@ const ThemeProvider = ({ children }: Props) => {
         placeholder: {
           color: '#000000',
         },
-        background: '#5999fa',
+        background: '#4690FF',
       },
       secondary: {
         background: '#ffffff',

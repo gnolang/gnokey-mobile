@@ -6,6 +6,8 @@ import * as Text from './text/index'
 import { TextField } from './textFields/TextField'
 import { ThemeProvider, DefaultTheme } from './theme/ThemeProvider'
 
+import { Checkbox } from './checkbox'
+
 export * from './chip/index'
 
 export * from './surfaces/index'
@@ -14,6 +16,10 @@ export * from './buttons/index'
 
 export * from './ui/SafeAreaView'
 
-export { FormItem } from './form/FormItem'
+export { FormItem, FormItemInline } from './form/FormItem'
 
-export { ThemeProvider, DefaultTheme, TextField, Container, BottonPanel, Spacer, ErrorBox, Alert, Text, TopModalBar }
+
+export {
+  ThemeProvider, DefaultTheme, TextField, Container, BottonPanel, Spacer, ErrorBox, Alert, Text, TopModalBar,
+  Checkbox
+}

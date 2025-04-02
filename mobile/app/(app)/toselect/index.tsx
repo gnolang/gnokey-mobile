@@ -59,7 +59,9 @@ export default function Page() {
             <FlatList
               data={vaults}
               renderItem={({ item }) => (
-                <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} />
+                <VaultListItem vault={item}
+                chains={item.chains}
+                onVaultPress={returnKeyAddressToSoliciting} />
               )}
               keyExtractor={(item) => item.keyInfo.name}
               ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}

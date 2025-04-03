@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ThunkExtra } from "@/providers/redux-provider";
 import { GnoNativeApi, KeyInfo, SignTxResponse } from "@gnolang/gnonative";
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 import { RootState } from "../root-reducer";
+
+const DEFAULT_GAS_MARGIN = 110; // 1.1%
 
 export interface LinkingState {
   chainId?: string;
@@ -16,7 +18,7 @@ export interface LinkingState {
   /* The callback URL to return to after each operation */
   callback?: string;
   /* The path of the requested screen */
-  path?: string | 'tosignin';
+  path?: string | "tosignin";
   hostname?: string;
 }
 
@@ -35,46 +37,89 @@ const initialState: LinkingState = {
 /**
  * Send the address to the soliciting app
  */
-export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo }, ThunkExtra>("linking/sendAddressToSoliciting", async ({ keyInfo }, thunkAPI) => {
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const { callback } = (thunkAPI.getState() as RootState).linking;
+export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo }, ThunkExtra>(
+  "linking/sendAddressToSoliciting",
+  async ({ keyInfo }, thunkAPI) => {
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+    const { callback } = (thunkAPI.getState() as RootState).linking;
 
-  console.log('sendAddressToSoliciting', keyInfo, callback);
+    console.log("sendAddressToSoliciting", keyInfo, callback);
 
-  if (!callback) {
-    throw new Error("No callback found.");
+    if (!callback) {
+      throw new Error("No callback found.");
+    }
+
+    const bech32 = await gnonative.addressToBech32(keyInfo?.address);
+
+    Linking.openURL(callback + "?address=" + bech32 + "&cachekill=" + new Date().getTime());
   }
+);
 
-  const temp = await gnonative.addressToBech32(keyInfo?.address)
-  const bech32 = await gnonative.addressToBech32(keyInfo?.address);
+export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>(
+  "linking/signTx",
+  async ({ keyInfo }, thunkAPI) => {
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+    const { txInput } = (thunkAPI.getState() as RootState).linking;
+    const { masterPassword } = (thunkAPI.getState() as RootState).signIn;
 
-  Linking.openURL(callback + '?address=' + bech32 + '&cachekill=' + new Date().getTime());
-});
+    if (!masterPassword) {
+      throw new Error("No keyInfo found.");
+    }
 
-export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>("linking/signTx", async ({ keyInfo }, thunkAPI) => {
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const { txInput } = (thunkAPI.getState() as RootState).linking;
-  const { masterPassword } = (thunkAPI.getState() as RootState).signIn;
+    console.log("txInput", txInput);
+    const txJson = decodeURIComponent(txInput || "");
+    console.log("txJson", txJson);
+    console.log("keyInfo", JSON.stringify(keyInfo));
 
-  if (!masterPassword) {
-    throw new Error("No keyInfo found.");
+    const res = await gnonative.activateAccount(keyInfo.name);
+    console.log("activateAccount", res);
+
+    await gnonative.setPassword(masterPassword, keyInfo.address);
+    console.log("selected account", keyInfo.name);
+
+    const signedTx = await gnonative.signTx(txJson, keyInfo?.address);
+    console.log("signedTx", signedTx);
+
+    return signedTx;
   }
+);
 
-  const txJson = decodeURIComponent(txInput || "");
-  console.log('txJson', txJson);
-  console.log('keyInfo', JSON.stringify(keyInfo));
+interface gasEstimation {
+  tx: string;
+  gasWanted: bigint;
+}
 
-  const res = await gnonative.activateAccount(keyInfo.name);
-  console.log('activateAccount', res);
+// estimateGasWanted estimates the gas wanted value for the transaction.
+// If the `update` field is true, the transaction will be updated with the new gas wanted value.
+export const estimateGasWanted = createAsyncThunk<gasEstimation, { keyInfo: KeyInfo; updateTx: boolean }, ThunkExtra>(
+  "linking/estimateGas",
+  async ({ keyInfo, updateTx }, thunkAPI) => {
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+    const { txInput } = (thunkAPI.getState() as RootState).linking;
+    const { masterPassword } = (thunkAPI.getState() as RootState).signIn;
 
-  await gnonative.setPassword(masterPassword, keyInfo.address);
-  console.log('selected account', keyInfo.name);
+    if (!masterPassword) {
+      throw new Error("No keyInfo found.");
+    }
 
-  const signedTx = await gnonative.signTx(txJson, keyInfo?.address);
-  console.log('signedTx', signedTx);
+    const txJson = decodeURIComponent(txInput || "");
 
-  return signedTx
-});
+    await gnonative.activateAccount(keyInfo.name);
+    await gnonative.setPassword(masterPassword, keyInfo.address);
+
+    // Estimate the gas used
+    const response = await gnonative.estimateGas(txJson, keyInfo?.address, DEFAULT_GAS_MARGIN, updateTx);
+    const gasWanted = response.gasWanted as bigint;
+    console.log("estimateGas: ", gasWanted);
+
+    // Update the transaction
+    if (updateTx) {
+      return { tx: response.txJson, gasWanted: gasWanted };
+    }
+
+    return { tx: txJson, gasWanted };
+  }
+);
 
 interface SetLinkResponse {
   chainId?: string;
@@ -89,39 +134,42 @@ interface SetLinkResponse {
   hostname?: string;
 }
 
-export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>("linking/setLinkingData", async (parsedURL, thunkAPI) => {
-  console.log('deep link received', parsedURL);
+export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>(
+  "linking/setLinkingData",
+  async (parsedURL, thunkAPI) => {
+    console.log("deep link received", parsedURL);
 
-  const queryParams = parsedURL.queryParams
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+    const queryParams = parsedURL.queryParams;
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
 
-  const bech32Address = queryParams?.address ? queryParams.address as string : undefined;
-  let keyinfo: KeyInfo | undefined;
+    const bech32Address = queryParams?.address ? (queryParams.address as string) : undefined;
+    let keyinfo: KeyInfo | undefined;
 
-  if (bech32Address) {
-    const keyinfos = await gnonative.listKeyInfo();
-    for (const k of keyinfos) {
-      const kAddress = await gnonative.addressToBech32(k.address);
-      if (kAddress === bech32Address) {
-        keyinfo = k;
-        break;
+    if (bech32Address) {
+      const keyinfos = await gnonative.listKeyInfo();
+      for (const k of keyinfos) {
+        const kAddress = await gnonative.addressToBech32(k.address);
+        if (kAddress === bech32Address) {
+          keyinfo = k;
+          break;
+        }
       }
     }
-  }
 
-  return {
-    chainId: queryParams?.chain_id ? queryParams.chain_id as string : undefined,
-    remote: queryParams?.remote ? queryParams.remote as string : undefined,
-    hostname: parsedURL.hostname || undefined,
-    reason: queryParams?.reason ? queryParams.reason as string : undefined,
-    clientName: queryParams?.client_name ? queryParams.client_name as string : undefined,
-    bech32Address,
-    txInput: queryParams?.tx ? queryParams.tx as string : undefined,
-    callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
-    path: queryParams?.path as string || '',
-    keyinfo
+    return {
+      chainId: queryParams?.chain_id ? (queryParams.chain_id as string) : undefined,
+      remote: queryParams?.remote ? (queryParams.remote as string) : undefined,
+      hostname: parsedURL.hostname || undefined,
+      reason: queryParams?.reason ? (queryParams.reason as string) : undefined,
+      clientName: queryParams?.client_name ? (queryParams.client_name as string) : undefined,
+      bech32Address,
+      txInput: queryParams?.tx ? (queryParams.tx as string) : undefined,
+      callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
+      path: (queryParams?.path as string) || "",
+      keyinfo,
+    };
   }
-});
+);
 
 export const linkingSlice = createSlice({
   name: "linking",
@@ -146,7 +194,10 @@ export const linkingSlice = createSlice({
       state.path = action.payload.path;
       state.keyinfo = action.payload.keyinfo;
       state.hostname = action.payload.hostname;
-    })
+    });
+    builder.addCase(estimateGasWanted.fulfilled, (state, action) => {
+      state.txInput = action.payload.tx;
+    });
   },
   selectors: {
     selectChainId: (state) => state.chainId,
@@ -157,15 +208,23 @@ export const linkingSlice = createSlice({
     selectClientName: (state) => state.clientName,
     selectKeyInfo: (state) => state.keyinfo,
     reasonSelector: (state) => state.reason,
-    selectAction: (state) => state.hostname !== expo_default ? state.hostname : undefined,
+    selectAction: (state) => (state.hostname !== expo_default ? state.hostname : undefined),
   },
 });
 
 // Expo default hostname
-const expo_default = 'expo-development-client';
+const expo_default = "expo-development-client";
 
 export const { clearLinking } = linkingSlice.actions;
 
-export const { selectTxInput, selectCallback, selectBech32Address, selectClientName,
-  reasonSelector, selectKeyInfo, selectAction, selectChainId, selectRemote
- } = linkingSlice.selectors;
+export const {
+  selectTxInput,
+  selectCallback,
+  selectBech32Address,
+  selectClientName,
+  reasonSelector,
+  selectKeyInfo,
+  selectAction,
+  selectChainId,
+  selectRemote,
+} = linkingSlice.selectors;

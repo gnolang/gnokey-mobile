@@ -66,6 +66,9 @@ export default function Page() {
 
         const { gasWanted } = await dispatch(estimateGasWanted({ keyInfo, updateTx: true })).unwrap();
 
+        // need to pause to let the Keybase DB close before using it again
+        await new Promise((f) => setTimeout(f, 1000));
+
         const signedTx = await dispatch(signTx({ keyInfo })).unwrap();
         setSignedTx(signedTx.signedTxJson);
         setGasWanted(gasWanted);

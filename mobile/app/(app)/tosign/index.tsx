@@ -1,19 +1,31 @@
-import { Layout, Ruller, TextInput } from "@/components";
+import { Layout, Ruller, TextInput } from '@/components';
 import {
-  selectClientName, selectBech32Address, selectTxInput, signTx, useAppDispatch,
-  useAppSelector, reasonSelector, selectCallback, selectKeyInfo, clearLinking, selectChainId,
-  selectRemote, selectSession, selectSessionWanted, newSessionKey, SessionKeyInfo
-} from "@/redux";
-import { useGnoNativeContext } from "@gnolang/gnonative";
-import { router } from "expo-router";
-import { Children, useEffect, useState } from "react";
+  selectClientName,
+  selectBech32Address,
+  selectTxInput,
+  signTx,
+  useAppDispatch,
+  useAppSelector,
+  reasonSelector,
+  selectCallback,
+  selectKeyInfo,
+  clearLinking,
+  selectChainId,
+  selectRemote,
+  selectSession,
+  selectSessionWanted,
+  newSessionKey,
+  SessionKeyInfo
+} from '@/redux';
+import { useGnoNativeContext } from '@gnolang/gnonative';
+import { router } from 'expo-router';
+import { Children, useEffect, useState } from 'react';
 import * as Linking from 'expo-linking';
-import { ScrollView, View, TouchableOpacity, TextInput as RNTextInput } from "react-native";
-import { Button, ButtonText, Checkbox, FormItem, FormItemInline, Spacer, Text } from "@/modules/ui-components";
-import styled from "styled-components/native";
+import { ScrollView, View, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import { Button, ButtonText, Checkbox, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components';
+import styled from 'styled-components/native';
 
 export default function Page() {
-
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { gnonative } = useGnoNativeContext();
@@ -29,6 +41,7 @@ export default function Page() {
   const keyInfo = useAppSelector(selectKeyInfo);
   const chainId = useAppSelector(selectChainId);
   const remote = useAppSelector(selectRemote);
+  const gasFee = '0.0001ugnot'; // TODO: get the gas fee from the txInput
   // const session = useAppSelector(selectSession);
   // const sessionWanted = useAppSelector(selectSessionWanted);
 
@@ -50,26 +63,24 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-
-      if (!chainId || !remote) throw new Error("No chainId or remote found.");
+      if (!chainId || !remote) throw new Error('No chainId or remote found.');
       gnonative.setChainID(chainId);
       gnonative.setRemote(remote);
 
-      const accountNameStr = await gnonative.qEval("gno.land/r/sys/users", `ResolveAddress("${bech32Address}").Name()`);
+      const accountNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveAddress("${bech32Address}").Name()`);
     })();
   }, [bech32Address]);
 
   const signTxAndReturnToRequester = async () => {
     console.log('signing the tx', keyInfo);
 
-    if (!txInput || !keyInfo) throw new Error("No transaction input or keyInfo found.");
+    if (!txInput || !keyInfo) throw new Error('No transaction input or keyInfo found.');
 
-    if (!callback) throw new Error("No callback found.");
+    if (!callback) throw new Error('No callback found.');
 
     setLoading(true);
 
     try {
-
       // let sessionToReturn;
       // if (session) {
       //   // TODO: const storedSession = Look up session.key in sessionKeys.
@@ -91,34 +102,35 @@ export default function Page() {
 
       Linking.openURL(path.toString());
 
-      router.push("/home")
-      console.log("return URL " + path.toString())
+      router.push('/home');
+      console.log('return URL ' + path.toString());
     } catch (error) {
-      console.error("Error signing the tx", error);
+      console.error('Error signing the tx', error);
       const path = new URL(callback);
       path.searchParams.append('status', '' + error);
       Linking.openURL(path.toString());
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const onCancel = () => {
     dispatch(clearLinking());
     if (callback) {
       Linking.openURL(`${callback}?status=cancelled`); // callback to requester
     }
-    router.replace("/home");
-  }
+    router.replace('/home');
+  };
 
   return (
     <>
       <Layout.Container>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <ButtonText onPress={onCancel}><Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack></ButtonText>
+          <ButtonText onPress={onCancel}>
+            <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
+          </ButtonText>
         </View>
         <Layout.Body>
-
           <Text.H3 style={{ textAlign: 'center', paddingHorizontal: 16 }}>
             <Text.H3>{clientName} </Text.H3>
             is requiring permission to
@@ -128,16 +140,15 @@ export default function Page() {
           <Spacer space={32} />
 
           <ScrollView contentContainerStyle={{}}>
-
             <Ruller />
 
-            <FormItem label="Client name" >
+            <FormItem label="Client name">
               <TextBodyBlack>{clientName}</TextBodyBlack>
             </FormItem>
 
             <Ruller />
 
-            <FormItemInline label="Max Amount" >
+            <FormItemInline label="Max Amount">
               <TextBodyWhite>{gasFee} ugnot</TextBodyWhite>
             </FormItemInline>
 
@@ -164,9 +175,7 @@ export default function Page() {
 
             <Ruller />
 
-
             <HiddenGroup>
-
               <FormItem label="Client name">
                 <TextBodyWhite>{clientName}</TextBodyWhite>
               </FormItem>
@@ -228,49 +237,51 @@ export default function Page() {
               <FormItem label="Raw Transaction Data">
                 <TextBodyWhite>{txInput}</TextBodyWhite>
               </FormItem>
-
             </HiddenGroup>
           </ScrollView>
 
           <Spacer space={32} />
 
           <View style={{ height: 100 }}>
-            <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>Approve</Button>
+            <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
+              Approve
+            </Button>
             <Spacer />
           </View>
-
         </Layout.Body>
       </Layout.Container>
     </>
-  )
+  );
 }
 
 const HiddenGroup = ({ children }: React.PropsWithChildren) => {
-
   const [visible, setVisible] = useState(false);
 
   if (!visible) {
-    return <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-      <Text.Body>Show more details...</Text.Body>
-    </TouchableOpacity>
+    return (
+      <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <Text.Body>Show more details...</Text.Body>
+      </TouchableOpacity>
+    );
   }
 
+  return (
+    <>
+      {children}
 
-  return <>
-    {children}
+      <Ruller />
 
-    <Ruller />
-
-    <TouchableOpacity onPress={() => setVisible(false)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-      <Text.Body>Hide details</Text.Body>
-    </TouchableOpacity>
-  </>
-}
+      <TouchableOpacity onPress={() => setVisible(false)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <Text.Body>Hide details</Text.Body>
+      </TouchableOpacity>
+    </>
+  );
+};
 
 const TextBodyWhite = styled(Text.Body)`
   color: white;
-`
+`;
 const TextBodyBlack = styled(Text.Body)`
   font-weight: 400;
   color: white;
-`
+`;

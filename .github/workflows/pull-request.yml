@@ -33,3 +33,7 @@ jobs:
       - name: Run ts:check
         working-directory: mobile
         run: npm run ts:check
+
+      - name: Run prettier:fix
+        working-directory: mobile
+        run: npx prettier . --single-quote --list-different

@@ -17,10 +17,10 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { gnonative } = useGnoNativeContext();
-  const [validityMinutes, setValidityMinutes] = useState<number>(10);
+  // const [validityMinutes, setValidityMinutes] = useState<number>(10);
   const clientName = useAppSelector(selectClientName);
-  const [value, setValue] = useState(0);
-  const [remember, setRemember] = useState(false);
+  // const [value, setValue] = useState(0);
+  // const [remember, setRemember] = useState(false);
 
   const reason = useAppSelector(reasonSelector);
   const bech32Address = useAppSelector(selectBech32Address);
@@ -29,6 +29,7 @@ export default function Page() {
   const keyInfo = useAppSelector(selectKeyInfo);
   const chainId = useAppSelector(selectChainId);
   const remote = useAppSelector(selectRemote);
+  const gasFee = 0.1; // TODO: get from txInput
   // const session = useAppSelector(selectSession);
   // const sessionWanted = useAppSelector(selectSessionWanted);
 
@@ -55,7 +56,7 @@ export default function Page() {
       gnonative.setChainID(chainId);
       gnonative.setRemote(remote);
 
-      const accountNameStr = await gnonative.qEval("gno.land/r/sys/users", `ResolveAddress("${bech32Address}").Name()`);
+      // const accountNameStr = await gnonative.qEval("gno.land/r/sys/users", `ResolveAddress("${bech32Address}").Name()`);
     })();
   }, [bech32Address]);
 

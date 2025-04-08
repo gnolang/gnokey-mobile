@@ -10,7 +10,9 @@
     "web": "expo start --web",
     "prebuild": "expo prebuild",
     "ts:check": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.6.0",
@@ -57,7 +59,9 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.79",
     "typescript": "~5.3.3",
-    "vitest": "^3.0.9"
+    "vitest": "^3.0.9",
+    "eslint": "^8.57.0",
+    "eslint-config-expo": "~7.1.2"
   },
   "overrides": {
     "react-refresh": "~0.14.0"

@@ -1,44 +1,40 @@
-import { TextCopy } from "@/components";
-import { ModalConfirmDelete } from "@/components/modal";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
-import { useSelector } from "react-redux";
-import { deleteVault, selectChainsPerVault, selectVaultToEdit, useAppDispatch } from "@/redux";
-import { useNavigation, useRouter } from "expo-router";
-import { useGnoNativeContext } from "@gnolang/gnonative";
-import { SafeAreaView, Button, Text, Container, TextField, Spacer, TopModalBar } from "@/modules/ui-components";
-import { AntDesign, FontAwesome6, Octicons } from "@expo/vector-icons";
-import { useTheme } from "styled-components/native";
+import { TextCopy } from '@/components'
+import { ModalConfirmDelete } from '@/components/modal'
+import { useEffect, useState } from 'react'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
+import { deleteVault, selectChainsPerVault, selectVaultToEdit, useAppDispatch } from '@/redux'
+import { useNavigation, useRouter } from 'expo-router'
+import { useGnoNativeContext } from '@gnolang/gnonative'
+import { SafeAreaView, Button, Text, Container, TextField, Spacer, TopModalBar } from '@/modules/ui-components'
+import { AntDesign, FontAwesome6, Octicons } from '@expo/vector-icons'
+import { useTheme } from 'styled-components/native'
 
 const Page = () => {
-
   const vault = useSelector(selectVaultToEdit)
-  const dispatch = useAppDispatch();
-  const router = useRouter();
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
-  const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [addressBech32, setAddressBech32] = useState('');
+  const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [addressBech32, setAddressBech32] = useState('')
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
-  const { gnonative } = useGnoNativeContext();
-  const theme = useTheme();
+  const { gnonative } = useGnoNativeContext()
+  const theme = useTheme()
 
   useEffect(() => {
-    (
-      async () => {
-        if (!vault) return;
+    ;(async () => {
+      if (!vault) return
 
-        const address = await gnonative.addressToBech32(vault.keyInfo.address);
-        setAddressBech32(address);
+      const address = await gnonative.addressToBech32(vault.keyInfo.address)
+      setAddressBech32(address)
 
-        // const chains = useSelector(selectChainsPerVault(vault.keyInfo.address));
-        // console.log('xxxx', chains);
-
-      }
-    )()
-  }, [vault]);
+      // const chains = useSelector(selectChainsPerVault(vault.keyInfo.address));
+      // console.log('xxxx', chains);
+    })()
+  }, [vault])
 
   const onSave = () => {
     // TODO: VALIDATE THE NAME HERE
@@ -47,14 +43,14 @@ const Page = () => {
   }
 
   const onDeleteVault = async () => {
-    setShowDeleteModal(true);
-  };
+    setShowDeleteModal(true)
+  }
 
   const onConfirmDelete = async () => {
-    if (!vault) return;
+    if (!vault) return
     await dispatch(deleteVault({ vault: vault.keyInfo })).unwrap()
-    setShowDeleteModal(false);
-    router.replace("/home");
+    setShowDeleteModal(false)
+    router.replace('/home')
   }
 
   return (
@@ -63,7 +59,6 @@ const Page = () => {
         <TopModalBar />
 
         <Container style={{ flex: 1 }}>
-
           <Text.H1>Update the</Text.H1>
           <View style={{ flexDirection: 'row' }}>
             <Text.H1>Vault </Text.H1>
@@ -82,16 +77,23 @@ const Page = () => {
           </TextCopy>
 
           <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'flex-end' }}>
-            <Button style={{ width: 110 }} color="tertirary" onPress={onDeleteVault}
-              endIcon={
-                <FontAwesome6 name='trash-can' size={16} color='black' />
-              }>Delete</Button>
+            <Button
+              style={{ width: 110 }}
+              color="tertirary"
+              onPress={onDeleteVault}
+              endIcon={<FontAwesome6 name="trash-can" size={16} color="black" />}
+            >
+              Delete
+            </Button>
             <View style={{ width: 110 }} />
-            <Button onPress={() => navigation.goBack()} color='primary' endIcon={<AntDesign name="reload1" size={16} color="white" />}>
+            <Button
+              onPress={() => navigation.goBack()}
+              color="primary"
+              endIcon={<AntDesign name="reload1" size={16} color="white" />}
+            >
               Cancel
             </Button>
           </View>
-
         </Container>
 
         <ModalConfirmDelete
@@ -104,7 +106,7 @@ const Page = () => {
         />
       </SafeAreaView>
     </>
-  );
+  )
 }
 
-export default Page;
+export default Page

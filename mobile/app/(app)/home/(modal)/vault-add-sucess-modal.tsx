@@ -1,12 +1,10 @@
-
-import { ButtonIcon, Text, TopModalBar } from "@/modules/ui-components"
-import { Feather } from "@expo/vector-icons"
-import { useRouter } from "expo-router"
-import { SafeAreaView, View } from "react-native"
-import { useTheme } from "styled-components/native"
+import { ButtonIcon, Text, TopModalBar } from '@/modules/ui-components'
+import { Feather } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { SafeAreaView, View } from 'react-native'
+import { useTheme } from 'styled-components/native'
 
 const Page = () => {
-
   const router = useRouter()
   const theme = useTheme()
 
@@ -29,18 +27,14 @@ const Page = () => {
       </View>
 
       <View style={{ justifyContent: 'flex-end' }}>
-
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <ButtonIcon size={60} color='primary' onPress={() => router.dismiss()}>
-            <Feather name="check" size={30} color='white' />
+          <ButtonIcon size={60} color="primary" onPress={() => router.dismiss()}>
+            <Feather name="check" size={30} color="white" />
           </ButtonIcon>
         </View>
       </View>
-
-
     </SafeAreaView>
   )
-
 }
 
 export default Page

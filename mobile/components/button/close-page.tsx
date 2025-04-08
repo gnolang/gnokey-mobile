@@ -1,35 +1,35 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { useRouter } from 'expo-router'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
-const IconClose = () => <Ionicons name="close" size={24} color="black" />;
-const IconLeft = () => <Ionicons name="arrow-back" size={24} color="black" />;
+const IconClose = () => <Ionicons name="close" size={24} color="black" />
+const IconLeft = () => <Ionicons name="arrow-back" size={24} color="black" />
 
 interface Props {
-  onCloseHandler?: () => {};
-  iconType?: "close" | "back";
+  onCloseHandler?: () => {}
+  iconType?: 'close' | 'back'
 }
 
-function ClosePage({ onCloseHandler, iconType = "close" }: Props) {
-  const router = useRouter();
+function ClosePage({ onCloseHandler, iconType = 'close' }: Props) {
+  const router = useRouter()
 
   const onPress = () => {
-    onCloseHandler ? onCloseHandler() : router.back();
-  };
+    onCloseHandler ? onCloseHandler() : router.back()
+  }
 
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      {iconType === "close" ? <IconClose /> : <IconLeft />}
+      {iconType === 'close' ? <IconClose /> : <IconLeft />}
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   button: {
-    position: "absolute",
+    position: 'absolute',
     paddingLeft: 10,
-    paddingTop: 40,
-  },
-});
+    paddingTop: 40
+  }
+})
 
-export default ClosePage;
+export default ClosePage

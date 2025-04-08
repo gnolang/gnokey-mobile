@@ -1,58 +1,62 @@
-import { createAsyncThunk, createSlice, Vault } from "@reduxjs/toolkit";
-import { GnoNativeApi, KeyInfo } from "@gnolang/gnonative";
-import { ThunkExtra } from "@/providers/redux-provider";
+import { createAsyncThunk, createSlice, Vault } from '@reduxjs/toolkit'
+import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
+import { ThunkExtra } from '@/providers/redux-provider'
 
 export interface VaultEditState {
-  vaultToEdit: Vault | undefined;
+  vaultToEdit: Vault | undefined
 }
 
 const initialState: VaultEditState = {
-  vaultToEdit: undefined,
-};
+  vaultToEdit: undefined
+}
 
 interface SaveChangesParam {
-  newName: string;
+  newName: string
 }
 
 interface DeleteVaultParam {
-  vault: KeyInfo;
+  vault: KeyInfo
 }
 
-export const deleteVault = createAsyncThunk<boolean, DeleteVaultParam, ThunkExtra>("vault/deleteVault", async (param, thunkAPI) => {
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
-  const { vault } = param;
+export const deleteVault = createAsyncThunk<boolean, DeleteVaultParam, ThunkExtra>(
+  'vault/deleteVault',
+  async (param, thunkAPI) => {
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+    const { vault } = param
 
-  await gnonative.deleteAccount(vault.name, undefined, true);
+    await gnonative.deleteAccount(vault.name, undefined, true)
 
-  return true
-})
+    return true
+  }
+)
 
-export const saveChanges = createAsyncThunk<boolean, SaveChangesParam, ThunkExtra>("vault/saveChanges", async (param, thunkAPI) => {
-  const { newName } = param;
+export const saveChanges = createAsyncThunk<boolean, SaveChangesParam, ThunkExtra>(
+  'vault/saveChanges',
+  async (param, thunkAPI) => {
+    const { newName } = param
 
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi;
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
-  // TODO: Implement the save changes logic using the gnonative.
+    // TODO: Implement the save changes logic using the gnonative.
 
-  return true;
-});
+    return true
+  }
+)
 
 export const vaultEditSlice = createSlice({
-  name: "vaultEdit",
+  name: 'vaultEdit',
   initialState,
   reducers: {
     setVaultToEdit: (state, action) => {
-      state.vaultToEdit = action.payload.vault;
+      state.vaultToEdit = action.payload.vault
     }
   },
-  extraReducers: (builder) => {
-
-  },
+  extraReducers: (builder) => {},
   selectors: {
-    selectVaultToEdit: (state) => state.vaultToEdit,
-  },
-});
+    selectVaultToEdit: (state) => state.vaultToEdit
+  }
+})
 
-export const { setVaultToEdit } = vaultEditSlice.actions;
+export const { setVaultToEdit } = vaultEditSlice.actions
 
-export const { selectVaultToEdit } = vaultEditSlice.selectors;
+export const { selectVaultToEdit } = vaultEditSlice.selectors

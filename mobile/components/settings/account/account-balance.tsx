@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from "react";
-import Text from "@/components/text";
-import { KeyInfo, useGnoNativeContext } from "@gnolang/gnonative";
-import * as Application from "expo-application";
+import React, { useEffect, useState } from 'react'
+import Text from '@/components/text'
+import { KeyInfo, useGnoNativeContext } from '@gnolang/gnonative'
+import * as Application from 'expo-application'
 
 interface Props {
-  activeAccount: KeyInfo | undefined;
+  activeAccount: KeyInfo | undefined
 }
 
 export function AccountBalance({ activeAccount }: Props) {
-  const [address, setAddress] = useState<string | undefined>(undefined);
-  const [balance, setBalance] = useState<string | undefined>(undefined);
+  const [address, setAddress] = useState<string | undefined>(undefined)
+  const [balance, setBalance] = useState<string | undefined>(undefined)
 
-  const { gnonative } = useGnoNativeContext();
+  const { gnonative } = useGnoNativeContext()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (!activeAccount) {
-        return;
+        return
       }
 
       gnonative.addressToBech32(activeAccount.address).then((address) => {
-        setAddress(address);
-      });
+        setAddress(address)
+      })
       gnonative
         .queryAccount(activeAccount.address)
         .then((balance) => {
-          setBalance(balance.accountInfo?.coins.reduce((acc, coin) => acc + coin.amount.toString() + coin.denom + " ", ""));
+          setBalance(balance.accountInfo?.coins.reduce((acc, coin) => acc + coin.amount.toString() + coin.denom + ' ', ''))
         })
         .catch((error) => {
-          console.log("Error on fetching balance", JSON.stringify(error));
-          setBalance("Error on fetching balance. Please check the logs.");
-        });
-    })();
-  }, [activeAccount]);
+          console.log('Error on fetching balance', JSON.stringify(error))
+          setBalance('Error on fetching balance. Please check the logs.')
+        })
+    })()
+  }, [activeAccount])
 
   if (!activeAccount) {
     return (
@@ -40,7 +40,7 @@ export function AccountBalance({ activeAccount }: Props) {
         <Text.HeaderSubtitle>Active Account:</Text.HeaderSubtitle>
         <Text.Body style={{ fontSize: 14 }}>No active account.</Text.Body>
       </>
-    );
+    )
   }
 
   return (
@@ -54,5 +54,5 @@ export function AccountBalance({ activeAccount }: Props) {
       <Text.Subheadline>Balance:</Text.Subheadline>
       <Text.Body>{balance}</Text.Body>
     </>
-  );
+  )
 }

@@ -1,3 +1,3 @@
-import { DefaultTheme } from './themes/default-theme';
+import { DefaultTheme } from './themes/default-theme'
 
-export { DefaultTheme };
+export { DefaultTheme }

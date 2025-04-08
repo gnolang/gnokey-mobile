@@ -1,18 +1,18 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import { GnoNativeApi, useGnoNativeContext } from "@gnolang/gnonative";
-import rootReducer from "@/redux/root-reducer";
+import React from 'react'
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
+import { GnoNativeApi, useGnoNativeContext } from '@gnolang/gnonative'
+import rootReducer from '@/redux/root-reducer'
 interface Props {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 export interface ThunkExtra {
-  extra: { gnonative: GnoNativeApi };
+  extra: { gnonative: GnoNativeApi }
 }
 
 const ReduxProvider: React.FC<Props> = ({ children }) => {
   // Exposing GnoNative API to reduxjs/toolkit
-  const { gnonative } = useGnoNativeContext();
+  const { gnonative } = useGnoNativeContext()
 
   const store = configureStore({
     reducer: rootReducer,
@@ -24,14 +24,12 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
           // https://redux.js.org/tutorials/essentials/part-6-performance-normalization#thunk-arguments
           extraArgument: {
             gnonative
-          },
-        },
-      }),
+          }
+        }
+      })
   })
 
-  return <Provider store={store}>
-    {children}
-  </Provider>;
-};
+  return <Provider store={store}>{children}</Provider>
+}
 
-export { ReduxProvider };
+export { ReduxProvider }

@@ -18,8 +18,4 @@ export * from './ui/SafeAreaView'
 
 export { FormItem, FormItemInline } from './form/FormItem'
 
-
-export {
-  ThemeProvider, DefaultTheme, TextField, Container, BottonPanel, Spacer, ErrorBox, Alert, Text, TopModalBar,
-  Checkbox
-}
+export { ThemeProvider, DefaultTheme, TextField, Container, BottonPanel, Spacer, ErrorBox, Alert, Text, TopModalBar, Checkbox }

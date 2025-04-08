@@ -1,30 +1,29 @@
-import Button from "@/components/button";
-import TextInput from "@/components/textinput";
-import { Alert, Spacer } from "@/modules/ui-components";
-import { useState } from "react";
+import Button from '@/components/button'
+import TextInput from '@/components/textinput'
+import { Alert, Spacer } from '@/modules/ui-components'
+import { useState } from 'react'
 
 export interface Props {
-  onCreateMasterPress: (password: string) => void;
-  error?: string;
+  onCreateMasterPress: (password: string) => void
+  error?: string
 }
 
 const SignUpView: React.FC<Props> = ({ onCreateMasterPress, error }) => {
-
-  const [innerError, setInnerError] = useState<string | undefined>(undefined);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [innerError, setInnerError] = useState<string | undefined>(undefined)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const onCreate = () => {
     if (!password || !confirmPassword) {
-      return;
+      return
     }
 
     if (password !== confirmPassword) {
-      setInnerError("Passwords do not match.");
-      return;
+      setInnerError('Passwords do not match.')
+      return
     }
 
-    onCreateMasterPress(password);
+    onCreateMasterPress(password)
   }
 
   return (
@@ -41,7 +40,7 @@ const SignUpView: React.FC<Props> = ({ onCreateMasterPress, error }) => {
       <Spacer space={8} />
       <Button.TouchableOpacity title="Create Master password" onPress={onCreate} variant="primary" />
     </>
-  );
+  )
 }
 
-export default SignUpView;
+export default SignUpView

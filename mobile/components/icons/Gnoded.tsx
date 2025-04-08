@@ -1,5 +1,5 @@
-import * as React from "react";
-import Svg, { G, Path, Rect, SvgProps } from "react-native-svg";
+import * as React from 'react'
+import Svg, { G, Path, Rect, SvgProps } from 'react-native-svg'
 
 function Gnod(props: SvgProps) {
   return (
@@ -59,7 +59,7 @@ function Gnod(props: SvgProps) {
         />
       </G>
     </Svg>
-  );
+  )
 }
 
-export default Gnod;
+export default Gnod

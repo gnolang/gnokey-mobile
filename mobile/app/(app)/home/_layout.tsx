@@ -1,26 +1,37 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router'
 
-type Group<T extends string> = `(${T})`;
-export type SharedSegment = Group<"feed"> | Group<"search"> | Group<"profile">;
+type Group<T extends string> = `(${T})`
+export type SharedSegment = Group<'feed'> | Group<'search'> | Group<'profile'>
 
 export default function AppLayout() {
-  return <Stack
-    screenOptions={{
-      headerShown: false,
-      headerLargeTitle: true,
-      headerBackVisible: false,
-    }}
-  >
-    <Stack.Screen name="home" />
-    <Stack.Screen name="profile" />
-    <Stack.Screen name="(modal)/vault-add-modal" options={{
-      presentation: 'modal'
-    }} />
-    <Stack.Screen name="(modal)/vault-add-sucess-modal" options={{
-      presentation: 'modal'
-    }} />
-    <Stack.Screen name="(modal)/vault-detail-modal" options={{
-      presentation: 'modal'
-    }} />
-  </Stack>
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        headerLargeTitle: true,
+        headerBackVisible: false
+      }}
+    >
+      <Stack.Screen name="home" />
+      <Stack.Screen name="profile" />
+      <Stack.Screen
+        name="(modal)/vault-add-modal"
+        options={{
+          presentation: 'modal'
+        }}
+      />
+      <Stack.Screen
+        name="(modal)/vault-add-sucess-modal"
+        options={{
+          presentation: 'modal'
+        }}
+      />
+      <Stack.Screen
+        name="(modal)/vault-detail-modal"
+        options={{
+          presentation: 'modal'
+        }}
+      />
+    </Stack>
+  )
 }

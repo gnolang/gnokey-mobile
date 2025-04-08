@@ -1,17 +1,17 @@
-import { TouchableOpacity, View, StyleSheet } from "react-native";
-import { useNavigation } from "expo-router";
-import Icons from "../icons";
+import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { useNavigation } from 'expo-router'
+import Icons from '../icons'
 
 interface Props {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 function ModalHeader({ children, ...props }: Props) {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const onCloseHandler = () => {
-    navigation.goBack();
-  };
+    navigation.goBack()
+  }
 
   return (
     <View style={styles.container} {...props}>
@@ -20,22 +20,22 @@ function ModalHeader({ children, ...props }: Props) {
       </TouchableOpacity>
       <View style={styles.children}>{children}</View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    margin: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: 8
   },
   children: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingRight: 32,
-  },
-});
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 32
+  }
+})
 
-export default ModalHeader;
+export default ModalHeader

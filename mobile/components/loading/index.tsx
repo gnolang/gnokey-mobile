@@ -1,4 +1,4 @@
-import LoadingModal from "./loading-modal";
-import Loading from "./loading";
+import LoadingModal from './loading-modal'
+import Loading from './loading'
 
-export { LoadingModal, Loading };
+export { LoadingModal, Loading }

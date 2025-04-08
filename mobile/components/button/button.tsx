@@ -1,6 +1,6 @@
-import { colors } from "@/assets/styles/colors";
-import { ActivityIndicator, TouchableOpacityProps } from "react-native";
-import styled, { css } from "styled-components/native";
+import { colors } from '@/assets/styles/colors'
+import { ActivityIndicator, TouchableOpacityProps } from 'react-native'
+import styled, { css } from 'styled-components/native'
 
 const variants = {
   common: css`
@@ -22,10 +22,10 @@ const variants = {
   text: css`
     background: transparent;
   `,
-  "primary-red": css`
+  'primary-red': css`
     background-color: red;
-  `,
-};
+  `
+}
 
 const textVariants = {
   common: css`
@@ -44,26 +44,26 @@ const textVariants = {
   secondary: css`
     color: white;
   `,
-  "primary-red": css`
+  'primary-red': css`
     color: white;
-  `,
-};
+  `
+}
 
-export type ButtonVariant = keyof typeof variants;
+export type ButtonVariant = keyof typeof variants
 
 export const ButtonBase = styled.TouchableOpacity<{ variant: ButtonVariant }>`
   padding: 10px;
   border-radius: 5px;
   ${variants.common}
-  ${(props) => variants[props.variant || "primary"]}
-`;
+  ${(props) => variants[props.variant || 'primary']}
+`
 
 export type Props = {
-  title: string;
-  onPress: () => void;
-  loading?: boolean;
-  variant: ButtonVariant;
-} & TouchableOpacityProps;
+  title: string
+  onPress: () => void
+  loading?: boolean
+  variant: ButtonVariant
+} & TouchableOpacityProps
 
 const Button: React.FC<Props> = ({ variant, title, loading, ...rest }) => {
   return (
@@ -71,12 +71,12 @@ const Button: React.FC<Props> = ({ variant, title, loading, ...rest }) => {
       {rest.children}
       {loading ? <ActivityIndicator size="small" /> : <ButtonLabel variant={variant}>{title}</ButtonLabel>}
     </ButtonBase>
-  );
-};
+  )
+}
 
 export const ButtonLabel = styled.Text<{ variant: Partial<ButtonVariant> }>`
   ${textVariants.common}
-  ${(props) => textVariants[props.variant || "primary"]}
-`;
+  ${(props) => textVariants[props.variant || 'primary']}
+`
 
-export default Button;
+export default Button

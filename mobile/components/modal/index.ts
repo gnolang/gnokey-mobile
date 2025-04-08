@@ -1,9 +1,9 @@
-import ModalHeader from './ModalHeader';
-import ModalContent from './ModalContent';
+import ModalHeader from './ModalHeader'
+import ModalContent from './ModalContent'
 
 export const ModalView = {
   Header: ModalHeader,
-  Content: ModalContent,
-};
+  Content: ModalContent
+}
 
-export { ModalConfirmDelete } from './ModalConfirm';
+export { ModalConfirmDelete } from './ModalConfirm'

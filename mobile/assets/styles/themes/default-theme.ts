@@ -1,4 +1,4 @@
-import type { Theme } from '@react-navigation/native';
+import type { Theme } from '@react-navigation/native'
 
 export const DefaultTheme: Theme = {
   dark: false,
@@ -8,6 +8,6 @@ export const DefaultTheme: Theme = {
     card: 'rgb(255, 255, 255)',
     text: 'rgb(28, 28, 30)',
     border: 'rgb(216, 216, 216)',
-    notification: 'rgb(255, 59, 48)',
+    notification: 'rgb(255, 59, 48)'
   }
 }

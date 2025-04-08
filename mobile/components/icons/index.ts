@@ -1,12 +1,12 @@
-import Close from "./Close";
-import ArrowLeft from "./ArrowLeft";
-import Exclamation from "./Exclamation";
-import CheckMark from "./CheckMark";
-import Home from "./Home";
-import Search from "./Search";
-import Profile from "./Profile";
-import Gnod from "./Gnod";
-import Gnoded from "./Gnoded";
+import Close from './Close'
+import ArrowLeft from './ArrowLeft'
+import Exclamation from './Exclamation'
+import CheckMark from './CheckMark'
+import Home from './Home'
+import Search from './Search'
+import Profile from './Profile'
+import Gnod from './Gnod'
+import Gnoded from './Gnoded'
 
 const Icons = {
   ArrowLeft,
@@ -18,6 +18,6 @@ const Icons = {
   Profile,
   Gnod,
   Gnoded
-};
+}
 
-export default Icons;
+export default Icons

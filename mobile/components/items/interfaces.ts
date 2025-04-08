@@ -1,24 +1,24 @@
 export interface MenuItemProps {
-	onPress?: () => void
-	testID?: string
-	noRightArrow?: boolean
-	children?: React.ReactNode
+  onPress?: () => void
+  testID?: string
+  noRightArrow?: boolean
+  children?: React.ReactNode
 }
 
 export interface MenuItemWithIconProps extends MenuItemProps {
-	iconName: string
+  iconName: string
 }
 
 export interface IsToggleProps {
-	isToggleOn?: boolean | null
+  isToggleOn?: boolean | null
 }
 
 export interface ToggleMenuItemWithIconProps extends MenuItemWithIconProps, IsToggleProps {}
 
 export interface OnToggleProps {
-	onToggle?: () => void
+  onToggle?: () => void
 }
 
 export interface PackProps {
-	pack?: string
+  pack?: string
 }

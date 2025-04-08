@@ -1,63 +1,61 @@
-import { useEffect, useRef, useState } from "react";
-import { FlatList, View } from "react-native";
-import { useRouter } from "expo-router";
-import { Layout } from "@/components/index";
-import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from "@/redux";
-import { useGnoNativeContext } from "@gnolang/gnonative";
-import VaultListItem from "@/components/list/vault-list/VaultListItem";
-import { setVaultToEdit, fetchVaults } from "@/redux";
-import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from "@/modules/ui-components";
-import { FontAwesome6 } from "@expo/vector-icons";
-import styled from "styled-components/native";
-import { ModalConfirm } from "@/components/modal/ModalConfirm";
+import { useEffect, useRef, useState } from 'react'
+import { FlatList, View } from 'react-native'
+import { useRouter } from 'expo-router'
+import { Layout } from '@/components/index'
+import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
+import { useGnoNativeContext } from '@gnolang/gnonative'
+import VaultListItem from '@/components/list/vault-list/VaultListItem'
+import { setVaultToEdit, fetchVaults } from '@/redux'
+import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
+import { FontAwesome6 } from '@expo/vector-icons'
+import styled from 'styled-components/native'
+import { ModalConfirm } from '@/components/modal/ModalConfirm'
 
 export default function Page() {
-
   const isFirstRender = useRef(true)
 
-  const [nameSearch, setNameSearch] = useState<string>("");
-  const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([]);
-  const [loading, setLoading] = useState<string | undefined>(undefined);
+  const [nameSearch, setNameSearch] = useState<string>('')
+  const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([])
+  const [loading, setLoading] = useState<string | undefined>(undefined)
 
-  const route = useRouter();
-  const dispatch = useAppDispatch();
+  const route = useRouter()
+  const dispatch = useAppDispatch()
   const vaults = useAppSelector(selectVaults)
 
   useEffect(() => {
-    (async () => {
-
+    ;(async () => {
       if (!isFirstRender.current) {
         return
       }
 
       try {
-        setLoading("Loading accounts...");
-        await dispatch(fetchVaults()).unwrap();
-        dispatch(checkForKeyOnChains()).unwrap();
+        setLoading('Loading accounts...')
+        await dispatch(fetchVaults()).unwrap()
+        dispatch(checkForKeyOnChains()).unwrap()
       } catch (error: unknown | Error) {
-        console.error(error);
+        console.error(error)
       } finally {
         isFirstRender.current = false
-        setLoading(undefined);
+        setLoading(undefined)
       }
     })()
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (nameSearch) {
-      setFilteredAccounts(vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : []);
+      setFilteredAccounts(vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : [])
     } else {
-      setFilteredAccounts(vaults || []);
+      setFilteredAccounts(vaults || [])
     }
-  }, [nameSearch, vaults]);
+  }, [nameSearch, vaults])
 
   const onChangeAccountHandler = async (vault: Vault) => {
     await dispatch(setVaultToEdit({ vault }))
-    route.push("/home/vault-detail-modal")
-  };
+    route.push('/home/vault-detail-modal')
+  }
 
   const navigateToAddKey = () => {
-    route.push("/tosign");
+    route.push('/tosign')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {
@@ -72,18 +70,18 @@ export default function Page() {
           <Text.Body>{loading}</Text.Body>
         </Layout.Body>
       </Layout.Container>
-    );
+    )
   }
 
   return (
     <>
       <Layout.Container>
         <AppBar>
-          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color='tertirary'>
-            <FontAwesome6 name='user' size={20} color='black' />
+          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color="tertirary">
+            <FontAwesome6 name="user" size={20} color="black" />
           </ButtonIcon>
 
-          <Button onPress={navigateToAddKey} color='tertirary' endIcon={<FontAwesome6 name='add' size={16} color='black' />}>
+          <Button onPress={navigateToAddKey} color="tertirary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
             New Vault
           </Button>
         </AppBar>
@@ -94,45 +92,58 @@ export default function Page() {
             <Text.H1 style={{ color: 'white' }}>Vault List</Text.H1>
           </View>
 
-          <TextField placeholder='Search Vault' value={nameSearch} onChangeText={setNameSearch} autoCapitalize="none" autoCorrect={false} />
+          <TextField
+            placeholder="Search Vault"
+            value={nameSearch}
+            onChangeText={setNameSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
           <Spacer />
-          <Text.Body style={{ textAlign: 'center' }} >{filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}</Text.Body>
+          <Text.Body style={{ textAlign: 'center' }}>
+            {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
+          </Text.Body>
           <Spacer />
-
 
           {filteredAccounts && (
             <FlatList
               data={filteredAccounts}
               contentContainerStyle={{ paddingBottom: 120 }}
               renderItem={({ item }) => (
-                <VaultListItem vault={item}
+                <VaultListItem
+                  vault={item}
                   onVaultPress={onChangeAccountHandler}
                   chains={item.chains}
-                  onBookmarkPress={onBookmarkPress(item)} />
+                  onBookmarkPress={onBookmarkPress(item)}
+                />
               )}
               keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={ vaults?.length == 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
+              ListEmptyComponent={vaults?.length == 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
             />
           )}
         </BodyAlignedBotton>
       </Layout.Container>
     </>
-  );
+  )
 }
 
 const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
-  const [loading, setLoading] = useState<string | undefined>(undefined);
-  const [visible, setVisible] = useState<boolean>(true);
+  const [loading, setLoading] = useState<string | undefined>(undefined)
+  const [visible, setVisible] = useState<boolean>(true)
   return (
-    <ModalConfirm visible={visible}
+    <ModalConfirm
+      visible={visible}
       onCancel={() => setVisible(false)}
-      onConfirm={() => { onConfirm() }}
+      onConfirm={() => {
+        onConfirm()
+      }}
       title="Not Found"
       confirmText="Add Vault"
-      message="Your Vault doesn't exist. Do you want to create a new one?" />)
+      message="Your Vault doesn't exist. Do you want to create a new one?"
+    />
+  )
 }
-
 
 export const BodyAlignedBotton = styled.View`
   width: 100%;
@@ -141,4 +152,4 @@ export const BodyAlignedBotton = styled.View`
   padding-horizontal: 8px;
   justify-content: flex-end;
   padding-bottom: 12px;
-`;
+`

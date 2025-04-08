@@ -1,11 +1,11 @@
-import styled from "styled-components/native";
+import styled from 'styled-components/native'
 
 //styleName: title/xs/medium;
 const Title = styled.Text`
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 0;
-`;
+`
 
 /** styleName: body/base/regular; */
 const Body = styled.Text`
@@ -14,7 +14,7 @@ const Body = styled.Text`
   line-height: 21px;
   letter-spacing: 0;
   text-align: left;
-`;
+`
 
 /** styleName: body/base/medium; */
 const BodyMedium = styled.Text`
@@ -23,7 +23,7 @@ const BodyMedium = styled.Text`
   line-height: 21px;
   letter-spacing: 0;
   text-align: left;
-`;
+`
 
 const Caption1 = styled.Text`
   font-size: 11px;
@@ -31,7 +31,7 @@ const Caption1 = styled.Text`
   line-height: 13px;
   letter-spacing: 0.5px;
   text-align: center;
-`;
+`
 
 const HeaderTitle = styled.Text`
   color: black;
@@ -40,7 +40,7 @@ const HeaderTitle = styled.Text`
   line-height: 22px;
   letter-spacing: 0;
   text-align: center;
-`;
+`
 
 const HeaderSubtitle = styled.Text`
   padding-top: 4px;
@@ -50,7 +50,7 @@ const HeaderSubtitle = styled.Text`
   line-height: 18px;
   letter-spacing: 0.25px;
   text-align: center;
-`;
+`
 
 export const HeaderTitleText = styled.Text`
   font-size: 17px;
@@ -58,7 +58,7 @@ export const HeaderTitleText = styled.Text`
   line-height: 22px;
   letter-spacing: 0;
   text-align: center;
-`;
+`
 
 export const HeaderSubtitleText = styled.Text`
   padding-top: 4px;
@@ -68,7 +68,7 @@ export const HeaderSubtitleText = styled.Text`
   line-height: 18px;
   letter-spacing: 0.25px;
   text-align: center;
-`;
+`
 
 //styleName: body/subheadline/medium;
 const Subheadline = styled.Text`
@@ -78,7 +78,7 @@ const Subheadline = styled.Text`
   line-height: 20px;
   letter-spacing: 0;
   text-align: left;
-`;
+`
 
 const InputLabel = styled.Text`
   color: gray;
@@ -87,8 +87,19 @@ const InputLabel = styled.Text`
   line-height: 16px;
   letter-spacing: 0.5px;
   text-align: left;
-`;
+`
 
-const Text = { Title, Body, HeaderSubtitle, HeaderTitle, HeaderTitleText, HeaderSubtitleText, Subheadline, BodyMedium, Caption1, InputLabel };
+const Text = {
+  Title,
+  Body,
+  HeaderSubtitle,
+  HeaderTitle,
+  HeaderTitleText,
+  HeaderSubtitleText,
+  Subheadline,
+  BodyMedium,
+  Caption1,
+  InputLabel
+}
 
-export default Text;
+export default Text

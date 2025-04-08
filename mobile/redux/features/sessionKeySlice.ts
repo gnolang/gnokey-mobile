@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ThunkExtra } from "@/providers/redux-provider";
-import { KeyInfo } from "@gnolang/gnonative";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { ThunkExtra } from '@/providers/redux-provider'
+import { KeyInfo } from '@gnolang/gnonative'
 
 export interface SessionKeyInfo {
   key: string
@@ -9,46 +9,45 @@ export interface SessionKeyInfo {
 }
 
 export interface SessionKeyState {
-  sessionKeys: Map<string, SessionKeyInfo>;
+  sessionKeys: Map<string, SessionKeyInfo>
 }
 
 const initialState: SessionKeyState = {
-  sessionKeys: new Map(),
-};
+  sessionKeys: new Map()
+}
 
-export const newSessionKey = createAsyncThunk<SessionKeyInfo, { keyInfo: KeyInfo, validityMinutes:number }, ThunkExtra>("sessionkey/newSession", async (param, config) => {
-  const { keyInfo, validityMinutes } = param;
+export const newSessionKey = createAsyncThunk<SessionKeyInfo, { keyInfo: KeyInfo; validityMinutes: number }, ThunkExtra>(
+  'sessionkey/newSession',
+  async (param, config) => {
+    const { keyInfo, validityMinutes } = param
 
-  // TODO: implement the actual session key generation
-  const key = new Date().getTime().toString();
+    // TODO: implement the actual session key generation
+    const key = new Date().getTime().toString()
 
-  return { expires_at: new Date(new Date().getTime() + validityMinutes * 60 * 1000), keyInfo, key };
-})
+    return { expires_at: new Date(new Date().getTime() + validityMinutes * 60 * 1000), keyInfo, key }
+  }
+)
 
 export const sessionKeySlice = createSlice({
-  name: "sessionKey",
+  name: 'sessionKey',
   initialState,
-  reducers: {
-  },
+  reducers: {},
 
   extraReducers(builder) {
     builder.addCase(newSessionKey.fulfilled, (state, action) => {
-      const sessionKeyInfo = action.payload;
+      const sessionKeyInfo = action.payload
       state.sessionKeys = new Map()
       try {
-        state.sessionKeys.set(sessionKeyInfo.key, sessionKeyInfo);
-
+        state.sessionKeys.set(sessionKeyInfo.key, sessionKeyInfo)
       } catch (error) {
-        console.error("Error adding session key", error);
+        console.error('Error adding session key', error)
       }
     })
   },
 
-  selectors: {
+  selectors: {}
+})
 
-  },
-});
+export const {} = sessionKeySlice.actions
 
-export const {  } = sessionKeySlice.actions;
-
-export const { } = sessionKeySlice.selectors;
+export const {} = sessionKeySlice.selectors

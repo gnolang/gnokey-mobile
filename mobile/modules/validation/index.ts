@@ -9,4 +9,4 @@ export const isInvalidURL = (url: string) => {
   } catch (e) {
     return true
   }
-};
+}

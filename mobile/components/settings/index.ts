@@ -1,3 +1,3 @@
-import { AccountBalance } from "./account/account-balance";
+import { AccountBalance } from './account/account-balance'
 
-export { AccountBalance };
+export { AccountBalance }

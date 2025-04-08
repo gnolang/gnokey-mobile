@@ -2,18 +2,13 @@
   "expo": {
     "name": "gnokey",
     "slug": "gnokey",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "0.0.1",
     "orientation": "portrait",
     "scheme": "land.gno.gnokey",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "land.gno.keymanager.ios",

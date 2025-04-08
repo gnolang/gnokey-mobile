@@ -1,12 +1,12 @@
-import Text from "@/components/text";
-import { View } from "react-native";
+import Text from '@/components/text'
+import { View } from 'react-native'
 
 function SearchEmptyList() {
   return (
     <View>
       <Text.Body>No results found</Text.Body>
     </View>
-  );
+  )
 }
 
-export default SearchEmptyList;
+export default SearchEmptyList

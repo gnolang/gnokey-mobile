@@ -1,31 +1,31 @@
-import styled from "styled-components/native";
-import React from "react";
-import { StyleProp, TextStyle } from "react-native";
-import * as Text from "../text";
+import styled from 'styled-components/native'
+import React from 'react'
+import { StyleProp, TextStyle } from 'react-native'
+import * as Text from '../text'
 
 type Props = {
-  label: string;
-  labelStyle?: StyleProp<TextStyle> | undefined;
-} & React.ComponentProps<typeof Container>;
+  label: string
+  labelStyle?: StyleProp<TextStyle> | undefined
+} & React.ComponentProps<typeof Container>
 
 export const FormItem: React.FC<Props> = ({ children, label, labelStyle = { fontWeight: 500 }, ...props }) => {
   return (
-    <Container {...props} >
+    <Container {...props}>
       <TextLabel style={labelStyle}>{label}</TextLabel>
       {children}
     </Container>
-  );
+  )
 }
 
 export const FormItemInline = styled(FormItem)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  `
+`
 
 const TextLabel = styled(Text.Body)`
   padding-bottom: 4px;
-  `
+`
 
 const Container = styled.View`
   align-items: flex-start;

@@ -1,15 +1,15 @@
-import React from "react";
-import { ActivityIndicator, Modal, StyleSheet, View } from "react-native";
-import Text from "../text";
-import { colors } from "@/assets/styles/colors";
+import React from 'react'
+import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
+import Text from '../text'
+import { colors } from '@/assets/styles/colors'
 
 type Props = {
-  visible: boolean;
-  message?: string;
-};
+  visible: boolean
+  message?: string
+}
 
-export default function LoadingModal({ visible, message = "Loading" }: Props) {
-  if (!visible) return null;
+export default function LoadingModal({ visible, message = 'Loading' }: Props) {
+  if (!visible) return null
 
   return (
     <Modal animationType="fade" transparent={true}>
@@ -20,37 +20,37 @@ export default function LoadingModal({ visible, message = "Loading" }: Props) {
         </View>
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
-    backgroundColor: "#0008",
+    backgroundColor: '#0008'
   },
   modalView: {
     padding: 40,
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 5,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   modalText: {
     marginVertical: 15,
-    textAlign: "center",
-    fontSize: 16,
-  },
-});
+    textAlign: 'center',
+    fontSize: 16
+  }
+})

@@ -6,7 +6,6 @@ type Props = {
 }
 
 const ThemeProvider = ({ children }: Props) => {
-
   const theme: DefaultTheme = {
     borderRadius: 20,
 
@@ -19,19 +18,19 @@ const ThemeProvider = ({ children }: Props) => {
       black: '#000000',
       white: '#ffffff',
 
-      gray: '#A1A1A1',
+      gray: '#A1A1A1'
     },
 
     textinputs: {
       primary: {
         placeholder: {
-          color: '#000000',
+          color: '#000000'
         },
-        background: '#4690FF',
+        background: '#4690FF'
       },
       secondary: {
-        background: '#ffffff',
-      },
+        background: '#ffffff'
+      }
     },
 
     buttons: {
@@ -44,9 +43,9 @@ const ThemeProvider = ({ children }: Props) => {
         primary: '#ffffff',
         secondary: '#000000',
         tertirary: '#000000',
-        danger: '#ffffff',
-      },
-    },
+        danger: '#ffffff'
+      }
+    }
   }
 
   return <RNThemeProvider theme={theme}>{children}</RNThemeProvider>

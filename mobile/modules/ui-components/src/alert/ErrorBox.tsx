@@ -6,8 +6,7 @@ type Props = {
 } & React.ComponentProps<typeof View>
 
 export const ErrorBox = ({ children, style, ...rest }: Props) => {
-
-  if (!children) return <View style={[{ height: 30 }, style]} {...rest}/>
+  if (!children) return <View style={[{ height: 30 }, style]} {...rest} />
 
   return (
     <ErrorBoxWrapper style={style} {...rest}>
@@ -17,14 +16,14 @@ export const ErrorBox = ({ children, style, ...rest }: Props) => {
 }
 
 const ErrorBoxWrapper = styled.View`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	text-align: center;
-	font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
   height: 30px;
   padding-horizontal: 8px;
-	color: black;
-	border-radius: ${(props) => props.theme.borderRadius || 20}px;
-	background-color: ${({ theme }) => theme.error.background};
+  color: black;
+  border-radius: ${(props) => props.theme.borderRadius || 20}px;
+  background-color: ${({ theme }) => theme.error.background};
 `

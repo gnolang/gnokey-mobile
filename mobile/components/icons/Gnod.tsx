@@ -1,5 +1,5 @@
-import * as React from "react";
-import Svg, { Path, SvgProps } from "react-native-svg";
+import * as React from 'react'
+import Svg, { Path, SvgProps } from 'react-native-svg'
 
 function Gnod(props: SvgProps) {
   return (
@@ -36,7 +36,7 @@ function Gnod(props: SvgProps) {
         strokeOpacity={1}
       />
     </Svg>
-  );
+  )
 }
 
-export default Gnod;
+export default Gnod

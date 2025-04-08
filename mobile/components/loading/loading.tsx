@@ -1,12 +1,12 @@
-import React from "react";
-import { ActivityIndicator } from "react-native";
-import styled from "styled-components/native";
-import Text from "../text";
-import { Layout } from "..";
+import React from 'react'
+import { ActivityIndicator } from 'react-native'
+import styled from 'styled-components/native'
+import Text from '../text'
+import { Layout } from '..'
 
 type Props = {
-  message: string;
-};
+  message: string
+}
 
 export const Loading: React.FC<Props> = ({ message }) => {
   return (
@@ -18,13 +18,13 @@ export const Loading: React.FC<Props> = ({ message }) => {
         </ViewCenter>
       </Layout.Body>
     </Layout.Container>
-  );
-};
+  )
+}
 
 const ViewCenter = styled.View`
   height: 100%;
   justify-content: center;
   align-items: center;
-`;
+`
 
-export default Loading;
+export default Loading

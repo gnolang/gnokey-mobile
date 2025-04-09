@@ -39,6 +39,7 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
       return
     }
     validateForm(form)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form])
 
   const validateForm = (form: Form) => {

@@ -1,5 +1,4 @@
 import styled from 'styled-components/native'
-import { DefaultTheme } from 'styled-components/native'
 
 export const BottonPanel = styled.View`
   position: absolute;

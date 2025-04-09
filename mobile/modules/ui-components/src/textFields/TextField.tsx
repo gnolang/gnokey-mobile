@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { TextInputProps, Animated, View } from 'react-native'
+import { TextInputProps, Animated } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
@@ -36,6 +36,7 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
       duration: 300,
       useNativeDriver: true
     }).start()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
   return (
@@ -62,14 +63,6 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
     </>
   )
 }
-
-const ErrorText = styled.Text`
-  color: #ff6b6b;
-  background-color: rgba(255, 255, 255, 0.8);
-  font-weight: 700;
-  font-size: 12px;
-  margin-top: 5px;
-`
 
 const Container = styled.View`
   flex-direction: column;

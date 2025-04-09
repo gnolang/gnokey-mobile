@@ -47,7 +47,3 @@ export const sessionKeySlice = createSlice({
 
   selectors: {}
 })
-
-export const {} = sessionKeySlice.actions
-
-export const {} = sessionKeySlice.selectors

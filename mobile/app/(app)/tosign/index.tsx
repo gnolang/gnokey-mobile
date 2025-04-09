@@ -1,4 +1,4 @@
-import { Layout, Ruller, TextInput } from '@/components'
+import { Layout, Ruller } from '@/components'
 import {
   selectClientName,
   selectBech32Address,
@@ -11,28 +11,21 @@ import {
   selectKeyInfo,
   clearLinking,
   selectChainId,
-  selectRemote,
-  selectSession,
-  selectSessionWanted,
-  newSessionKey,
-  SessionKeyInfo
+  selectRemote
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
-import { Children, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity, TextInput as RNTextInput } from 'react-native'
-import { Button, ButtonText, Checkbox, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
+import { ScrollView, View, TouchableOpacity } from 'react-native'
+import { Button, ButtonText, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
 
 export default function Page() {
   const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
   const { gnonative } = useGnoNativeContext()
-  const [validityMinutes, setValidityMinutes] = useState<number>(10)
   const clientName = useAppSelector(selectClientName)
-  const [value, setValue] = useState(0)
-  const [remember, setRemember] = useState(false)
 
   const reason = useAppSelector(reasonSelector)
   const bech32Address = useAppSelector(selectBech32Address)
@@ -66,9 +59,8 @@ export default function Page() {
       if (!chainId || !remote) throw new Error('No chainId or remote found.')
       gnonative.setChainID(chainId)
       gnonative.setRemote(remote)
-
-      const accountNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveAddress("${bech32Address}").Name()`)
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bech32Address])
 
   const signTxAndReturnToRequester = async () => {

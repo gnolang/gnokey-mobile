@@ -32,7 +32,7 @@ export function AccountBalance({ activeAccount }: Props) {
           setBalance('Error on fetching balance. Please check the logs.')
         })
     })()
-  }, [activeAccount])
+  }, [activeAccount, gnonative])
 
   if (!activeAccount) {
     return (

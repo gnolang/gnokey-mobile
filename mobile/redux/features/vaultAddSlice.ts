@@ -63,7 +63,7 @@ type SignUpResponse = { newAccount?: KeyInfo; existingAccount?: KeyInfo; state: 
  */
 export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/signUp', async (param, thunkAPI) => {
   const { name, password, phrase } = param
-  const { registerAccount, selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
+  const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
 
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
@@ -117,7 +117,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
         addProgress(`exisging local address "${localAddress}" and blockchain Users Addr "${blockchainUser.address}"`)
       )
 
-      if (blockchainUser.address == localAddress) {
+      if (blockchainUser.address === localAddress) {
         thunkAPI.dispatch(addProgress(`CASE 1.0 SignUpState.user_exists_on_blockchain_and_local_storage`))
         // CASE 1.0: Offer to do normal signin, or choose new name
         return { newAccount: undefined, state: VaultCreationState.user_exists_on_blockchain_and_local_storage }
@@ -206,7 +206,7 @@ const checkForUserOnLocalStorage = async (gnonative: GnoNativeApi, name: string)
   let userOnLocalStorage: KeyInfo | undefined = undefined
   try {
     userOnLocalStorage = await gnonative.getKeyInfoByNameOrAddress(name)
-  } catch (e) {
+  } catch {
     // TODO: Check for error other than ErrCryptoKeyNotFound(#151)
     return undefined
   }
@@ -292,7 +292,7 @@ const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
     const gasFee = '10000000ugnot'
     const gasWanted = BigInt(20000000)
     const send = [new Coin({ denom: 'ugnot', amount: BigInt(1000000) })]
-    const args: Array<string> = [account.name]
+    const args: string[] = [account.name]
     for await (const response of await gnonative.call(
       'gno.land/r/gnoland/users/v1',
       'Register',
@@ -389,7 +389,9 @@ export const vaultAddSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(addVault.rejected, (state, action) => {
-        action.error.message ? (state.progress = [...state.progress, action.error.message]) : null
+        if (action.error.message) {
+          state.progress = [...state.progress, action.error.message]
+        }
         console.error('signUp.rejected', action)
       })
       .addCase(addVault.fulfilled, (state, action) => {

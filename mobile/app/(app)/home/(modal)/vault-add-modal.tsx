@@ -1,4 +1,4 @@
-import { StyleSheet, View, TextInput as RNTextInput, Alert as RNAlert, Modal, ActivityIndicator } from 'react-native'
+import { View, TextInput as RNTextInput, Alert as RNAlert, Modal, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
@@ -64,7 +64,7 @@ export default function Page() {
       inputRef.current?.focus()
     })
     return unsubscribe
-  }, [navigation])
+  }, [navigation, dispatch])
 
   useEffect(() => {
     ;(async () => {
@@ -105,7 +105,7 @@ export default function Page() {
         router.replace({ pathname: 'home/vault-add-sucess-modal' })
       }
     })()
-  }, [signUpState, newAccount])
+  }, [signUpState, newAccount, dispatch])
 
   const onCreate = async () => {
     setError(undefined)
@@ -213,25 +213,3 @@ export default function Page() {
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 24
-  },
-  main: {
-    flex: 1,
-    justifyContent: 'center',
-    maxWidth: 960,
-    marginHorizontal: 'auto'
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: 'bold'
-  },
-  subtitle: {
-    fontSize: 36,
-    color: '#38434D'
-  }
-})

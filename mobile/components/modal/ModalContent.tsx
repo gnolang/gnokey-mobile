@@ -2,13 +2,6 @@ import { colors } from '@/assets/styles/colors'
 import { View, ViewProps } from 'react-native'
 import styled from 'styled-components/native'
 
-const ModalContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.white};
-  justify-content: flex-end;
-  background-color: gray;
-`
-
 const ModalView = styled.View`
   background-color: ${colors.modal.background};
   border-top-end-radius: 16px;

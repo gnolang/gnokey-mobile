@@ -3,7 +3,6 @@ import { useNavigation } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { signOut, useAppDispatch } from '@/redux'
-import { Layout } from '@/components/index'
 import { LoadingModal } from '@/components/loading'
 import ChangeMasterPassword from '@/views/change-master-password'
 import { AppBar, Button, ButtonProfile, Container, FormItemInline, SafeAreaView, Spacer, Text } from '@/modules/ui-components'
@@ -29,13 +28,16 @@ export default function Page() {
       }
     })
     return unsubscribe
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation])
 
   const fetchAccountData = async () => {
+    setLoading(true)
     const chainId = await gnonative.getChainID()
     const remote = await gnonative.getRemote()
     setChainID(chainId)
     setRemote(remote)
+    setLoading(false)
   }
 
   const onPressChangePass = async () => {

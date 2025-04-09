@@ -12,7 +12,6 @@ import {
   useAppSelector,
   createMasterPass
 } from '@/redux'
-import * as Application from 'expo-application'
 import SignInView from '@/views/signin'
 import SignUpView from '@/views/signup'
 import { Container, Text } from '@/modules/ui-components'
@@ -24,15 +23,13 @@ export default function Root() {
 
   const dispatch = useAppDispatch()
 
-  const appVersion = Application.nativeBuildVersion
-
   const appInitialized = useAppSelector(selectInitialized)
   const hasMasterPassword = useAppSelector(selectMasterPassword)
   const action = useAppSelector(selectAction)
 
   useEffect(() => {
     dispatch(getInitialState())
-  }, [])
+  }, [dispatch])
 
   const onCreateMasterPass = async (masterPassword: string) => {
     try {

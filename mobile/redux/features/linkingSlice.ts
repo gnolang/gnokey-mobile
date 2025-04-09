@@ -52,7 +52,6 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo
       throw new Error('No callback found.')
     }
 
-    const temp = await gnonative.addressToBech32(keyInfo?.address)
     const bech32 = await gnonative.addressToBech32(keyInfo?.address)
 
     Linking.openURL(callback + '?address=' + bech32 + '&cachekill=' + new Date().getTime())

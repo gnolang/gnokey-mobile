@@ -10,10 +10,6 @@ const initialState: VaultEditState = {
   vaultToEdit: undefined
 }
 
-interface SaveChangesParam {
-  newName: string
-}
-
 interface DeleteVaultParam {
   vault: KeyInfo
 }
@@ -25,19 +21,6 @@ export const deleteVault = createAsyncThunk<boolean, DeleteVaultParam, ThunkExtr
     const { vault } = param
 
     await gnonative.deleteAccount(vault.name, undefined, true)
-
-    return true
-  }
-)
-
-export const saveChanges = createAsyncThunk<boolean, SaveChangesParam, ThunkExtra>(
-  'vault/saveChanges',
-  async (param, thunkAPI) => {
-    const { newName } = param
-
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-
-    // TODO: Implement the save changes logic using the gnonative.
 
     return true
   }

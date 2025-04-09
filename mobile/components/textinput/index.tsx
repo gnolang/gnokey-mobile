@@ -33,6 +33,8 @@ export const TextInput = React.forwardRef<RNTextInput, Props>((props, ref) => {
   )
 })
 
+TextInput.displayName = 'TextInput'
+
 const Container = styled.View<Props>`
   flex-direction: row;
   align-items: center;

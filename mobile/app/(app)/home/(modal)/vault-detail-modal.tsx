@@ -3,7 +3,7 @@ import { ModalConfirmDelete } from '@/components/modal'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { deleteVault, selectChainsPerVault, selectVaultToEdit, useAppDispatch } from '@/redux'
+import { deleteVault, selectVaultToEdit, useAppDispatch } from '@/redux'
 import { useNavigation, useRouter } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { SafeAreaView, Button, Text, Container, TextField, Spacer, TopModalBar } from '@/modules/ui-components'
@@ -34,13 +34,7 @@ const Page = () => {
       // const chains = useSelector(selectChainsPerVault(vault.keyInfo.address));
       // console.log('xxxx', chains);
     })()
-  }, [vault])
-
-  const onSave = () => {
-    // TODO: VALIDATE THE NAME HERE
-    // TODO: restrict text input to lowercase
-    // dispatch(saveVault({ name: vaultName }));
-  }
+  }, [vault, gnonative])
 
   const onDeleteVault = async () => {
     setShowDeleteModal(true)

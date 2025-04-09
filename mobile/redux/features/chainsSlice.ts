@@ -45,4 +45,3 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, voi
 
 export const { selectChainsAvailable } = chainsSlice.selectors
 export const { addCustomChain } = chainsSlice.actions
-export const {} = chainsSlice.selectors

@@ -1,16 +1,15 @@
 import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import styled from 'styled-components/native'
-import { DefaultTheme } from 'styled-components/native'
 import { ButtonColor } from '.'
 
-export interface ButtonIcon extends TouchableOpacityProps {
+export interface ButtonIconProp extends TouchableOpacityProps {
   children: React.ReactNode
   color?: ButtonColor
   size?: number
 }
 
-export const ButtonIcon: React.FC<ButtonIcon> = (props) => {
+export const ButtonIcon: React.FC<ButtonIconProp> = (props) => {
   return (
     <ButtonWrapper {...props} $color={props.color} style={[props.style]}>
       {props.children}

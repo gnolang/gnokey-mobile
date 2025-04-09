@@ -32,6 +32,10 @@ jobs:
         working-directory: mobile
         run: npm run ts:check
 
+      - name: Run lint
+        working-directory: mobile
+        run: npm run lint
+
       - name: Run prettier:fix
         working-directory: mobile
         run: npx prettier . --single-quote --check

@@ -35,7 +35,3 @@ const Box = styled.View<{ checked?: boolean }>`
   justify-content: center;
   margin-right: 10px;
 `
-
-const Label = styled.Text`
-  font-size: 16px;
-`

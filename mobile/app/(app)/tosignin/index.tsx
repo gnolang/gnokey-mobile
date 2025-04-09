@@ -12,8 +12,7 @@ import {
   useAppDispatch,
   useAppSelector,
   fetchVaults,
-  checkForKeyOnChains,
-  selectVaultsChains
+  checkForKeyOnChains
 } from '@/redux'
 import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
@@ -30,7 +29,6 @@ export default function Page() {
   const vaults = useAppSelector(selectVaults)
   const callback = useAppSelector(selectCallback)
   const clientName = useAppSelector(selectClientName)
-  const vaultsChains = useAppSelector(selectVaultsChains)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
@@ -48,6 +46,7 @@ export default function Page() {
       }
     })
     return unsubscribe
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation])
 
   const returnKeyAddressToSoliciting = useCallback(
@@ -56,6 +55,7 @@ export default function Page() {
 
       router.push('/home')
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [callback]
   )
 
@@ -82,7 +82,12 @@ export default function Page() {
               ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
             />
           )}
-          <Button.TouchableOpacity title="Cancel" variant="primary" onPress={onCancel}></Button.TouchableOpacity>
+          <Button.TouchableOpacity
+            title="Cancel"
+            variant="primary"
+            onPress={onCancel}
+            loading={loading !== undefined}
+          ></Button.TouchableOpacity>
         </Layout.BodyAlignedBotton>
       </Layout.Container>
     </>

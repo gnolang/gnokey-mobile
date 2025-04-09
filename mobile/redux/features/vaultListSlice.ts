@@ -105,9 +105,11 @@ export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExt
         console.log(`Key ${vault.keyInfo.name} on chain ${chain.chainName} has coins: ${keyHasCoins}`)
 
         if (keyHasCoins) {
-          infoOnChains.has(vault.keyInfo.address.toString())
-            ? infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName)
-            : infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName])
+          if (infoOnChains.has(vault.keyInfo.address.toString())) {
+            infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName)
+          } else {
+            infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName])
+          }
         }
       }
     }

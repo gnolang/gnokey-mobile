@@ -22,7 +22,7 @@ const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch(setLinkingData(linkingParsedURL))
       }
     })()
-  }, [url])
+  }, [url, dispatch])
 
   return <>{children}</>
 }

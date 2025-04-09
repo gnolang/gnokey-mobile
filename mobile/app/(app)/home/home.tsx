@@ -3,7 +3,6 @@ import { FlatList, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
 import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
-import { useGnoNativeContext } from '@gnolang/gnonative'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
@@ -39,6 +38,7 @@ export default function Page() {
         setLoading(undefined)
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function Page() {
                 />
               )}
               keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={vaults?.length == 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
+              ListEmptyComponent={vaults?.length === 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
             />
           )}
         </BodyAlignedBotton>
@@ -129,7 +129,6 @@ export default function Page() {
 }
 
 const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
-  const [loading, setLoading] = useState<string | undefined>(undefined)
   const [visible, setVisible] = useState<boolean>(true)
   return (
     <ModalConfirm

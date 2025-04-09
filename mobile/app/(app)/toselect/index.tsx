@@ -2,7 +2,7 @@ import { Layout } from '@/components'
 import Button from '@/components/button'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import Text from '@/components/text'
-import { fetchVaults, Vault, selectCallback, selectTxInput, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
+import { fetchVaults, Vault, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
@@ -20,7 +20,6 @@ export default function Page() {
 
   const vaults = useAppSelector(selectVaults)
   const callback = useAppSelector(selectCallback)
-  const txInput = useAppSelector(selectTxInput)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
@@ -35,6 +34,7 @@ export default function Page() {
       }
     })
     return unsubscribe
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation])
 
   const returnKeyAddressToSoliciting = useCallback(
@@ -47,6 +47,7 @@ export default function Page() {
 
       router.push('/home')
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [callback]
   )
 
@@ -70,6 +71,7 @@ export default function Page() {
           <Button.TouchableOpacity
             title="Cancel"
             variant="primary"
+            loading={loading !== undefined}
             onPress={() => router.push('/home')}
           ></Button.TouchableOpacity>
         </Layout.BodyAlignedBotton>

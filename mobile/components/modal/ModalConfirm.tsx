@@ -1,11 +1,8 @@
-import { Keyboard, Modal as NativeModal, TouchableWithoutFeedback, View, StyleSheet } from 'react-native'
-import ModalHeader, { ModalHeaderTitle } from './ModalHeader'
-import ModalContent from './ModalContent'
-import Ruller from 'components/row/Ruller'
-import { useState } from 'react'
+import { Modal as NativeModal, TouchableWithoutFeedback, View, StyleSheet } from 'react-native'
+import { ModalHeaderTitle } from './ModalHeader'
 import { useTheme } from 'styled-components/native'
 import { Text, Button, Spacer } from '@/modules/ui-components'
-import { AntDesign, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons'
+import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
 
 export type Props = {
   title: string

@@ -1,6 +1,5 @@
 import { Button, Spacer, TextField } from '@/modules/ui-components'
-import { useRef, useState } from 'react'
-import { TextInput as RNTextInput } from 'react-native'
+import { useState } from 'react'
 
 export interface Props {
   onUnlokPress: (password: string) => void
@@ -8,7 +7,6 @@ export interface Props {
 }
 
 const SignInView: React.FC<Props> = ({ onUnlokPress, error }) => {
-  const inputRef = useRef<RNTextInput>(null)
   const [password, setPassword] = useState('')
 
   return (

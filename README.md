@@ -59,11 +59,10 @@ land.gno.gnokey://tosign?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_call
   - address: bech32 address of whoever you want to sign the transaction.
   - remote: the connection address for the remote node where the transaction will be sent
   - chain_id: the chain ID for the remote
-  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user (if no session).
-  - reason: the reason behind this action. It will be displayed to the user (if no session).
+  - client_name: the name of the app that is calling the Gnokey Mobile app. It will be displayed to the user.
+  - reason: the reason behind this action. It will be displayed to the user.
   - callback: the URL that Gnokey Mobile will call after signing the tx.
-  - want_session: boolean, if true and no session then create and return a new session key
-  - session (optional): the session key json from the previous call with want_session true. If present, sign immediately and return
+  - update_tx (optional): if "true" then update gas_wanted in the tx with the estimated gas.
 
 Example response:
 
@@ -75,8 +74,7 @@ tech.berty.dsocial://post?tx=%7B%22msg%22%3A%5B%7B%22%40type%22%3A%22%2Fvm.m_cal
 - Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://post`
 - Parameters (values are percent-escaped, to be decoded with `decodeURIComponent`):
   - tx: the signed transaction json to pass to `gnonative.broadcastTxCommit(...)`
-  - session: if want_session then the session key json to use in future `tosign`. Example: `{"expires_at":"2025-03-24T14:35:16.970Z","key":"673768235734692"}`
-  - status: either "success" or an error such as "session expired"
+  - status: either "success" or an error
 
 ### Testing on iOS simulator
 

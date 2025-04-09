@@ -24,7 +24,7 @@ export const Button: React.FC<ButtonProp> = (props) => {
   )
 }
 
-export const ButtonProfile: React.FC<Button> = (props) => {
+export const ButtonProfile: React.FC<ButtonProp> = (props) => {
   const isChildrenString = typeof props.children === 'string'
 
   return (

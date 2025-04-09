@@ -1,9 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
+import { Coin, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
 import { NetworkMetainfo } from '@/types'
-import { Coin } from '@buf/gnolang_gnonative.bufbuild_es/gnonativetypes_pb'
 import { RootState } from '../root-reducer'
 
 export enum VaultCreationState {

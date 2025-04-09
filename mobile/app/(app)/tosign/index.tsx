@@ -1,8 +1,10 @@
 import { Layout, Ruller } from '@/components'
 import {
+  estimateGasWanted,
   selectClientName,
   selectBech32Address,
   selectTxInput,
+  selectUpdateTx,
   signTx,
   useAppDispatch,
   useAppSelector,
@@ -30,11 +32,13 @@ export default function Page() {
   const reason = useAppSelector(reasonSelector)
   const bech32Address = useAppSelector(selectBech32Address)
   const txInput = useAppSelector(selectTxInput)
+  const updateTx = useAppSelector(selectUpdateTx) ?? false
   const callback = useAppSelector(selectCallback)
   const keyInfo = useAppSelector(selectKeyInfo)
   const chainId = useAppSelector(selectChainId)
   const remote = useAppSelector(selectRemote)
-  const gasFee = '0.0001ugnot' // TODO: get the gas fee from the txInput
+  const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
+  const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
   // const session = useAppSelector(selectSession);
   // const sessionWanted = useAppSelector(selectSessionWanted);
 
@@ -62,6 +66,30 @@ export default function Page() {
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bech32Address])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        console.log('onChangeAccountHandler', keyInfo)
+
+        if (!txInput || !keyInfo) {
+          throw new Error('No transaction input or keyInfo found.')
+        }
+
+        const { gasWanted } = await dispatch(estimateGasWanted({ keyInfo, updateTx: updateTx })).unwrap()
+
+        // need to pause to let the Keybase DB close before using it again
+        await new Promise((f) => setTimeout(f, 1000))
+
+        const signedTx = await dispatch(signTx({ keyInfo })).unwrap()
+        setSignedTx(signedTx.signedTxJson)
+        setGasWanted(gasWanted)
+      } catch (error: unknown | Error) {
+        console.error(error)
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txInput, keyInfo])
 
   const signTxAndReturnToRequester = async () => {
     console.log('signing the tx', keyInfo)
@@ -140,8 +168,8 @@ export default function Page() {
 
             <Ruller />
 
-            <FormItemInline label="Max Amount">
-              <TextBodyWhite>{gasFee} ugnot</TextBodyWhite>
+            <FormItemInline label="Gas Wanted">
+              <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
             </FormItemInline>
 
             {/* {sessionWanted &&
@@ -228,6 +256,12 @@ export default function Page() {
 
               <FormItem label="Raw Transaction Data">
                 <TextBodyWhite>{txInput}</TextBodyWhite>
+              </FormItem>
+
+              <Ruller />
+
+              <FormItem label="Raw Signed Data">
+                <TextBodyWhite>{signedTx}</TextBodyWhite>
               </FormItem>
             </HiddenGroup>
           </ScrollView>

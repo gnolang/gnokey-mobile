@@ -19,7 +19,7 @@
     "@connectrpc/connect": "^1.2.1",
     "@connectrpc/connect-web": "^1.2.1",
     "@expo/vector-icons": "^14.0.4",
-    "@gnolang/gnonative": "^4.0.0",
+    "@gnolang/gnonative": "^4.1.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@reduxjs/toolkit": "^2.1.0",
     "date-fns": "^3.6.0",

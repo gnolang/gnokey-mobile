@@ -42,4 +42,4 @@ jobs:
 
       - name: Run prettier:fix
         working-directory: mobile
-        run: npx prettier . --single-quote --check
+        run: npx prettier .

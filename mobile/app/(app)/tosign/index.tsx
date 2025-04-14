@@ -19,9 +19,10 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity } from 'react-native'
+import { ScrollView, View, TouchableOpacity, Text as RNText } from 'react-native'
 import { Button, ButtonText, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
+import PrettyJSON from '../../../modules/ui-components/src/ui/PrettyJSON'
 
 export default function Page() {
   const [loading, setLoading] = useState(false)
@@ -172,6 +173,8 @@ export default function Page() {
               <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
             </FormItemInline>
 
+            <Ruller />
+
             {/* {sessionWanted &&
               <>
                 <FormItemInline label="Remember this permission" >
@@ -254,14 +257,12 @@ export default function Page() {
 
               <Ruller />
 
-              <FormItem label="Raw Transaction Data">
-                <TextBodyWhite>{txInput}</TextBodyWhite>
-              </FormItem>
+              <FormItem label="Raw Transaction Data">{txInput && <PrettyJSON data={JSON.parse(txInput || '')} />}</FormItem>
 
               <Ruller />
 
               <FormItem label="Raw Signed Data">
-                <TextBodyWhite>{signedTx}</TextBodyWhite>
+                <TextBodyWhite>{signedTx && <PrettyJSON data={JSON.parse(signedTx || '')} />}</TextBodyWhite>
               </FormItem>
             </HiddenGroup>
           </ScrollView>

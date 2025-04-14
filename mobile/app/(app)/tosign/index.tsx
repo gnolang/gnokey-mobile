@@ -13,7 +13,8 @@ import {
   selectKeyInfo,
   clearLinking,
   selectChainId,
-  selectRemote
+  selectRemote,
+  selectBroadcast
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
@@ -38,6 +39,7 @@ export default function Page() {
   const keyInfo = useAppSelector(selectKeyInfo)
   const chainId = useAppSelector(selectChainId)
   const remote = useAppSelector(selectRemote)
+  const broadcast = useAppSelector(selectBroadcast)
   const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
   const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
   // const session = useAppSelector(selectSession);
@@ -96,6 +98,13 @@ export default function Page() {
     console.log('signing the tx', keyInfo)
 
     if (!txInput || !keyInfo) throw new Error('No transaction input or keyInfo found.')
+
+    if (broadcast) {
+      await gnonative.broadcastTxCommit(txInput)
+      console.log('broadcasting the tx', txInput)
+      router.push('/home')
+      return
+    }
 
     if (!callback) throw new Error('No callback found.')
 
@@ -174,6 +183,10 @@ export default function Page() {
             </FormItemInline>
 
             <Ruller />
+
+            <FormItemInline label="Broadcast">
+              <TextBodyWhite>{JSON.stringify(broadcast)}</TextBodyWhite>
+            </FormItemInline>
 
             {/* {sessionWanted &&
               <>

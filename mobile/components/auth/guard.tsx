@@ -12,6 +12,7 @@ function useProtectedRoute(signedIn?: boolean) {
   const router = useRouter()
 
   React.useEffect(() => {
+    // @ts-ignore
     const inAuthGroup = segments.length === 0 || segments[0] === 'sign-up' || segments[0] === 'sign-in'
 
     // If the user is not signed in and the initial segment is not anything in the auth group.

@@ -26,6 +26,10 @@
       "buildNumber": "1",
       "config": {
         "usesNonExemptEncryption": false
+      },
+      "jsEngine": "hermes",
+      "ios": {
+        "jsEngine": "jsc"
       }
     },
     "android": {

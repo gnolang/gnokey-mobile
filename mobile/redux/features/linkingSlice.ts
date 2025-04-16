@@ -25,6 +25,8 @@ export interface LinkingState {
   /* The session key info */
   session?: string
   session_wanted?: boolean
+  /* Decide if the transaction should be broadcasted to the chain */
+  broadcast?: boolean
 }
 
 const initialState: LinkingState = {
@@ -142,6 +144,7 @@ interface SetLinkResponse {
   hostname?: string
   session?: string
   session_wanted: boolean
+  broadcast?: boolean
 }
 
 /**
@@ -185,7 +188,8 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
       path: (queryParams?.path as string) || '',
       keyinfo,
       session: queryParams?.session ? (queryParams.session as string) : undefined,
-      session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false
+      session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false,
+      broadcast: queryParams?.broadcast ? Boolean(queryParams.broadcast) : false
     }
   }
 )
@@ -248,6 +252,7 @@ export const linkingSlice = createSlice({
       state.hostname = action.payload.hostname
       state.session = action.payload.session
       state.session_wanted = action.payload.session_wanted
+      state.broadcast = action.payload.broadcast
     })
   },
   selectors: {
@@ -262,7 +267,8 @@ export const linkingSlice = createSlice({
     reasonSelector: (state) => state.reason,
     selectAction: (state) => (state.hostname !== expo_default ? state.hostname : undefined),
     selectSession: (state) => state.session,
-    selectSessionWanted: (state) => state.session_wanted
+    selectSessionWanted: (state) => state.session_wanted,
+    selectBroadcast: (state) => state.broadcast
   }
 })
 
@@ -282,6 +288,7 @@ export const {
   selectAction,
   selectChainId,
   selectRemote,
+  selectBroadcast,
   selectSession,
   selectSessionWanted
 } = linkingSlice.selectors

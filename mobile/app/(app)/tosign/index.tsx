@@ -13,15 +13,17 @@ import {
   selectKeyInfo,
   clearLinking,
   selectChainId,
-  selectRemote
+  selectRemote,
+  selectBroadcast
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity } from 'react-native'
+import { ScrollView, View, TouchableOpacity, Text as RNText, Alert } from 'react-native'
 import { Button, ButtonText, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
+import PrettyJSON from '../../../modules/ui-components/src/ui/PrettyJSON'
 
 export default function Page() {
   const [loading, setLoading] = useState(false)
@@ -37,15 +39,15 @@ export default function Page() {
   const keyInfo = useAppSelector(selectKeyInfo)
   const chainId = useAppSelector(selectChainId)
   const remote = useAppSelector(selectRemote)
+  const broadcast = useAppSelector(selectBroadcast)
   const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
   const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
   // const session = useAppSelector(selectSession);
   // const sessionWanted = useAppSelector(selectSessionWanted);
 
-  console.log('txInput', txInput)
-  console.log('bech32Address', bech32Address)
-  console.log('clientName', clientName)
-  console.log('reason', reason)
+  console.log(
+    `tosign screen -> broadcast: ${broadcast}, bech32Address: ${bech32Address}, clientName: ${clientName}, reason: ${reason}, txInput: ${txInput}`
+  )
   // console.log('session', session);
   // console.log('sessionWanted', sessionWanted);
 
@@ -95,6 +97,17 @@ export default function Page() {
     console.log('signing the tx', keyInfo)
 
     if (!txInput || !keyInfo) throw new Error('No transaction input or keyInfo found.')
+
+    if (broadcast) {
+      if (!signedTx) {
+        Alert.alert('No signedTx')
+        return
+      }
+      const res = await gnonative.broadcastTxCommit(signedTx)
+      console.log('broadcasting the tx', signedTx, res)
+      router.push('/home')
+      return
+    }
 
     if (!callback) throw new Error('No callback found.')
 
@@ -170,6 +183,12 @@ export default function Page() {
 
             <FormItemInline label="Gas Wanted">
               <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
+            </FormItemInline>
+
+            <Ruller />
+
+            <FormItemInline label="Broadcast">
+              <TextBodyWhite>{JSON.stringify(broadcast)}</TextBodyWhite>
             </FormItemInline>
 
             {/* {sessionWanted &&
@@ -254,15 +273,13 @@ export default function Page() {
 
               <Ruller />
 
-              <FormItem label="Raw Transaction Data">
-                <TextBodyWhite>{txInput}</TextBodyWhite>
-              </FormItem>
+              <FormItem label="Raw Transaction Data">{txInput && <PrettyJSON data={JSON.parse(txInput || '')} />}</FormItem>
 
-              <Ruller />
+              {/* <Ruller /> */}
 
-              <FormItem label="Raw Signed Data">
-                <TextBodyWhite>{signedTx}</TextBodyWhite>
-              </FormItem>
+              {/* <FormItem label="Raw Signed Data">
+                <TextBodyWhite>{signedTx && <PrettyJSON data={JSON.parse(signedTx)} />}</TextBodyWhite>
+              </FormItem> */}
             </HiddenGroup>
           </ScrollView>
 

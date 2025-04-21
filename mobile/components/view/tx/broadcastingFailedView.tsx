@@ -86,7 +86,7 @@ export function BroadcastingFailedView({ onCancel = () => {}, txResponse = '' }:
       </View>
       <Text.Body style={styles.statusText}>Transaction Failed</Text.Body>
       <Spacer space={56} />
-      <Button color="tertirary" onPress={() => showDetails(!details)}>
+      <Button color="tertiary" onPress={() => showDetails(!details)}>
         Show details...
       </Button>
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, Text, StyleSheet, Platform } from 'react-native'
 
-const PrettyJSON = ({ data }: { data: object }) => {
+export const PrettyJSON = ({ data }: { data: object }) => {
   const formatted = JSON.stringify(data, null, 2)
 
   return (
@@ -28,5 +28,3 @@ const styles = StyleSheet.create({
     color: '#333'
   }
 })
-
-export default PrettyJSON

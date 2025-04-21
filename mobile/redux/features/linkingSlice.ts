@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { GnoNativeApi, KeyInfo, SignTxResponse } from '@gnolang/gnonative'
+import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
 import { RootState } from '../root-reducer'
-
-const DEFAULT_GAS_MARGIN = 110 // 1.1%
 
 export interface LinkingState {
   chainId?: string
@@ -62,71 +60,6 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo
     const bech32 = await gnonative.addressToBech32(keyInfo?.address)
 
     Linking.openURL(callback + '?address=' + bech32 + '&cachekill=' + new Date().getTime())
-  }
-)
-
-export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>(
-  'linking/signTx',
-  async ({ keyInfo }, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
-    const { masterPassword } = (thunkAPI.getState() as RootState).signIn
-
-    if (!masterPassword) {
-      throw new Error('No keyInfo found.')
-    }
-
-    const txJson = decodeURIComponent(txInput || '')
-    console.log('txJson', txJson)
-    console.log('keyInfo', JSON.stringify(keyInfo))
-
-    const res = await gnonative.activateAccount(keyInfo.name)
-    console.log('activateAccount', res)
-
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-    console.log('selected account', keyInfo.name)
-
-    const signedTx = await gnonative.signTx(txJson, keyInfo?.address)
-    console.log('signedTx', signedTx)
-
-    return signedTx
-  }
-)
-
-interface gasEstimation {
-  tx: string
-  gasWanted: bigint
-}
-
-// estimateGasWanted estimates the gas wanted value for the transaction.
-// If the `update` field is true, the transaction will be updated with the new gas wanted value.
-export const estimateGasWanted = createAsyncThunk<gasEstimation, { keyInfo: KeyInfo; updateTx: boolean }, ThunkExtra>(
-  'linking/estimateGas',
-  async ({ keyInfo, updateTx }, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
-    const { masterPassword } = (thunkAPI.getState() as RootState).signIn
-
-    if (!masterPassword) {
-      throw new Error('No keyInfo found.')
-    }
-
-    const txJson = decodeURIComponent(txInput || '')
-
-    await gnonative.activateAccount(keyInfo.name)
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-
-    // Estimate the gas used
-    const response = await gnonative.estimateGas(txJson, keyInfo?.address, DEFAULT_GAS_MARGIN, updateTx)
-    const gasWanted = response.gasWanted as bigint
-    console.log('estimateGas: ', gasWanted)
-
-    // Update the transaction
-    if (updateTx) {
-      return { tx: response.txJson, gasWanted: gasWanted }
-    }
-
-    return { tx: txJson, gasWanted }
   }
 )
 

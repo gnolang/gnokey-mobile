@@ -14,16 +14,16 @@ import {
   clearLinking,
   selectChainId,
   selectRemote,
-  selectBroadcast
+  selectBroadcast,
+  broadcastTx
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity, Text as RNText, Alert } from 'react-native'
-import { Button, ButtonText, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
+import { ScrollView, View, TouchableOpacity, Alert } from 'react-native'
+import { Button, ButtonText, FormItem, FormItemInline, PrettyJSON, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
-import PrettyJSON from '../../../modules/ui-components/src/ui/PrettyJSON'
 
 export default function Page() {
   const [loading, setLoading] = useState(false)
@@ -103,9 +103,8 @@ export default function Page() {
         Alert.alert('No signedTx')
         return
       }
-      const res = await gnonative.broadcastTxCommit(signedTx)
-      console.log('broadcasting the tx', signedTx, res)
-      router.push('/home')
+      dispatch(broadcastTx({ signedTx }))
+      router.push('/tosign/broadcasting')
       return
     }
 
@@ -173,6 +172,13 @@ export default function Page() {
           <Spacer space={32} />
 
           <ScrollView contentContainerStyle={{}}>
+            <Ruller />
+            <FormItemInline label="Signature Verification">
+              <View style={{ backgroundColor: 'white', width: 100, borderRadius: 20, alignContent: 'center', padding: 2 }}>
+                <Text.Body style={{ color: 'red', textAlign: 'center' }}>Unverified</Text.Body>
+              </View>
+            </FormItemInline>
+
             <Ruller />
 
             <FormItem label="Client name">

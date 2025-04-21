@@ -14,7 +14,7 @@ export * from './surfaces/index'
 
 export * from './buttons/index'
 
-export * from './ui/SafeAreaView'
+export * from './ui'
 
 export { FormItem, FormItemInline } from './form/FormItem'
 

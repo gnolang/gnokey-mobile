@@ -11,7 +11,9 @@ import {
   VaultListState,
   ChainsState,
   chainsSlice,
-  sessionKeySlice
+  sessionKeySlice,
+  txSlice,
+  TxState
 } from '@/redux/features'
 
 const rootReducer = combineSlices({
@@ -21,7 +23,8 @@ const rootReducer = combineSlices({
   [signinSlice.name]: signinSlice.reducer,
   [linkingSlice.name]: linkingSlice.reducer,
   [chainsSlice.name]: chainsSlice.reducer,
-  [sessionKeySlice.name]: sessionKeySlice.reducer
+  [sessionKeySlice.name]: sessionKeySlice.reducer,
+  [txSlice.name]: txSlice.reducer
 })
 
 export type RootState = {
@@ -32,6 +35,7 @@ export type RootState = {
   linking: LinkingState
   chains: ChainsState
   sessionKey: SessionKeyState
+  tx: TxState
 }
 
 const store = configureStore({

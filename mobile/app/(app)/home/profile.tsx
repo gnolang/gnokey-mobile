@@ -55,7 +55,7 @@ export default function Page() {
           <View />
           <Button
             onPress={() => navigation.goBack()}
-            color="tertirary"
+            color="tertiary"
             endIcon={<FontAwesome6 name="xmark" size={16} color="black" />}
           >
             Cancel

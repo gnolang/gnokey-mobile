@@ -65,7 +65,7 @@ const ButtonProfileWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   padding-horizontal: 24px;
   border-radius: ${(props) => props.theme.borderRadius * 2 || 20}px;
   color: ${(props) => props.theme.colors.black};
-  background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.tertirary)};
+  background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.tertiary)};
 `
 export const ButtonProfileLabel = styled.Text<{ $color?: ButtonColor }>`
   font-weight: 500;

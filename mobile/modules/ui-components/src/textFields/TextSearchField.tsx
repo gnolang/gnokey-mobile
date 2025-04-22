@@ -5,16 +5,16 @@ import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
 import { Spacer } from '../layout'
 
-export type TextFieldProps = {
+export type Props = {
   label?: string
   type?: 'password' | 'text'
   error?: string
   color?: 'secondary'
 } & TextInputProps
 
-type PropsWithTheme = TextFieldProps & { theme: DefaultTheme }
+type PropsWithTheme = Props & { theme: DefaultTheme }
 
-export const TextField: React.FC<TextFieldProps> = ({ type = 'text', label, error, value, ...rest }) => {
+export const TextSearchField: React.FC<Props> = ({ type = 'text', label, error, value, ...rest }) => {
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
   const fadeAnim = React.useRef(new Animated.Value(0)).current
@@ -67,6 +67,7 @@ export const TextField: React.FC<TextFieldProps> = ({ type = 'text', label, erro
 const Container = styled.View`
   flex-direction: column;
   align-items: flex-start;
+  background-color: red;
   width: 100%;
 `
 

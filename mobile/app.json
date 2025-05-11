@@ -30,7 +30,8 @@
       "jsEngine": "hermes",
       "ios": {
         "jsEngine": "jsc"
-      }
+      },
+      "associatedDomains": ["applinks:gno.berty.io"]
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +42,8 @@
       "versionCode": "1"
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "output": "server"
     },
     "experiments": {
       "tsconfigPaths": true

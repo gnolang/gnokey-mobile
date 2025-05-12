@@ -1,0 +1,1393 @@
+{
+  "data": {
+    "package_path": "gno.land/r/berty/social",
+    "package_line": "package social // import \"social\"",
+    "package_doc": "",
+    "values": [
+      {
+        "signature": "var (\n\tgUserPostsByAddress avl.Tree // user's std.Address -\u003e *UserPosts\n\tgUserAddressByName  avl.Tree // user's username -\u003e std.Address\n\tpostsCtr            uint64   // increments Post.id globally\n)",
+        "const": false,
+        "values": [
+          {
+            "name": "gUserPostsByAddress",
+            "doc": "// user's std.Address -\u003e \\*UserPosts\n",
+            "type": "avl.Tree"
+          },
+          {
+            "name": "gUserAddressByName",
+            "doc": "// user's username -\u003e std.Address\n",
+            "type": "avl.Tree"
+          },
+          {
+            "name": "postsCtr",
+            "doc": "// increments Post.id globally\n",
+            "type": "uint64"
+          }
+        ],
+        "doc": ""
+      },
+      {
+        "signature": "const (\n\tGnod Reaction = iota\n\tMaxReaction\n)",
+        "const": true,
+        "values": [
+          {
+            "name": "Gnod",
+            "doc": "",
+            "type": "Reaction"
+          },
+          {
+            "name": "MaxReaction",
+            "doc": "",
+            "type": ""
+          }
+        ],
+        "doc": ""
+      }
+    ],
+    "funcs": [
+      {
+        "type": "",
+        "name": "AddReaction",
+        "signature": "func AddReaction(userPostsAddr std.Address, threadid, postid PostID, reaction Reaction) bool",
+        "doc": "Add the reaction by the caller to the post of userPostsAddr, where threadid is the ID returned by the original call to PostMessage. If postid == threadid then add the reaction to a top-level post for the threadid, otherwise add the reaction to the postid \"sub reply\". (This function's arguments are similar to PostReply.) The caller must already be registered with /r/gnoland/users/v1 Register. Return a boolean indicating whether the userAddr was added. See Post.AddReaction.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "threadid",
+            "type": "PostID"
+          },
+          {
+            "name": "postid",
+            "type": "PostID"
+          },
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetHomePosts",
+        "signature": "func GetHomePosts(userPostsAddr std.Address) *avl.Tree",
+        "doc": "Get home posts for a user, which are the user's top-level posts plus all posts of all users being followed. The response is a map of postID -\u003e \\*Post. The avl.Tree sorts by the post ID which is unique for every post and increases in time. If you just want the total count, use GetHomePostsCount. This returns the current state of the home posts (without need to pay gas). To include the latest followed posts, call RefreshHomePosts.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*avl.Tree"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetHomePostsCount",
+        "signature": "func GetHomePostsCount(userPostsAddr std.Address) int",
+        "doc": "Get the number of posts which GetHomePosts or GetJsonHomePosts will return. The result is something like \"(12 int)\". This returns the current count of the home posts (without need to pay gas). To include the latest followed posts, call RefreshHomePosts.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "int"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonFollowers",
+        "signature": "func GetJsonFollowers(address std.Address, startIndex int, endIndex int) string",
+        "doc": "Get the UserPosts for the user with the given address, and return the list of followers. If the user address is not found, return \"\". Limit the response to entries from startIndex up to (not including) endIndex. The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "address",
+            "type": "std.Address"
+          },
+          {
+            "name": "startIndex",
+            "type": "int"
+          },
+          {
+            "name": "endIndex",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonFollowing",
+        "signature": "func GetJsonFollowing(address std.Address, startIndex int, endIndex int) string",
+        "doc": "Get the UserPosts for the user with the given address, and return the list of other users that this user is following. If the user address is not found, return \"\". Limit the response to entries from startIndex up to (not including) endIndex. The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "address",
+            "type": "std.Address"
+          },
+          {
+            "name": "startIndex",
+            "type": "int"
+          },
+          {
+            "name": "endIndex",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonHomePosts",
+        "signature": "func GetJsonHomePosts(userPostsAddr std.Address, startIndex int, endIndex int) string",
+        "doc": "Get home posts for a user (using GetHomePosts), which are the user's top-level posts plus all posts of all users being followed. Limit the response to posts from startIndex up to (not including) endIndex within the home posts. If you just want the total count, use GetHomePostsCount. The response is a JSON string. This returns the current state of the home posts (without need to pay gas). To include the latest posts, call RefreshHomePosts.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "startIndex",
+            "type": "int"
+          },
+          {
+            "name": "endIndex",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonTopPostsByID",
+        "signature": "func GetJsonTopPostsByID(addrAndIDs []UserAndPostID) string",
+        "doc": "For each address/PostID in addrAndIDs, get the thread post. The Post ID must be for a a top-level thread (not a reply; to get reply posts, use GetThreadPosts). If the Post ID is not found, set the result for that Post ID to {}. The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "addrAndIDs",
+            "type": "[]UserAndPostID"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonUserByAddress",
+        "signature": "func GetJsonUserByAddress(addr std.Address) string",
+        "doc": "Call users.ResolveAddress and return the result as JSON, or \"\" if not found. (This is a temporary utility until gno.land supports returning structured data directly.)\n",
+        "params": [
+          {
+            "name": "addr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonUserByName",
+        "signature": "func GetJsonUserByName(name string) string",
+        "doc": "Call users.ResolveName and return the result as JSON, or \"\" if not found. (This is a temporary utility until gno.land supports returning structured data directly.)\n",
+        "params": [
+          {
+            "name": "name",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetJsonUserPostsInfo",
+        "signature": "func GetJsonUserPostsInfo(address std.Address) string",
+        "doc": "Get the UserPosts info for the user with the given address, including url, n\\_threads, n\\_followers and n\\_following. If the user address is not found, return \"\". The name of this function has \"Info\" because it just returns the number of items, not the items themselves. To get the items, see GetJsonFollowers, etc. The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "address",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "GetThreadPosts",
+        "signature": "func GetThreadPosts(userPostsAddr std.Address, threadID int, replyID int, startIndex int, endIndex int) string",
+        "doc": "Get posts in a thread for a user. A thread is the sequence of posts without replies. While each post has an an arbitrary id, it also has an index within the thread starting from 0. Limit the response to posts from startIndex up to (not including) endIndex within the thread. If you just want the total count, set startIndex and endIndex to 0 and see the response \"n\\_threads\". If threadID is 0 then return the user's top-level posts. (Like render args \"user\".) If threadID is X and replyID is 0, then return the posts (without replies) in that thread. (Like render args \"user/2\".) If threadID is X and replyID is Y, then return the posts in the thread starting with replyID. (Like render args \"user/2/5\".) The response includes reposts by this user (only if threadID is 0), but not messages of other users that are being followed. (See GetHomePosts.) The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "threadID",
+            "type": "int"
+          },
+          {
+            "name": "replyID",
+            "type": "int"
+          },
+          {
+            "name": "startIndex",
+            "type": "int"
+          },
+          {
+            "name": "endIndex",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "ListJsonUsersByPrefix",
+        "signature": "func ListJsonUsersByPrefix(prefix string, maxResults int) string",
+        "doc": "Get a list of user names starting from the given prefix. Limit the number of results to maxResults. The response is a JSON string.\n",
+        "params": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "ListUsersByPrefix",
+        "signature": "func ListUsersByPrefix(prefix string, maxResults int) []string",
+        "doc": "Get a list of user names starting from the given prefix. Limit the number of results to maxResults.\n",
+        "params": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "maxResults",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "[]string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "RefreshHomePosts",
+        "signature": "func RefreshHomePosts(userPostsAddr std.Address) int",
+        "doc": "Update the home posts by scanning all posts from all followed users and adding the followed posts since the last call to RefreshHomePosts (or since started following the user). Return the new count of home posts. The result is something like \"(12 int)\".\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "int"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "RemoveReaction",
+        "signature": "func RemoveReaction(userPostsAddr std.Address, threadid, postid PostID, reaction Reaction) bool",
+        "doc": "Remove the reaction by the caller to the post of userPostsAddr, where threadid is the ID returned by the original call to PostMessage. If postid == threadid then remove the reaction from a top-level post for the threadid, otherwise remove the reaction from the postid \"sub reply\". (This function's arguments are similar to PostReply.) The caller must already be registered with /r/gnoland/users/v1 Register. Return a boolean indicating whether the userAddr was removed. See Post.RemoveReaction.\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "threadid",
+            "type": "PostID"
+          },
+          {
+            "name": "postid",
+            "type": "PostID"
+          },
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "Render",
+        "signature": "func Render(path string) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "path",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "Unfollow",
+        "signature": "func Unfollow(followedAddr std.Address)",
+        "doc": "Update the caller to unfollow the user with followedAddr. See UserPosts.Unfollow.\n",
+        "params": [
+          {
+            "name": "followedAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": []
+      },
+      {
+        "type": "",
+        "name": "displayAddressMD",
+        "signature": "func displayAddressMD(addr std.Address) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "addr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "getOrCreateReactionValue",
+        "signature": "func getOrCreateReactionValue(reactions *avl.Tree, reaction Reaction) *avl.Tree",
+        "doc": "If reactions has an value for the given reaction, then return it. Otherwise, add the reaction key to reactions, set the value to an empty avl.Tree and return it.\n",
+        "params": [
+          {
+            "name": "reactions",
+            "type": "*avl.Tree"
+          },
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*avl.Tree"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "getPosts",
+        "signature": "func getPosts(posts avl.Tree, startIndex int, endIndex int) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "posts",
+            "type": "avl.Tree"
+          },
+          {
+            "name": "startIndex",
+            "type": "int"
+          },
+          {
+            "name": "endIndex",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "indentBody",
+        "signature": "func indentBody(indent string, body string) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "indent",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "marshalJsonUser",
+        "signature": "func marshalJsonUser(user *users.UserData) string",
+        "doc": "Return the User info as a JSON string. (This is a temporary utility until gno.land supports returning structured data directly.)\n",
+        "params": [
+          {
+            "name": "user",
+            "type": "*users.UserData"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "padZero",
+        "signature": "func padZero(u64 uint64, length int) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "u64",
+            "type": "uint64"
+          },
+          {
+            "name": "length",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "postIDKey",
+        "signature": "func postIDKey(pid PostID) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "pid",
+            "type": "PostID"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "reactionKey",
+        "signature": "func reactionKey(reaction Reaction) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "summaryOf",
+        "signature": "func summaryOf(str string, length int) string",
+        "doc": "NOTE: length must be greater than 3.\n",
+        "params": [
+          {
+            "name": "str",
+            "type": "string"
+          },
+          {
+            "name": "length",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "usernameOf",
+        "signature": "func usernameOf(addr std.Address) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "addr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "validateReaction",
+        "signature": "func validateReaction(reaction Reaction)",
+        "doc": "",
+        "params": [
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": []
+      },
+      {
+        "type": "",
+        "name": "newPost",
+        "signature": "func newPost(userPosts *UserPosts, id PostID, creator std.Address, body string, threadID, parentID PostID, repostUser std.Address) *Post",
+        "doc": "",
+        "params": [
+          {
+            "name": "userPosts",
+            "type": "*UserPosts"
+          },
+          {
+            "name": "id",
+            "type": "PostID"
+          },
+          {
+            "name": "creator",
+            "type": "std.Address"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          },
+          {
+            "name": "threadID",
+            "type": "PostID"
+          },
+          {
+            "name": "parentID",
+            "type": "PostID"
+          },
+          {
+            "name": "repostUser",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "AddReaction",
+        "signature": "func (post *Post) AddReaction(userAddr std.Address, reaction Reaction) bool",
+        "doc": "Add the userAddr to the posts.reactions for reaction. Create the reaction key in post.reactions if needed. If userAddr is already added, do nothing. If the userAddr is the post's creator, do nothing. (Don't react to one's own posts.) Return a boolean indicating whether the userAddr was added (false if it was already added).\n",
+        "params": [
+          {
+            "name": "userAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "AddReply",
+        "signature": "func (post *Post) AddReply(creator std.Address, body string) *Post",
+        "doc": "",
+        "params": [
+          {
+            "name": "creator",
+            "type": "std.Address"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "AddRepostTo",
+        "signature": "func (post *Post) AddRepostTo(creator std.Address, comment string, dst *UserPosts) *Post",
+        "doc": "",
+        "params": [
+          {
+            "name": "creator",
+            "type": "std.Address"
+          },
+          {
+            "name": "comment",
+            "type": "string"
+          },
+          {
+            "name": "dst",
+            "type": "*UserPosts"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetGnodFormURL",
+        "signature": "func (post *Post) GetGnodFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetPostID",
+        "signature": "func (post *Post) GetPostID() PostID",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetReactionCount",
+        "signature": "func (post *Post) GetReactionCount(reaction Reaction) int",
+        "doc": "Return the count of reactions for the reaction.\n",
+        "params": [
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "int"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetReply",
+        "signature": "func (post *Post) GetReply(pid PostID) *Post",
+        "doc": "",
+        "params": [
+          {
+            "name": "pid",
+            "type": "PostID"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetReplyFormURL",
+        "signature": "func (post *Post) GetReplyFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetRepostFormURL",
+        "signature": "func (post *Post) GetRepostFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetSummary",
+        "signature": "func (post *Post) GetSummary() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "GetURL",
+        "signature": "func (post *Post) GetURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "IsThread",
+        "signature": "func (post *Post) IsThread() bool",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "MarshalJSON",
+        "signature": "func (post *Post) MarshalJSON() ([]byte, error)",
+        "doc": "MarshalJSON implements the json.Marshaler interface.\n",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "[]byte"
+          },
+          {
+            "name": "",
+            "type": "error"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "RemoveReaction",
+        "signature": "func (post *Post) RemoveReaction(userAddr std.Address, reaction Reaction) bool",
+        "doc": "Remove the userAddr from the posts.reactions for reaction. If userAddr is already removed, do nothing. Return a boolean indicating whether the userAddr was found and removed.\n",
+        "params": [
+          {
+            "name": "userAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "reaction",
+            "type": "Reaction"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "bool"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "RenderInner",
+        "signature": "func (post *Post) RenderInner() string",
+        "doc": "render reply and link to context thread\n",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "RenderPost",
+        "signature": "func (post *Post) RenderPost(indent string, levels int) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "indent",
+            "type": "string"
+          },
+          {
+            "name": "levels",
+            "type": "int"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "Post",
+        "name": "RenderSummary",
+        "signature": "func (post *Post) RenderSummary() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "Follow",
+        "signature": "func Follow(followedAddr std.Address) PostID",
+        "doc": "Update the caller to follow the user with followedAddr. See UserPosts.Follow.\n",
+        "params": [
+          {
+            "name": "followedAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "PostMessage",
+        "signature": "func PostMessage(body string) PostID",
+        "doc": "Post a message to the caller's main user posts. The caller must already be registered with /r/gnoland/users/v1 Register. Return the \"thread ID\" of the new post. (This is similar to boards.CreateThread, but no message title)\n",
+        "params": [
+          {
+            "name": "body",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "PostReply",
+        "signature": "func PostReply(userPostsAddr std.Address, threadid, postid PostID, body string) PostID",
+        "doc": "Post a reply to the user posts of userPostsAddr where threadid is the ID returned by the original call to PostMessage. If postid == threadid then create another top-level post for the threadid, otherwise post a reply to the postid \"sub reply\". The caller must already be registered with /r/gnoland/users/v1 Register. Return the new post ID. (This is similar to boards.CreateReply.)\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "threadid",
+            "type": "PostID"
+          },
+          {
+            "name": "postid",
+            "type": "PostID"
+          },
+          {
+            "name": "body",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "RepostThread",
+        "signature": "func RepostThread(userPostsAddr std.Address, threadid PostID, comment string) PostID",
+        "doc": "Repost the message from the user posts of userPostsAddr where threadid is the ID returned by the original call to PostMessage. This must be a top-level thread (not a reply). Return the new post ID. (This is similar to boards.CreateRepost.)\n",
+        "params": [
+          {
+            "name": "userPostsAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "threadid",
+            "type": "PostID"
+          },
+          {
+            "name": "comment",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "PostID",
+        "name": "String",
+        "signature": "func (pid PostID) String() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "getOrCreateUserPosts",
+        "signature": "func getOrCreateUserPosts(userAddr std.Address, username string) *UserPosts",
+        "doc": "Get the UserPosts for the userAddr. If not found, add a new UserPosts to gUserPostsByAddress and update gUserAddressByName with the username. (The caller usually has already called usernameOf to get the username, but if it is \"\" then this will get it.)\n",
+        "params": [
+          {
+            "name": "userAddr",
+            "type": "std.Address"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*UserPosts"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "getUserPosts",
+        "signature": "func getUserPosts(userAddr std.Address) *UserPosts",
+        "doc": "Get the UserPosts for the user.\n",
+        "params": [
+          {
+            "name": "userAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*UserPosts"
+          }
+        ]
+      },
+      {
+        "type": "",
+        "name": "newUserPosts",
+        "signature": "func newUserPosts(url string, userAddr std.Address) *UserPosts",
+        "doc": "Create a new userPosts for the user. Panic if there is already a userPosts for the user.\n",
+        "params": [
+          {
+            "name": "url",
+            "type": "string"
+          },
+          {
+            "name": "userAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*UserPosts"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "AddThread",
+        "signature": "func (userPosts *UserPosts) AddThread(body string) *Post",
+        "doc": "Add a new top-level thread to the userPosts. Return the new Post.\n",
+        "params": [
+          {
+            "name": "body",
+            "type": "string"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "Follow",
+        "signature": "func (userPosts *UserPosts) Follow(followedAddr std.Address) PostID",
+        "doc": "If already following followedAddr, then do nothing and return 0. If there is a UserPosts for followedAddr, then add it to following, and add this user to its followers. If there is no UserPosts for followedAddr, then do nothing and return 0. (We don't expect this because this is usually called by clicking on the display page of followedAddr.) Return the value of startedPostsCtr in the added FollowingInfo.\n",
+        "params": [
+          {
+            "name": "followedAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetFollowFormURL",
+        "signature": "func (userPosts *UserPosts) GetFollowFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetPostFormURL",
+        "signature": "func (userPosts *UserPosts) GetPostFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetRefreshFormURL",
+        "signature": "func (userPosts *UserPosts) GetRefreshFormURL() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetThread",
+        "signature": "func (userPosts *UserPosts) GetThread(pid PostID) *Post",
+        "doc": "",
+        "params": [
+          {
+            "name": "pid",
+            "type": "PostID"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "*Post"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetURLFromThreadAndReplyID",
+        "signature": "func (userPosts *UserPosts) GetURLFromThreadAndReplyID(threadID, replyID PostID) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "threadID",
+            "type": "PostID"
+          },
+          {
+            "name": "replyID",
+            "type": "PostID"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "GetUnfollowFormURL",
+        "signature": "func (userPosts *UserPosts) GetUnfollowFormURL(followedAddr std.Address) string",
+        "doc": "",
+        "params": [
+          {
+            "name": "followedAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "MarshalJSON",
+        "signature": "func (userPosts *UserPosts) MarshalJSON() ([]byte, error)",
+        "doc": "MarshalJSON implements the json.Marshaler interface.\n",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "[]byte"
+          },
+          {
+            "name": "",
+            "type": "error"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "RenderFollowers",
+        "signature": "func (userPosts *UserPosts) RenderFollowers() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "RenderFollowing",
+        "signature": "func (userPosts *UserPosts) RenderFollowing() string",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "RenderUserPosts",
+        "signature": "func (userPosts *UserPosts) RenderUserPosts(includeFollowed bool) string",
+        "doc": "Renders the userPosts for display suitable as plaintext in console.  This is suitable for demonstration or tests, but not for prod.\n",
+        "params": [
+          {
+            "name": "includeFollowed",
+            "type": "bool"
+          }
+        ],
+        "results": [
+          {
+            "name": "",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "Unfollow",
+        "signature": "func (userPosts *UserPosts) Unfollow(followedAddr std.Address)",
+        "doc": "Remove followedAddr from following. If there is a UserPosts for followedAddr, then remove this user from its followers. If there is no UserPosts for followedAddr, then do nothing. (We don't expect this usually.)\n",
+        "params": [
+          {
+            "name": "followedAddr",
+            "type": "std.Address"
+          }
+        ],
+        "results": []
+      },
+      {
+        "type": "UserPosts",
+        "name": "incGetPostID",
+        "signature": "func (userPosts *UserPosts) incGetPostID() PostID",
+        "doc": "",
+        "params": [],
+        "results": [
+          {
+            "name": "",
+            "type": "PostID"
+          }
+        ]
+      },
+      {
+        "type": "UserPosts",
+        "name": "refreshHomePosts",
+        "signature": "func (userPosts *UserPosts) refreshHomePosts()",
+        "doc": "Scan userPosts.following for all posts from all followed users starting from lastRefreshId+1 . Add the posts to the homePosts avl.Tree, which is sorted by the post ID which is unique for every post and increases in time. When finished, update lastRefreshId.\n",
+        "params": [],
+        "results": []
+      }
+    ],
+    "types": [
+      {
+        "name": "FollowingInfo",
+        "signature": "type FollowingInfo struct {\n\tstartedFollowingAt time.Time\n\tstartedPostsCtr    PostID\n}",
+        "doc": ""
+      },
+      {
+        "name": "Post",
+        "signature": "type Post struct {\n\tuserPosts  *UserPosts\n\tid         PostID\n\tcreator    std.Address\n\tbody       string\n\treplies    avl.Tree    // PostID -\u003e *Post\n\trepliesAll avl.Tree    // PostID -\u003e *Post (all replies, for top-level posts)\n\treposts    avl.Tree    // UserPosts user std.Address -\u003e PostID\n\tthreadID   PostID      // original PostID\n\tparentID   PostID      // parent PostID (if reply or repost)\n\trepostUser std.Address // UserPosts user std.Address of original post (if repost)\n\treactions  *avl.Tree   // Reaction -\u003e *avl.Tree of std.Address -\u003e \"\" (Use the avl.Tree keys as the \"set\" of addresses)\n\tcreatedAt  time.Time\n}",
+        "doc": "A Post is a \"thread\" or a \"reply\" depending on context. A thread is a Post of a UserPosts that holds other replies. This is similar to boards.Post except that this doesn't have a title.\n"
+      },
+      {
+        "name": "PostID",
+        "signature": "type PostID uint64",
+        "doc": "NOTE: a PostID is relative to the userPosts.\n"
+      },
+      {
+        "name": "Reaction",
+        "signature": "type Reaction int",
+        "doc": "Reaction is for the \"enum\" of ways to react to a post\n"
+      },
+      {
+        "name": "UserAndPostID",
+        "signature": "type UserAndPostID struct {\n\tUserPostAddr std.Address\n\tPostID       PostID\n}",
+        "doc": ""
+      },
+      {
+        "name": "UserPosts",
+        "signature": "type UserPosts struct {\n\turl           string\n\tuserAddr      std.Address\n\tthreads       avl.Tree // PostID -\u003e *Post\n\thomePosts     avl.Tree // PostID -\u003e *Post. Includes this user's threads posts plus posts of users being followed.\n\tlastRefreshId PostID   // Updated by refreshHomePosts\n\tfollowers     avl.Tree // std.Address -\u003e \"\"\n\tfollowing     avl.Tree // std.Address -\u003e *FollowingInfo\n}",
+        "doc": "UserPosts is similar to boards.Board where each user has their own \"board\" for posts which come from the user. The list of posts is identified by the user's std.Address . A user's \"home feed\" may contain other posts (from followed users, etc.) but this only has the top-level posts from the user (not replies to other user's posts).\n"
+      }
+    ]
+  }
+}

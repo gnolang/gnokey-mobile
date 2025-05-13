@@ -110,8 +110,8 @@ export const prepareToExecuteContract = createAsyncThunk<
       packagePath: webLink.packagePath(),
       fnc: webLink.func,
       args: webLink.funcArg() || [],
-      gasFee: '1000000ugnot', // TODO: get if from the URL
-      gasWanted: BigInt(10000000), // TODO: get if from the URL
+      gasFee: '1000000ugnot', // TODO: should we use the maximum gas fee?
+      gasWanted: BigInt(10000000), // TODO: should we use the maximum gas fee?
       address: 'g18r356vy0etd09dnlmvgq23elpae8hzx2ds7swq', // TODO: get if from Gnokey
       activateAccount: 'devkey123', // TODO: get if from Gnokey
       pass: masterPass || ''

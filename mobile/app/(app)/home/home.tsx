@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { FlatList, TextInput, View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
 import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
+import { AppBar, ButtonIcon, Spacer, Text } from '@/modules/ui-components'
 import { FontAwesome6, FontAwesome } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 import { ModalConfirm } from '@/components/modal/ModalConfirm'
@@ -44,6 +44,7 @@ export default function Page() {
 
   useEffect(() => {
     doSearch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameSearch, vaults])
 
   const doSearch = () => {

@@ -173,7 +173,7 @@ export default function Page() {
 
           <ScrollView contentContainerStyle={{}}>
             <Ruller />
-            <FormItemInline label="Signature Verification">
+            <FormItemInline label="Source">
               <View style={{ backgroundColor: 'white', width: 100, borderRadius: 20, alignContent: 'center', padding: 2 }}>
                 <Text.Body style={{ color: 'red', textAlign: 'center' }}>Unverified</Text.Body>
               </View>
@@ -221,12 +221,6 @@ export default function Page() {
             <Ruller />
 
             <HiddenGroup>
-              <FormItem label="Client name">
-                <TextBodyWhite>{clientName}</TextBodyWhite>
-              </FormItem>
-
-              <Ruller />
-
               <FormItem label="Reason">
                 <TextBodyWhite>{reason}</TextBodyWhite>
               </FormItem>

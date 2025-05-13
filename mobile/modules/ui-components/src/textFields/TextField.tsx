@@ -46,7 +46,13 @@ export const TextField: React.FC<TextFieldProps> = ({ type = 'text', label, erro
           {label}
         </AnimatedLabel>
         <Content {...rest}>
-          <TextFieldStyled {...rest} value={inputValue} secureTextEntry={isSecureText} onChangeText={handleChangeText} />
+          <TextFieldStyled
+            {...rest}
+            value={inputValue}
+            secureTextEntry={isSecureText}
+            onChangeText={handleChangeText}
+            placeholderTextColor="gray"
+          />
           {type === 'password' ? (
             <ToggleIcon>
               <FontAwesome
@@ -73,22 +79,28 @@ const Container = styled.View`
 const Content = styled.View<PropsWithTheme>`
   flex-direction: row;
   align-items: center;
-  border-bottom-width: 1px;
-  color: ${(p) => p.theme.colors.black};
-  background-color: ${(p) => (p.color ? p.theme.textinputs.secondary.background : p.theme.textinputs.primary.background)};
+  border: 1px;
+  border-radius: 8px;
+  padding: 0 8px;
+  background-color: #f2f2f2;
 `
 
-const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
-  placeholderTextColor: props.theme.textinputs.primary.placeholder.color || props.theme.textinputs.primary.placeholder.color
-}))`
-  flex: 1;
+// const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
+//   placeholderTextColor: props.theme.textinputs.primary.placeholder.color || props.theme.textinputs.primary.placeholder.color
+// }))`
+//   flex: 1;
+//   height: 40px;
+//   width: 100%;
+//   font-weight: 500;
+//   line-height: 20px;
+//   font-size: 18px;
+//   border-style: solid;
+// `
+
+const TextFieldStyled = styled.TextInput`
+  flex-grow: 1;
   height: 40px;
-  width: 100%;
-  font-weight: 500;
-  line-height: 20px;
-  font-size: 18px;
-  placeholder: ${(p) => p.theme.colors.black};
-  border-style: solid;
+  color: black;
 `
 
 const ToggleIcon = styled.TouchableOpacity`

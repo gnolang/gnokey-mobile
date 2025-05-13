@@ -34,13 +34,22 @@ export class GnoChainAdapter implements ChainAdapter {
     const { packagePath, fnc, args, gasFee, gasWanted, address, activateAccount } = params
     const addr = await this.gnonative.addressFromBech32(address)
 
-    const res = await this.gnonative.makeCallTx(packagePath, fnc, args, gasFee, gasWanted, addr)
+    console.log(
+      `estimating gas for ${fnc} on ${packagePath}, addr: ${addr}, gasFee: ${gasFee}, gasWanted: ${gasWanted}, args: ${args}`
+    )
+    try {
+      // TODO
+      await this.gnonative.activateAccount(activateAccount)
+      await this.gnonative.setPassword(params.pass, addr)
 
-    await this.gnonative.activateAccount(activateAccount)
-    await this.gnonative.setPassword(params.pass, addr)
+      const res = await this.gnonative.makeCallTx(packagePath, fnc, args, gasFee, gasWanted, addr)
 
-    const response = await this.gnonative.estimateGas(res.txJson, addr, DEFAULT_GAS_MARGIN, true)
+      const response = await this.gnonative.estimateGas(res.txJson, addr, DEFAULT_GAS_MARGIN, true)
 
-    return response.gasWanted
+      return response.gasWanted
+    } catch (error) {
+      console.error('Error estimating gas', error)
+      throw error
+    }
   }
 }

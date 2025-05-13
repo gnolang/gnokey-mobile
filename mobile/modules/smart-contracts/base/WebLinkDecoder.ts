@@ -1,11 +1,12 @@
 export class WebLinkDecoder {
   url: string
+
   hostname: string | undefined
   action: string | undefined
   path: string | undefined
   tab: string | undefined
+  params: string | undefined
   func: string | undefined
-  send: string | undefined
 
   // TODO: make generic
   chainType: 'gno' | undefined
@@ -19,8 +20,8 @@ export class WebLinkDecoder {
     this.action = parsed.action
     this.path = parsed.path
     this.tab = parsed.tab
+    this.params = parsed.params
     this.func = parsed.func
-    this.send = parsed.send
   }
 
   /**
@@ -29,12 +30,10 @@ export class WebLinkDecoder {
    * @returns An object with the parsed data, eg:
    * {
    *   base: land.gno.gnokey
-   *   hostname: land.gno.gnokey
    *   action: tosign
    *   path: /r/gnoland/users/v1
    *   tab: help
-   *   func: Register
-   *   send: 1000000ugnot
+   *   params: func=Register&.send=1000000ugnot
    * }
    */
   parse = (url: string) => {
@@ -42,23 +41,41 @@ export class WebLinkDecoder {
       return {}
     }
 
-    const res = url.match(/^([^:]+):([^?]+)\?([^$]+)\$([^&]+)&[^=]+=(.*?)&\.send=(.*)/)
+    const res = url.match(/([^:]+):([^?]+)\?([^$]+)\$([^&]+)&(.+)/)
 
     if (!res) {
       return {}
     }
 
-    const [base, hostname, action, path, tab, func, send] = res
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, hostname, action, path, tab, params] = res
+
+    const func = params.match(/func=([^&]+)/)?.[1]
 
     return {
-      base,
       hostname,
       action,
       path,
       tab,
-      func,
-      send
+      params,
+      func
     }
+  }
+
+  /** returns all parameters values, ordered, excepted by func */
+  funcArg = () => {
+    if (!this.params) {
+      return undefined
+    }
+
+    // remove func and its value:
+    const args = this.params.replace(/func=[^&]+&/, '').split('&')
+    const values = args.map((arg) => {
+      const [, value] = arg.split('=')
+      return value
+    })
+    // TODO: use the original order of the args
+    return values.reverse()
   }
 
   // TODO: remove the hardcode 'gno.land/r/gnoland/users/v1'

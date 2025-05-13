@@ -1,5 +1,10 @@
-import { combineSlices, configureStore, LinkingState, SessionKeyState } from '@reduxjs/toolkit'
+import { combineSlices, configureStore } from '@reduxjs/toolkit'
+
 import {
+  SessionKeyState,
+  LinkingState,
+  executeContractsSlice,
+  ExecuteContractsState,
   vaultEditSlice,
   signinSlice,
   vaultAddSlice,
@@ -24,7 +29,8 @@ const rootReducer = combineSlices({
   [linkingSlice.name]: linkingSlice.reducer,
   [chainsSlice.name]: chainsSlice.reducer,
   [sessionKeySlice.name]: sessionKeySlice.reducer,
-  [txSlice.name]: txSlice.reducer
+  [txSlice.name]: txSlice.reducer,
+  [executeContractsSlice.name]: executeContractsSlice.reducer
 })
 
 export type RootState = {
@@ -36,8 +42,10 @@ export type RootState = {
   chains: ChainsState
   sessionKey: SessionKeyState
   tx: TxState
+  executeContracts: ExecuteContractsState
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const store = configureStore({
   reducer: rootReducer
 })

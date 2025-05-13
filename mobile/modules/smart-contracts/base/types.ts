@@ -24,7 +24,7 @@ export interface EstimateGasParams {
   /** The function name to call */
   fnc: string
   /** The arguments to pass to the function */
-  args: string[]
+  args: any[]
   /** The gas fee to use */
   gasFee: string
   /** The gas wanted for the transaction */

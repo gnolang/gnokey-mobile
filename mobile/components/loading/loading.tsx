@@ -14,7 +14,7 @@ export const Loading: React.FC<Props> = ({ message }) => {
       <Layout.Body>
         <ViewCenter>
           <ActivityIndicator size="large" color="#0000ff" />
-          <Text.Body>{message}</Text.Body>
+          <Text.Body style={{ marginTop: 16, textAlign: 'center' }}>{message}</Text.Body>
         </ViewCenter>
       </Layout.Body>
     </Layout.Container>

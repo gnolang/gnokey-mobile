@@ -36,13 +36,13 @@ const ThemeProvider = ({ children }: Props) => {
     buttons: {
       primary: '#000000',
       secondary: '#E5E5E5',
-      tertirary: '#4c8ae7',
+      tertiary: '#4c8ae7',
       danger: '#FF4647',
 
       label: {
         primary: '#ffffff',
         secondary: '#000000',
-        tertirary: '#000000',
+        tertiary: '#000000',
         danger: '#ffffff'
       }
     }

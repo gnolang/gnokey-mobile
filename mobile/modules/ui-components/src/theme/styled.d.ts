@@ -10,13 +10,13 @@ declare module 'styled-components/native' {
     buttons: {
       primary: string
       secondary: string
-      tertirary: string
+      tertiary: string
       danger: string
 
       label: {
         primary: string
         secondary: string
-        tertirary: string
+        tertiary: string
         danger: string
       }
     }

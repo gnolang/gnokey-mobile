@@ -1,0 +1,27 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "WMBQ84HN4T.land.gno.keymanager.ios"
+        ],
+        "components": [
+          {
+            "/": "*",
+            "comment": "Matches all routes"
+          }
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "WMBQ84HN4T.land.gno.keymanager.ios"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "WMBQ84HN4T.land.gno.keymanager.ios"
+    ]
+  }
+}

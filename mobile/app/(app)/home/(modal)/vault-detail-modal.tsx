@@ -73,7 +73,7 @@ const Page = () => {
           <View style={{ flex: 1, justifyContent: 'space-between', flexDirection: 'row', alignItems: 'flex-end' }}>
             <Button
               style={{ width: 110 }}
-              color="tertirary"
+              color="tertiary"
               onPress={onDeleteVault}
               endIcon={<FontAwesome6 name="trash-can" size={16} color="black" />}
             >

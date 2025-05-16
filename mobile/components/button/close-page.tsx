@@ -6,7 +6,7 @@ const IconClose = () => <Ionicons name="close" size={24} color="black" />
 const IconLeft = () => <Ionicons name="arrow-back" size={24} color="black" />
 
 interface Props {
-  onCloseHandler?: () => {}
+  onCloseHandler?: () => object
   iconType?: 'close' | 'back'
 }
 

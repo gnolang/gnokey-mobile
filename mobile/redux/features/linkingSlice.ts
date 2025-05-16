@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { GnoNativeApi, KeyInfo, SignTxResponse } from '@gnolang/gnonative'
+import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
 import { RootState } from '../root-reducer'
-
-const DEFAULT_GAS_MARGIN = 110 // 1.1%
+import { prepareToExecuteContract, clearExecute } from '@/redux/features'
 
 export interface LinkingState {
   chainId?: string
@@ -25,6 +24,8 @@ export interface LinkingState {
   /* The session key info */
   session?: string
   session_wanted?: boolean
+  /* Decide if the transaction should be broadcasted to the chain */
+  broadcast?: boolean
 }
 
 const initialState: LinkingState = {
@@ -63,71 +64,6 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { keyInfo: KeyInfo
   }
 )
 
-export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>(
-  'linking/signTx',
-  async ({ keyInfo }, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
-    const { masterPassword } = (thunkAPI.getState() as RootState).signIn
-
-    if (!masterPassword) {
-      throw new Error('No keyInfo found.')
-    }
-
-    const txJson = decodeURIComponent(txInput || '')
-    console.log('txJson', txJson)
-    console.log('keyInfo', JSON.stringify(keyInfo))
-
-    const res = await gnonative.activateAccount(keyInfo.name)
-    console.log('activateAccount', res)
-
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-    console.log('selected account', keyInfo.name)
-
-    const signedTx = await gnonative.signTx(txJson, keyInfo?.address)
-    console.log('signedTx', signedTx)
-
-    return signedTx
-  }
-)
-
-interface gasEstimation {
-  tx: string
-  gasWanted: bigint
-}
-
-// estimateGasWanted estimates the gas wanted value for the transaction.
-// If the `update` field is true, the transaction will be updated with the new gas wanted value.
-export const estimateGasWanted = createAsyncThunk<gasEstimation, { keyInfo: KeyInfo; updateTx: boolean }, ThunkExtra>(
-  'linking/estimateGas',
-  async ({ keyInfo, updateTx }, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
-    const { masterPassword } = (thunkAPI.getState() as RootState).signIn
-
-    if (!masterPassword) {
-      throw new Error('No keyInfo found.')
-    }
-
-    const txJson = decodeURIComponent(txInput || '')
-
-    await gnonative.activateAccount(keyInfo.name)
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-
-    // Estimate the gas used
-    const response = await gnonative.estimateGas(txJson, keyInfo?.address, DEFAULT_GAS_MARGIN, updateTx)
-    const gasWanted = response.gasWanted as bigint
-    console.log('estimateGas: ', gasWanted)
-
-    // Update the transaction
-    if (updateTx) {
-      return { tx: response.txJson, gasWanted: gasWanted }
-    }
-
-    return { tx: txJson, gasWanted }
-  }
-)
-
 interface SetLinkResponse {
   chainId?: string
   remote?: string
@@ -137,58 +73,91 @@ interface SetLinkResponse {
   txInput?: string
   updateTx?: boolean
   callback?: string
-  path: string
+  /* The path of the requested screen */
+  path: 'tosignin' | 'toexecute' | string
   keyinfo?: KeyInfo
   hostname?: string
   session?: string
-  session_wanted: boolean
+  session_wanted?: boolean
+  broadcast?: boolean
+}
+
+export type GnoLinkingApp = {
+  address?: string
+  update_tx?: string
+  tx?: string
+  reason?: string
+  client_name?: string
+  callback?: string
+  path?: string
+  session?: string
+  session_wanted?: string
+  broadcast?: string
+  chain_id?: string
+  remote?: string
+  hostname?: string
 }
 
 /**
  * Set the linking data from the parsed URL received from the linking event
  */
-export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>(
-  'linking/setLinkingData',
-  async (parsedURL, thunkAPI) => {
-    const queryParams = parsedURL.queryParams
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+export const setLinkingData = createAsyncThunk<
+  SetLinkResponse,
+  {
+    url: string
+  },
+  ThunkExtra
+>('linking/setLinkingData', async ({ url }, thunkAPI) => {
+  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
-    const bech32Address = queryParams?.address ? (queryParams.address as string) : undefined
-    let keyinfo: KeyInfo | undefined
+  const parsedLink: Linking.ParsedURL = Linking.parse(url)
+  const queryParams = parsedLink.queryParams as GnoLinkingApp
 
-    if (bech32Address) {
-      const keyinfos = await gnonative.listKeyInfo()
-      for (const k of keyinfos) {
-        const kAddress = await gnonative.addressToBech32(k.address)
-        if (kAddress === bech32Address) {
-          keyinfo = k
-          break
-        }
-      }
-    }
-
-    let updateTx = false
-    if (queryParams?.update_tx && (queryParams.update_tx as string) === 'true') {
-      updateTx = true
-    }
-
+  if (parsedLink.path === 'toexecute') {
+    thunkAPI.dispatch(clearExecute())
+    thunkAPI.dispatch(prepareToExecuteContract(url))
     return {
-      chainId: queryParams?.chain_id ? (queryParams.chain_id as string) : undefined,
-      remote: queryParams?.remote ? (queryParams.remote as string) : undefined,
-      hostname: parsedURL.hostname || undefined,
-      reason: queryParams?.reason ? (queryParams.reason as string) : undefined,
-      clientName: queryParams?.client_name ? (queryParams.client_name as string) : undefined,
-      bech32Address,
-      txInput: queryParams?.tx ? (queryParams.tx as string) : undefined,
-      updateTx: updateTx,
-      callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
-      path: (queryParams?.path as string) || '',
-      keyinfo,
-      session: queryParams?.session ? (queryParams.session as string) : undefined,
-      session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false
+      // to redirect to the toexecute page
+      path: 'toexecute'
     }
   }
-)
+
+  const bech32Address = queryParams?.address ? (queryParams.address as string) : undefined
+  let keyinfo: KeyInfo | undefined
+
+  if (bech32Address) {
+    const keyinfos = await gnonative.listKeyInfo()
+    for (const k of keyinfos) {
+      const kAddress = await gnonative.addressToBech32(k.address)
+      if (kAddress === bech32Address) {
+        keyinfo = k
+        break
+      }
+    }
+  }
+
+  let updateTx = false
+  if (queryParams?.update_tx && (queryParams.update_tx as string) === 'true') {
+    updateTx = true
+  }
+
+  return {
+    chainId: queryParams?.chain_id ? (queryParams.chain_id as string) : undefined,
+    remote: queryParams?.remote ? (queryParams.remote as string) : undefined,
+    hostname: queryParams.hostname || undefined,
+    reason: queryParams?.reason ? (queryParams.reason as string) : undefined,
+    clientName: queryParams?.client_name ? (queryParams.client_name as string) : undefined,
+    bech32Address,
+    txInput: queryParams?.tx ? (queryParams.tx as string) : undefined,
+    updateTx: updateTx,
+    callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
+    path: (queryParams?.path as string) || '',
+    keyinfo,
+    session: queryParams?.session ? (queryParams.session as string) : undefined,
+    session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false,
+    broadcast: queryParams?.broadcast ? Boolean(queryParams.broadcast) : false
+  }
+})
 
 // export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>(
 //   'linking/setLinkingData',
@@ -248,6 +217,7 @@ export const linkingSlice = createSlice({
       state.hostname = action.payload.hostname
       state.session = action.payload.session
       state.session_wanted = action.payload.session_wanted
+      state.broadcast = action.payload.broadcast
     })
   },
   selectors: {
@@ -262,7 +232,8 @@ export const linkingSlice = createSlice({
     reasonSelector: (state) => state.reason,
     selectAction: (state) => (state.hostname !== expo_default ? state.hostname : undefined),
     selectSession: (state) => state.session,
-    selectSessionWanted: (state) => state.session_wanted
+    selectSessionWanted: (state) => state.session_wanted,
+    selectBroadcast: (state) => state.broadcast
   }
 })
 
@@ -282,6 +253,7 @@ export const {
   selectAction,
   selectChainId,
   selectRemote,
+  selectBroadcast,
   selectSession,
   selectSessionWanted
 } = linkingSlice.selectors

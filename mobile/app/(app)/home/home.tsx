@@ -5,10 +5,11 @@ import { Layout } from '@/components/index'
 import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
-import { FontAwesome6 } from '@expo/vector-icons'
+import { AppBar, ButtonIcon, Spacer, Text } from '@/modules/ui-components'
+import { FontAwesome6, FontAwesome } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 import { ModalConfirm } from '@/components/modal/ModalConfirm'
+import { SearchInput } from '@/components/textinput/SearchInput'
 
 export default function Page() {
   const isFirstRender = useRef(true)
@@ -42,12 +43,17 @@ export default function Page() {
   }, [])
 
   useEffect(() => {
+    doSearch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nameSearch, vaults])
+
+  const doSearch = () => {
     if (nameSearch) {
       setFilteredAccounts(vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : [])
     } else {
       setFilteredAccounts(vaults || [])
     }
-  }, [nameSearch, vaults])
+  }
 
   const onChangeAccountHandler = async (vault: Vault) => {
     await dispatch(setVaultToEdit({ vault }))
@@ -77,13 +83,12 @@ export default function Page() {
     <>
       <Layout.Container>
         <AppBar>
-          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color="tertirary">
+          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color="tertiary">
+            <FontAwesome6 name="network-wired" size={20} color="black" />
+          </ButtonIcon>
+          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color="tertiary">
             <FontAwesome6 name="user" size={20} color="black" />
           </ButtonIcon>
-
-          <Button onPress={navigateToAddKey} color="tertirary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
-            New Vault
-          </Button>
         </AppBar>
 
         <BodyAlignedBotton>
@@ -92,16 +97,21 @@ export default function Page() {
             <Text.H1 style={{ color: 'white' }}>Vault List</Text.H1>
           </View>
 
-          <TextField
-            placeholder="Search Vault"
-            value={nameSearch}
-            onChangeText={setNameSearch}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-
           <Spacer />
-          <Text.Body style={{ textAlign: 'center' }}>
+
+          <View style={{ padding: 4 }}>
+            <View style={{ flexDirection: 'row' }}>
+              <SearchInput placeholder="Search Vault" onChangeText={setNameSearch} autoCapitalize="none" autoCorrect={false} />
+              <ButtonIcon onPress={doSearch} color="tertiary">
+                <FontAwesome name="search" size={16} color="black" />
+              </ButtonIcon>
+              <Spacer spaceH={16} />
+              <ButtonIcon onPress={navigateToAddKey} color="tertiary">
+                <FontAwesome6 name="add" size={16} color="black" />
+              </ButtonIcon>
+            </View>
+          </View>
+          <Text.Body style={{ textAlign: 'center', paddingTop: 8 }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
           <Spacer />

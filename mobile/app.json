@@ -38,6 +38,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "edgeToEdgeEnabled": true,
       "package": "land.gno.keymanager.android",
       "versionCode": "1"
     },

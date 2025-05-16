@@ -1,9 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Coin, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
+import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
 import { NetworkMetainfo } from '@/types'
 import { RootState } from '../root-reducer'
+import { create } from '@bufbuild/protobuf'
 
 export enum VaultCreationState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -290,7 +291,7 @@ const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
   try {
     const gasFee = '10000000ugnot'
     const gasWanted = BigInt(20000000)
-    const send = [new Coin({ denom: 'ugnot', amount: BigInt(1000000) })]
+    const send = [create(CoinSchema, { denom: 'ugnot', amount: BigInt(1000000) })]
     const args: string[] = [account.name]
     for await (const response of await gnonative.call(
       'gno.land/r/gnoland/users/v1',

@@ -48,7 +48,7 @@ export default function Page() {
             Paste
           </Button>
           <Spacer />
-          <Button color="primary" onPress={() => route.push('/(vault)/option-phrase/enter-vault-name')}>
+          <Button color="primary" onPress={() => route.push('/vault/option-phrase/enter-vault-name')}>
             Continue
           </Button>
         </ScrollView>

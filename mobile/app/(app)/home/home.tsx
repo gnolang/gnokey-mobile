@@ -55,7 +55,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('/(vault)')
+    route.push('/vault')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {
@@ -119,7 +119,6 @@ export default function Page() {
                 />
               )}
               keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={vaults?.length === 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
             />
           )}
         </BodyAlignedBotton>

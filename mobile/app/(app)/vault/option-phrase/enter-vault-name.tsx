@@ -11,7 +11,7 @@ export default function Page() {
     // if (!password) throw new Error('No password found')
     try {
       // await dispatch(addVault({ name: vaultName, password, phrase: seed })).unwrap()
-      router.replace({ pathname: '(vault)/new-vault/new-vault-sucess' })
+      router.replace({ pathname: 'vault/new-vault/new-vault-sucess' })
       // route.push('/home')_
     } catch (error) {
       console.error('Error importing vault:', error)

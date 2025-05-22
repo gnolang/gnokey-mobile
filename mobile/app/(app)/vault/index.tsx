@@ -24,13 +24,13 @@ export default function Page() {
         <ActionItem
           title="Create a personal vault"
           subtitle="Quick and easy to set up"
-          onPress={() => router.navigate('/(vault)/new-vault')}
+          onPress={() => router.navigate('/vault/new-vault')}
         />
         <Ruller />
         <ActionItem
           title="Import a wallet."
           subtitle="Recover a wallet you previously used."
-          onPress={() => router.navigate('/(vault)/recovery-options')}
+          onPress={() => router.navigate('/vault/recovery-options')}
         />
         <Ruller />
       </Layout.Body>

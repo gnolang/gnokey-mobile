@@ -4,6 +4,7 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
-    'no-unused-expressions': 'off'
+    'no-unused-expressions': 'off',
+    'import/no-unresolved': ['error', { ignore: ['@/redux', '^@/modules/.+', '@/components', '@/views'] }]
   }
 }

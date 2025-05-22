@@ -55,7 +55,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('/home/vault-add-modal')
+    route.push('/(vault)')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {

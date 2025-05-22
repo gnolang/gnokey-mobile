@@ -45,7 +45,7 @@ export const ChainSelectView = () => {
         <Text.Body>Select Network to </Text.Body>
         <Text.Body style={{ color: theme.colors.white }}>&nbsp;Register Username</Text.Body>
       </View>
-      <Spacer />
+      <Spacer space={4} />
 
       <SelectWrapper onPress={() => setShowModalChain(!showModalChain)} hasItem={Boolean(currentChain)}>
         {currentChain ? (

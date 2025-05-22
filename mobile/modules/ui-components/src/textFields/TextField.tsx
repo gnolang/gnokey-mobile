@@ -73,9 +73,11 @@ const Container = styled.View`
 const Content = styled.View<PropsWithTheme>`
   flex-direction: row;
   align-items: center;
-  border-bottom-width: 1px;
+  border-radius: 8px;
+  border-width: 1px;
+  padding: 0 8px;
   color: ${(p) => p.theme.colors.black};
-  background-color: ${(p) => (p.color ? p.theme.textinputs.secondary.background : p.theme.textinputs.primary.background)};
+  background-color: #f5f5f5;
 `
 
 const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({

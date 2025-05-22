@@ -15,18 +15,6 @@ export default function AppLayout() {
       <Stack.Screen name="home" />
       <Stack.Screen name="profile" />
       <Stack.Screen
-        name="(modal)/vault-add-modal"
-        options={{
-          presentation: 'modal'
-        }}
-      />
-      <Stack.Screen
-        name="(modal)/vault-add-sucess-modal"
-        options={{
-          presentation: 'modal'
-        }}
-      />
-      <Stack.Screen
         name="(modal)/vault-detail-modal"
         options={{
           presentation: 'modal'

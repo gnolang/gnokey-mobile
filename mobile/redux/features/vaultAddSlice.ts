@@ -98,6 +98,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
 
+    thunkAPI.dispatch(setPhrase('')) // clear the phrase
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
@@ -358,6 +359,9 @@ export const vaultAddSlice = createSlice({
   name: 'vaultAdd',
   initialState,
   reducers: {
+    setPhrase: (state, action: PayloadAction<string>) => {
+      state.phrase = action.payload
+    },
     signUpState: (state, action: PayloadAction<VaultCreationState>) => {
       state.signUpState = action.payload
     },
@@ -384,6 +388,7 @@ export const vaultAddSlice = createSlice({
       state.signUpState = undefined
       state.selectedChain = undefined
       state.keyName = ''
+      state.phrase = ''
     }
   },
   extraReducers(builder) {
@@ -424,8 +429,16 @@ export const vaultAddSlice = createSlice({
   }
 })
 
-export const { addProgress, signUpState, clearProgress, setRegisterAccount, setKeyName, setSelectedChain, resetState } =
-  vaultAddSlice.actions
+export const {
+  addProgress,
+  signUpState,
+  clearProgress,
+  setRegisterAccount,
+  setKeyName,
+  setSelectedChain,
+  resetState,
+  setPhrase
+} = vaultAddSlice.actions
 
 export const {
   selectLoading,

@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components/native'
 
 type Props = {
@@ -6,24 +6,29 @@ type Props = {
 } & React.ComponentProps<typeof View>
 
 export const ErrorBox = ({ children, style, ...rest }: Props) => {
-  if (!children) return <View style={[{ height: 30 }, style]} {...rest} />
+  if (!children) return <View style={[{ minHeight: 30 }, style]} {...rest} />
 
   return (
     <ErrorBoxWrapper style={style} {...rest}>
-      <Text>{children}</Text>
+      <TextStyled numberOfLines={0}>{children}</TextStyled>
     </ErrorBoxWrapper>
   )
 }
 
 const ErrorBoxWrapper = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: center;
-  font-size: 14px;
-  height: 30px;
-  padding-horizontal: 8px;
+  align-self: stretch;
+  justify-content: center;
+  min-height: 30px;
+  padding-horizontal: 4px;
   color: black;
-  border-radius: ${(props) => props.theme.borderRadius || 20}px;
+  border-radius: ${(props) => props.theme.borderRadius || 8}px;
   background-color: ${({ theme }) => theme.error.background};
+  flex-wrap: wrap;
+`
+
+const TextStyled = styled.Text`
+  size: 10px;
+  flexwrap: wrap;
+  color: red;
+  align-self: center;
 `

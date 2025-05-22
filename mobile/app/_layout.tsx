@@ -18,6 +18,11 @@ const indexerConfig = {
   remote: process.env.EXPO_PUBLIC_TXINDEXER_REMOTE!
 }
 
+// eslint-disable-next-line no-extend-native
+BigInt.prototype.toJSON = function () {
+  return this.toString()
+}
+
 export default function AppLayout() {
   return (
     <GnoNativeProvider config={gnoDefaultConfig}>

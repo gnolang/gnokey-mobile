@@ -22,17 +22,7 @@ import {
 } from '@/redux'
 import { TextCopy } from '@/components'
 import { Feather, FontAwesome6, Octicons } from '@expo/vector-icons'
-import {
-  Button,
-  Text,
-  TextField,
-  BottonPanel,
-  Container,
-  ButtonIcon,
-  Spacer,
-  SafeAreaView,
-  TopModalBar
-} from '@/modules/ui-components'
+import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
 import { ChainSelectView } from '@/views/chains/chain-select-view'
 
@@ -67,7 +57,7 @@ export default function Page() {
   }, [navigation, dispatch])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       // console.log("signUpState ->", signUpState);
 
       if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {
@@ -102,7 +92,7 @@ export default function Page() {
       }
       if (signUpState === VaultCreationState.account_created && newAccount) {
         dispatch(resetState())
-        router.replace({ pathname: 'home/vault-add-sucess-modal' })
+        router.replace({ pathname: '(vault)/new-vault/new-vault-sucess' })
       }
     })()
   }, [signUpState, newAccount, dispatch])
@@ -162,8 +152,6 @@ export default function Page() {
         </View>
       </Modal>
       <SafeAreaView>
-        <TopModalBar />
-
         <Container>
           <View>
             <Text.H1>My New</Text.H1>
@@ -199,16 +187,17 @@ export default function Page() {
           </Text.Body>
         </TextCopy>
         <Spacer />
+        <ButtonIcon size={30} color="primary" onPress={() => dispatch(generateNewPhrase())}>
+          <Feather name="refresh-cw" size={15} color="white" />
+        </ButtonIcon>
+        <Spacer />
         <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-          {/* <Button color='secondary'>Import Vault</Button> */}
           <View style={{ width: 120 }} />
-          <ButtonIcon size={60} color="primary" onPress={() => dispatch(generateNewPhrase())}>
-            <Feather name="refresh-cw" size={30} color="white" />
-          </ButtonIcon>
-          <Button onPress={onCreate} endIcon={<FontAwesome6 name="add" size={16} color="white" />}>
-            New Vault
-          </Button>
         </View>
+        <Spacer />
+        <Button onPress={onCreate} style={{ width: '100%' }}>
+          Continue
+        </Button>
       </BottonPanel>
     </>
   )

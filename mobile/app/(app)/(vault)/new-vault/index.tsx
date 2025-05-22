@@ -21,7 +21,7 @@ import {
   checkForKeyOnChains
 } from '@/redux'
 import { TextCopy } from '@/components'
-import { Feather, FontAwesome6, Octicons } from '@expo/vector-icons'
+import { Feather, Octicons } from '@expo/vector-icons'
 import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
 import { ChainSelectView } from '@/views/chains/chain-select-view'
@@ -57,7 +57,7 @@ export default function Page() {
   }, [navigation, dispatch])
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       // console.log("signUpState ->", signUpState);
 
       if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {

@@ -34,6 +34,7 @@ export type RootState = {
   sessionKey: SessionKeyState
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const store = configureStore({
   reducer: rootReducer
 })

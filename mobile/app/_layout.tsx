@@ -18,6 +18,13 @@ const indexerConfig = {
   remote: process.env.EXPO_PUBLIC_TXINDEXER_REMOTE!
 }
 
+// Extend the BigInt interface to include toJSON
+declare global {
+  interface BigInt {
+    toJSON(): string
+  }
+}
+
 // eslint-disable-next-line no-extend-native
 BigInt.prototype.toJSON = function () {
   return this.toString()

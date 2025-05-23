@@ -98,10 +98,12 @@ export default function Page() {
             onChangeText={setNameSearch}
             autoCapitalize="none"
             autoCorrect={false}
+            hideError
           />
           <Text.Body style={{ textAlign: 'center' }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
+          <Spacer space={8} />
 
           {filteredAccounts && (
             <FlatList

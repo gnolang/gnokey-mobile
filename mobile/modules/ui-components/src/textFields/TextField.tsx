@@ -10,11 +10,12 @@ export type Props = {
   type?: 'password' | 'text'
   error?: string
   color?: 'secondary'
+  hideError?: boolean
 } & TextInputProps
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
-export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, ...rest }) => {
+export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, hideError, ...rest }) => {
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
   const fadeAnim = React.useRef(new Animated.Value(0)).current
@@ -59,7 +60,7 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
         </Content>
         <Spacer space={8} />
       </Container>
-      <ErrorBox>{error}</ErrorBox>
+      {hideError ? null : <ErrorBox>{error}</ErrorBox>}
     </>
   )
 }

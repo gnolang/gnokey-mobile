@@ -3,19 +3,31 @@ import { Spacer, Text } from '@/modules/ui-components'
 import { View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { NewVaultView } from '@/views'
+import { useAppSelector, selectLoadingAddVault } from '@/redux'
 
 export default function Page() {
   const router = useRouter()
 
+  const loading = useAppSelector(selectLoadingAddVault)
+
   const onContinue = () => {
-    // if (!password) throw new Error('No password found')
     try {
-      // await dispatch(addVault({ name: vaultName, password, phrase: seed })).unwrap()
       router.replace({ pathname: 'vault/new-vault/new-vault-sucess' })
-      // route.push('/home')_
     } catch (error) {
       console.error('Error importing vault:', error)
     }
+  }
+
+  if (loading) {
+    return (
+      <Layout.Container>
+        <Layout.Body>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Text.H3>Loading...</Text.H3>
+          </View>
+        </Layout.Body>
+      </Layout.Container>
+    )
   }
 
   return (

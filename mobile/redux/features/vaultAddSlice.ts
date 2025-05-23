@@ -399,6 +399,10 @@ export const vaultAddSlice = createSlice({
         }
         console.error('signUp.rejected', action)
       })
+      .addCase(addVault.pending, (state) => {
+        state.loading = true
+        state.progress = []
+      })
       .addCase(addVault.fulfilled, (state, action) => {
         state.loading = false
         state.newAccount = action.payload?.newAccount
@@ -417,7 +421,7 @@ export const vaultAddSlice = createSlice({
   },
 
   selectors: {
-    selectLoading: (state) => state.loading,
+    selectLoadingAddVault: (state) => state.loading,
     selectProgress: (state) => state.progress,
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
@@ -441,7 +445,7 @@ export const {
 } = vaultAddSlice.actions
 
 export const {
-  selectLoading,
+  selectLoadingAddVault,
   selectProgress,
   signUpStateSelector,
   newAccountSelector,

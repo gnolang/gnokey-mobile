@@ -99,12 +99,9 @@ export default function Page() {
             autoCapitalize="none"
             autoCorrect={false}
           />
-
-          <Spacer />
           <Text.Body style={{ textAlign: 'center' }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
-          <Spacer />
 
           {filteredAccounts && (
             <FlatList

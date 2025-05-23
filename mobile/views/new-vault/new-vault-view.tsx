@@ -17,7 +17,8 @@ import {
   resetState,
   fetchVaults,
   checkForKeyOnChains,
-  setKeyName
+  setKeyName,
+  selectLoadingAddVault
 } from '@/redux'
 import { Button, TextField, Spacer } from '@/modules/ui-components'
 import { Text } from '@/components'
@@ -30,7 +31,7 @@ export const NewVaultView = (props: Props) => {
   const { onSucess } = props
 
   const [error, setError] = useState<string | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
+  const loading = useAppSelector(selectLoadingAddVault)
 
   const { gnonative } = useGnoNativeContext()
 
@@ -106,8 +107,6 @@ export const NewVaultView = (props: Props) => {
       return
     }
 
-    setLoading(true)
-
     if (signUpState === VaultCreationState.user_exists_only_on_local_storage && existingAccount) {
       await gnonative.activateAccount(keyName)
       await gnonative.setPassword(masterPassword, existingAccount.address)
@@ -124,8 +123,6 @@ export const NewVaultView = (props: Props) => {
       RNAlert.alert('Error', '' + error)
       setError('' + error)
       console.log(error)
-    } finally {
-      setLoading(false)
     }
   }
 

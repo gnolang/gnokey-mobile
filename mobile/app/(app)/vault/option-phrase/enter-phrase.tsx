@@ -4,13 +4,12 @@ import { useState, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/modules/ui-components/src/seed-input/SeedInputs'
-import { useAppDispatch, useAppSelector, setPhrase, selectPhrase, resetState } from '@/redux'
+import { useAppDispatch, setPhrase, resetState } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 
 export default function Page() {
   const [menomicLength, setMenomicLength] = useState<12 | 24>(12)
 
-  const seed = useAppSelector(selectPhrase)
   const dispatch = useAppDispatch()
   const route = useRouter()
   const hasReset = useRef(false)

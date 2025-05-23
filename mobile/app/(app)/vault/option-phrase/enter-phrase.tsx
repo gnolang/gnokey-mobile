@@ -42,6 +42,7 @@ export default function Page() {
               <Button color="tertirary" onPress={() => setMenomicLength(12)}>
                 {'12 words'}
               </Button>
+              <Spacer spaceH={8} />
               <Button color="tertirary" onPress={() => setMenomicLength(24)}>
                 {'24 words'}
               </Button>

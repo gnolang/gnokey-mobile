@@ -1,27 +1,33 @@
 import { View } from 'react-native'
 import { useEffect, useMemo, useState } from 'react'
 import { SeedInputItem } from './SeedInputItem'
+import { useAppDispatch, useAppSelector, setPhrase, selectPhrase } from '@/redux'
 
 interface Props {
   length: 12 | 24
-  initialValue: string
-  onChange: (v: string) => void
 }
 
-export const SeedInputs = ({ length, initialValue, onChange = () => {} }: Props) => {
-  const [mnemonicWords, setMnemonicWords] = useState<string[]>(initialValue.split(' '))
+export const SeedInputs = ({ length }: Props) => {
+  const dispatch = useAppDispatch()
+
+  const seed = useAppSelector(selectPhrase)
+  const [mnemonicWords, setMnemonicWords] = useState<string[]>(Array(length).fill(''))
 
   useEffect(() => {
-    setMnemonicWords(initialValue.split(' '))
-  }, [initialValue])
+    if (seed && seed.length > 0) {
+      setMnemonicWords(seed.split(' '))
+    } else {
+      setMnemonicWords(Array(length).fill(''))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed])
 
-  const pairs = useMemo(() => Array(Math.round(length / 2)).fill(''), [length])
+  const pairs = useMemo(() => Array.from({ length: length / 2 }).fill(''), [length])
 
   const handleChangeText = (index: number, text: string) => {
     const newMnemonicWords = [...mnemonicWords]
     newMnemonicWords[index] = text
-    setMnemonicWords(newMnemonicWords)
-    onChange(newMnemonicWords.join(' '))
+    dispatch(setPhrase(newMnemonicWords.join(' ')))
   }
 
   return (

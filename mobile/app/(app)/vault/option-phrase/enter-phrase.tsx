@@ -1,11 +1,11 @@
 import { Layout } from '@/components'
 import { Button, Spacer, Text } from '@/modules/ui-components'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/modules/ui-components/src/seed-input/SeedInputs'
 import { useAppDispatch, useAppSelector, setPhrase, selectPhrase, resetState } from '@/redux'
-import { useFocusEffect, useRouter } from 'expo-router'
+import { useRouter, useFocusEffect } from 'expo-router'
 
 export default function Page() {
   const [menomicLength, setMenomicLength] = useState<12 | 24>(12)
@@ -13,23 +13,22 @@ export default function Page() {
   const seed = useAppSelector(selectPhrase)
   const dispatch = useAppDispatch()
   const route = useRouter()
+  const hasReset = useRef(false)
 
   useFocusEffect(() => {
-    dispatch(resetState())
+    if (!hasReset.current) {
+      dispatch(resetState())
+      hasReset.current = true
+    }
   })
 
   const pasteClipboard = async () => {
     const v = await Clipboard.getString()
-    console.log('Clipboard', v)
     dispatch(setPhrase(v))
 
     if (v.length > 0 && v.split(' ').length === 24) {
       setMenomicLength(24)
     }
-  }
-
-  const onChange = (value: string) => {
-    dispatch(setPhrase(value))
   }
 
   return (
@@ -46,9 +45,13 @@ export default function Page() {
               <Button color="tertirary" onPress={() => setMenomicLength(24)}>
                 {'24 words'}
               </Button>
+              <Spacer spaceH={8} />
+              <Button color="tertirary" onPress={() => dispatch(resetState())}>
+                Clear
+              </Button>
             </View>
           </View>
-          <SeedInputs length={menomicLength} initialValue={seed || ''} onChange={onChange} />
+          <SeedInputs length={menomicLength} />
           <Button color="tertirary" onPress={pasteClipboard}>
             Paste
           </Button>

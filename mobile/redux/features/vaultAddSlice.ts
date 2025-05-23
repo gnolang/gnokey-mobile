@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, asyncThunkCreator, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
@@ -354,6 +354,34 @@ const sendCoins = async (address: string, faucetRemote: string) => {
 
   return fetch(faucetRemote, requestOptions)
 }
+
+interface CheckPhraseResponse {
+  message: string
+  invalid: boolean
+}
+
+export const checkPhrase = createAsyncThunk<CheckPhraseResponse, void, ThunkExtra>(
+  'vaultAddSlice/checkPhrase',
+  async (_, thunkAPI) => {
+    const seed = (thunkAPI.getState() as RootState).vaultAdd.phrase
+    const seedWords = seed?.split(' ')
+
+    if (!seed || !seedWords || (seedWords.length !== 12 && seedWords.length !== 24)) {
+      return { message: 'Please enter a valid seed phrase with 12 or 24 words.', invalid: true }
+    }
+
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+
+    for (let i = 0; i < seedWords.length; i++) {
+      const word = seedWords[i]
+      const isValid = await gnonative.validateMnemonicWord(word)
+      if (!isValid) {
+        return { message: `Invalid word "${word}" at position ${i + 1}`, invalid: true }
+      }
+    }
+    return { message: 'Valid seed phrase', invalid: false }
+  }
+)
 
 export const vaultAddSlice = createSlice({
   name: 'vaultAdd',

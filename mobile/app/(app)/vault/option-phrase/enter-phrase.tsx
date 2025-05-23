@@ -1,10 +1,10 @@
 import { Layout } from '@/components'
 import { Button, Spacer, Text } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
-import { ScrollView, View } from 'react-native'
+import { Alert, ScrollView, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { SeedInputs } from '@/modules/ui-components/src/seed-input/SeedInputs'
-import { useAppDispatch, setPhrase, resetState } from '@/redux'
+import { SeedInputs } from '@/views'
+import { useAppDispatch, setPhrase, resetState, useAppSelector, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 
 export default function Page() {
@@ -13,6 +13,8 @@ export default function Page() {
   const dispatch = useAppDispatch()
   const route = useRouter()
   const hasReset = useRef(false)
+
+  const seed = useAppSelector
 
   useFocusEffect(() => {
     if (!hasReset.current) {
@@ -28,6 +30,16 @@ export default function Page() {
     if (v.length > 0 && v.split(' ').length === 24) {
       setMenomicLength(24)
     }
+  }
+
+  const onContinue = async () => {
+    const { invalid, message } = await dispatch(checkPhrase()).unwrap()
+    if (invalid) {
+      Alert.alert('Invalid seed phrase', message)
+      return
+    }
+
+    route.push('/vault/option-phrase/enter-vault-name')
   }
 
   return (
@@ -55,7 +67,7 @@ export default function Page() {
             Paste
           </Button>
           <Spacer />
-          <Button color="primary" onPress={() => route.push('/vault/option-phrase/enter-vault-name')}>
+          <Button color="primary" onPress={onContinue}>
             Continue
           </Button>
         </ScrollView>

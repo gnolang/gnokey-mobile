@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, asyncThunkCreator, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
@@ -98,6 +98,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
 
+    thunkAPI.dispatch(setPhrase('')) // clear the phrase
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
@@ -354,10 +355,41 @@ const sendCoins = async (address: string, faucetRemote: string) => {
   return fetch(faucetRemote, requestOptions)
 }
 
+interface CheckPhraseResponse {
+  message: string
+  invalid: boolean
+}
+
+export const checkPhrase = createAsyncThunk<CheckPhraseResponse, void, ThunkExtra>(
+  'vaultAddSlice/checkPhrase',
+  async (_, thunkAPI) => {
+    const seed = (thunkAPI.getState() as RootState).vaultAdd.phrase
+    const seedWords = seed?.split(' ')
+
+    if (!seed || !seedWords || (seedWords.length !== 12 && seedWords.length !== 24)) {
+      return { message: 'Please enter a valid seed phrase with 12 or 24 words.', invalid: true }
+    }
+
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+
+    for (let i = 0; i < seedWords.length; i++) {
+      const word = seedWords[i]
+      const isValid = await gnonative.validateMnemonicWord(word)
+      if (!isValid) {
+        return { message: `Invalid word "${word}" at position ${i + 1}`, invalid: true }
+      }
+    }
+    return { message: 'Valid seed phrase', invalid: false }
+  }
+)
+
 export const vaultAddSlice = createSlice({
   name: 'vaultAdd',
   initialState,
   reducers: {
+    setPhrase: (state, action: PayloadAction<string>) => {
+      state.phrase = action.payload
+    },
     signUpState: (state, action: PayloadAction<VaultCreationState>) => {
       state.signUpState = action.payload
     },
@@ -384,6 +416,7 @@ export const vaultAddSlice = createSlice({
       state.signUpState = undefined
       state.selectedChain = undefined
       state.keyName = ''
+      state.phrase = ''
     }
   },
   extraReducers(builder) {
@@ -393,6 +426,10 @@ export const vaultAddSlice = createSlice({
           state.progress = [...state.progress, action.error.message]
         }
         console.error('signUp.rejected', action)
+      })
+      .addCase(addVault.pending, (state) => {
+        state.loading = true
+        state.progress = []
       })
       .addCase(addVault.fulfilled, (state, action) => {
         state.loading = false
@@ -412,7 +449,7 @@ export const vaultAddSlice = createSlice({
   },
 
   selectors: {
-    selectLoading: (state) => state.loading,
+    selectLoadingAddVault: (state) => state.loading,
     selectProgress: (state) => state.progress,
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
@@ -424,11 +461,19 @@ export const vaultAddSlice = createSlice({
   }
 })
 
-export const { addProgress, signUpState, clearProgress, setRegisterAccount, setKeyName, setSelectedChain, resetState } =
-  vaultAddSlice.actions
+export const {
+  addProgress,
+  signUpState,
+  clearProgress,
+  setRegisterAccount,
+  setKeyName,
+  setSelectedChain,
+  resetState,
+  setPhrase
+} = vaultAddSlice.actions
 
 export const {
-  selectLoading,
+  selectLoadingAddVault,
   selectProgress,
   signUpStateSelector,
   newAccountSelector,

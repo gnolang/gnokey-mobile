@@ -30,6 +30,18 @@ export const Body = styled.Text<TextProps>`
   color: ${(props) => props.theme.colors.black};
 `
 
+export const Body5 = styled.Text<TextProps>`
+  font-size: 18px;
+  line-height: 140%;
+  color: ${(props) => props.theme.colors.black};
+`
+
+export const Body6 = styled.Text<TextProps>`
+  font-size: 15px;
+  line-height: 140%;
+  color: ${(props) => props.theme.colors.black};
+`
+
 export const Caption = styled.Text<TextProps>`
   font-weight: 400;
   font-size: 12px;

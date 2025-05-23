@@ -11,7 +11,7 @@ type Props = {
   style?: any
 }
 
-const Header: React.FC<Props> = ({ iconType = 'close', onCloseHandler, title = '', subtitle = '', style }) => {
+const Header: React.FC<Props> = ({ iconType = 'back', onCloseHandler, title = '', subtitle = '', style }) => {
   const router = useRouter()
 
   if (!onCloseHandler) {

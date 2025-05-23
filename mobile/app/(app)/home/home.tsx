@@ -55,7 +55,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('/home/vault-add-modal')
+    route.push('/vault')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {
@@ -98,13 +98,12 @@ export default function Page() {
             onChangeText={setNameSearch}
             autoCapitalize="none"
             autoCorrect={false}
+            hideError
           />
-
-          <Spacer />
           <Text.Body style={{ textAlign: 'center' }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
-          <Spacer />
+          <Spacer space={8} />
 
           {filteredAccounts && (
             <FlatList
@@ -119,7 +118,6 @@ export default function Page() {
                 />
               )}
               keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={vaults?.length === 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
             />
           )}
         </BodyAlignedBotton>

@@ -1,7 +1,7 @@
 import { Layout } from '@/components'
 import { Button, Spacer, Text } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
-import { Alert, ScrollView, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/views'
 import { useAppDispatch, setPhrase, resetState, useAppSelector, checkPhrase } from '@/redux'
@@ -43,35 +43,37 @@ export default function Page() {
   }
 
   return (
-    <Layout.Container>
-      <Layout.Body>
-        <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Text.H3>Enter your seed phrase</Text.H3>
-            <View style={{ flexDirection: 'row', paddingTop: 16, paddingBottom: 8 }}>
-              <Button color="tertirary" onPress={() => setMenomicLength(12)}>
-                {'12 words'}
-              </Button>
-              <Spacer spaceH={8} />
-              <Button color="tertirary" onPress={() => setMenomicLength(24)}>
-                {'24 words'}
-              </Button>
-              <Spacer spaceH={8} />
-              <Button color="tertirary" onPress={() => dispatch(resetState())}>
-                Clear
-              </Button>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={80}>
+      <Layout.Container>
+        <Layout.Body>
+          <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text.H3>Enter your seed phrase</Text.H3>
+              <View style={{ flexDirection: 'row', paddingTop: 16, paddingBottom: 8 }}>
+                <Button color="tertirary" onPress={() => setMenomicLength(12)}>
+                  {'12 words'}
+                </Button>
+                <Spacer spaceH={8} />
+                <Button color="tertirary" onPress={() => setMenomicLength(24)}>
+                  {'24 words'}
+                </Button>
+                <Spacer spaceH={8} />
+                <Button color="tertirary" onPress={() => dispatch(resetState())}>
+                  Clear
+                </Button>
+              </View>
             </View>
-          </View>
-          <SeedInputs length={menomicLength} />
-          <Button color="tertirary" onPress={pasteClipboard}>
-            Paste
-          </Button>
-          <Spacer />
-          <Button color="primary" onPress={onContinue}>
-            Continue
-          </Button>
-        </ScrollView>
-      </Layout.Body>
-    </Layout.Container>
+            <SeedInputs length={menomicLength} />
+            <Button color="tertirary" onPress={pasteClipboard}>
+              Paste
+            </Button>
+            <Spacer />
+            <Button color="primary" onPress={onContinue}>
+              Continue
+            </Button>
+          </ScrollView>
+        </Layout.Body>
+      </Layout.Container>
+    </KeyboardAvoidingView>
   )
 }

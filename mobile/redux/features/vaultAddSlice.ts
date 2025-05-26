@@ -379,6 +379,12 @@ export const checkPhrase = createAsyncThunk<CheckPhraseResponse, void, ThunkExtr
         return { message: `Invalid word "${word}" at position ${i + 1}`, invalid: true }
       }
     }
+
+    const isValid = await gnonative.validateMnemonicPhrase(seed)
+    if (!isValid) {
+      return { message: 'Invalid seed phrase. Please check the words and their order.', invalid: true }
+    }
+
     return { message: 'Valid seed phrase', invalid: false }
   }
 )

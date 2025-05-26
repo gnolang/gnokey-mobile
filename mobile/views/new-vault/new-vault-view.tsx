@@ -119,10 +119,9 @@ export const NewVaultView = (props: Props) => {
       await dispatch(fetchVaults()).unwrap()
 
       dispatch(checkForKeyOnChains())
-    } catch (error) {
-      RNAlert.alert('Error', '' + error)
-      setError('' + error)
+    } catch (error: any | Error) {
       console.log(error)
+      RNAlert.alert('Error', '' + error.message || 'An error occurred while creating the vault. Please try again.')
     }
   }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
 import {
@@ -74,20 +74,36 @@ export default function Root() {
 
   return (
     <Container>
-      <>
-        <View style={{ alignItems: 'center', paddingTop: 100 }}>
-          <Text.H1 style={{ textAlign: 'center', color: '#E5E5E5' }}>GnoKey</Text.H1>
-          <Text.H1 style={{ textAlign: 'center' }}>Mobile</Text.H1>
-          <Text.Body>The Gno Key Management Tool</Text.Body>
-        </View>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <View style={styles.innerGroup}>
+              <Text.H1 style={{ color: '#E5E5E5' }}>GnoKey</Text.H1>
+              <Text.H1>Mobile</Text.H1>
+              <Text.Body>The Gno Key Management Tool</Text.Body>
+            </View>
 
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
-          <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} style={{ flex: 1 }}>
-            {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
-            {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </>
+            <View style={styles.innerGroup}>
+              {hasMasterPassword ? <SignInView onUnlokPress={onUnlokPress} error={error} /> : null}
+              {!hasMasterPassword ? <SignUpView onCreateMasterPress={onCreateMasterPass} error={error} /> : null}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  inner: {
+    flex: 1
+  },
+  innerGroup: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

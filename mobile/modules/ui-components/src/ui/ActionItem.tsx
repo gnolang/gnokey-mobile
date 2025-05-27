@@ -11,7 +11,14 @@ interface Props {
 
 export const ActionItem: React.FC<Props> = ({ onPress, title, subtitle, iconLeft }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}
+    >
       {iconLeft}
       <View style={{ flex: 1, paddingLeft: iconLeft ? 18 : 0 }}>
         <Text.Body5>{title}</Text.Body5>

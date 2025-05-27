@@ -1,4 +1,4 @@
-import { Button, Spacer, TextField } from '@/modules/ui-components'
+import { Button, TextField } from '@/modules/ui-components'
 import { useState } from 'react'
 
 export interface Props {
@@ -20,7 +20,6 @@ const SignInView: React.FC<Props> = ({ onUnlokPress, error }) => {
         error={error}
         onChangeText={setPassword}
       />
-      <Spacer space={8} />
       <Button style={{ width: '100%' }} onPress={() => onUnlokPress(password)} color="primary">
         Unlock
       </Button>

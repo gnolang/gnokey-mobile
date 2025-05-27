@@ -27,10 +27,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "jsEngine": "hermes",
-      "ios": {
-        "jsEngine": "jsc"
-      }
+      "jsEngine": "hermes"
     },
     "android": {
       "adaptiveIcon": {

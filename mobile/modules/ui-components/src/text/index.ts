@@ -32,13 +32,13 @@ export const Body = styled.Text<TextProps>`
 
 export const Body5 = styled.Text<TextProps>`
   font-size: 18px;
-  line-height: 140%;
+  line-height: 25px;
   color: ${(props) => props.theme.colors.black};
 `
 
 export const Body6 = styled.Text<TextProps>`
   font-size: 15px;
-  line-height: 140%;
+  line-height: 21px;
   color: ${(props) => props.theme.colors.black};
 `
 

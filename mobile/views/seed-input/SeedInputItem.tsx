@@ -9,7 +9,7 @@ interface Props {
 export const SeedInputItem = ({ index, onChangeText, value }: Props) => {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Text>{index}</Text>
+      <Text style={styles.textIndex}>{index}</Text>
       <TextInput
         onChangeText={onChangeText}
         style={styles.textInput}
@@ -25,13 +25,17 @@ export const SeedInputItem = ({ index, onChangeText, value }: Props) => {
 }
 
 const styles = StyleSheet.create({
+  textIndex: {
+    width: 20
+  },
   textInput: {
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 8,
     height: 30,
-    width: 150,
-    paddingHorizontal: 4,
-    marginLeft: 2
+    margin: 0,
+    padding: 0,
+    paddingHorizontal: 8,
+    width: 130
   }
 })

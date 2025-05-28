@@ -1,4 +1,12 @@
-import { View, TextInput as RNTextInput, Alert as RNAlert, Modal, ActivityIndicator } from 'react-native'
+import {
+  View,
+  TextInput as RNTextInput,
+  Alert as RNAlert,
+  Modal,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
@@ -152,29 +160,31 @@ export default function Page() {
         </View>
       </Modal>
       <SafeAreaView>
-        <Container>
-          <View>
-            <Text.H1>My New</Text.H1>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text.H1>Vault&nbsp;</Text.H1>
-              <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Container>
+            <View>
+              <Text.H1>My New</Text.H1>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text.H1>Vault&nbsp;</Text.H1>
+                <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
+              </View>
             </View>
-          </View>
 
-          <Spacer />
-          <TextField
-            label="Vault name"
-            placeholder="Vault name"
-            value={keyName}
-            onChangeText={(x) => dispatch(setKeyName(x))}
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoComplete="off"
-            error={error}
-          />
-          <Spacer space={4} />
-          <ChainSelectView />
-        </Container>
+            <Spacer />
+            <TextField
+              label="Vault name"
+              placeholder="Vault name"
+              value={keyName}
+              onChangeText={(x) => dispatch(setKeyName(x))}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="off"
+              error={error}
+            />
+            <Spacer space={4} />
+            <ChainSelectView />
+          </Container>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
 
       <BottonPanel>

@@ -1,10 +1,19 @@
-import { Layout } from '@/components'
-import { Button, Spacer, Text } from '@/modules/ui-components'
+import { Button, Spacer, Text, Container } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native'
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  ScrollView,
+  View,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  SafeAreaView
+} from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/views'
-import { useAppDispatch, setPhrase, resetState, useAppSelector, checkPhrase } from '@/redux'
+import { useAppDispatch, setPhrase, resetState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 
 export default function Page() {
@@ -13,8 +22,6 @@ export default function Page() {
   const dispatch = useAppDispatch()
   const route = useRouter()
   const hasReset = useRef(false)
-
-  const seed = useAppSelector
 
   useFocusEffect(() => {
     if (!hasReset.current) {
@@ -43,13 +50,26 @@ export default function Page() {
   }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={80}>
-      <Layout.Container>
-        <Layout.Body>
-          <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <Container>
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 240}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingBottom: 220
+              }}
+              keyboardShouldPersistTaps="handled"
+              style={styles.container}
+            >
               <Text.H3>Enter your seed phrase</Text.H3>
-              <View style={{ flexDirection: 'row', paddingTop: 16, paddingBottom: 8 }}>
+              <View style={styles.actions}>
                 <Button color="tertirary" onPress={() => setMenomicLength(12)}>
                   {'12 words'}
                 </Button>
@@ -62,18 +82,30 @@ export default function Page() {
                   Clear
                 </Button>
               </View>
-            </View>
-            <SeedInputs length={menomicLength} />
-            <Button color="tertirary" onPress={pasteClipboard}>
-              Paste
-            </Button>
-            <Spacer />
-            <Button color="primary" onPress={onContinue}>
-              Continue
-            </Button>
-          </ScrollView>
-        </Layout.Body>
-      </Layout.Container>
-    </KeyboardAvoidingView>
+              <View style={styles.container}>
+                <SeedInputs length={menomicLength} />
+              </View>
+              <View style={styles.footer}>
+                <Button color="tertirary" onPress={pasteClipboard}>
+                  Paste
+                </Button>
+                <Spacer />
+                <Button color="primary" onPress={onContinue}>
+                  Continue
+                </Button>
+              </View>
+            </ScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  actions: { flexDirection: 'row', padding: 16, justifyContent: 'center' },
+  footer: { width: '100%', flexDirection: 'column', justifyContent: 'center' }
+})

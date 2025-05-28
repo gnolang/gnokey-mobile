@@ -24,7 +24,7 @@ const Page = () => {
         <Text.Body>You can now use your key!</Text.Body>
       </View>
 
-      <View style={{ justifyContent: 'flex-end' }}>
+      <View style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <ButtonIcon size={60} color="primary" onPress={() => router.replace('/home')}>
             <Feather name="check" size={30} color="white" />

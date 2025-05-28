@@ -3,7 +3,6 @@ import { TextInputProps, Animated } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
-import { Spacer } from '../layout'
 
 export type Props = {
   label?: string
@@ -58,7 +57,6 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
             </ToggleIcon>
           ) : null}
         </Content>
-        <Spacer space={8} />
       </Container>
       {hideError ? null : <ErrorBox>{error}</ErrorBox>}
     </>
@@ -69,6 +67,7 @@ const Container = styled.View`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  padding-bottom: 2px;
 `
 
 const Content = styled.View<PropsWithTheme>`

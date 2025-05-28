@@ -19,7 +19,8 @@ const ErrorBoxWrapper = styled.View`
   align-self: stretch;
   justify-content: center;
   min-height: 30px;
-  padding-horizontal: 4px;
+  padding-horizontal: 8px;
+  margin-bottom: 4px;
   color: black;
   border-radius: ${(props) => props.theme.borderRadius || 8}px;
   background-color: ${({ theme }) => theme.error.background};

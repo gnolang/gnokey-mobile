@@ -3,18 +3,18 @@ import { TextInputProps, Animated } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
-import { Spacer } from '../layout'
 
 export type Props = {
   label?: string
   type?: 'password' | 'text'
   error?: string
   color?: 'secondary'
+  hideError?: boolean
 } & TextInputProps
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
-export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, ...rest }) => {
+export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, hideError, ...rest }) => {
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
   const fadeAnim = React.useRef(new Animated.Value(0)).current
@@ -57,9 +57,8 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
             </ToggleIcon>
           ) : null}
         </Content>
-        <Spacer space={8} />
       </Container>
-      <ErrorBox>{error}</ErrorBox>
+      {hideError ? null : <ErrorBox>{error}</ErrorBox>}
     </>
   )
 }
@@ -68,14 +67,17 @@ const Container = styled.View`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  padding-bottom: 2px;
 `
 
 const Content = styled.View<PropsWithTheme>`
   flex-direction: row;
   align-items: center;
-  border-bottom-width: 1px;
+  border-radius: 8px;
+  border-width: 1px;
+  padding: 0 8px;
   color: ${(p) => p.theme.colors.black};
-  background-color: ${(p) => (p.color ? p.theme.textinputs.secondary.background : p.theme.textinputs.primary.background)};
+  background-color: #f5f5f5;
 `
 
 const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({

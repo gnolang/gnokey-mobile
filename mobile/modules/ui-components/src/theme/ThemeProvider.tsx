@@ -7,7 +7,7 @@ type Props = {
 
 const ThemeProvider = ({ children }: Props) => {
   const theme: DefaultTheme = {
-    borderRadius: 20,
+    borderRadius: 8,
 
     error: { background: '#FFE5E6', text: '#FA262A' },
     success: { background: '#E5F9E5', text: '#00A86B' },

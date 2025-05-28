@@ -1,4 +1,12 @@
-import { View, TextInput as RNTextInput, Alert as RNAlert, Modal, ActivityIndicator } from 'react-native'
+import {
+  View,
+  TextInput as RNTextInput,
+  Alert as RNAlert,
+  Modal,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
@@ -21,18 +29,8 @@ import {
   checkForKeyOnChains
 } from '@/redux'
 import { TextCopy } from '@/components'
-import { Feather, FontAwesome6, Octicons } from '@expo/vector-icons'
-import {
-  Button,
-  Text,
-  TextField,
-  BottonPanel,
-  Container,
-  ButtonIcon,
-  Spacer,
-  SafeAreaView,
-  TopModalBar
-} from '@/modules/ui-components'
+import { Feather, Octicons } from '@expo/vector-icons'
+import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
 import { ChainSelectView } from '@/views/chains/chain-select-view'
 
@@ -102,7 +100,7 @@ export default function Page() {
       }
       if (signUpState === VaultCreationState.account_created && newAccount) {
         dispatch(resetState())
-        router.replace({ pathname: 'home/vault-add-sucess-modal' })
+        router.replace({ pathname: 'vault/new-vault/new-vault-sucess' })
       }
     })()
   }, [signUpState, newAccount, dispatch])
@@ -162,31 +160,31 @@ export default function Page() {
         </View>
       </Modal>
       <SafeAreaView>
-        <TopModalBar />
-
-        <Container>
-          <View>
-            <Text.H1>My New</Text.H1>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text.H1>Vault&nbsp;</Text.H1>
-              <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Container>
+            <View>
+              <Text.H1>My New</Text.H1>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text.H1>Vault&nbsp;</Text.H1>
+                <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
+              </View>
             </View>
-          </View>
 
-          <Spacer />
-          <TextField
-            label="Vault name"
-            placeholder="Vault name"
-            value={keyName}
-            onChangeText={(x) => dispatch(setKeyName(x))}
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoComplete="off"
-            error={error}
-          />
-          <Spacer space={4} />
-          <ChainSelectView />
-        </Container>
+            <Spacer />
+            <TextField
+              label="Vault name"
+              placeholder="Vault name"
+              value={keyName}
+              onChangeText={(x) => dispatch(setKeyName(x))}
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="off"
+              error={error}
+            />
+            <Spacer space={4} />
+            <ChainSelectView />
+          </Container>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
 
       <BottonPanel>
@@ -199,16 +197,17 @@ export default function Page() {
           </Text.Body>
         </TextCopy>
         <Spacer />
+        <ButtonIcon size={30} color="primary" onPress={() => dispatch(generateNewPhrase())}>
+          <Feather name="refresh-cw" size={15} color="white" />
+        </ButtonIcon>
+        <Spacer />
         <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-          {/* <Button color='secondary'>Import Vault</Button> */}
           <View style={{ width: 120 }} />
-          <ButtonIcon size={60} color="primary" onPress={() => dispatch(generateNewPhrase())}>
-            <Feather name="refresh-cw" size={30} color="white" />
-          </ButtonIcon>
-          <Button onPress={onCreate} endIcon={<FontAwesome6 name="add" size={16} color="white" />}>
-            New Vault
-          </Button>
         </View>
+        <Spacer />
+        <Button onPress={onCreate} style={{ width: '100%' }}>
+          Continue
+        </Button>
       </BottonPanel>
     </>
   )

@@ -8,7 +8,6 @@ import { setVaultToEdit, fetchVaults } from '@/redux'
 import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
-import { ModalConfirm } from '@/components/modal/ModalConfirm'
 
 export default function Page() {
   const isFirstRender = useRef(true)
@@ -55,7 +54,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('/home/vault-add-modal')
+    route.push('/vault')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {
@@ -98,13 +97,12 @@ export default function Page() {
             onChangeText={setNameSearch}
             autoCapitalize="none"
             autoCorrect={false}
+            hideError
           />
-
-          <Spacer />
           <Text.Body style={{ textAlign: 'center' }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
-          <Spacer />
+          <Spacer space={8} />
 
           {filteredAccounts && (
             <FlatList
@@ -119,7 +117,6 @@ export default function Page() {
                 />
               )}
               keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={vaults?.length === 0 ? <ShowModal onConfirm={navigateToAddKey} /> : null}
             />
           )}
         </BodyAlignedBotton>
@@ -128,21 +125,21 @@ export default function Page() {
   )
 }
 
-const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
-  const [visible, setVisible] = useState<boolean>(true)
-  return (
-    <ModalConfirm
-      visible={visible}
-      onCancel={() => setVisible(false)}
-      onConfirm={() => {
-        onConfirm()
-      }}
-      title="Not Found"
-      confirmText="Add Vault"
-      message="Your Vault doesn't exist. Do you want to create a new one?"
-    />
-  )
-}
+// const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
+//   const [visible, setVisible] = useState<boolean>(true)
+//   return (
+//     <ModalConfirm
+//       visible={visible}
+//       onCancel={() => setVisible(false)}
+//       onConfirm={() => {
+//         onConfirm()
+//       }}
+//       title="Not Found"
+//       confirmText="Add Vault"
+//       message="Your Vault doesn't exist. Do you want to create a new one?"
+//     />
+//   )
+// }
 
 export const BodyAlignedBotton = styled.View`
   width: 100%;

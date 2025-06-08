@@ -1,5 +1,11 @@
 [
   {
+    "chainId": "dev",
+    "chainName": "Berty-Dev",
+    "gnoAddress": "https://api.gno.berty.io:443",
+    "faucetAddress": "https://faucetpass.gno.berty.io"
+  },
+  {
     "chainId": "portal-loop",
     "chainName": "Portal loop",
     "gnoAddress": "https://rpc.gno.land:443",
@@ -10,11 +16,5 @@
     "chainName": "Testnet 5",
     "gnoAddress": "http://rpc.test5.gno.land",
     "faucetAddress": "https://faucet-api.test5.gno.land"
-  },
-  {
-    "chainId": "dev",
-    "chainName": "Berty-Dev",
-    "gnoAddress": "https://api.gno.berty.io:443",
-    "faucetAddress": "https://faucetpass.gno.berty.io"
   }
 ]

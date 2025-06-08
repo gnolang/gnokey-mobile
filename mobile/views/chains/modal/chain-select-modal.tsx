@@ -1,5 +1,5 @@
 import { NetworkListItem } from '@/components'
-import { Button } from '@/modules/ui-components'
+import { Button, Spacer } from '@/modules/ui-components'
 import { NetworkMetainfo } from '@/types'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { FlatList, Modal, SafeAreaView, View } from 'react-native'
@@ -40,11 +40,12 @@ export const ChainSelectModal = ({ visible, currentChain, onChainSelect, onCance
 
             <NetworkListItem key="not-registered" title="Do Not Register" onPress={() => onChainSelect(undefined)} />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 40 }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'space-between', paddingTop: 40 }}>
               <Button color="secondary" onPress={onCancel} endIcon={<FontAwesome6 name="xmark" size={16} color="black" />}>
                 Cancel
               </Button>
-              <Button color="secondary" onPress={onAddChainPress} endIcon={<FontAwesome6 name="plus" size={16} color="black" />}>
+              <Spacer space={8} />
+              <Button color="primary" onPress={onAddChainPress} endIcon={<FontAwesome6 name="plus" size={16} color="black" />}>
                 Add a Chain
               </Button>
             </View>

@@ -12,11 +12,11 @@ const SignInView: React.FC<Props> = ({ onUnlokPress, error }) => {
   return (
     <>
       <TextField
-        placeholder={`Master password`}
+        placeholder="Master password"
         label="Master password"
         autoCorrect={false}
-        type="password"
         autoCapitalize="none"
+        type="password"
         error={error}
         onChangeText={setPassword}
       />

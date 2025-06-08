@@ -1,5 +1,4 @@
 import { Layout } from '@/components'
-import Button from '@/components/button'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import Text from '@/components/text'
 import {
@@ -16,9 +15,9 @@ import {
 } from '@/redux'
 import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, SafeAreaView } from 'react-native'
 import * as Linking from 'expo-linking'
-import { Spacer } from '@/modules/ui-components'
+import { Button, Container, Spacer } from '@/modules/ui-components'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)
@@ -67,29 +66,28 @@ export default function Page() {
 
   return (
     <>
-      <Layout.Container>
-        <Layout.BodyAlignedBotton>
-          <Text.Title>Select a key to sign in into {clientName}</Text.Title>
-          <Spacer space={16} />
+      <Container>
+        <SafeAreaView>
+          <Layout.BodyAlignedBotton>
+            <Text.Title>Select a key to sign in into {clientName}</Text.Title>
+            <Spacer space={16} />
 
-          {vaults && (
-            <FlatList
-              data={vaults}
-              renderItem={({ item }) => (
-                <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} chains={item.chains} />
-              )}
-              keyExtractor={(item) => item.keyInfo.name}
-              ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
-            />
-          )}
-          <Button.TouchableOpacity
-            title="Cancel"
-            variant="primary"
-            onPress={onCancel}
-            loading={loading !== undefined}
-          ></Button.TouchableOpacity>
-        </Layout.BodyAlignedBotton>
-      </Layout.Container>
+            {vaults && (
+              <FlatList
+                data={vaults}
+                renderItem={({ item }) => (
+                  <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} chains={item.chains} />
+                )}
+                keyExtractor={(item) => item.keyInfo.name}
+                ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
+              />
+            )}
+            <Button color="primary" onPress={onCancel} loading={loading !== undefined}>
+              Cancel
+            </Button>
+          </Layout.BodyAlignedBotton>
+        </SafeAreaView>
+      </Container>
     </>
   )
 }

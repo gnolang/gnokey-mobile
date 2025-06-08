@@ -1,23 +1,24 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 import TextInput from '../../textinput'
 import Icons from '../../icons'
-import { colors } from '@/assets/styles/colors'
+import { useTheme } from 'styled-components/native'
 
 type Props = {
   onChangeText: (text: string) => void
 }
 
 const SearchBox = ({ onChangeText }: Props) => {
+  const theme = useTheme()
   return (
     <SafeAreaView>
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: theme.colors.black }]}
           placeholder="Search"
-          placeholderTextColor={colors.text.placeholder}
+          placeholderTextColor={theme.colors.gray}
           onChangeText={onChangeText}
         />
-        <Icons.Search color={colors.icon.default} />
+        <Icons.Search color={theme.colors.gray} />
       </View>
     </SafeAreaView>
   )
@@ -29,12 +30,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.background.default,
     borderRadius: 8,
     padding: 8
   },
   input: {
-    flex: 1,
-    color: colors.text.primary
+    flex: 1
   }
 })

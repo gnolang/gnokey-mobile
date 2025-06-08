@@ -1,5 +1,5 @@
 import { Layout } from '@/components'
-import { Spacer, Text } from '@/modules/ui-components'
+import { Spacer, Text, Container } from '@/modules/ui-components'
 import { ActivityIndicator, Modal, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { NewVaultView } from '@/views'
@@ -14,7 +14,7 @@ export default function Page() {
 
   const onContinue = () => {
     try {
-      router.replace({ pathname: 'vault/new-vault/new-vault-sucess' })
+      router.replace({ pathname: 'home/vault/new-vault/new-vault-sucess' })
     } catch (error) {
       console.error('Error importing vault:', error)
     }
@@ -27,16 +27,17 @@ export default function Page() {
           <ActivityIndicator size="large" color={theme.colors.primary} />
         </View>
       </Modal>
-      <Layout.Container>
-        <Layout.Body>
+      <Container>
+        <Spacer space={64} />
+        <>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Text.H3>Name your Vault</Text.H3>
-            <Text.Body>This name helps you identify this key in your wallet.</Text.Body>
-            <NewVaultView onSucess={onContinue} />
+            {/* <Text.H3>Name your Vault</Text.H3> */}
+            <Text.Body>Let's name your vault. This name helps you identify this key in your wallet.</Text.Body>
           </View>
+          <NewVaultView onSucess={onContinue} />
           <Spacer />
-        </Layout.Body>
-      </Layout.Container>
+        </>
+      </Container>
     </>
   )
 }

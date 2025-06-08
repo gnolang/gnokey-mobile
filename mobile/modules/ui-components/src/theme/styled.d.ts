@@ -23,7 +23,6 @@ declare module 'styled-components/native' {
 
     textinputs: {
       primary: {
-        background: string
         placeholder: {
           color: string
         }
@@ -31,6 +30,9 @@ declare module 'styled-components/native' {
       secondary: {
         background: string
       }
+      border: string
+      label: string
+      background: string
     }
 
     colors: {
@@ -40,6 +42,14 @@ declare module 'styled-components/native' {
       white: string
 
       gray: string
+
+      background: string
+
+      border: string // Border, Ruller, Divider
+    }
+
+    text: {
+      textMuted: string // Muted text, hint text
     }
   }
 }

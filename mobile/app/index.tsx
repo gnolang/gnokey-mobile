@@ -78,7 +78,7 @@ export default function Root() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
             <View style={styles.innerGroup}>
-              <Text.H1 style={{ color: '#E5E5E5' }}>GnoKey</Text.H1>
+              <Text.H1>GnoKey</Text.H1>
               <Text.H1>Mobile</Text.H1>
               <Text.Body>The Gno Key Management Tool</Text.Body>
             </View>

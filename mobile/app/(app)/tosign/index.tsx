@@ -19,8 +19,8 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity } from 'react-native'
-import { Button, ButtonText, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
+import { ScrollView, View, TouchableOpacity, SafeAreaView } from 'react-native'
+import { Button, ButtonText, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
 
 export default function Page() {
@@ -144,35 +144,34 @@ export default function Page() {
 
   return (
     <>
-      <Layout.Container>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <ButtonText onPress={onCancel}>
-            <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
-          </ButtonText>
-        </View>
-        <Layout.Body>
-          <Text.H3 style={{ textAlign: 'center', paddingHorizontal: 16 }}>
-            <Text.H3>{clientName} </Text.H3>
-            is requiring permission to
-            <Text.H3> {reason}.</Text.H3>
-          </Text.H3>
+      <Container>
+        <SafeAreaView>
+          {/* <View style={{ flexDirection: 'row', paddingTop: 16 }}>
+            <ButtonText onPress={onCancel}>
+              <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
+            </ButtonText>
+          </View> */}
+          <Layout.Body>
+            <Text.H3 style={{ textAlign: 'center', paddingHorizontal: 16 }}>
+              <Text.H3>{clientName} </Text.H3>
+              is requiring permission to
+              <Text.H3> {reason}</Text.H3>
+            </Text.H3>
 
-          <Spacer space={32} />
+            <ScrollView contentContainerStyle={{}}>
+              <Ruller />
 
-          <ScrollView contentContainerStyle={{}}>
-            <Ruller />
+              <FormItem label="Client name">
+                <TextBodyBlack>{clientName}</TextBodyBlack>
+              </FormItem>
 
-            <FormItem label="Client name">
-              <TextBodyBlack>{clientName}</TextBodyBlack>
-            </FormItem>
+              <Ruller />
 
-            <Ruller />
+              <FormItemInline label="Gas Wanted">
+                <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
+              </FormItemInline>
 
-            <FormItemInline label="Gas Wanted">
-              <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
-            </FormItemInline>
-
-            {/* {sessionWanted &&
+              {/* {sessionWanted &&
               <>
                 <FormItemInline label="Remember this permission" >
                   <Checkbox
@@ -193,50 +192,50 @@ export default function Page() {
               </>
             } */}
 
-            <Ruller />
-
-            <HiddenGroup>
-              <FormItem label="Client name">
-                <TextBodyWhite>{clientName}</TextBodyWhite>
-              </FormItem>
-
               <Ruller />
 
-              <FormItem label="Reason">
-                <TextBodyWhite>{reason}</TextBodyWhite>
-              </FormItem>
+              <HiddenGroup>
+                <FormItem label="Client name">
+                  <TextBodyWhite>{clientName}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Callback">
-                <TextBodyWhite>{callback}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Reason">
+                  <TextBodyWhite>{reason}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Address">
-                <TextBodyWhite>{bech32Address}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Callback">
+                  <TextBodyWhite>{callback}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Key name (local key store info)">
-                <TextBodyWhite>{JSON.stringify(keyInfo?.name)}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Address">
+                  <TextBodyWhite>{bech32Address}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Remote">
-                <TextBodyWhite>{remote}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Key name (local key store info)">
+                  <TextBodyWhite>{JSON.stringify(keyInfo?.name)}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Chain ID">
-                <TextBodyWhite>{chainId}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Remote">
+                  <TextBodyWhite>{remote}</TextBodyWhite>
+                </FormItem>
 
-              {/* <FormItem label="Session wanted">
+                <Ruller />
+
+                <FormItem label="Chain ID">
+                  <TextBodyWhite>{chainId}</TextBodyWhite>
+                </FormItem>
+
+                {/* <FormItem label="Session wanted">
                 <TextBodyWhite>{JSON.stringify(sessionWanted)}</TextBodyWhite>
               </FormItem>
 
@@ -252,30 +251,32 @@ export default function Page() {
                 <TextBodyWhite>gno.land/r/berty/social</TextBodyWhite>
               </FormItem>*/}
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Raw Transaction Data">
-                <TextBodyWhite>{txInput}</TextBodyWhite>
-              </FormItem>
+                <FormItem label="Raw Transaction Data">
+                  <TextBodyWhite>{txInput}</TextBodyWhite>
+                </FormItem>
 
-              <Ruller />
+                <Ruller />
 
-              <FormItem label="Raw Signed Data">
-                <TextBodyWhite>{signedTx}</TextBodyWhite>
-              </FormItem>
-            </HiddenGroup>
-          </ScrollView>
+                <FormItem label="Raw Signed Data">
+                  <TextBodyWhite>{signedTx}</TextBodyWhite>
+                </FormItem>
+              </HiddenGroup>
+            </ScrollView>
 
-          <Spacer space={32} />
-
-          <View style={{ height: 100 }}>
-            <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
-              Approve
-            </Button>
-            <Spacer />
-          </View>
-        </Layout.Body>
-      </Layout.Container>
+            <View style={{ height: 100 }}>
+              <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
+                Approve
+              </Button>
+              <Spacer />
+              <Button color="secondary" onPress={onCancel} loading={loading}>
+                Cancel
+              </Button>
+            </View>
+          </Layout.Body>
+        </SafeAreaView>
+      </Container>
     </>
   )
 }

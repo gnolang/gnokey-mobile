@@ -1,5 +1,4 @@
-import { colors } from '@/assets/styles/colors'
-import styled from 'styled-components/native'
+import styled, { useTheme } from 'styled-components/native'
 import { Spacer } from '../layout'
 
 export interface Props {
@@ -20,16 +19,16 @@ const InnerContent = styled.View<{ severity: Props['severity'] }>`
   border-radius: 16px;
   padding-left: 12px;
   padding-right: 12px;
-  background-color: ${({ severity }) => {
+  background-color: ${({ severity, theme }) => {
     switch (severity) {
       case 'error':
-        return colors.danger
+        return theme.error.background
       case 'warning':
-        return colors.warning
+        return theme.colors.primary
       case 'info':
-        return colors.main
+        return theme.colors.primary
       case 'success':
-        return colors.success
+        return theme.success.background
     }
   }};
 `
@@ -46,6 +45,8 @@ const ErrorText = styled.Text<{ paddingLeft: boolean }>`
 
 const Alert = ({ message, severity }: Props) => {
   const isError = severity === 'error'
+
+  // theme is available for children if needed
 
   return (
     <Wrapper>

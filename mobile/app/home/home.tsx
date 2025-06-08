@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
 import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { AppBar, ButtonIcon, Button, TextField, Spacer, Text } from '@/modules/ui-components'
+import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 
@@ -54,7 +54,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('/vault')
+    route.push('home/vault')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {
@@ -64,33 +64,24 @@ export default function Page() {
 
   if (loading) {
     return (
-      <Layout.Container>
+      <Container>
         <Layout.Body>
           <Text.Body>{loading}</Text.Body>
         </Layout.Body>
-      </Layout.Container>
+      </Container>
     )
   }
 
   return (
     <>
-      <Layout.Container>
-        <AppBar>
-          <ButtonIcon onPress={() => route.push('/home/profile')} size={40} color="tertirary">
-            <FontAwesome6 name="user" size={20} color="black" />
-          </ButtonIcon>
-
-          <Button onPress={navigateToAddKey} color="tertirary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
-            New Vault
-          </Button>
-        </AppBar>
-
-        <BodyAlignedBotton>
-          <Text.H1>Your Safe</Text.H1>
-          <View style={{ flexDirection: 'row' }}>
-            <Text.H1 style={{ color: 'white' }}>Vault List</Text.H1>
-          </View>
-
+      <Container>
+        <SafeAreaView>
+          <AppBar>
+            <Text.H3>GnoKey Mobile</Text.H3>
+            <TouchableOpacity onPress={() => route.navigate('/home/settings')}>
+              <Text.Caption>Settings</Text.Caption>
+            </TouchableOpacity>
+          </AppBar>
           <TextField
             placeholder="Search Vault"
             value={nameSearch}
@@ -103,49 +94,41 @@ export default function Page() {
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
           <Spacer space={8} />
-
-          {filteredAccounts && (
-            <FlatList
-              data={filteredAccounts}
-              contentContainerStyle={{ paddingBottom: 120 }}
-              renderItem={({ item }) => (
-                <VaultListItem
-                  vault={item}
-                  onVaultPress={onChangeAccountHandler}
-                  chains={item.chains}
-                  onBookmarkPress={onBookmarkPress(item)}
+          <Content>
+            <Body>
+              {filteredAccounts && (
+                <FlatList
+                  data={filteredAccounts}
+                  renderItem={({ item }) => (
+                    <VaultListItem
+                      vault={item}
+                      onVaultPress={onChangeAccountHandler}
+                      chains={item.chains}
+                      onBookmarkPress={onBookmarkPress(item)}
+                    />
+                  )}
+                  keyExtractor={(item) => item.keyInfo.name}
                 />
               )}
-              keyExtractor={(item) => item.keyInfo.name}
-            />
-          )}
-        </BodyAlignedBotton>
-      </Layout.Container>
+            </Body>
+            <Botton>
+              <Button onPress={navigateToAddKey} color="primary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
+                New Vault
+              </Button>
+            </Botton>
+          </Content>
+        </SafeAreaView>
+      </Container>
     </>
   )
 }
 
-// const ShowModal = ({ onConfirm }: { onConfirm: () => void }) => {
-//   const [visible, setVisible] = useState<boolean>(true)
-//   return (
-//     <ModalConfirm
-//       visible={visible}
-//       onCancel={() => setVisible(false)}
-//       onConfirm={() => {
-//         onConfirm()
-//       }}
-//       title="Not Found"
-//       confirmText="Add Vault"
-//       message="Your Vault doesn't exist. Do you want to create a new one?"
-//     />
-//   )
-// }
-
-export const BodyAlignedBotton = styled.View`
-  width: 100%;
-  height: 100%;
-  padding-top: 4px;
-  padding-horizontal: 8px;
-  justify-content: flex-end;
-  padding-bottom: 12px;
+const Body = styled.View`
+  flex: 1;
+`
+const Botton = styled.View`
+  margin-top: 16px;
+`
+const Content = styled.View`
+  flex: 1;
 `

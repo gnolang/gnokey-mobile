@@ -1,5 +1,4 @@
-import Button from '@/components/button'
-import { Spacer } from '@/modules/ui-components'
+import { Button, Spacer } from '@/modules/ui-components'
 import { KeyInfo } from '@gnolang/gnonative'
 
 interface SideMenuAccountItemProps {
@@ -12,7 +11,9 @@ const SideMenuAccountItem = (props: SideMenuAccountItemProps) => {
   return (
     <>
       <Spacer />
-      <Button.TouchableOpacity title={account.name} onPress={() => changeAccount(account)} variant="primary" />
+      <Button onPress={() => changeAccount(account)} color="primary">
+        {account.name}
+      </Button>
     </>
   )
 }

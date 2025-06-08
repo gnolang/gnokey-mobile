@@ -3,7 +3,6 @@ import { View, Modal, StyleSheet, FlatList, TouchableOpacity, Share } from 'reac
 import { EvilIcons, MaterialIcons } from '@expo/vector-icons'
 import { useAppDispatch, useAppSelector, selectProgress, clearProgress } from '@/redux'
 import { Layout, Text } from '@/components'
-import { colors } from '@/assets'
 
 const ProgressViewModal = () => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: colors.modal.backgroundOpaque
+    backgroundColor: 'red'
   },
   transparentTop: {
     flex: 1,
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingHorizontal: 16
   },
-  flatList: { borderColor: colors.grayscale[200], borderWidth: 1, marginVertical: 22, borderRadius: 4, height: 400 }
+  flatList: { borderColor: 'red', borderWidth: 1, marginVertical: 22, borderRadius: 4, height: 400 }
 })
 
 export default ProgressViewModal

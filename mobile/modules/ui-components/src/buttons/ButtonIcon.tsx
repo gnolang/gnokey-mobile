@@ -24,5 +24,5 @@ const ButtonWrapper = styled(TouchableOpacity)<{ $color?: ButtonColor; size?: nu
   font-size: 40px;
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
+  background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : 'transparent')};
 `

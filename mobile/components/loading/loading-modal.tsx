@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
 import Text from '../text'
-import { colors } from '@/assets/styles/colors'
+import { useTheme } from 'styled-components/native'
 
 type Props = {
   visible: boolean
@@ -9,13 +9,14 @@ type Props = {
 }
 
 export default function LoadingModal({ visible, message = 'Loading' }: Props) {
+  const theme = useTheme()
   if (!visible) return null
 
   return (
     <Modal animationType="fade" transparent={true}>
       <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <ActivityIndicator size="large" color={colors.blue} />
+        <View style={[styles.modalView, { backgroundColor: theme.colors.white }]}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
           {message ? <Text.Body style={styles.modalText}>{message}</Text.Body> : null}
         </View>
       </View>
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
   modalView: {
     padding: 40,
     margin: 20,
-    backgroundColor: 'white',
     borderRadius: 5,
     flexDirection: 'column',
     justifyContent: 'center',

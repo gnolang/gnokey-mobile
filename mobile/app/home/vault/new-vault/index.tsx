@@ -100,7 +100,7 @@ export default function Page() {
       }
       if (signUpState === VaultCreationState.account_created && newAccount) {
         dispatch(resetState())
-        router.replace({ pathname: 'vault/new-vault/new-vault-sucess' })
+        router.replace('/home/vault/new-vault/new-vault-sucess')
       }
     })()
   }, [signUpState, newAccount, dispatch])

@@ -31,7 +31,7 @@ const Container = styled.View`
   align-items: flex-start;
   border-radius: ${({ theme }) => theme.borderRadius - 12}px;
   color: ${({ theme }) => theme.colors.black};
-  background-color: ${({ theme }) => theme.textinputs.primary.background};
+  background-color: ${({ theme }) => theme.textinputs.background};
 `
 
 export const FormTextValue = styled.Text`

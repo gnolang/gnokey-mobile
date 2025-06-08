@@ -139,11 +139,12 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
             />
             <Spacer />
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '100%' }}>
               <Button color="secondary" onPress={onCancel} endIcon={<FontAwesome6 name="xmark" size={16} color="black" />}>
                 Cancel
               </Button>
-              <Button color="secondary" onPress={onSave} endIcon={<FontAwesome6 name="plus" size={16} color="black" />}>
+              <Spacer space={8} />
+              <Button color="primary" onPress={onSave} endIcon={<FontAwesome6 name="plus" size={16} color="black" />}>
                 Add a Chain
               </Button>
             </View>

@@ -1,21 +1,21 @@
 import { Stack } from 'expo-router'
-import { ThemeProvider as ThemeProvider2 } from '@react-navigation/native'
 import { Guard } from '@/components/auth/guard'
 import { GnoNativeProvider } from '@gnolang/gnonative'
 import { IndexerProvider, LinkingProvider, ReduxProvider } from '@/providers'
-import { DefaultTheme } from '@/assets/styles'
 import { ThemeProvider } from '@/modules/ui-components'
+import defaultChains from '@/assets/chains.json'
+import { Initializer } from '@/providers/initializer-provider'
 
 const gnoDefaultConfig = {
   // @ts-ignore
-  remote: process.env.EXPO_PUBLIC_GNO_REMOTE!,
+  remote: defaultChains[0].gnoAddress!,
   // @ts-ignore
-  chain_id: process.env.EXPO_PUBLIC_GNO_CHAIN_ID!
+  chain_id: defaultChains[0].chainId!
 }
 
 const indexerConfig = {
   // @ts-ignore
-  remote: process.env.EXPO_PUBLIC_TXINDEXER_REMOTE!
+  remote: defaultChains[0].faucetAddress!
 }
 
 // Extend the BigInt interface to include toJSON
@@ -36,7 +36,7 @@ export default function AppLayout() {
       <IndexerProvider config={indexerConfig}>
         <ReduxProvider>
           <ThemeProvider>
-            <ThemeProvider2 value={DefaultTheme}>
+            <Initializer>
               <LinkingProvider>
                 <Guard>
                   <Stack
@@ -48,7 +48,7 @@ export default function AppLayout() {
                   />
                 </Guard>
               </LinkingProvider>
-            </ThemeProvider2>
+            </Initializer>
           </ThemeProvider>
         </ReduxProvider>
       </IndexerProvider>

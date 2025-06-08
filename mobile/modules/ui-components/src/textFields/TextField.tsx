@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { TextInputProps, Animated } from 'react-native'
+import React, { forwardRef, useEffect } from 'react'
+import { TextInputProps, Animated, TextInput } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
@@ -14,7 +14,8 @@ export type Props = {
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
-export const TextField: React.FC<Props> = ({ type = 'text', label, error, value, hideError, ...rest }) => {
+export const TextField = forwardRef<TextInput, Props>((props, ref) => {
+  const { type = 'text', label, error, value, hideError, ...rest } = props
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
   const fadeAnim = React.useRef(new Animated.Value(0)).current
@@ -46,7 +47,13 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
           {label}
         </AnimatedLabel>
         <Content {...rest}>
-          <TextFieldStyled {...rest} value={inputValue} secureTextEntry={isSecureText} onChangeText={handleChangeText} />
+          <TextFieldStyled
+            ref={ref}
+            {...rest}
+            value={inputValue}
+            secureTextEntry={isSecureText}
+            onChangeText={handleChangeText}
+          />
           {type === 'password' ? (
             <ToggleIcon>
               <FontAwesome
@@ -61,7 +68,9 @@ export const TextField: React.FC<Props> = ({ type = 'text', label, error, value,
       {hideError ? null : <ErrorBox>{error}</ErrorBox>}
     </>
   )
-}
+})
+
+TextField.displayName = 'TextField'
 
 const Container = styled.View`
   flex-direction: column;
@@ -75,9 +84,10 @@ const Content = styled.View<PropsWithTheme>`
   align-items: center;
   border-radius: 8px;
   border-width: 1px;
+  border-color: ${(p) => p.theme.textinputs.border};
   padding: 0 8px;
   color: ${(p) => p.theme.colors.black};
-  background-color: #f5f5f5;
+  background-color: ${(p) => p.theme.textinputs.background};
 `
 
 const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
@@ -99,7 +109,7 @@ const ToggleIcon = styled.TouchableOpacity`
 `
 
 const AnimatedLabel = styled(Animated.Text)<PropsWithTheme>`
-  color: ${(p) => (p.color ? p.theme.colors.gray : p.theme.colors.white)};
+  color: ${(p) => (p.color ? p.theme.colors.gray : p.theme.colors.gray)};
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 500;

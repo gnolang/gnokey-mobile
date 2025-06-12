@@ -1,14 +1,19 @@
 import { Form } from '@/modules/ui-components'
-import { selectChainsAvailable, useAppSelector, selectSelectedChain, useAppDispatch, setSelectedChain } from '@/redux'
+import { selectChainsAvailable, useAppSelector, selectCurrentChain, useAppDispatch, setCurrentChain } from '@/redux'
 import { NetworkMetainfo } from '@/types'
+import { Alert } from 'react-native'
 
 export const NetworkSelectView = () => {
   const dispatch = useAppDispatch()
   const chains = useAppSelector(selectChainsAvailable)
-  const currentChain = useAppSelector(selectSelectedChain)
+  const currentChain = useAppSelector(selectCurrentChain)
 
   const onChainSelect = (chain: NetworkMetainfo | undefined) => {
-    dispatch(setSelectedChain(chain))
+    if (!chain) {
+      Alert.alert('No chain selected')
+      return
+    }
+    dispatch(setCurrentChain(chain))
   }
 
   return (

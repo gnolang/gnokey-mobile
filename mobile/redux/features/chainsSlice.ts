@@ -4,13 +4,16 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import { RootState } from '../root-reducer'
 import { NetworkMetainfo } from '@/types'
 import defaultChains from '@/assets/chains.json'
+import { DEFAULT_CHAIN } from '@/app/_layout'
 
 export interface ChainsState {
   chains: NetworkMetainfo[]
+  currentChain?: NetworkMetainfo
 }
 
 const initialState: ChainsState = {
-  chains: defaultChains
+  chains: defaultChains,
+  currentChain: DEFAULT_CHAIN
 }
 
 export const chainsSlice = createSlice({
@@ -22,19 +25,38 @@ export const chainsSlice = createSlice({
     }
   },
   selectors: {
-    selectChainsAvailable: (state) => state.chains
+    selectChainsAvailable: (state) => state.chains,
+    selectCurrentChain: (state) => state.currentChain
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getCurrentChain.fulfilled, (state, action) => {
+      state.currentChain = action.payload
+    })
+    builder.addCase(setCurrentChain.fulfilled, (state, action) => {
+      state.currentChain = action.payload
+    })
   }
 })
 
+export const setCurrentChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo, ThunkExtra>(
+  'chains/setCurrentChain',
+  async (chain, thunkAPI) => {
+    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+    gnonative.setRemote(chain.gnoAddress)
+    gnonative.setChainID(chain.chainId)
+    return chain
+  }
+)
+
 export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, void, ThunkExtra>(
-  'user/getCurrentChain',
+  'chains/getCurrentChain',
   async (_, thunkAPI) => {
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     const remote = await gnonative.getRemote()
     const combinedChains = selectChainsAvailable(thunkAPI.getState() as RootState)
     const currentChain = combinedChains.find((chain: NetworkMetainfo) => chain.gnoAddress === remote)
     if (!currentChain) {
-      // chain not fuond can indicate some changed on gnoAddress. So, we need to update the current selection.
+      // chain not found can indicate some changed on gnoAddress. So, we need to update the current selection.
       // TODO: inform the user that the current chain is not available anymore.
       return undefined
     }
@@ -43,5 +65,5 @@ export const getCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, voi
   }
 )
 
-export const { selectChainsAvailable } = chainsSlice.selectors
+export const { selectChainsAvailable, selectCurrentChain } = chainsSlice.selectors
 export const { addCustomChain } = chainsSlice.actions

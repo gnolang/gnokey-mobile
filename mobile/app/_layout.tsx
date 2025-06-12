@@ -4,18 +4,20 @@ import { GnoNativeProvider } from '@gnolang/gnonative'
 import { IndexerProvider, LinkingProvider, ReduxProvider } from '@/providers'
 import { ThemeProvider } from '@/modules/ui-components'
 import defaultChains from '@/assets/chains.json'
-import { Initializer } from '@/providers/initializer-provider'
+
+// The first Chain into chains.json will be the default chain
+export const DEFAULT_CHAIN = defaultChains[0]
 
 const gnoDefaultConfig = {
   // @ts-ignore
-  remote: defaultChains[0].gnoAddress!,
+  remote: DEFAULT_CHAIN.gnoAddress!,
   // @ts-ignore
-  chain_id: defaultChains[0].chainId!
+  chain_id: DEFAULT_CHAIN.chainId!
 }
 
 const indexerConfig = {
   // @ts-ignore
-  remote: defaultChains[0].faucetAddress!
+  remote: DEFAULT_CHAIN.faucetAddress!
 }
 
 // Extend the BigInt interface to include toJSON
@@ -36,19 +38,17 @@ export default function AppLayout() {
       <IndexerProvider config={indexerConfig}>
         <ReduxProvider>
           <ThemeProvider>
-            <Initializer>
-              <LinkingProvider>
-                <Guard>
-                  <Stack
-                    screenOptions={{
-                      headerShown: false,
-                      headerLargeTitle: true,
-                      headerBackVisible: false
-                    }}
-                  />
-                </Guard>
-              </LinkingProvider>
-            </Initializer>
+            <LinkingProvider>
+              <Guard>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    headerLargeTitle: true,
+                    headerBackVisible: false
+                  }}
+                />
+              </Guard>
+            </LinkingProvider>
           </ThemeProvider>
         </ReduxProvider>
       </IndexerProvider>

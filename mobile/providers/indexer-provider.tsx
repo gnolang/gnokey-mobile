@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import { DEFAULT_CHAIN } from './gnonative-provider'
 
 export interface GasPriceResponse {
   low: bigint
@@ -11,20 +12,16 @@ export interface IndexerContextProps {
   getGasPrice: () => Promise<GasPriceResponse>
 }
 
-interface ConfigProps {
-  remote: string
-}
-
 interface IndexerProviderProps {
-  config: ConfigProps
   children: React.ReactNode
 }
 
 const IndexerContext = createContext<IndexerContextProps | null>(null)
 
-const IndexerProvider: React.FC<IndexerProviderProps> = ({ children, config }) => {
-  if (!config.remote) {
-    throw new Error('IndexerProvider requires a remote config')
+const IndexerProvider: React.FC<IndexerProviderProps> = ({ children }) => {
+  const config = {
+    // @ts-ignore
+    remote: DEFAULT_CHAIN.faucetAddress!
   }
 
   const getGasPrice = async (): Promise<GasPriceResponse> => {

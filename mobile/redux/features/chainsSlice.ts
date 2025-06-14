@@ -4,7 +4,8 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import { RootState } from '../root-reducer'
 import { NetworkMetainfo } from '@/types'
 import defaultChains from '@/assets/chains.json'
-import { DEFAULT_CHAIN } from '@/app/_layout'
+import { insertChain } from '@/providers/database-provider'
+import { DEFAULT_CHAIN } from '@/providers/gnonative-provider'
 
 export interface ChainsState {
   chains: NetworkMetainfo[]
@@ -35,8 +36,24 @@ export const chainsSlice = createSlice({
     builder.addCase(setCurrentChain.fulfilled, (state, action) => {
       state.currentChain = action.payload
     })
+    builder.addCase(saveChain.fulfilled, (state, action) => {
+      state.chains.push(action.payload)
+    })
   }
 })
+
+export const saveChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo, ThunkExtra>(
+  'chains/saveChain',
+  async (chain, thunkAPI) => {
+    await insertChain({
+      chainId: chain.chainId,
+      chainName: chain.chainName,
+      rpcUrl: chain.gnoAddress,
+      faucetUrl: chain.faucetAddress || ''
+    })
+    return chain
+  }
+)
 
 export const setCurrentChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo, ThunkExtra>(
   'chains/setCurrentChain',

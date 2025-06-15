@@ -2,25 +2,25 @@
   {
     "chainId": "dev",
     "chainName": "Berty-Dev",
-    "gnoAddress": "https://api.gno.berty.io:443",
-    "faucetAddress": "https://faucetpass.gno.berty.io"
+    "rpcUrl": "https://api.gno.berty.io:443",
+    "faucetUrl": "https://faucetpass.gno.berty.io"
   },
   {
     "chainId": "portal-loop",
     "chainName": "Portal loop",
-    "gnoAddress": "https://rpc.gno.land:443",
-    "faucetAddress": "https://faucet-api.gno.land"
+    "rpcUrl": "https://rpc.gno.land:443",
+    "faucetUrl": "https://faucet-api.gno.land"
   },
   {
     "chainId": "test5",
     "chainName": "Testnet 5",
-    "gnoAddress": "http://rpc.test5.gno.land",
-    "faucetAddress": "https://faucet-api.test5.gno.land"
+    "rpcUrl": "http://rpc.test5.gno.land",
+    "faucetUrl": "https://faucet-api.test5.gno.land"
   },
   {
     "chainId": "test6",
     "chainName": "Testnet 6",
-    "gnoAddress": "https://test6.gno.berty.io:26657",
-    "faucetAddress": "https://faucet.test6.gno.berty.io"
+    "rpcUrl": "https://test6.gno.berty.io:26657",
+    "faucetUrl": "https://faucet.test6.gno.berty.io"
   }
 ]

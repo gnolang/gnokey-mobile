@@ -1,9 +1,8 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, RootState, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
 import { NetworkMetainfo } from '@/types'
-import { RootState } from '../root-reducer'
 import { create } from '@bufbuild/protobuf'
 
 export enum VaultCreationState {
@@ -70,7 +69,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
   console.log('selectedChain in signUp', selectedChain)
 
   if (selectedChain) {
-    await gnonative.setRemote(selectedChain.gnoAddress)
+    await gnonative.setRemote(selectedChain.rpcUrl)
     await gnonative.setChainID(selectedChain.chainId)
   }
 
@@ -158,11 +157,11 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
 
-    if (!selectedChain.faucetAddress) {
+    if (!selectedChain.faucetUrl) {
       thunkAPI.dispatch(addProgress(`no faucetAddress set for chain "${selectedChain.chainName}"`))
     } else {
       thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
-      await onboard(gnonative, newAccount, selectedChain.faucetAddress)
+      await onboard(gnonative, newAccount, selectedChain.faucetUrl)
     }
 
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
@@ -183,7 +182,7 @@ export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo },
 
     const { account } = param
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    await onboard(gnonative, account, selectedChain.faucetAddress)
+    await onboard(gnonative, account, selectedChain.faucetUrl)
 
     thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
     return { newAccount: account, state: VaultCreationState.account_created }

@@ -9,8 +9,8 @@ import { isEmpty, isInvalidURL } from '@/modules/validation'
 export interface Form {
   chainName: string
   chainId: string
-  gnoAddress: string
-  faucetAddress: string
+  rpcUrl: string
+  faucetUrl: string
 }
 
 export interface Props {
@@ -23,8 +23,8 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
   const initialForm: Form = {
     chainName: '',
     chainId: '',
-    gnoAddress: '',
-    faucetAddress: ''
+    rpcUrl: '',
+    faucetUrl: ''
   }
 
   const [form, setForm] = React.useState<Form>(initialForm)
@@ -38,7 +38,7 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
       setInitial(false)
       return
     }
-    validateForm(form)
+    setErrors(validateForm(form))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form])
 
@@ -46,18 +46,17 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
     let errors: Form = {
       chainName: '',
       chainId: '',
-      gnoAddress: '',
-      faucetAddress: ''
+      rpcUrl: '',
+      faucetUrl: ''
     }
 
     errors.chainName = validate([{ condition: () => isEmpty(form.chainName), message: 'Chain Name is required' }])
     errors.chainId = validate([{ condition: () => isEmpty(form.chainId), message: 'Chain ID is required' }])
-    errors.gnoAddress = validate([
-      { condition: () => isEmpty(form.gnoAddress), message: 'Chain URL is required' },
-      { condition: () => isInvalidURL(form.gnoAddress), message: 'Chain URL must be a validURL' }
+    errors.rpcUrl = validate([
+      { condition: () => isEmpty(form.rpcUrl), message: 'Chain rpc URL is required' },
+      { condition: () => isInvalidURL(form.rpcUrl), message: 'Chain rpc URL must be a validURL' }
     ])
-
-    setErrors(errors)
+    return errors
   }
 
   const validate = (validations: { condition: () => boolean; message: string }[]) => {
@@ -70,8 +69,10 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
   }
 
   const onSave = () => {
-    if (Object.values(errors).some((error) => error !== '')) {
-      console.log('Errors', errors)
+    const err = validateForm(form)
+    if (Object.values(err).some((error) => error !== '')) {
+      setErrors(err)
+      console.log('Errors', err)
       return
     }
     onSaveChain(form)
@@ -118,9 +119,9 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
             <TextField
               label="Chain URL"
               placeholder="Chain URL"
-              value={form.gnoAddress}
-              onChangeText={(text) => setForm({ ...form, gnoAddress: text })}
-              error={errors.gnoAddress}
+              value={form.rpcUrl}
+              onChangeText={(text) => setForm({ ...form, rpcUrl: text })}
+              error={errors.rpcUrl}
               autoComplete="off"
               autoCapitalize="none"
               autoCorrect={false}
@@ -129,9 +130,9 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
             <TextField
               label="Faucet URL"
               placeholder="Faucet URL"
-              value={form.faucetAddress}
-              onChangeText={(text) => setForm({ ...form, faucetAddress: text })}
-              error={errors.faucetAddress}
+              value={form.faucetUrl}
+              onChangeText={(text) => setForm({ ...form, faucetUrl: text })}
+              error={errors.faucetUrl}
               autoComplete="off"
               autoCapitalize="none"
               autoCorrect={false}

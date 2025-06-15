@@ -30,9 +30,9 @@ export const ChainSelectModal = ({ visible, currentChain, onChainSelect, onCance
                 <NetworkListItem
                   key={item.chainName}
                   title={item.chainName}
-                  address={item.gnoAddress}
-                  faucet={item.faucetAddress}
-                  inUse={currentChain?.gnoAddress === item.gnoAddress}
+                  address={item.rpcUrl}
+                  faucet={item.faucetUrl}
+                  inUse={currentChain?.rpcUrl === item.rpcUrl}
                   onPress={() => onChainSelect(item)}
                 />
               )}

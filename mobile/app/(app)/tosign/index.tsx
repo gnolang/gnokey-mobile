@@ -20,7 +20,7 @@ import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
 import { ScrollView, View, TouchableOpacity, SafeAreaView } from 'react-native'
-import { Button, ButtonText, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
+import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
 
 export default function Page() {

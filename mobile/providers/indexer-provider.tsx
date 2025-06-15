@@ -21,7 +21,7 @@ const IndexerContext = createContext<IndexerContextProps | null>(null)
 const IndexerProvider: React.FC<IndexerProviderProps> = ({ children }) => {
   const config = {
     // @ts-ignore
-    remote: DEFAULT_CHAIN.faucetAddress!
+    remote: DEFAULT_CHAIN.faucetUrl!
   }
 
   const getGasPrice = async (): Promise<GasPriceResponse> => {

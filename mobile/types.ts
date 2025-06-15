@@ -39,8 +39,10 @@ export interface GetJsonFollowingResult {
 }
 
 export type NetworkMetainfo = {
+  id: string
   chainId: string
   chainName: string
-  gnoAddress: string
-  faucetAddress?: string
+  rpcUrl: string
+  faucetUrl?: string
+  active: boolean
 }

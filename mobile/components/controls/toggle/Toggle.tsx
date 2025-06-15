@@ -1,16 +1,17 @@
 import React from 'react'
-import { colors } from '@/assets'
 import { ToggleProps } from './interfaces'
 import { TogglePriv } from './Toggle.priv'
+import { useTheme } from 'styled-components/native'
 
 export const Toggle: React.FC<ToggleProps> = (props) => {
+  const theme = useTheme()
   return (
     <TogglePriv
       {...props}
       styleColors={{
-        circleBackground: 'white',
-        toggleBackgroundInactive: '#EDF0F3',
-        toggleBackgroundActive: colors.primary
+        circleBackground: theme.colors.white,
+        toggleBackgroundInactive: theme.colors.background,
+        toggleBackgroundActive: theme.colors.primary
       }}
     />
   )

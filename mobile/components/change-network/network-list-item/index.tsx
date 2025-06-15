@@ -1,5 +1,4 @@
 import styled, { useTheme } from 'styled-components/native'
-import { colors } from '@/assets'
 import Icons from '@/components/icons'
 import * as Text from '../../../modules/ui-components/src/text'
 import { View } from 'react-native'
@@ -32,7 +31,7 @@ const NetworkListItem: React.FC<Props> = ({ title, address, faucet, inUse, onPre
 
 const InUse = () => (
   <>
-    <Icons.CheckMark color={colors.white} />
+    <Icons.CheckMark color="red" />
     <Text.Caption style={{ paddingLeft: 8 }}>in use</Text.Caption>
   </>
 )

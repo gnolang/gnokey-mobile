@@ -13,34 +13,40 @@ const ThemeProvider = ({ children }: Props) => {
     success: { background: '#E5F9E5', text: '#00A86B' },
 
     colors: {
-      primary: '#4690FF',
-
+      primary: '#00A86B',
       black: '#000000',
       white: '#ffffff',
+      gray: '#A1A1A1',
+      background: '#F3F5F7', // #F8F9FA'
+      border: '#E5E5E5' // Border, Ruller, Divider
+    },
 
-      gray: '#A1A1A1'
+    text: {
+      textMuted: '#A1A1A1'
     },
 
     textinputs: {
       primary: {
         placeholder: {
           color: '#000000'
-        },
-        background: '#4690FF'
+        }
       },
       secondary: {
         background: '#ffffff'
-      }
+      },
+      border: '#94A0AB',
+      label: '#121212',
+      background: '#ffffff'
     },
 
     buttons: {
-      primary: '#000000',
+      primary: '#00A86B',
       secondary: '#E5E5E5',
       tertirary: '#4c8ae7',
       danger: '#FF4647',
 
       label: {
-        primary: '#ffffff',
+        primary: '#FFFFFF',
         secondary: '#000000',
         tertirary: '#000000',
         danger: '#ffffff'

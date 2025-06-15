@@ -15,6 +15,7 @@ import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/views'
 import { useAppDispatch, setPhrase, resetState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
+import styled from 'styled-components/native'
 
 export default function Page() {
   const [menomicLength, setMenomicLength] = useState<12 | 24>(12)
@@ -46,7 +47,7 @@ export default function Page() {
       return
     }
 
-    route.push('/vault/option-phrase/enter-vault-name')
+    route.push('/home/vault/option-phrase/enter-vault-name')
   }
 
   return (
@@ -70,23 +71,23 @@ export default function Page() {
             >
               <Text.H3>Enter your seed phrase</Text.H3>
               <View style={styles.actions}>
-                <Button color="tertirary" onPress={() => setMenomicLength(12)}>
+                <SmallButton color="secondary" onPress={() => setMenomicLength(12)}>
                   {'12 words'}
-                </Button>
+                </SmallButton>
                 <Spacer spaceH={8} />
-                <Button color="tertirary" onPress={() => setMenomicLength(24)}>
+                <SmallButton color="secondary" onPress={() => setMenomicLength(24)}>
                   {'24 words'}
-                </Button>
+                </SmallButton>
                 <Spacer spaceH={8} />
-                <Button color="tertirary" onPress={() => dispatch(resetState())}>
+                <SmallButton color="secondary" onPress={() => dispatch(resetState())}>
                   Clear
-                </Button>
+                </SmallButton>
               </View>
               <View style={styles.container}>
                 <SeedInputs length={menomicLength} />
               </View>
               <View style={styles.footer}>
-                <Button color="tertirary" onPress={pasteClipboard}>
+                <Button color="secondary" onPress={pasteClipboard}>
                   Paste
                 </Button>
                 <Spacer />
@@ -101,6 +102,10 @@ export default function Page() {
     </Container>
   )
 }
+
+const SmallButton = styled(Button)`
+  width: 100px;
+`
 
 const styles = StyleSheet.create({
   container: {

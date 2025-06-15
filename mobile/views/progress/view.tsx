@@ -6,10 +6,11 @@ import { clearProgress, selectProgress } from '@/redux/features/vaultAddSlice'
 import Text from '@/components/text'
 import { EvilIcons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
-import { colors } from '@/assets/styles/colors'
+import { useTheme } from 'styled-components/native'
 
 const ProgressView = () => {
   const [modalVisible, setModalVisible] = useState(false)
+  const theme = useTheme()
 
   const dispatch = useAppDispatch()
   const progress = useAppSelector(selectProgress)
@@ -39,22 +40,22 @@ const ProgressView = () => {
           setModalVisible(!modalVisible)
         }}
       >
-        <View style={styles.modalOverlay}>
+        <View style={[styles.modalOverlay, { backgroundColor: theme.colors.background || '#0008' }]}>
           <View style={styles.transparentTop}></View>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: theme.colors.white }]}>
             <Layout.Header title="Progress" onCloseHandler={() => setModalVisible(false)} style={{ marginTop: 22 }} />
             <FlatList
               data={progress}
-              style={styles.flatList}
+              style={[styles.flatList, { borderColor: theme.colors.gray }]}
               ListEmptyComponent={<Text.Caption1 style={{ flex: 1, textAlign: 'center' }}>No progress yet.</Text.Caption1>}
               renderItem={({ item }) => {
                 return <Text.Caption1 style={{ flex: 1, textAlign: 'left' }}>{item}</Text.Caption1>
               }}
             />
             <View style={styles.bottom}>
-              <EvilIcons name="share-apple" size={24} color="black" onPress={share} />
+              <EvilIcons name="share-apple" size={24} color={theme.colors.black} onPress={share} />
               <TouchableOpacity>
-                <EvilIcons name="trash" size={24} color="black" onPress={clear} />
+                <EvilIcons name="trash" size={24} color={theme.colors.black} onPress={clear} />
               </TouchableOpacity>
             </View>
           </View>
@@ -72,15 +73,13 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: colors.modal.backgroundOpaque
+    justifyContent: 'flex-end'
   },
   transparentTop: {
     flex: 1,
     backgroundColor: 'transparent'
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingHorizontal: 16
   },
-  flatList: { borderColor: colors.grayscale[200], borderWidth: 1, marginVertical: 22, borderRadius: 4 }
+  flatList: { borderWidth: 1, marginVertical: 22, borderRadius: 4 }
 })
 
 export default ProgressView

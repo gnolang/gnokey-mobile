@@ -49,6 +49,7 @@ interface ButtonWrapperProps extends TouchableOpacityProps {
 
 const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   height: 40px;
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: center;

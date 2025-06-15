@@ -1,6 +1,5 @@
-import Button from '@/components/button'
 import TextInput from '@/components/textinput'
-import { Alert, Spacer } from '@/modules/ui-components'
+import { Alert, Button, Spacer } from '@/modules/ui-components'
 import { useState } from 'react'
 
 export interface Props {
@@ -38,7 +37,9 @@ const SignUpView: React.FC<Props> = ({ onCreateMasterPress, error }) => {
       />
       <Alert severity="error" message={error || innerError} />
       <Spacer space={8} />
-      <Button.TouchableOpacity title="Create Master password" onPress={onCreate} variant="primary" />
+      <Button onPress={onCreate} style={{ width: '100%' }}>
+        Create Master Password
+      </Button>
     </>
   )
 }

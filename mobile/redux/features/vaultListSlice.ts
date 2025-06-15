@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction, RootState } from '@reduxjs/toolkit'
 import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { RootState } from '../root-reducer'
 import { selectChainsAvailable } from './chainsSlice'
 
 export interface VaultListState {
@@ -97,7 +96,7 @@ export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExt
     for (const chain of chains) {
       console.log('checking keys on chain', chain.chainName)
       await gnonative.setChainID(chain.chainId)
-      await gnonative.setRemote(chain.gnoAddress)
+      await gnonative.setRemote(chain.rpcUrl)
 
       for (const vault of vaults) {
         console.log(`Checking key ${vault.keyInfo.name} on chain ${chain.chainName}`)

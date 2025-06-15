@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import { GnoNativeApi, useGnoNativeContext } from '@gnolang/gnonative'
-import rootReducer from '@/redux/root-reducer'
+import { rootReducer } from '@/redux'
+import { useDatabaseContext } from './database-provider'
+
 interface Props {
   children: React.ReactNode
 }
@@ -13,25 +15,39 @@ export interface ThunkExtra {
 const ReduxProvider: React.FC<Props> = ({ children }) => {
   // Exposing GnoNative API to reduxjs/toolkit
   const { gnonative } = useGnoNativeContext()
+  const { listChains } = useDatabaseContext()
+  const [store, setStore] = useState<any>(null)
 
-  const store = useMemo(
-    () =>
-      configureStore({
+  useEffect(() => {
+    ;(async () => {
+      if (store) return // Prevent re-initialization
+      const chains = await listChains()
+
+      gnonative.setChainID(chains.currentChain.chainId)
+      gnonative.setRemote(chains.currentChain.rpcUrl)
+
+      const storeInstance = configureStore({
         reducer: rootReducer,
+        preloadedState: {
+          chains: {
+            chains: chains.chains,
+            currentChain: chains.currentChain
+          }
+        },
         middleware: (getDefaultMiddleware) =>
           getDefaultMiddleware({
             serializableCheck: false,
             thunk: {
-              // To make Thunk inject gnonative in all Thunk objects.
-              // https://redux.js.org/tutorials/essentials/part-6-performance-normalization#thunk-arguments
-              extraArgument: {
-                gnonative
-              }
+              extraArgument: { gnonative }
             }
           })
-      }),
-    [gnonative]
-  )
+      })
+      setStore(storeInstance)
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (!store) return null
 
   return <Provider store={store}>{children}</Provider>
 }

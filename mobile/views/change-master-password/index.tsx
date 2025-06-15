@@ -1,18 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, TouchableWithoutFeedback, Keyboard, Modal, TextInput as RNTextInput, View } from 'react-native'
-import Text from '@/components/text'
-import TextInput from '@/components/textinput'
-import Button from '@/components/button'
+import { useState } from 'react'
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from '@/redux'
-import { Alert, Spacer } from '@/modules/ui-components'
-import { ModalHeaderTitle } from '@/components/modal/ModalHeader'
+import { Alert, Button, Spacer, TextField } from '@/modules/ui-components'
+import { View } from 'react-native'
 
 export type Props = {
-  visible: boolean
   onClose: (sucess: boolean) => void
 }
 
-const ChangeMasterPassword = ({ visible, onClose }: Props) => {
+const ChangeMasterPassword = ({ onClose }: Props) => {
   const [loadingMasterPassword, setLoadingMasterPassword] = useState(false)
   const [password, setPassword] = useState('')
   const [currentPassword, setCurrentPassword] = useState('')
@@ -21,16 +16,6 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
 
   const masterPassword = useAppSelector(selectMasterPassword)
   const dispatch = useAppDispatch()
-
-  const inputRef = useRef<RNTextInput>(null)
-
-  useEffect(() => {
-    if (visible) {
-      setTimeout(() => {
-        inputRef.current?.focus()
-      }, 200)
-    }
-  }, [visible])
 
   const onConfirm = async () => {
     if (!password) return
@@ -61,93 +46,41 @@ const ChangeMasterPassword = ({ visible, onClose }: Props) => {
     }
   }
 
-  if (!visible) return null
-
   return (
-    <Modal transparent animationType="slide">
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.modalContainer}>
-          <TouchableWithoutFeedback>
-            <View style={styles.modalContent}>
-              <ModalHeaderTitle title="Change Master Password" />
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Spacer />
+      <TextField
+        label="Current password"
+        placeholder={`Current password`}
+        type="password"
+        secureTextEntry={true}
+        onChangeText={setCurrentPassword}
+      />
 
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Spacer />
-                <TextInput
-                  ref={inputRef}
-                  placeholder={`Current password`}
-                  error={error}
-                  secureTextEntry={true}
-                  onChangeText={setCurrentPassword}
-                />
-                <Spacer />
-                <Text.BodyMedium>Please, enter the new password:</Text.BodyMedium>
-
-                <TextInput placeholder={`New password`} error={error} secureTextEntry={true} onChangeText={setPassword} />
-                <TextInput
-                  placeholder={`Reenter password`}
-                  error={error}
-                  secureTextEntry={true}
-                  onChangeText={setReenterPassword}
-                />
-                <Alert severity="error" message={error} />
-                <Button.TouchableOpacity title="Confirm" onPress={onConfirm} variant="primary" loading={loadingMasterPassword} />
-                <Button.TouchableOpacity
-                  title="Cancel"
-                  onPress={() => onClose(false)}
-                  variant="secondary"
-                  loading={loadingMasterPassword}
-                />
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+      <TextField
+        label="New password"
+        placeholder={`New password`}
+        type="password"
+        secureTextEntry={true}
+        onChangeText={setPassword}
+      />
+      <TextField
+        label="Reenter password"
+        placeholder={`Reenter password`}
+        type="password"
+        secureTextEntry={true}
+        onChangeText={setReenterPassword}
+      />
+      <Alert severity="error" message={error} />
+      <Button color="primary" onPress={onConfirm} loading={loadingMasterPassword}>
+        Update Password
+      </Button>
+      <Spacer />
+      <Button color="primary" onPress={() => onClose(false)} loading={loadingMasterPassword}>
+        Cancel
+      </Button>
+    </View>
   )
 }
 
 export default ChangeMasterPassword
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  modalContent: {
-    minHeight: '30%',
-    width: '100%',
-    borderTopRightRadius: 18,
-    borderTopLeftRadius: 18,
-    position: 'absolute',
-    bottom: 0,
-
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20
-  },
-  container: {
-    flex: 1
-  },
-  inner: {
-    padding: 24,
-    flex: 1,
-    justifyContent: 'space-around'
-  },
-  header: {
-    fontSize: 36,
-    marginBottom: 48
-  },
-  textInput: {
-    height: 40,
-    borderColor: '#000000',
-    borderBottomWidth: 1,
-    marginBottom: 36
-  },
-  btnContainer: {
-    backgroundColor: 'white',
-    marginTop: 12
-  }
-})

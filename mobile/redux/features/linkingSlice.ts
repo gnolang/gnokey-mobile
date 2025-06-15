@@ -1,8 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, RootState } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { GnoNativeApi, KeyInfo, SignTxResponse } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
-import { RootState } from '../root-reducer'
 
 const DEFAULT_GAS_MARGIN = 110 // 1.1%
 

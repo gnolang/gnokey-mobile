@@ -1,6 +1,5 @@
-import { colors } from '@/assets/styles/colors'
 import { TouchableOpacity, View } from 'react-native'
-import styled, { DefaultTheme } from 'styled-components/native'
+import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { Chip, Text } from '@/modules/ui-components'
 import { Vault } from '@reduxjs/toolkit'
@@ -13,22 +12,23 @@ interface Props {
 }
 
 const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Props) => {
+  const theme = useTheme()
   return (
     <Wrapper onPress={() => onVaultPress(vault)}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
         {chains && chains.length > 0 ? (
           <Chip>
-            <Text.Caption style={{ color: '#A1A1A1' }}>{chains.join(', ')}</Text.Caption>
+            <Text.Caption style={{ color: theme.colors.gray }}>{chains.join(', ')}</Text.Caption>
           </Chip>
         ) : (
           <Chip>
-            <Text.Caption style={{ color: '#A1A1A1' }}>Not registered</Text.Caption>
+            <Text.Caption style={{ color: theme.colors.gray }}>Not registered</Text.Caption>
           </Chip>
         )}
         <View />
         {onBookmarkPress ? (
           <TouchableOpacity onPress={() => onBookmarkPress(vault)}>
-            <FontAwesome name={vault.bookmarked ? 'star' : 'star-o'} size={24} color="black" />
+            <FontAwesome name={vault.bookmarked ? 'star' : 'star-o'} size={24} color={theme.colors.black} />
           </TouchableOpacity>
         ) : null}
       </View>
@@ -37,7 +37,7 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
         <PlaceHolder />
         <View style={{ flex: 1, paddingLeft: 16 }}>
           <Text.H3>{vault.keyInfo.name}</Text.H3>
-          <Text.Caption style={{ textAlign: 'left', color: '#A1A1A1' }}>Created at 2025-02-19</Text.Caption>
+          <Text.Caption style={{ textAlign: 'left', color: theme.colors.gray }}>Created at 2025-02-19</Text.Caption>
         </View>
       </View>
     </Wrapper>
@@ -47,8 +47,8 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
 const PlaceHolder = styled.View`
   height: 48px;
   width: 48px;
-  background-color: #e5e5e5;
-  border-color: ${colors.grayscale[500]};
+  background-color: ${({ theme }) => theme.colors.gray};
+  border-color: ${({ theme }) => theme.colors.gray};
   border-radius: ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};
 `
 

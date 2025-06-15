@@ -1,5 +1,4 @@
 import { Layout } from '@/components'
-import Button from '@/components/button'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import Text from '@/components/text'
 import { fetchVaults, Vault, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
@@ -8,7 +7,7 @@ import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
-import { Spacer } from '@/modules/ui-components'
+import { Button, Spacer } from '@/modules/ui-components'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)
@@ -68,12 +67,9 @@ export default function Page() {
               ListEmptyComponent={<Text.Body>There are no items to list.</Text.Body>}
             />
           )}
-          <Button.TouchableOpacity
-            title="Cancel"
-            variant="primary"
-            loading={loading !== undefined}
-            onPress={() => router.push('/home')}
-          ></Button.TouchableOpacity>
+          <Button color="primary" loading={loading !== undefined} onPress={() => router.push('/home')}>
+            Cancel
+          </Button>
         </Layout.BodyAlignedBotton>
       </Layout.Container>
     </>

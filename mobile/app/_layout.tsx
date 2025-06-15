@@ -1,22 +1,7 @@
 import { Stack } from 'expo-router'
-import { ThemeProvider as ThemeProvider2 } from '@react-navigation/native'
 import { Guard } from '@/components/auth/guard'
-import { GnoNativeProvider } from '@gnolang/gnonative'
-import { IndexerProvider, LinkingProvider, ReduxProvider } from '@/providers'
-import { DefaultTheme } from '@/assets/styles'
+import { IndexerProvider, LinkingProvider, ReduxProvider, DatabaseProvider, GnoNativeProvider } from '@/providers'
 import { ThemeProvider } from '@/modules/ui-components'
-
-const gnoDefaultConfig = {
-  // @ts-ignore
-  remote: process.env.EXPO_PUBLIC_GNO_REMOTE!,
-  // @ts-ignore
-  chain_id: process.env.EXPO_PUBLIC_GNO_CHAIN_ID!
-}
-
-const indexerConfig = {
-  // @ts-ignore
-  remote: process.env.EXPO_PUBLIC_TXINDEXER_REMOTE!
-}
 
 // Extend the BigInt interface to include toJSON
 declare global {
@@ -32,11 +17,11 @@ BigInt.prototype.toJSON = function () {
 
 export default function AppLayout() {
   return (
-    <GnoNativeProvider config={gnoDefaultConfig}>
-      <IndexerProvider config={indexerConfig}>
-        <ReduxProvider>
-          <ThemeProvider>
-            <ThemeProvider2 value={DefaultTheme}>
+    <DatabaseProvider>
+      <GnoNativeProvider>
+        <IndexerProvider>
+          <ReduxProvider>
+            <ThemeProvider>
               <LinkingProvider>
                 <Guard>
                   <Stack
@@ -48,10 +33,10 @@ export default function AppLayout() {
                   />
                 </Guard>
               </LinkingProvider>
-            </ThemeProvider2>
-          </ThemeProvider>
-        </ReduxProvider>
-      </IndexerProvider>
-    </GnoNativeProvider>
+            </ThemeProvider>
+          </ReduxProvider>
+        </IndexerProvider>
+      </GnoNativeProvider>
+    </DatabaseProvider>
   )
 }

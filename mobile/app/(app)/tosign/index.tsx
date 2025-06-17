@@ -24,11 +24,10 @@ import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/mod
 import styled from 'styled-components/native'
 
 export default function Page() {
-  const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch()
   const { gnonative } = useGnoNativeContext()
-  const clientName = useAppSelector(selectClientName)
 
+  const clientName = useAppSelector(selectClientName)
   const reason = useAppSelector(reasonSelector)
   const bech32Address = useAppSelector(selectBech32Address)
   const txInput = useAppSelector(selectTxInput)
@@ -37,6 +36,9 @@ export default function Page() {
   const keyInfo = useAppSelector(selectKeyInfo)
   const chainId = useAppSelector(selectChainId)
   const remote = useAppSelector(selectRemote)
+
+  const [loading, setLoading] = useState(false)
+  const [gnonativeReady, setGnonativeReady] = useState(false)
   const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
   const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
 
@@ -44,13 +46,15 @@ export default function Page() {
   console.log('bech32Address', bech32Address)
   console.log('clientName', clientName)
   console.log('reason', reason)
+  console.log('callback', callback)
 
   useEffect(() => {
     ;(async () => {
       if (!chainId || !remote || !bech32Address) return
-      gnonative.setChainID(chainId)
-      gnonative.setRemote(remote)
-      gnonative.activateAccount(bech32Address)
+      await gnonative.setChainID(chainId)
+      await gnonative.setRemote(remote)
+      await gnonative.activateAccount(bech32Address)
+      setGnonativeReady(true)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bech32Address])
@@ -58,8 +62,9 @@ export default function Page() {
   useEffect(() => {
     ;(async () => {
       try {
-        if (!txInput || !keyInfo) {
-          throw new Error('No transaction input or keyInfo found.')
+        if (!txInput || !keyInfo || !gnonativeReady) {
+          console.log('No txInput, keyInfo, or gnonativeReady')
+          return
         }
 
         // need to pause to let the Keybase DB close before using it again
@@ -78,7 +83,7 @@ export default function Page() {
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txInput, keyInfo])
+  }, [txInput, keyInfo, gnonativeReady])
 
   const signTxAndReturnToRequester = async () => {
     console.log('signing the tx', keyInfo)

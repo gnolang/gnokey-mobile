@@ -95,8 +95,8 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
 
             <Spacer />
             <TextField
-              label="Chain Name"
-              placeholder="Enter Chain Name"
+              label="Label"
+              placeholder="Enter the chain label"
               value={form.chainName}
               onChangeText={(text) => setForm({ ...form, chainName: text })}
               error={errors.chainName}
@@ -117,8 +117,8 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
               color="secondary"
             />
             <TextField
-              label="Chain URL"
-              placeholder="Chain URL"
+              label="RPC URL"
+              placeholder="RPC URL"
               value={form.rpcUrl}
               onChangeText={(text) => setForm({ ...form, rpcUrl: text })}
               error={errors.rpcUrl}

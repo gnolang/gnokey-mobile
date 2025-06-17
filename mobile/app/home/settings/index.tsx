@@ -24,7 +24,7 @@ export default function Page() {
           <Spacer />
           <Form.Section title="Chain Info">
             <Form.Link hint={currentChain ? currentChain.chainName : 'undefined'} href="home/settings/change-network">
-              Chain Name
+              Label
             </Form.Link>
             <Form.Text hint={currentChain ? currentChain.chainId : ''}>Chain ID</Form.Text>
             <Form.Text hint={currentChain ? currentChain.rpcUrl : ''}>Remote</Form.Text>

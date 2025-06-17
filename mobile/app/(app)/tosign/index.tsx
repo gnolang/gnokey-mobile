@@ -19,7 +19,7 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity, SafeAreaView } from 'react-native'
+import { ScrollView, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native'
 import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
 
@@ -39,30 +39,18 @@ export default function Page() {
   const remote = useAppSelector(selectRemote)
   const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
   const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
-  // const session = useAppSelector(selectSession);
-  // const sessionWanted = useAppSelector(selectSessionWanted);
 
   console.log('txInput', txInput)
   console.log('bech32Address', bech32Address)
   console.log('clientName', clientName)
   console.log('reason', reason)
-  // console.log('session', session);
-  // console.log('sessionWanted', sessionWanted);
-
-  // useEffect(() => {
-  //   if (session) {
-  //     // if we have a session, mwe can sign the tx and return to the requester.
-  //     setTimeout(() => {
-  //       signTxAndReturnToRequester()
-  //     }, 300);
-  //   }
-  // }, [session])
 
   useEffect(() => {
     ;(async () => {
-      if (!chainId || !remote) throw new Error('No chainId or remote found.')
+      if (!chainId || !remote || !bech32Address) return
       gnonative.setChainID(chainId)
       gnonative.setRemote(remote)
+      gnonative.activateAccount(bech32Address)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bech32Address])
@@ -70,16 +58,17 @@ export default function Page() {
   useEffect(() => {
     ;(async () => {
       try {
-        console.log('onChangeAccountHandler', keyInfo)
-
         if (!txInput || !keyInfo) {
           throw new Error('No transaction input or keyInfo found.')
         }
 
+        // need to pause to let the Keybase DB close before using it again
+        await new Promise((f) => setTimeout(f, 2000))
+
         const { gasWanted } = await dispatch(estimateGasWanted({ keyInfo, updateTx: updateTx })).unwrap()
 
         // need to pause to let the Keybase DB close before using it again
-        await new Promise((f) => setTimeout(f, 1000))
+        await new Promise((f) => setTimeout(f, 2000))
 
         const signedTx = await dispatch(signTx({ keyInfo })).unwrap()
         setSignedTx(signedTx.signedTxJson)
@@ -168,29 +157,8 @@ export default function Page() {
               <Ruller />
 
               <FormItemInline label="Gas Wanted">
-                <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite>
+                {gasWanted ? <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite> : <ActivityIndicator />}
               </FormItemInline>
-
-              {/* {sessionWanted &&
-              <>
-                <FormItemInline label="Remember this permission" >
-                  <Checkbox
-                    label=""
-                    checked={remember}
-                    onPress={() => setRemember(prev => !prev)}
-                  />
-                </FormItemInline>
-
-
-                {remember ?
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text.Body>Auto-approve for next  </Text.Body>
-                    <TextInput value={validityMinutes?.toString()} onChangeText={x => setValidityMinutes(Number(x))} containerStyle={{ width: 70 }} keyboardType="number-pad" />
-                    <Text.Body>  minutes</Text.Body>
-                  </View>
-                  : null}
-              </>
-            } */}
 
               <Ruller />
 
@@ -260,7 +228,7 @@ export default function Page() {
                 <Ruller />
 
                 <FormItem label="Raw Signed Data">
-                  <TextBodyWhite>{signedTx}</TextBodyWhite>
+                  {signedTx ? <TextBodyWhite>{signedTx?.toString()}</TextBodyWhite> : <ActivityIndicator />}
                 </FormItem>
               </HiddenGroup>
             </ScrollView>
@@ -306,9 +274,9 @@ const HiddenGroup = ({ children }: React.PropsWithChildren) => {
 }
 
 const TextBodyWhite = styled(Text.Body)`
-  color: white;
+  color: black;
 `
 const TextBodyBlack = styled(Text.Body)`
   font-weight: 400;
-  color: white;
+  color: black;
 `

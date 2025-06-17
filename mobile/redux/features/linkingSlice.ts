@@ -152,7 +152,7 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
     const queryParams = parsedURL.queryParams
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
-    const bech32Address = queryParams?.address ? (queryParams.address as string) : undefined
+    const bech32Address = queryParams?.address ? (queryParams.address as string).trim() : undefined
     let keyinfo: KeyInfo | undefined
 
     if (bech32Address) {
@@ -165,6 +165,7 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
         }
       }
     }
+    console.log('keyinfoxxx', keyinfo)
 
     let updateTx = false
     if (queryParams?.update_tx && (queryParams.update_tx as string) === 'true') {

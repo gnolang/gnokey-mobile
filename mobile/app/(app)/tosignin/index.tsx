@@ -15,9 +15,9 @@ import {
 } from '@/redux'
 import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { FlatList, SafeAreaView } from 'react-native'
+import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
-import { Button, Container, Spacer } from '@/modules/ui-components'
+import { Button, Container, SafeAreaView, Spacer } from '@/modules/ui-components'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)

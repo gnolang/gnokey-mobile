@@ -1,5 +1,5 @@
+import { SafeAreaView } from '@/modules/ui-components'
 import React from 'react'
-import { SafeAreaView } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 
 const Wrapper = styled.View`

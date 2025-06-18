@@ -1,4 +1,4 @@
-import { Button, Spacer, Text, Container } from '@/modules/ui-components'
+import { Button, Spacer, Text, Container, SafeAreaView } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
 import {
   Alert,
@@ -8,8 +8,7 @@ import {
   ScrollView,
   View,
   TouchableWithoutFeedback,
-  StyleSheet,
-  SafeAreaView
+  StyleSheet
 } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/views'
@@ -52,7 +51,7 @@ export default function Page() {
 
   return (
     <Container>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.container}

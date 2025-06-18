@@ -16,7 +16,7 @@ const Page = () => {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView>
         <Container style={{ flex: 1 }}>
           <Text.Body>Are you sure you want to log out?</Text.Body>
           <Button onPress={() => onCancel(false)} style={{ marginTop: 20 }}>

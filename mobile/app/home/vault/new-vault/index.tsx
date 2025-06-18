@@ -163,11 +163,7 @@ export default function Page() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Container>
             <View>
-              <Text.H1>My New</Text.H1>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text.H1>Vault&nbsp;</Text.H1>
-                <Text.H1 style={{ color: '#E5E5E5' }}>Info</Text.H1>
-              </View>
+              <Text.H3>My new Vault</Text.H3>
             </View>
 
             <Spacer />

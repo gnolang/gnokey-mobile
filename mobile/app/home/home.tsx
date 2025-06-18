@@ -75,7 +75,7 @@ export default function Page() {
   return (
     <>
       <Container>
-        <SafeAreaView>
+        <SafeAreaView style={{ marginBottom: 40 }}>
           <AppBar>
             <Text.H3>GnoKey Mobile</Text.H3>
             <TouchableOpacity onPress={() => route.navigate('/home/settings')}>
@@ -127,7 +127,7 @@ const Body = styled.View`
   flex: 1;
 `
 const Botton = styled.View`
-  margin-top: 16px;
+  margin-top: 6px;
 `
 const Content = styled.View`
   flex: 1;

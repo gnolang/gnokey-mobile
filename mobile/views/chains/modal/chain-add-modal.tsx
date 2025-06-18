@@ -1,8 +1,8 @@
 import { Text } from '@/components'
-import { Button, Spacer, TextField } from '@/modules/ui-components'
+import { Button, SafeAreaView, Spacer, TextField } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import React, { useEffect } from 'react'
-import { Modal, SafeAreaView, View } from 'react-native'
+import { Modal, View } from 'react-native'
 import { useTheme } from 'styled-components/native'
 import { isEmpty, isInvalidURL } from '@/modules/validation'
 

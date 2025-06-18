@@ -49,7 +49,7 @@ const Page = () => {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView>
         <TopModalBar />
 
         <Container style={{ flex: 1 }}>

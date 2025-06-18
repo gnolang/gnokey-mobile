@@ -1,7 +1,7 @@
-import { ButtonIcon, Text } from '@/modules/ui-components'
+import { ButtonIcon, SafeAreaView, Text } from '@/modules/ui-components'
 import { Feather } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { useTheme } from 'styled-components/native'
 
 const Page = () => {
@@ -9,7 +9,7 @@ const Page = () => {
   const theme = useTheme()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView>
       <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 24 }}>
         <Text.H3 style={{ color: theme.success.text }}>Sucess</Text.H3>
       </View>

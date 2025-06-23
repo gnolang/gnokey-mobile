@@ -11,7 +11,7 @@ const Page = () => {
   return (
     <SafeAreaView>
       <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 24 }}>
-        <Text.H3 style={{ color: theme.success.text }}>Sucess</Text.H3>
+        <Text.H3 style={{ color: theme.success.text }}>Success</Text.H3>
       </View>
 
       <View style={{ flex: 1, paddingHorizontal: 20, justifyContent: 'center' }}>

@@ -87,7 +87,7 @@ const Content = styled.View<PropsWithTheme>`
   border-color: ${(p) => p.theme.textinputs.border};
   padding: 0 8px;
   color: ${(p) => p.theme.colors.black};
-  background-color: ${(p) => p.theme.textinputs.background};
+  background-color: ${(p) => (p.editable === false ? '#f0f0f0' : p.theme.textinputs.background)};
 `
 
 const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({

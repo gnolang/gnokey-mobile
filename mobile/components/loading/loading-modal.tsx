@@ -15,7 +15,7 @@ export default function LoadingModal({ visible, message = 'Loading' }: Props) {
   return (
     <Modal animationType="fade" transparent={true}>
       <View style={styles.centeredView}>
-        <View style={[styles.modalView, { backgroundColor: theme.colors.white }]}>
+        <View style={styles.modalView}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
           {message ? <Text.Body style={styles.modalText}>{message}</Text.Body> : null}
         </View>
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginVertical: 15,
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 16,
+    color: '#fff'
   }
 })

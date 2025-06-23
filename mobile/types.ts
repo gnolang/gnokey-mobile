@@ -44,5 +44,7 @@ export type NetworkMetainfo = {
   chainName: string
   rpcUrl: string
   faucetUrl?: string
+  faucetPortalUrl?: string
   active: boolean
+  createdAt?: string
 }

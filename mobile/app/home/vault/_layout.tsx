@@ -27,16 +27,16 @@ export default function VaultModalLayout() {
       <Stack.Screen
         name="new-vault/index"
         options={{
-          title: 'New Vault',
+          title: 'New Master Key',
           ...defaultOptions
         }}
       />
-      <Stack.Screen name="new-vault/new-vault-sucess" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
+      <Stack.Screen name="new-vault/new-vault-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
 
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />
       <Stack.Screen name="option-phrase/enter-vault-name" options={{ ...defaultOptions, title: 'Vault name' }} />
-      {/* <Stack.Screen name="vault/new-vault/new-vault-sucess" options={{ ...defaultOptions, title: 'd' }} /> */}
+      {/* <Stack.Screen name="vault/new-vault/new-vault-success" options={{ ...defaultOptions, title: 'd' }} /> */}
     </Stack>
   )
 }

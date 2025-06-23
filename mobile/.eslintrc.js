@@ -7,7 +7,7 @@ module.exports = {
     'no-unused-expressions': 'off',
     'import/no-unresolved': [
       'error',
-      { ignore: ['@/redux', '^@/modules/.+', '@/components', '@/views', '@/providers', '@/assets'] }
+      { ignore: ['@/redux', '^@/modules/.+', '@/components', '@/views', '@/providers', '@/assets', '@/types'] }
     ]
   }
 }

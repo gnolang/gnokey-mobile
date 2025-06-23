@@ -4,7 +4,7 @@ import { Alert, Button, Spacer, TextField } from '@/modules/ui-components'
 import { View } from 'react-native'
 
 export type Props = {
-  onClose: (sucess: boolean) => void
+  onClose: (success: boolean) => void
 }
 
 const ChangeMasterPassword = ({ onClose }: Props) => {

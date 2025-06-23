@@ -5,11 +5,12 @@
     "rpcUrl": "https://api.gno.berty.io:443",
     "faucetUrl": "https://faucetpass.gno.berty.io"
   },
-  {
-    "chainId": "portal-loop",
-    "chainName": "Portal loop",
+    {
+    "chainId": "staging",
+    "chainName": "Gno Staging",
     "rpcUrl": "https://rpc.gno.land:443",
-    "faucetUrl": "https://faucet-api.gno.land"
+    "faucetUrl": "",
+    "faucetPortalUrl": "https://faucet.gno.land"
   },
   {
     "chainId": "test5",

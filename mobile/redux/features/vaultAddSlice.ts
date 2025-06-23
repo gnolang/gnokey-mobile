@@ -12,7 +12,8 @@ export enum VaultCreationState {
   user_exists_only_on_local_storage = 'user_exists_only_on_local_storage',
   user_already_exists_on_blockchain_under_different_name = 'user_already_exists_on_blockchain_under_different_name',
   user_already_exists_on_blockchain = 'user_already_exists_on_blockchain',
-  account_created = 'account_created'
+  account_created = 'account_created',
+  masterkey_created_external_faucet = 'masterkey_created_external_faucet'
 }
 
 export interface VaultAddState {
@@ -20,6 +21,7 @@ export interface VaultAddState {
   newAccount?: KeyInfo
   existingAccount?: KeyInfo
   loading: boolean
+  onboardingLoading: boolean
   progress: string[]
   selectedChain?: NetworkMetainfo
   registerAccount: boolean
@@ -31,7 +33,8 @@ const initialState: VaultAddState = {
   signUpState: undefined,
   newAccount: undefined,
   existingAccount: undefined,
-  loading: false,
+  loading: true,
+  onboardingLoading: false,
   progress: [],
   selectedChain: undefined,
   registerAccount: false
@@ -80,7 +83,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
 
     if (userOnLocalStorage) {
-      thunkAPI.dispatch(addProgress(`SignUpState.user_exists_under_differente_key_local`))
+      thunkAPI.dispatch(addProgress(`user_exists_under_differente_key_local`))
       // CASE 1.1: Bad case. Choose new name. (Delete name in keystore?)
       return { newAccount: undefined, state: VaultCreationState.user_exists_under_differente_key_local }
     }
@@ -98,7 +101,7 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.setPassword(password, newAccount.address)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase
-    thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
+    thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 
@@ -114,20 +117,20 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     if (blockchainUser) {
       const localAddress = await gnonative.addressToBech32(userOnLocalStorage.address)
       thunkAPI.dispatch(
-        addProgress(`exisging local address "${localAddress}" and blockchain Users Addr "${blockchainUser.address}"`)
+        addProgress(`existing local address "${localAddress}" and blockchain Users Addr "${blockchainUser.address}"`)
       )
 
       if (blockchainUser.address === localAddress) {
-        thunkAPI.dispatch(addProgress(`CASE 1.0 SignUpState.user_exists_on_blockchain_and_local_storage`))
+        thunkAPI.dispatch(addProgress(`CASE 1.0 user_exists_on_blockchain_and_local_storage`))
         // CASE 1.0: Offer to do normal signin, or choose new name
         return { newAccount: undefined, state: VaultCreationState.user_exists_on_blockchain_and_local_storage }
       } else {
-        thunkAPI.dispatch(addProgress(`SignUpState.user_exists_under_differente_key`))
+        thunkAPI.dispatch(addProgress(`user_exists_under_differente_key`))
         // CASE 1.1: Bad case. Choose new name. (Delete name in keystore?)
         return { newAccount: undefined, state: VaultCreationState.user_exists_under_differente_key }
       }
     } else {
-      thunkAPI.dispatch(addProgress(`SignUpState.user_exists_only_on_local_storage`))
+      thunkAPI.dispatch(addProgress(`user_exists_only_on_local_storage`))
       // CASE 1.2: Offer to onboard existing account, replace it, or choose new name
       return {
         newAccount: undefined,
@@ -157,14 +160,19 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
 
-    if (!selectedChain.faucetUrl) {
-      thunkAPI.dispatch(addProgress(`no faucetAddress set for chain "${selectedChain.chainName}"`))
-    } else {
+    if (selectedChain.faucetUrl) {
       thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
       await onboard(gnonative, newAccount, selectedChain.faucetUrl)
+    } else {
+      thunkAPI.dispatch(addProgress(`no faucetAddress set for chain "${selectedChain.chainName}"`))
     }
 
-    thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
+    if (!selectedChain.faucetUrl && selectedChain.faucetPortalUrl) {
+      thunkAPI.dispatch(addProgress(`masterkey_created_external_faucet`))
+      return { newAccount, state: VaultCreationState.masterkey_created_external_faucet }
+    }
+
+    thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 })
@@ -184,7 +192,13 @@ export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo },
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     await onboard(gnonative, account, selectedChain.faucetUrl)
 
-    thunkAPI.dispatch(addProgress(`SignUpState.account_created`))
+    thunkAPI.dispatch(addProgress(`account_created`))
+
+    if (!selectedChain.faucetUrl && selectedChain.faucetPortalUrl) {
+      thunkAPI.dispatch(addProgress(`masterkey_created_external_faucet`))
+      return { newAccount: account, state: VaultCreationState.masterkey_created_external_faucet }
+    }
+
     return { newAccount: account, state: VaultCreationState.account_created }
   }
 )
@@ -287,7 +301,7 @@ const onboard = async (gnonative: GnoNativeApi, account: KeyInfo, faucetRemote?:
 }
 
 const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
-  console.log('Registering account %s', account.name)
+  console.log('Registering account', account.name)
   try {
     const gasFee = '10000000ugnot'
     const gasWanted = BigInt(20000000)
@@ -400,7 +414,7 @@ export const vaultAddSlice = createSlice({
     },
     addProgress: (state, action: PayloadAction<string>) => {
       console.log('progress--->', action.payload)
-      state.progress = [...state.progress, '- ' + action.payload]
+      state.progress = [...state.progress, '' + action.payload]
     },
     clearProgress: (state) => {
       state.progress = []
@@ -430,6 +444,7 @@ export const vaultAddSlice = createSlice({
         if (action.error.message) {
           state.progress = [...state.progress, action.error.message]
         }
+        state.loading = false
         console.error('signUp.rejected', action)
       })
       .addCase(addVault.pending, (state) => {
@@ -442,8 +457,15 @@ export const vaultAddSlice = createSlice({
         state.existingAccount = action.payload?.existingAccount
         state.signUpState = action.payload?.state
       })
+      .addCase(onboarding.pending, (state) => {
+        state.onboardingLoading = true
+      })
+      .addCase(onboarding.rejected, (state, _) => {
+        state.onboardingLoading = false
+      })
       .addCase(onboarding.fulfilled, (state, action) => {
         state.loading = false
+        state.onboardingLoading = false
         state.newAccount = action.payload?.newAccount
         state.existingAccount = action.payload?.existingAccount
         state.signUpState = action.payload?.state
@@ -455,6 +477,7 @@ export const vaultAddSlice = createSlice({
 
   selectors: {
     selectLoadingAddVault: (state) => state.loading,
+    selectOnboardingLoading: (state) => state.onboardingLoading,
     selectProgress: (state) => state.progress,
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
@@ -462,7 +485,8 @@ export const vaultAddSlice = createSlice({
     selectRegisterAccount: (state) => state.registerAccount,
     selectKeyName: (state) => state.keyName,
     selectSelectedChain: (state) => state.selectedChain,
-    selectPhrase: (state) => state.phrase
+    selectPhrase: (state) => state.phrase,
+    selectLastProgress: (state) => state.progress[state.progress.length - 1]
   }
 })
 
@@ -479,7 +503,9 @@ export const {
 
 export const {
   selectLoadingAddVault,
+  selectOnboardingLoading,
   selectProgress,
+  selectLastProgress,
   signUpStateSelector,
   newAccountSelector,
   existingAccountSelector,

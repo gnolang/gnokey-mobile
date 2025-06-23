@@ -113,7 +113,7 @@ export default function Page() {
             </Body>
             <Botton>
               <Button onPress={navigateToAddKey} color="primary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
-                New Vault
+                New Master Key
               </Button>
             </Botton>
           </Content>

@@ -75,6 +75,7 @@ const executeMigrations = async (db: SQLite.SQLiteDatabase) => {
       chainName TEXT NOT NULL,
       rpcUrl TEXT NOT NULL,
       faucetUrl TEXT,
+      faucetPortalUrl TEXT,
       active BOOLEAN NOT NULL DEFAULT 0,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -103,6 +104,7 @@ const initialDataLoad = async (db: SQLite.SQLiteDatabase) => {
       chainName: chain.chainName,
       rpcUrl: chain.rpcUrl,
       faucetUrl: chain.faucetUrl || '',
+      faucetPortalUrl: chain.faucetPortalUrl || '',
       active: i === 0 ? true : false
     })
   }
@@ -113,9 +115,9 @@ const isDataLoaded = async (db: SQLite.SQLiteDatabase) => {
   return result && result.total > 0
 }
 
-export const insertChain = async ({ chainId, chainName, rpcUrl, faucetUrl, active }: AddChainProp) => {
-  const sql = 'INSERT INTO app_chains (chainId, chainName, rpcUrl, faucetUrl, active) VALUES (?, ?, ?, ?, ?)'
-  return await db.runAsync(sql, chainId, chainName, rpcUrl, faucetUrl, active)
+export const insertChain = async ({ chainId, chainName, rpcUrl, faucetUrl, faucetPortalUrl, active }: AddChainProp) => {
+  const sql = 'INSERT INTO app_chains (chainId, chainName, rpcUrl, faucetUrl, faucetPortalUrl, active) VALUES (?, ?, ?, ?, ?, ?)'
+  return await db.runAsync(sql, chainId, chainName, rpcUrl, faucetUrl || '', faucetPortalUrl || '', active)
 }
 
 export const updateActiveChain = async (id: string) => {
@@ -134,13 +136,7 @@ export const nukeDatabase = async () => {
   console.log('All tables dropped successfully')
 }
 
-interface AddChainProp {
-  chainId: string
-  chainName: string
-  rpcUrl: string
-  faucetUrl: string
-  active: boolean
-}
+type AddChainProp = Omit<NetworkMetainfo, 'id' | 'createdAt'>
 
 interface ListChainsResult {
   chains: NetworkMetainfo[]

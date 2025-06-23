@@ -28,6 +28,8 @@ export default function Page() {
             </Form.Link>
             <Form.Text hint={currentChain ? currentChain.chainId : ''}>Chain ID</Form.Text>
             <Form.Text hint={currentChain ? currentChain.rpcUrl : ''}>Remote</Form.Text>
+            <Form.Text hint={currentChain ? currentChain.faucetUrl : ''}>Faucet API</Form.Text>
+            <Form.Text hint={currentChain ? currentChain.faucetPortalUrl : ''}>Faucet Portal</Form.Text>
           </Form.Section>
           <Spacer />
           <Form.Section title="Security">

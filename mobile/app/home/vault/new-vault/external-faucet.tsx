@@ -2,10 +2,10 @@ import { Container, Spacer, Text } from '@/modules/ui-components'
 import { Linking } from 'react-native'
 import { Button } from '@/modules/ui-components'
 import {
+  existingAccountSelector,
   newAccountSelector,
-  onboarding,
-  resetState,
-  selectOnboardingLoading,
+  registerAccount,
+  selectLoadingAddVault,
   signUpStateSelector,
   useAppDispatch,
   useAppSelector,
@@ -21,8 +21,9 @@ import { LoadingModal } from '@/components/loading'
 
 export default function Page() {
   const newAccount = useAppSelector(newAccountSelector)
+  const existingAccount = useAppSelector(existingAccountSelector)
   const signUpState = useAppSelector(signUpStateSelector)
-  const loading = useAppSelector(selectOnboardingLoading)
+  const loading = useAppSelector(selectLoadingAddVault)
 
   const theme = useTheme()
   const { gnonative } = useGnoNativeContext()
@@ -34,17 +35,21 @@ export default function Page() {
   useEffect(() => {
     ;(async () => {
       if (!newAccount) return
-
       const address = await gnonative.addressToBech32(newAccount.address)
       setAddressBech32(address)
     })()
   }, [newAccount, gnonative])
 
   useEffect(() => {
-    if (
-      signUpState === VaultCreationState.account_created ||
-      signUpState === VaultCreationState.masterkey_created_external_faucet
-    ) {
+    ;(async () => {
+      if (!existingAccount) return
+      const address = await gnonative.addressToBech32(existingAccount.address)
+      setAddressBech32(address)
+    })()
+  }, [existingAccount, gnonative])
+
+  useEffect(() => {
+    if (signUpState === VaultCreationState.account_registered) {
       router.replace('/home/vault/new-vault/new-vault-success')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,19 +60,20 @@ export default function Page() {
   }
 
   const continueToVaultCreation = async () => {
-    if (!newAccount) {
-      console.error('No new account found, cannot continue to vault creation.')
+    const account = newAccount || existingAccount
+    if (!account) {
+      console.error('No account found, cannot continue to vault creation.')
       return
     }
     console.log('Continuing to vault creation...')
-    await dispatch(onboarding({ account: newAccount })).unwrap()
+    await dispatch(registerAccount()).unwrap()
   }
 
   return (
     <Container>
       <LoadingModal visible={loading} />
       <Spacer />
-      <Text.H3>To fund your master key, please open the Gno Faucet website and request tokens for your address.</Text.H3>
+      <Text.H3>To fund your Account Key, please open the Gno Faucet website and request tokens for your address.</Text.H3>
       <Spacer space={24} />
       <TextCopy text={addressBech32}>
         <Text.Body style={{ color: theme.colors.primary }}>1 - Press here to copy address:</Text.Body>
@@ -84,7 +90,7 @@ export default function Page() {
       <Text.Body style={{ color: theme.colors.primary }}>
         3 - After completing the faucet process, return to this app to continue.
       </Text.Body>
-      <Button onPress={() => continueToVaultCreation()}>Continue to Master Key Creation</Button>
+      <Button onPress={() => continueToVaultCreation()}>Continue to Account Key Creation</Button>
     </Container>
   )
 }

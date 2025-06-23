@@ -27,7 +27,7 @@ export default function VaultModalLayout() {
       <Stack.Screen
         name="new-vault/index"
         options={{
-          title: 'New Master Key',
+          title: 'New Account Key',
           ...defaultOptions
         }}
       />

@@ -13,7 +13,7 @@ export enum VaultCreationState {
   user_already_exists_on_blockchain_under_different_name = 'user_already_exists_on_blockchain_under_different_name',
   user_already_exists_on_blockchain = 'user_already_exists_on_blockchain',
   account_created = 'account_created',
-  masterkey_created_external_faucet = 'masterkey_created_external_faucet'
+  account_registered = 'account_registered'
 }
 
 export interface VaultAddState {
@@ -21,7 +21,6 @@ export interface VaultAddState {
   newAccount?: KeyInfo
   existingAccount?: KeyInfo
   loading: boolean
-  onboardingLoading: boolean
   progress: string[]
   selectedChain?: NetworkMetainfo
   registerAccount: boolean
@@ -34,7 +33,6 @@ const initialState: VaultAddState = {
   newAccount: undefined,
   existingAccount: undefined,
   loading: true,
-  onboardingLoading: false,
   progress: [],
   selectedChain: undefined,
   registerAccount: false
@@ -63,18 +61,11 @@ type SignUpResponse = { newAccount?: KeyInfo; existingAccount?: KeyInfo; state: 
  *
  * ref: https://github.com/gnolang/dsocial/issues/72
  */
-export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/signUp', async (param, thunkAPI) => {
+export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/createKey', async (param, thunkAPI) => {
   const { name, password, phrase } = param
   const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
-
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-
-  console.log('selectedChain in signUp', selectedChain)
-
-  if (selectedChain) {
-    await gnonative.setRemote(selectedChain.rpcUrl)
-    await gnonative.setChainID(selectedChain.chainId)
-  }
+  console.log('selectedChain', selectedChain)
 
   // do not register on chain
   if (!selectedChain) {
@@ -104,6 +95,9 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
+
+  await gnonative.setRemote(selectedChain.rpcUrl)
+  await gnonative.setChainID(selectedChain.chainId)
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase)
@@ -160,48 +154,52 @@ export const addVault = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
 
-    if (selectedChain.faucetUrl) {
-      thunkAPI.dispatch(addProgress(`onboarding "${name}"`))
-      await onboard(gnonative, newAccount, selectedChain.faucetUrl)
-    } else {
-      thunkAPI.dispatch(addProgress(`no faucetAddress set for chain "${selectedChain.chainName}"`))
-    }
-
-    if (!selectedChain.faucetUrl && selectedChain.faucetPortalUrl) {
-      thunkAPI.dispatch(addProgress(`masterkey_created_external_faucet`))
-      return { newAccount, state: VaultCreationState.masterkey_created_external_faucet }
-    }
-
     thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 })
 
-export const onboarding = createAsyncThunk<SignUpResponse, { account: KeyInfo }, ThunkExtra>(
-  'user/onboarding',
-  async (param, thunkAPI) => {
-    thunkAPI.dispatch(addProgress(`onboarding "${param.account.name}"`))
+export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra>('user/registerKey', async (param, thunkAPI) => {
+  thunkAPI.dispatch(addProgress(`onboarding started`))
 
-    const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
+  const { selectedChain, newAccount, existingAccount } = (thunkAPI.getState() as RootState).vaultAdd
+  const account = newAccount || existingAccount
+  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
-    if (!selectedChain) {
-      throw new Error('No chain selected')
-    }
-
-    const { account } = param
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    await onboard(gnonative, account, selectedChain.faucetUrl)
-
-    thunkAPI.dispatch(addProgress(`account_created`))
-
-    if (!selectedChain.faucetUrl && selectedChain.faucetPortalUrl) {
-      thunkAPI.dispatch(addProgress(`masterkey_created_external_faucet`))
-      return { newAccount: account, state: VaultCreationState.masterkey_created_external_faucet }
-    }
-
-    return { newAccount: account, state: VaultCreationState.account_created }
+  if (!selectedChain || !account) {
+    thunkAPI.dispatch(addProgress(`No chain or account selected for onboarding`))
+    throw new Error('No chain or account selected for onboarding')
   }
-)
+
+  try {
+    const { name, address } = account
+    const address_bech32 = await gnonative.addressToBech32(address)
+    console.log(`onboarding ${name}, with address: ${address_bech32}`)
+
+    const hasBalance = await hasCoins(gnonative, address)
+    console.log(`hasBalance: ${hasBalance}`)
+
+    if (hasBalance) {
+      await registerOnChain(gnonative, account)
+      return { newAccount, state: VaultCreationState.account_registered }
+    }
+
+    if (!selectedChain.faucetUrl) {
+      throw new Error('No faucet URL configured for the selected chain')
+    }
+
+    const response = await sendCoins(address_bech32, selectedChain.faucetUrl)
+    console.log(`coins sent, response: ${response}`)
+
+    await registerOnChain(gnonative, account)
+    thunkAPI.dispatch(addProgress(`account_registered`))
+    return { newAccount, state: VaultCreationState.account_registered }
+  } catch (error) {
+    console.error('Error during onboarding:', error)
+    thunkAPI.dispatch(addProgress(`Error during account registration: ${error}`))
+    throw error
+  }
+})
 
 export const generateNewPhrase = createAsyncThunk<{ phrase: string }, void, ThunkExtra>(
   'user/generateNewPhrase',
@@ -267,6 +265,7 @@ const checkForUserOnBlockchain = async (
 }
 
 function convertToJson(result: string | undefined) {
+  console.log('xxxxx:', result)
   if (!result || result === '("" string)') return undefined
 
   const userData = result.match(/\("(\w+)" std\.Address/)?.[1]
@@ -274,34 +273,8 @@ function convertToJson(result: string | undefined) {
   return userData
 }
 
-const onboard = async (gnonative: GnoNativeApi, account: KeyInfo, faucetRemote?: string) => {
-  const { name, address } = account
-  const address_bech32 = await gnonative.addressToBech32(address)
-  console.log('onboarding %s, with address: %s', name, address_bech32)
-
-  try {
-    const hasBalance = await hasCoins(gnonative, address)
-
-    if (hasBalance) {
-      console.log('user %s already has a balance', name)
-      await registerAccount(gnonative, account)
-      return
-    }
-
-    if (faucetRemote) {
-      const response = await sendCoins(address_bech32, faucetRemote)
-      console.log('coins sent, response: %s', response)
-      await registerAccount(gnonative, account)
-    } else {
-      console.log('no faucet remote address set')
-    }
-  } catch (error) {
-    console.error('onboard error', error)
-  }
-}
-
-const registerAccount = async (gnonative: GnoNativeApi, account: KeyInfo) => {
-  console.log('Registering account', account.name)
+const registerOnChain = async (gnonative: GnoNativeApi, account: KeyInfo) => {
+  console.log(`Registering account ${account.name}`)
   try {
     const gasFee = '10000000ugnot'
     const gasWanted = BigInt(20000000)
@@ -440,32 +413,31 @@ export const vaultAddSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(addVault.rejected, (state, action) => {
+      .addCase(createKey.rejected, (state, action) => {
         if (action.error.message) {
           state.progress = [...state.progress, action.error.message]
         }
         state.loading = false
         console.error('signUp.rejected', action)
       })
-      .addCase(addVault.pending, (state) => {
+      .addCase(createKey.pending, (state) => {
         state.loading = true
         state.progress = []
       })
-      .addCase(addVault.fulfilled, (state, action) => {
+      .addCase(createKey.fulfilled, (state, action) => {
         state.loading = false
         state.newAccount = action.payload?.newAccount
         state.existingAccount = action.payload?.existingAccount
         state.signUpState = action.payload?.state
       })
-      .addCase(onboarding.pending, (state) => {
-        state.onboardingLoading = true
+      .addCase(registerAccount.pending, (state) => {
+        state.loading = true
       })
-      .addCase(onboarding.rejected, (state, _) => {
-        state.onboardingLoading = false
-      })
-      .addCase(onboarding.fulfilled, (state, action) => {
+      .addCase(registerAccount.rejected, (state, _) => {
         state.loading = false
-        state.onboardingLoading = false
+      })
+      .addCase(registerAccount.fulfilled, (state, action) => {
+        state.loading = false
         state.newAccount = action.payload?.newAccount
         state.existingAccount = action.payload?.existingAccount
         state.signUpState = action.payload?.state
@@ -477,7 +449,6 @@ export const vaultAddSlice = createSlice({
 
   selectors: {
     selectLoadingAddVault: (state) => state.loading,
-    selectOnboardingLoading: (state) => state.onboardingLoading,
     selectProgress: (state) => state.progress,
     signUpStateSelector: (state) => state.signUpState,
     newAccountSelector: (state) => state.newAccount,
@@ -503,7 +474,6 @@ export const {
 
 export const {
   selectLoadingAddVault,
-  selectOnboardingLoading,
   selectProgress,
   selectLastProgress,
   signUpStateSelector,

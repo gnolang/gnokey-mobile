@@ -22,7 +22,7 @@ export default function NewVaultPage() {
         <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}></View>
         <Ruller />
         <ActionItem
-          title="Create a personal vault"
+          title="Create an Account Key"
           subtitle="Quick and easy to set up"
           onPress={() => router.push('/home/vault/new-vault')}
         />

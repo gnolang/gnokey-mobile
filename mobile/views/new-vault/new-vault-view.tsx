@@ -9,8 +9,8 @@ import {
   VaultCreationState,
   existingAccountSelector,
   newAccountSelector,
-  onboarding,
-  addVault,
+  registerAccount,
+  createKey,
   signUpStateSelector,
   selectKeyName,
   selectPhrase,
@@ -110,12 +110,12 @@ export const NewVaultView = (props: Props) => {
     if (signUpState === VaultCreationState.user_exists_only_on_local_storage && existingAccount) {
       await gnonative.activateAccount(keyName)
       await gnonative.setPassword(masterPassword, existingAccount.address)
-      await dispatch(onboarding({ account: existingAccount })).unwrap()
+      await dispatch(registerAccount()).unwrap()
       return
     }
 
     try {
-      await dispatch(addVault({ name: keyName, password: masterPassword, phrase })).unwrap()
+      await dispatch(createKey({ name: keyName, password: masterPassword, phrase })).unwrap()
       await dispatch(fetchVaults()).unwrap()
 
       dispatch(checkForKeyOnChains())

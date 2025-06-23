@@ -1,6 +1,6 @@
 import { View, TextInput as RNTextInput, Alert as RNAlert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { router, useFocusEffect, useNavigation } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import {
   selectMasterPassword,
@@ -9,8 +9,8 @@ import {
   VaultCreationState,
   existingAccountSelector,
   newAccountSelector,
-  onboarding,
-  addVault,
+  registerAccount,
+  createKey,
   signUpStateSelector,
   selectKeyName,
   setKeyName,
@@ -21,7 +21,8 @@ import {
   checkForKeyOnChains,
   selectLastProgress,
   selectLoadingAddVault,
-  clearProgress
+  clearProgress,
+  selectSelectedChain
 } from '@/redux'
 import { TextCopy } from '@/components'
 import { Feather, Octicons } from '@expo/vector-icons'
@@ -36,7 +37,6 @@ export default function Page() {
 
   const inputRef = useRef<RNTextInput>(null)
 
-  const navigation = useNavigation()
   const { gnonative } = useGnoNativeContext()
   const progress = useAppSelector(selectLastProgress)
 
@@ -49,6 +49,7 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
   const loading = useAppSelector(selectLoadingAddVault)
+  const selectedChain = useAppSelector(selectSelectedChain)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,15 +91,25 @@ export default function Page() {
         setError('This name is already registered locally under a different key. Please choose another name.')
         return
       }
-      if (signUpState === VaultCreationState.account_created && newAccount) {
-        dispatch(resetState())
-        router.replace('/home/vault/new-vault/new-vault-success')
+      if (signUpState === VaultCreationState.account_created) {
+        if (selectedChain?.faucetPortalUrl) {
+          router.push('/home/vault/new-vault/external-faucet')
+          return
+        }
+        if (selectedChain?.faucetUrl) {
+          await dispatch(registerAccount()).unwrap()
+          return
+        } else {
+          router.replace('/home/vault/new-vault/new-vault-success')
+          return
+        }
       }
-      if (signUpState === VaultCreationState.masterkey_created_external_faucet) {
-        router.replace('/home/vault/new-vault/external-faucet')
+      if (signUpState === VaultCreationState.account_registered) {
+        router.replace('/home/vault/new-vault/new-vault-success')
         return
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signUpState, newAccount, dispatch])
 
   const onCreate = async () => {
@@ -126,7 +137,7 @@ export default function Page() {
     }
 
     try {
-      await dispatch(addVault({ name: keyName, password: masterPassword, phrase })).unwrap()
+      await dispatch(createKey({ name: keyName, password: masterPassword, phrase })).unwrap()
       await dispatch(fetchVaults()).unwrap()
       dispatch(checkForKeyOnChains())
     } catch (error: any) {
@@ -146,7 +157,11 @@ export default function Page() {
     try {
       await gnonative.activateAccount(keyName)
       await gnonative.setPassword(masterPassword, existingAccount.address)
-      await dispatch(onboarding({ account: existingAccount })).unwrap()
+      if (selectedChain?.faucetPortalUrl) {
+        router.push('/home/vault/new-vault/external-faucet')
+        return
+      }
+      await dispatch(registerAccount()).unwrap()
     } catch (error: any) {
       console.log(error)
       const msg = error['message'] || JSON.stringify(error)
@@ -172,8 +187,8 @@ export default function Page() {
           <Container>
             <Spacer />
             <TextField
-              label="Master Key Name"
-              placeholder="Master Key Name"
+              label="Account Key Name"
+              placeholder="Account Key Name"
               value={keyName}
               onChangeText={(x) => dispatch(setKeyName(x))}
               editable={editable}

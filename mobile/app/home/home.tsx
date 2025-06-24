@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { FlatList, TouchableOpacity } from 'react-native'
+import { FlatList, TouchableOpacity, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
-import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults, setBookmark, Vault } from '@/redux'
+import {
+  checkForKeyOnChains,
+  useAppDispatch,
+  useAppSelector,
+  selectVaults,
+  setBookmark,
+  Vault,
+  selectCurrentChain
+} from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView } from '@/modules/ui-components'
@@ -15,6 +23,7 @@ export default function Page() {
   const [nameSearch, setNameSearch] = useState<string>('')
   const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([])
   const [loading, setLoading] = useState<string | undefined>(undefined)
+  const currentChain = useAppSelector(selectCurrentChain)
 
   const route = useRouter()
   const dispatch = useAppDispatch()
@@ -77,7 +86,10 @@ export default function Page() {
       <Container>
         <SafeAreaView style={{ marginBottom: 40 }}>
           <AppBar>
-            <Text.H3>GnoKey Mobile</Text.H3>
+            <View>
+              <Text.H3>GnoKey Mobile</Text.H3>
+              <Text.Caption>{currentChain?.chainName}</Text.Caption>
+            </View>
             <TouchableOpacity onPress={() => route.navigate('/home/settings')}>
               <Text.Caption>Settings</Text.Caption>
             </TouchableOpacity>

@@ -35,7 +35,7 @@ export default function VaultModalLayout() {
 
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />
-      <Stack.Screen name="option-phrase/enter-vault-name" options={{ ...defaultOptions, title: 'Vault name' }} />
+      <Stack.Screen name="option-phrase/enter-vault-name" options={{ ...defaultOptions, title: 'Master Key Name' }} />
       {/* <Stack.Screen name="vault/new-vault/new-vault-success" options={{ ...defaultOptions, title: 'd' }} /> */}
     </Stack>
   )

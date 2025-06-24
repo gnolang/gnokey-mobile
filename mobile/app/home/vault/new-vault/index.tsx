@@ -22,7 +22,7 @@ import {
   selectLastProgress,
   selectLoadingAddVault,
   clearProgress,
-  selectSelectedChain
+  selectCurrentChain
 } from '@/redux'
 import { TextCopy } from '@/components'
 import { Feather, Octicons } from '@expo/vector-icons'
@@ -49,7 +49,7 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
   const loading = useAppSelector(selectLoadingAddVault)
-  const selectedChain = useAppSelector(selectSelectedChain)
+  const currentChain = useAppSelector(selectCurrentChain)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -92,11 +92,11 @@ export default function Page() {
         return
       }
       if (signUpState === VaultCreationState.account_created) {
-        if (selectedChain?.faucetPortalUrl) {
+        if (currentChain?.faucetPortalUrl) {
           router.push('/home/vault/new-vault/external-faucet')
           return
         }
-        if (selectedChain?.faucetUrl) {
+        if (currentChain?.faucetUrl) {
           await dispatch(registerAccount()).unwrap()
           return
         } else {
@@ -157,7 +157,7 @@ export default function Page() {
     try {
       await gnonative.activateAccount(keyName)
       await gnonative.setPassword(masterPassword, existingAccount.address)
-      if (selectedChain?.faucetPortalUrl) {
+      if (currentChain?.faucetPortalUrl) {
         router.push('/home/vault/new-vault/external-faucet')
         return
       }
@@ -198,7 +198,7 @@ export default function Page() {
               error={error}
             />
             <Spacer space={4} />
-            <ChainSelectView />
+            {/* <ChainSelectView /> */}
           </Container>
         </TouchableWithoutFeedback>
       </SafeAreaView>

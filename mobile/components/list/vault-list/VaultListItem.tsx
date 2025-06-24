@@ -16,7 +16,7 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
   return (
     <Wrapper onPress={() => onVaultPress(vault)}>
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-        {chains && chains.length > 0 ? (
+        {/* {chains && chains.length > 0 ? (
           <Chip>
             <Text.Caption style={{ color: theme.colors.gray }}>{chains.join(', ')}</Text.Caption>
           </Chip>
@@ -24,7 +24,7 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
           <Chip>
             <Text.Caption style={{ color: theme.colors.gray }}>Not registered</Text.Caption>
           </Chip>
-        )}
+        )} */}
         <View />
         {onBookmarkPress ? (
           <TouchableOpacity onPress={() => onBookmarkPress(vault)}>

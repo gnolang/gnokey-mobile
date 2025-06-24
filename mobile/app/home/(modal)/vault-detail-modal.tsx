@@ -61,7 +61,7 @@ const Page = () => {
 
           <Spacer space={32} />
 
-          <TextField label="Vault name" value={vaultName} placeholder="Vault name" onChangeText={setVaultName} />
+          <TextField label="Master Key Name" value={vaultName} placeholder="Master Key Name" onChangeText={setVaultName} />
 
           <TextCopy text={addressBech32} style={{ flexDirection: 'row' }}>
             <View style={{ flexDirection: 'row' }}>

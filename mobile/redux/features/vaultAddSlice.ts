@@ -2,7 +2,6 @@ import { PayloadAction, RootState, createAsyncThunk, createSlice } from '@reduxj
 import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
-import { NetworkMetainfo } from '@/types'
 import { create } from '@bufbuild/protobuf'
 
 export enum VaultCreationState {
@@ -22,7 +21,6 @@ export interface VaultAddState {
   existingAccount?: KeyInfo
   loading: boolean
   progress: string[]
-  selectedChain?: NetworkMetainfo
   registerAccount: boolean
   keyName?: string
   phrase?: string
@@ -34,7 +32,6 @@ const initialState: VaultAddState = {
   existingAccount: undefined,
   loading: true,
   progress: [],
-  selectedChain: undefined,
   registerAccount: false
 }
 
@@ -63,12 +60,12 @@ type SignUpResponse = { newAccount?: KeyInfo; existingAccount?: KeyInfo; state: 
  */
 export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/createKey', async (param, thunkAPI) => {
   const { name, password, phrase } = param
-  const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
+  const { currentChain } = (thunkAPI.getState() as RootState).chains
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-  console.log('selectedChain', selectedChain)
+  console.log('currentChain', currentChain)
 
   // do not register on chain
-  if (!selectedChain) {
+  if (!currentChain) {
     thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
     const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name)
     thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
@@ -96,8 +93,8 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     return { newAccount, state: VaultCreationState.account_created }
   }
 
-  await gnonative.setRemote(selectedChain.rpcUrl)
-  await gnonative.setChainID(selectedChain.chainId)
+  await gnonative.setRemote(currentChain.rpcUrl)
+  await gnonative.setChainID(currentChain.chainId)
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase)
@@ -162,11 +159,12 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra>('user/registerKey', async (_, thunkAPI) => {
   thunkAPI.dispatch(addProgress(`onboarding started`))
 
-  const { selectedChain, newAccount, existingAccount } = (thunkAPI.getState() as RootState).vaultAdd
+  const { newAccount, existingAccount } = (thunkAPI.getState() as RootState).vaultAdd
+  const { currentChain } = (thunkAPI.getState() as RootState).chains
   const account = newAccount || existingAccount
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
 
-  if (!selectedChain || !account) {
+  if (!currentChain || !account) {
     thunkAPI.dispatch(addProgress(`No chain or account selected for onboarding`))
     throw new Error('No chain or account selected for onboarding')
   }
@@ -184,16 +182,16 @@ export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra
       await registerOnChain(gnonative, account)
       thunkAPI.dispatch(addProgress(`account_registered`))
       return { newAccount, state: VaultCreationState.account_registered }
-    } else if (selectedChain.faucetUrl) {
-      thunkAPI.dispatch(addProgress(`sending coins on ${selectedChain.chainName} faucet`))
-      const response = await sendCoins(address_bech32, selectedChain.faucetUrl)
+    } else if (currentChain.faucetUrl) {
+      thunkAPI.dispatch(addProgress(`sending coins on ${currentChain.chainName} faucet`))
+      const response = await sendCoins(address_bech32, currentChain.faucetUrl)
       console.log(`coins sent, response: ${response}`)
       thunkAPI.dispatch(addProgress(`registering account on chain`))
       await registerOnChain(gnonative, account)
       thunkAPI.dispatch(addProgress(`account registered`))
       return { newAccount, state: VaultCreationState.account_registered }
     }
-    throw new Error(`No balance found for account ${name} on chain ${selectedChain.chainName}. Please fund your account.`)
+    throw new Error(`No balance found for account ${name} on chain ${currentChain.chainName}. Please fund your account.`)
   } catch (error) {
     console.error('Error during onboarding:', error)
     thunkAPI.dispatch(addProgress(`Error during account registration: ${error}`))
@@ -398,15 +396,11 @@ export const vaultAddSlice = createSlice({
     setKeyName: (state, action: PayloadAction<string>) => {
       state.keyName = action.payload
     },
-    setSelectedChain: (state, action: PayloadAction<NetworkMetainfo | undefined>) => {
-      state.selectedChain = action.payload
-    },
     resetState: (state) => {
       state.loading = false
       state.newAccount = undefined
       state.existingAccount = undefined
       state.signUpState = undefined
-      state.selectedChain = undefined
       state.keyName = ''
       state.phrase = ''
     }
@@ -455,22 +449,13 @@ export const vaultAddSlice = createSlice({
     existingAccountSelector: (state) => state.existingAccount,
     selectRegisterAccount: (state) => state.registerAccount,
     selectKeyName: (state) => state.keyName,
-    selectSelectedChain: (state) => state.selectedChain,
     selectPhrase: (state) => state.phrase,
     selectLastProgress: (state) => state.progress[state.progress.length - 1]
   }
 })
 
-export const {
-  addProgress,
-  signUpState,
-  clearProgress,
-  setRegisterAccount,
-  setKeyName,
-  setSelectedChain,
-  resetState,
-  setPhrase
-} = vaultAddSlice.actions
+export const { addProgress, signUpState, clearProgress, setRegisterAccount, setKeyName, resetState, setPhrase } =
+  vaultAddSlice.actions
 
 export const {
   selectLoadingAddVault,
@@ -481,6 +466,5 @@ export const {
   existingAccountSelector,
   selectRegisterAccount,
   selectKeyName,
-  selectSelectedChain,
   selectPhrase
 } = vaultAddSlice.selectors

@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import React from 'react'
-import { selectSelectedChain, setSelectedChain, useAppDispatch, useAppSelector } from '@/redux'
+import { selectCurrentChain, setCurrentChain, useAppDispatch, useAppSelector } from '@/redux'
 import { Spacer, Text } from '@/modules/ui-components'
 import { NetworkMetainfo } from '@/types'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
@@ -15,11 +15,12 @@ export const ChainSelectView = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
 
-  const currentChain = useAppSelector(selectSelectedChain)
+  const currentChain = useAppSelector(selectCurrentChain)
 
   const onChainSelect = (chain: NetworkMetainfo | undefined) => {
+    if (!chain) return
     setShowModalChain(false)
-    dispatch(setSelectedChain(chain))
+    dispatch(setCurrentChain(chain))
   }
 
   const onAddChainPress = () => {

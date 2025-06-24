@@ -3,7 +3,6 @@ import { GnoNativeApi } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { NetworkMetainfo } from '@/types'
 import { insertChain, updateActiveChain } from '@/providers/database-provider'
-import { RootState } from '@/redux'
 
 export interface ChainsState {
   chains: NetworkMetainfo[]
@@ -55,19 +54,19 @@ export const setCurrentChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo
   }
 )
 
-/**
- * Fetches the current chain from redux state and sets it in the GnoNative API.
- * This is used to ensure that the GnoNative API is always in sync with the current chain
- * selected in the app.
- */
-export const synchronizeStateChain = createAsyncThunk<void, void, ThunkExtra>('chains/getCurrentChain', async (_, thunkAPI) => {
-  const currentChain = (thunkAPI.getState() as RootState).chains.currentChain
-  if (!currentChain) {
-    throw new Error('Current chain is not set. Please set a chain before synchronizing state.')
-  }
-  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-  await gnonative.setRemote(currentChain.rpcUrl)
-  await gnonative.setChainID(currentChain.chainId)
-})
+// /**
+//  * Fetches the current chain from redux state and sets it in the GnoNative API.
+//  * This is used to ensure that the GnoNative API is always in sync with the current chain
+//  * selected in the app.
+//  */
+// export const synchronizeStateChain = createAsyncThunk<void, void, ThunkExtra>('chains/getCurrentChain', async (_, thunkAPI) => {
+//   const currentChain = (thunkAPI.getState() as RootState).chains.currentChain
+//   if (!currentChain) {
+//     throw new Error('Current chain is not set. Please set a chain before synchronizing state.')
+//   }
+//   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+//   await gnonative.setRemote(currentChain.rpcUrl)
+//   await gnonative.setChainID(currentChain.chainId)
+// })
 
 export const { selectChainsAvailable, selectCurrentChain } = chainsSlice.selectors

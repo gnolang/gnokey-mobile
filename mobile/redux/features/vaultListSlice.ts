@@ -83,36 +83,37 @@ type CheckOnChain = { infoOnChains: Map<vaultAddress, vaultChains> } | undefined
 export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExtra>(
   'vault/checkForKeyOnChains',
   async (_, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const vaults = await selectVaults(thunkAPI.getState() as RootState)
-    const chains = await selectChainsAvailable(thunkAPI.getState() as RootState)
+    if (true) return undefined
+    // const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+    // const vaults = await selectVaults(thunkAPI.getState() as RootState)
+    // const chains = await selectChainsAvailable(thunkAPI.getState() as RootState)
 
-    const infoOnChains = new Map<string, string[]>()
+    // const infoOnChains = new Map<string, string[]>()
 
-    if (!chains || !vaults) {
-      return undefined
-    }
+    // if (!chains || !vaults) {
+    //   return undefined
+    // }
 
-    for (const chain of chains) {
-      console.log('checking keys on chain', chain.chainName)
-      await gnonative.setChainID(chain.chainId)
-      await gnonative.setRemote(chain.rpcUrl)
+    // for (const chain of chains) {
+    //   console.log('checking keys on chain', chain.chainName)
+    //   await gnonative.setChainID(chain.chainId)
+    //   await gnonative.setRemote(chain.rpcUrl)
 
-      for (const vault of vaults) {
-        console.log(`Checking key ${vault.keyInfo.name} on chain ${chain.chainName}`)
-        const keyHasCoins = await hasCoins(gnonative, vault.keyInfo.address)
-        console.log(`Key ${vault.keyInfo.name} on chain ${chain.chainName} has coins: ${keyHasCoins}`)
+    //   for (const vault of vaults) {
+    //     console.log(`Checking key ${vault.keyInfo.name} on chain ${chain.chainName}`)
+    //     const keyHasCoins = await hasCoins(gnonative, vault.keyInfo.address)
+    //     console.log(`Key ${vault.keyInfo.name} on chain ${chain.chainName} has coins: ${keyHasCoins}`)
 
-        if (keyHasCoins) {
-          if (infoOnChains.has(vault.keyInfo.address.toString())) {
-            infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName)
-          } else {
-            infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName])
-          }
-        }
-      }
-    }
-    return { infoOnChains }
+    //     if (keyHasCoins) {
+    //       if (infoOnChains.has(vault.keyInfo.address.toString())) {
+    //         infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName)
+    //       } else {
+    //         infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName])
+    //       }
+    //     }
+    //   }
+    // }
+    // return { infoOnChains }
   }
 )
 

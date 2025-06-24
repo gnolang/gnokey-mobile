@@ -159,7 +159,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
   }
 })
 
-export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra>('user/registerKey', async (param, thunkAPI) => {
+export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra>('user/registerKey', async (_, thunkAPI) => {
   thunkAPI.dispatch(addProgress(`onboarding started`))
 
   const { selectedChain, newAccount, existingAccount } = (thunkAPI.getState() as RootState).vaultAdd
@@ -180,20 +180,20 @@ export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra
     console.log(`hasBalance: ${hasBalance}`)
 
     if (hasBalance) {
+      thunkAPI.dispatch(addProgress(`registering account on chain`))
       await registerOnChain(gnonative, account)
+      thunkAPI.dispatch(addProgress(`account_registered`))
+      return { newAccount, state: VaultCreationState.account_registered }
+    } else if (selectedChain.faucetUrl) {
+      thunkAPI.dispatch(addProgress(`sending coins on ${selectedChain.chainName} faucet`))
+      const response = await sendCoins(address_bech32, selectedChain.faucetUrl)
+      console.log(`coins sent, response: ${response}`)
+      thunkAPI.dispatch(addProgress(`registering account on chain`))
+      await registerOnChain(gnonative, account)
+      thunkAPI.dispatch(addProgress(`account registered`))
       return { newAccount, state: VaultCreationState.account_registered }
     }
-
-    if (!selectedChain.faucetUrl) {
-      throw new Error('No faucet URL configured for the selected chain')
-    }
-
-    const response = await sendCoins(address_bech32, selectedChain.faucetUrl)
-    console.log(`coins sent, response: ${response}`)
-
-    await registerOnChain(gnonative, account)
-    thunkAPI.dispatch(addProgress(`account_registered`))
-    return { newAccount, state: VaultCreationState.account_registered }
+    throw new Error(`No balance found for account ${name} on chain ${selectedChain.chainName}. Please fund your account.`)
   } catch (error) {
     console.error('Error during onboarding:', error)
     thunkAPI.dispatch(addProgress(`Error during account registration: ${error}`))

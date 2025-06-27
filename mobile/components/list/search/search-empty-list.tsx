@@ -1,4 +1,4 @@
-import Text from '@/components/text'
+import { Text } from '@/modules/ui-components'
 import { View } from 'react-native'
 
 function SearchEmptyList() {

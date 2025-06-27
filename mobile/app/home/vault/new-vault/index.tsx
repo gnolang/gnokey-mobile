@@ -28,7 +28,6 @@ import { TextCopy } from '@/components'
 import { Feather, Octicons } from '@expo/vector-icons'
 import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
-import { ChainSelectView } from '@/views/chains/chain-select-view'
 import { LoadingModal } from '@/components/loading'
 
 export default function Page() {

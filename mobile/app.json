@@ -58,7 +58,24 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      ["expo-font",
+      {
+          "fonts": ["./assets/fonts/SF-Pro.ttf"],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "SF Pro",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/SF-Pro.ttf",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
+        }]
     ],
     "extra": {
       "router": {

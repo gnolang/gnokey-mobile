@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction, RootState } from '@reduxjs/toolkit'
 import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { selectChainsAvailable } from './chainsSlice'
 
 export interface VaultListState {
   /** vaults fetched from gnonative */

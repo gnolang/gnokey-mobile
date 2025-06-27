@@ -2,6 +2,7 @@ import { Stack } from 'expo-router'
 import { Guard } from '@/components/auth/guard'
 import { IndexerProvider, LinkingProvider, ReduxProvider, DatabaseProvider, GnoNativeProvider } from '@/providers'
 import { ThemeProvider } from '@/modules/ui-components'
+import { useFonts } from 'expo-font'
 
 // Extend the BigInt interface to include toJSON
 declare global {
@@ -16,6 +17,15 @@ BigInt.prototype.toJSON = function () {
 }
 
 export default function AppLayout() {
+  const [loaded] = useFonts({
+    SpaceMono: require('../assets/fonts/SF-Pro.ttf')
+  })
+
+  if (!loaded) {
+    // Async font loading only occurs in development.
+    return null
+  }
+
   return (
     <DatabaseProvider>
       <GnoNativeProvider>

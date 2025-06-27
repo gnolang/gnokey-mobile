@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from 'react-native'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
-import { Chip, Text } from '@/modules/ui-components'
+import { Text } from '@/modules/ui-components'
 import { Vault } from '@reduxjs/toolkit'
 
 interface Props {

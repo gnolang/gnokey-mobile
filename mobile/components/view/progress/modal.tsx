@@ -3,10 +3,10 @@ import { View, Modal, StyleSheet, FlatList, TouchableOpacity, Share } from 'reac
 import { useAppDispatch, useAppSelector } from '@/redux'
 import { Layout } from '@/components/index'
 import { clearProgress, selectProgress } from '@/redux/features/vaultAddSlice'
-import Text from '@/components/text'
 import { EvilIcons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
+import { Text } from '@/modules/ui-components'
 
 const ProgressViewModal = () => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -28,7 +28,7 @@ const ProgressViewModal = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setModalVisible(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text.Caption1 style={{ paddingRight: 4 }}>Show Progress</Text.Caption1>
+        <Text.Caption style={{ paddingRight: 4 }}>Show Progress</Text.Caption>
         <MaterialIcons name="history" size={18} />
       </TouchableOpacity>
 
@@ -47,9 +47,9 @@ const ProgressViewModal = () => {
             <FlatList
               data={progress}
               style={[styles.flatList, { borderColor: theme.colors.gray }]}
-              ListEmptyComponent={<Text.Caption1 style={{ flex: 1, textAlign: 'center' }}>No progress yet.</Text.Caption1>}
+              ListEmptyComponent={<Text.Caption style={{ flex: 1, textAlign: 'center' }}>No progress yet.</Text.Caption>}
               renderItem={({ item }) => {
-                return <Text.Caption1 style={{ flex: 1, textAlign: 'left' }}>{item}</Text.Caption1>
+                return <Text.Caption style={{ flex: 1, textAlign: 'left' }}>{item}</Text.Caption>
               }}
             />
             <View style={styles.bottom}>

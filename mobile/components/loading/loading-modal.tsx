@@ -1,6 +1,6 @@
+import { Text } from '@/modules/ui-components'
 import React from 'react'
 import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
-import Text from '../text'
 import { useTheme } from 'styled-components/native'
 
 type Props = {

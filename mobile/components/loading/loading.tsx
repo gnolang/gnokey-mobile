@@ -1,8 +1,8 @@
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
-import Text from '../text'
 import { Layout } from '..'
+import { Text } from '@/modules/ui-components'
 
 type Props = {
   message: string

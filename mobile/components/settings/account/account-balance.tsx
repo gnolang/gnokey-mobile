@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Text from '@/components/text'
 import { KeyInfo, useGnoNativeContext } from '@gnolang/gnonative'
 import * as Application from 'expo-application'
+import { Text } from '@/modules/ui-components'
 
 interface Props {
   activeAccount: KeyInfo | undefined
@@ -37,7 +37,7 @@ export function AccountBalance({ activeAccount }: Props) {
   if (!activeAccount) {
     return (
       <>
-        <Text.HeaderSubtitle>Active Account:</Text.HeaderSubtitle>
+        <Text.H3>Active Account:</Text.H3>
         <Text.Body style={{ fontSize: 14 }}>No active account.</Text.Body>
       </>
     )
@@ -45,13 +45,13 @@ export function AccountBalance({ activeAccount }: Props) {
 
   return (
     <>
-      <Text.Subheadline>Version:</Text.Subheadline>
+      <Text.Body>Version:</Text.Body>
       <Text.Body>{Application.nativeApplicationVersion}</Text.Body>
-      <Text.Subheadline>Active Account:</Text.Subheadline>
+      <Text.Body>Active Account:</Text.Body>
       <Text.Body>{activeAccount.name}</Text.Body>
-      <Text.Subheadline>Address:</Text.Subheadline>
+      <Text.Body>Address:</Text.Body>
       <Text.Body>{address}</Text.Body>
-      <Text.Subheadline>Balance:</Text.Subheadline>
+      <Text.Body>Balance:</Text.Body>
       <Text.Body>{balance}</Text.Body>
     </>
   )

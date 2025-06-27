@@ -3,9 +3,9 @@ import styled from 'styled-components/native'
 import { ButtonColor } from '../../index'
 
 export const H1 = styled.Text`
-  font-weight: 400;
-  font-size: 64px;
-  line-height: 64px;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 48px;
   letter-spacing: -0.32px;
   color: ${(props) => props.theme.colors.black};
 `
@@ -26,7 +26,7 @@ export const H3 = styled.Text`
 
 export const Body = styled.Text<TextProps>`
   font-weight: 400;
-  font-size: 16px;
+  font-size: 20px;
   color: ${(props) => props.theme.colors.black};
 `
 

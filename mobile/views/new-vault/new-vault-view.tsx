@@ -1,6 +1,5 @@
-import { ChainSelectView } from '@/views'
-import { View, Alert as RNAlert } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { View, Alert as RNAlert } from 'react-native'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import {
   selectMasterPassword,
@@ -20,8 +19,7 @@ import {
   setKeyName,
   selectLoadingAddVault
 } from '@/redux'
-import { Button, TextField, Spacer } from '@/modules/ui-components'
-import { Text } from '@/components'
+import { Button, TextField, Spacer, Text } from '@/modules/ui-components'
 
 interface Props {
   onSucess: () => void
@@ -129,10 +127,10 @@ export const NewVaultView = (props: Props) => {
     <View>
       <View style={{ paddingVertical: 16, paddingBottom: 40 }}>
         <Spacer space={16} />
-        <Text.Caption1>
+        <Text.Caption>
           Master Key Name must be 6-20 characters, start with 3 lowercase letters, can include lowercase letters, numbers,
           underscores, and must end with 3 digits.
-        </Text.Caption1>
+        </Text.Caption>
         <TextField
           label="Master Key Name"
           placeholder="Master Key Name"

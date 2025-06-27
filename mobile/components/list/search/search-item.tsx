@@ -1,5 +1,5 @@
+import { Text } from '@/modules/ui-components'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import Text from '@/components/text'
 
 type Props = {
   name: string
@@ -12,7 +12,7 @@ function SearchItem({ name, onPress }: Props) {
       <Image source={{ uri: 'https://www.gravatar.com/avatar/tmp' }} style={{ width: 48, height: 48, borderRadius: 24 }} />
       <View style={{ paddingLeft: 8, gap: 4, flex: 1, alignItems: 'flex-start' }}>
         <Text.Body style={styles.name}>@{name}</Text.Body>
-        <Text.Caption1 style={styles.caption}>{name}</Text.Caption1>
+        <Text.Caption style={styles.caption}>{name}</Text.Caption>
       </View>
     </TouchableOpacity>
   )

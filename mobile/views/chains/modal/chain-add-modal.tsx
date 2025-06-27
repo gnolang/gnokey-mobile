@@ -1,5 +1,4 @@
-import { Text } from '@/components'
-import { Button, SafeAreaView, Spacer, TextField } from '@/modules/ui-components'
+import { Button, SafeAreaView, Spacer, Text, TextField } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import React, { useEffect } from 'react'
 import { Modal, View } from 'react-native'
@@ -91,7 +90,7 @@ export const ChainAddModal = ({ visible, onCancel, onSaveChain }: Props) => {
               alignItems: 'center'
             }}
           >
-            <Text.Title style={{ color: theme.colors.primary }}>Create a Custom Chain</Text.Title>
+            <Text.H3 style={{ color: theme.colors.primary }}>Create a Custom Chain</Text.H3>
 
             <Spacer />
             <TextField

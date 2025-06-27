@@ -1,6 +1,5 @@
 import { Layout } from '@/components'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
-import Text from '@/components/text'
 import {
   clearLinking,
   Vault,
@@ -17,7 +16,7 @@ import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
-import { Button, Container, SafeAreaView, Spacer } from '@/modules/ui-components'
+import { Button, Container, SafeAreaView, Spacer, Text } from '@/modules/ui-components'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)
@@ -69,7 +68,7 @@ export default function Page() {
       <Container>
         <SafeAreaView>
           <Layout.BodyAlignedBotton>
-            <Text.Title>Select a key to sign in into {clientName}</Text.Title>
+            <Text.H3>Select a key to sign in into {clientName}</Text.H3>
             <Spacer space={16} />
 
             {vaults && (

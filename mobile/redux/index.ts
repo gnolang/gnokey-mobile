@@ -14,7 +14,9 @@ import {
   chainsSlice,
   sessionKeySlice,
   LinkingState,
-  SessionKeyState
+  SessionKeyState,
+  settingsSlice,
+  SettingsState
 } from '@/redux/features'
 import { combineSlices, configureStore } from '@reduxjs/toolkit'
 
@@ -25,7 +27,8 @@ export const rootReducer = combineSlices({
   [signinSlice.name]: signinSlice.reducer,
   [linkingSlice.name]: linkingSlice.reducer,
   [chainsSlice.name]: chainsSlice.reducer,
-  [sessionKeySlice.name]: sessionKeySlice.reducer
+  [sessionKeySlice.name]: sessionKeySlice.reducer,
+  [settingsSlice.name]: settingsSlice.reducer
 })
 
 export type RootState = {
@@ -36,6 +39,7 @@ export type RootState = {
   linking: LinkingState
   chains: ChainsState
   sessionKey: SessionKeyState
+  settings: SettingsState
 }
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

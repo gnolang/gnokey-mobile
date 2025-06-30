@@ -20,7 +20,7 @@ const ErrorBoxWrapper = styled.View`
   justify-content: center;
   min-height: 30px;
   padding-horizontal: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   color: black;
   border-radius: ${(props) => props.theme.borderRadius || 8}px;
   background-color: ${({ theme }) => theme.error.background};

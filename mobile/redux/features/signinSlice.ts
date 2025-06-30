@@ -24,11 +24,11 @@ interface ChangeMasterParam {
   masterPassword: string
 }
 
-const MATER_PASS_KEY = 'master_password_key_store'
+export const MATER_PASS_KEY = 'master_password_key_store'
 
 export const createMasterPass = createAsyncThunk<{ masterPassword: string | null }, CreateMasterParam, ThunkExtra>(
   'signin/createMasterPass',
-  async (param, config) => {
+  async (param) => {
     const { masterPassword } = param
 
     await SecureStore.setItemAsync(MATER_PASS_KEY, masterPassword)

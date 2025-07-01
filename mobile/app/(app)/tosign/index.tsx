@@ -140,17 +140,15 @@ export default function Page() {
     <>
       <Container>
         <SafeAreaView>
-          <BetaVersionMiniBanner />
           {/* <View style={{ flexDirection: 'row', paddingTop: 16 }}>
             <ButtonText onPress={onCancel}>
               <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
             </ButtonText>
           </View> */}
           <Layout.Body>
-            <Text.H3 style={{ textAlign: 'center', paddingHorizontal: 16 }}>
-              <Text.H3>{clientName} </Text.H3>
-              is requiring permission to
-              <Text.H3> {reason}</Text.H3>
+            <BetaVersionMiniBanner />
+            <Text.H3 style={{ textAlign: 'center', marginVertical: 16 }}>
+              {clientName} is requiring permission to {reason}
             </Text.H3>
 
             <ScrollView contentContainerStyle={{}}>

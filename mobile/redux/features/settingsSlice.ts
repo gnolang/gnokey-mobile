@@ -3,11 +3,12 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import * as SecureStore from 'expo-secure-store'
 import { GnoNativeApi } from '@gnolang/gnonative'
 import { nukeDatabase } from '@/providers/database-provider'
-import { MATER_PASS_KEY } from './signinSlice'
+import { DEV_MODE_KEY, MATER_PASS_KEY } from './constants'
 
 const initialState: SettingsState = {
   loading: false,
-  forceAppReset: false
+  forceAppReset: false,
+  devMode: SecureStore.getItem(DEV_MODE_KEY) === 'true'
 }
 
 export const settingsSlice = createSlice({
@@ -26,18 +27,27 @@ export const settingsSlice = createSlice({
       console.log(err)
       state.loading = false
     })
+    builder.addCase(toggleDevMode.fulfilled, (state, action) => {
+      state.devMode = action.payload
+    })
+    builder.addCase(toggleDevMode.rejected, (state, err) => {
+      console.log(err)
+      state.devMode = SecureStore.getItem(DEV_MODE_KEY) === 'true'
+    })
   },
   selectors: {
     selectLoadingReset: (state) => state.loading,
-    selectForceAppReset: (state) => state.forceAppReset
+    selectForceAppReset: (state) => state.forceAppReset,
+    selectDevMode: (state) => state.devMode
   }
 })
 
-export const { selectLoadingReset, selectForceAppReset } = settingsSlice.selectors
+export const { selectLoadingReset, selectForceAppReset, selectDevMode } = settingsSlice.selectors
 
 export interface SettingsState {
   loading: boolean
   forceAppReset: boolean
+  devMode: boolean
 }
 
 export const hardReset = createAsyncThunk<boolean, void, ThunkExtra>('settings/hardReset', async (param, thunkAPI) => {
@@ -53,4 +63,11 @@ export const hardReset = createAsyncThunk<boolean, void, ThunkExtra>('settings/h
   }
   await new Promise((r) => setTimeout(r, 2000))
   return true
+})
+
+export const toggleDevMode = createAsyncThunk<boolean, void, ThunkExtra>('settings/toggleDevMode', async () => {
+  const currentMode = SecureStore.getItem(DEV_MODE_KEY)
+  const newMode = currentMode !== 'true' ? 'true' : 'false'
+  SecureStore.setItem(DEV_MODE_KEY, newMode)
+  return newMode === 'true'
 })

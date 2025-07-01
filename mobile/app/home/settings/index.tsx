@@ -1,10 +1,12 @@
 import { Alert, ScrollView } from 'react-native'
 import { Container, Form, SafeAreaView, Spacer } from '@/modules/ui-components'
-import { selectCurrentChain, useAppSelector } from '@/redux'
+import { selectCurrentChain, selectDevMode, toggleDevMode, useAppDispatch, useAppSelector } from '@/redux'
 import { nukeDatabase } from '@/providers/database-provider'
 
 export default function Page() {
   const currentChain = useAppSelector(selectCurrentChain)
+  const dispatch = useAppDispatch()
+  const devMode = useAppSelector(selectDevMode)
 
   const deleteDatabase = async () => {
     Alert.alert('Confirm Deletion', 'Are you sure you want to delete the database? All data will be lost.', [
@@ -40,6 +42,7 @@ export default function Page() {
 
           <Form.Section title="Advanced">
             <Form.Button onPress={() => deleteDatabase()}>Delete Database</Form.Button>
+            <Form.Button onPress={() => dispatch(toggleDevMode())}>Developer Mode {devMode ? 'On' : 'Off'}</Form.Button>
           </Form.Section>
         </ScrollView>
       </SafeAreaView>

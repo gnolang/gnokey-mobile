@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
 import * as SecureStore from 'expo-secure-store'
 import { ErrCode, GnoNativeApi, GRPCError } from '@gnolang/gnonative'
+import { MATER_PASS_KEY } from './constants'
 
 export interface SignInState {
   masterPassword?: string
@@ -24,7 +25,6 @@ interface ChangeMasterParam {
   masterPassword: string
 }
 
-export const MATER_PASS_KEY = 'master_password_key_store'
 
 export const createMasterPass = createAsyncThunk<{ masterPassword: string | null }, CreateMasterParam, ThunkExtra>(
   'signin/createMasterPass',

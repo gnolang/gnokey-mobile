@@ -2,12 +2,13 @@ import { Layout, Ruller } from '@/components'
 import { Container } from '@/modules/ui-components'
 import { ActionItem } from '@/modules/ui-components/src/ui/ActionItem'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { resetState, useAppDispatch } from '@/redux'
+import { resetState, selectDevMode, useAppDispatch, useAppSelector } from '@/redux'
 import { View } from 'react-native'
 
 export default function NewVaultPage() {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const devMode = useAppSelector(selectDevMode)
 
   // const currentRoute = router..split('/').pop() || 'unknown'
 
@@ -27,12 +28,16 @@ export default function NewVaultPage() {
           onPress={() => router.push('/home/vault/new-vault')}
         />
         <Ruller />
-        <ActionItem
-          title="Import a wallet."
-          subtitle="Recover a wallet you previously used."
-          onPress={() => router.push('/home/vault/recovery-options')}
-        />
-        <Ruller />
+        {devMode && (
+          <>
+            <ActionItem
+              title="Import a wallet."
+              subtitle="Recover a wallet you previously used."
+              onPress={() => router.push('/home/vault/recovery-options')}
+            />
+            <Ruller />
+          </>
+        )}
       </Layout.Body>
     </Container>
   )

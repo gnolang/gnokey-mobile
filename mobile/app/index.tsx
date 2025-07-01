@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
 import { useRouter } from 'expo-router'
-import { Layout } from '@/components/index'
+import { BetaVersionBanner, Layout } from '@/components/index'
 import {
   getInitialState,
   selectAction,
@@ -83,6 +83,7 @@ export default function Root() {
                 <Text.H1>GnoKey Mobile</Text.H1>
                 <Spacer space={16} />
                 <Text.Body>The Gno Key Management Tool</Text.Body>
+                <BetaVersionBanner />
               </View>
 
               <View style={styles.bottonGroup}>

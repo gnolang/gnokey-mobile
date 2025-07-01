@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
 import { useRouter } from 'expo-router'
-import { Layout } from '@/components/index'
+import { BetaVersionMiniBanner, Layout } from '@/components/index'
 import {
   checkForKeyOnChains,
   useAppDispatch,
@@ -85,6 +85,7 @@ export default function Page() {
     <>
       <Container>
         <SafeAreaView style={{ marginBottom: 40 }}>
+          <BetaVersionMiniBanner />
           <AppBar>
             <View>
               <Text.H3>GnoKey Mobile</Text.H3>

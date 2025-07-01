@@ -56,24 +56,24 @@ const enrichData = (keyinfoList: KeyInfo[], bookmarks: string[], vaultsChains?: 
   })) as Vault[]
 }
 
-const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
-  try {
-    console.log('checking if user has balance')
-    const balance = await gnonative.queryAccount(address)
-    console.log('account balance: %s', balance.accountInfo?.coins)
+// const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
+//   try {
+//     console.log('checking if user has balance')
+//     const balance = await gnonative.queryAccount(address)
+//     console.log('account balance: %s', balance.accountInfo?.coins)
 
-    if (!balance.accountInfo) return false
+//     if (!balance.accountInfo) return false
 
-    const hasCoins = balance.accountInfo.coins.length > 0
-    const hasBalance = hasCoins && balance.accountInfo.coins[0].amount > 0
+//     const hasCoins = balance.accountInfo.coins.length > 0
+//     const hasBalance = hasCoins && balance.accountInfo.coins[0].amount > 0
 
-    return hasBalance
-  } catch (error: any) {
-    console.log('error on hasBalance', error['rawMessage'])
-    if (error['rawMessage'] === 'invoke bridge method error: unknown: ErrUnknownAddress(#206)') return false
-    return false
-  }
-}
+//     return hasBalance
+//   } catch (error: any) {
+//     console.log('error on hasBalance', error['rawMessage'])
+//     if (error['rawMessage'] === 'invoke bridge method error: unknown: ErrUnknownAddress(#206)') return false
+//     return false
+//   }
+// }
 
 type CheckOnChain = { infoOnChains: Map<vaultAddress, vaultChains> } | undefined
 /**

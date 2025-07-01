@@ -22,3 +22,17 @@ export const BetaVersionBanner = () => {
     </View>
   )
 }
+
+export const BetaVersionMiniBanner = () => {
+  return (
+    <View
+      style={{
+        width: '100%',
+        backgroundColor: '#FFD700',
+        alignItems: 'center'
+      }}
+    >
+      <Text.Body style={{ color: 'red' }}>BETA - Do not use for real assets</Text.Body>
+    </View>
+  )
+}

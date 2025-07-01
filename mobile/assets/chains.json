@@ -5,7 +5,7 @@
     "rpcUrl": "https://api.gno.berty.io:443",
     "faucetUrl": "https://faucetpass.gno.berty.io"
   },
-    {
+  {
     "chainId": "staging",
     "chainName": "Gno Staging",
     "rpcUrl": "https://rpc.gno.land:443",

@@ -25,7 +25,6 @@ interface ChangeMasterParam {
   masterPassword: string
 }
 
-
 export const createMasterPass = createAsyncThunk<{ masterPassword: string | null }, CreateMasterParam, ThunkExtra>(
   'signin/createMasterPass',
   async (param) => {

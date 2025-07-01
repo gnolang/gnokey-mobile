@@ -1,4 +1,4 @@
-import { Layout } from '@/components'
+import { BetaVersionMiniBanner, Layout } from '@/components'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import {
   clearLinking,
@@ -67,6 +67,7 @@ export default function Page() {
     <>
       <Container>
         <SafeAreaView>
+          <BetaVersionMiniBanner />
           <Layout.BodyAlignedBotton>
             <Text.H3>Select a key to sign in into {clientName}</Text.H3>
             <Spacer space={16} />

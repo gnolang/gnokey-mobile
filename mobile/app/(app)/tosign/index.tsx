@@ -1,4 +1,4 @@
-import { Layout, Ruller } from '@/components'
+import { BetaVersionMiniBanner, Layout, Ruller } from '@/components'
 import {
   estimateGasWanted,
   selectClientName,
@@ -140,6 +140,7 @@ export default function Page() {
     <>
       <Container>
         <SafeAreaView>
+          <BetaVersionMiniBanner />
           {/* <View style={{ flexDirection: 'row', paddingTop: 16 }}>
             <ButtonText onPress={onCancel}>
               <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>

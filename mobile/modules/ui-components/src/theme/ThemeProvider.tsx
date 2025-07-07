@@ -13,12 +13,13 @@ const ThemeProvider = ({ children }: Props) => {
     success: { background: '#E5F9E5', text: '#00A86B' },
 
     colors: {
-      primary: '#00A86B',
+      primary: '#007AFF',
       black: '#000000',
       white: '#ffffff',
       gray: '#A1A1A1',
-      background: '#F3F5F7', // #F8F9FA'
-      border: '#E5E5E5' // Border, Ruller, Divider
+      background: '#FDFDFD',
+      backgroundSecondary: '#8E8E931F',
+      border: '#D1D1D6' // Border, Ruller, Divider
     },
 
     text: {
@@ -40,7 +41,7 @@ const ThemeProvider = ({ children }: Props) => {
     },
 
     buttons: {
-      primary: '#00A86B',
+      primary: '#007AFF',
       secondary: '#E5E5E5',
       tertirary: '#4c8ae7',
       danger: '#FF4647',

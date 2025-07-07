@@ -2,15 +2,14 @@ import styled from 'styled-components/native'
 
 export const BottonPanel = styled.View`
   position: absolute;
+  border-top-width: 1px;
+  border-top-color: ${({ theme }) => theme.colors.border};
   bottom: 0;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding-horizontal: 20px;
-  padding-top: 20px;
-  padding-bottom: 50px;
-  min-height: 120px;
-  border-top-right-radius: ${(props) => props.theme.borderRadius * 2 || 40}px;
-  border-top-left-radius: ${(props) => props.theme.borderRadius * 2 || 40}px;
-  background-color: ${({ theme }) => theme.colors.white};
+  padding-horizontal: 28px;
+  padding-top: 18px;
+  min-height: 90px;
+  background-color: ${({ theme }) => theme.colors.backgroundSecondary};
 `

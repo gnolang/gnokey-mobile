@@ -25,20 +25,7 @@ export const H3 = styled.Text`
 `
 
 export const Body = styled.Text<TextProps>`
-  font-weight: 400;
-  font-size: 20px;
-  color: ${(props) => props.theme.colors.black};
-`
-
-export const Body5 = styled.Text<TextProps>`
-  font-size: 18px;
-  line-height: 25px;
-  color: ${(props) => props.theme.colors.black};
-`
-
-export const Body6 = styled.Text<TextProps>`
   font-size: 15px;
-  line-height: 21px;
   color: ${(props) => props.theme.colors.black};
 `
 
@@ -47,6 +34,13 @@ export const Caption = styled.Text<TextProps>`
   font-size: 12px;
   letter-spacing: 0.8px;
   color: ${(props) => props.theme.colors.black};
+`
+
+export const Link = styled.Text<TextProps>`
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  color: ${(props) => props.theme.colors.primary};
 `
 
 export const ButtonLabel = styled.Text<{ $color?: ButtonColor }>`

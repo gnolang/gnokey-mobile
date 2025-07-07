@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { BetaVersionMiniBanner, Layout } from '@/components/index'
 import {
   checkForKeyOnChains,
@@ -13,7 +13,7 @@ import {
 } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView } from '@/modules/ui-components'
+import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView, BottonPanel } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 
@@ -30,7 +30,7 @@ export default function Page() {
   const vaults = useAppSelector(selectVaults)
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (!isFirstRender.current) {
         return
       }
@@ -85,7 +85,6 @@ export default function Page() {
     <>
       <Container>
         <SafeAreaView style={{ marginBottom: 40 }}>
-          <BetaVersionMiniBanner />
           <AppBar>
             <View>
               <Text.H3>GnoKey Mobile</Text.H3>
@@ -106,7 +105,8 @@ export default function Page() {
           <Text.Body style={{ textAlign: 'center' }}>
             {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
           </Text.Body>
-          <Spacer space={8} />
+          <BetaVersionMiniBanner />
+          <Spacer />
           <Content>
             <Body>
               {filteredAccounts && (
@@ -124,14 +124,31 @@ export default function Page() {
                 />
               )}
             </Body>
-            <Botton>
+            {/* <Botton>
               <Button onPress={navigateToAddKey} color="primary" endIcon={<FontAwesome6 name="add" size={16} color="black" />}>
                 New Account Key
               </Button>
-            </Botton>
+            </Botton> */}
           </Content>
         </SafeAreaView>
       </Container>
+      <BottonPanel>
+        <HorizontalGroup>
+          <Button
+            onPress={navigateToAddKey}
+            color="primary"
+            startIcon={<FontAwesome6 name="add" size={16} color="white" />}
+            style={{ width: 230 }}
+          >
+            Add Account
+          </Button>
+          <Link href="/home/settings" asChild>
+            <TouchableOpacity>
+              <Text.Link>Settings</Text.Link>
+            </TouchableOpacity>
+          </Link>
+        </HorizontalGroup>
+      </BottonPanel>
     </>
   )
 }
@@ -139,8 +156,11 @@ export default function Page() {
 const Body = styled.View`
   flex: 1;
 `
-const Botton = styled.View`
-  margin-top: 6px;
+const HorizontalGroup = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `
 const Content = styled.View`
   flex: 1;

@@ -44,6 +44,7 @@ declare module 'styled-components/native' {
       gray: string
 
       background: string
+      backgroundSecondary: string // Secondary background color, used for surfaces like cards, panels, etc.
 
       border: string // Border, Ruller, Divider
     }

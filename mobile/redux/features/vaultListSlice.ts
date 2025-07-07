@@ -22,6 +22,7 @@ type vaultChains = string[]
 
 export type Vault = {
   bookmarked?: boolean
+  description?: string
   keyInfo: KeyInfo
   chains?: string[]
 }

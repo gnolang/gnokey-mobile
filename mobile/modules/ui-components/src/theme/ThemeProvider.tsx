@@ -18,7 +18,7 @@ const ThemeProvider = ({ children }: Props) => {
       white: '#ffffff',
       gray: '#A1A1A1',
       background: '#FDFDFD',
-      backgroundSecondary: '#8E8E931F',
+      backgroundSecondary: '#F8F8F8',
       border: '#D1D1D6' // Border, Ruller, Divider
     },
 
@@ -29,15 +29,15 @@ const ThemeProvider = ({ children }: Props) => {
     textinputs: {
       primary: {
         placeholder: {
-          color: '#000000'
+          color: '#8D8D8D'
         }
       },
       secondary: {
         background: '#ffffff'
       },
       border: '#94A0AB',
-      label: '#121212',
-      background: '#ffffff'
+      label: '#8D8D8D',
+      background: '#E1E1E2'
     },
 
     buttons: {

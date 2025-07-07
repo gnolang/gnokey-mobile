@@ -1,5 +1,6 @@
 import { Text } from '@/modules/ui-components'
 import { View } from 'react-native'
+import { useTheme } from 'styled-components/native'
 
 export const BetaVersionBanner = () => {
   return (
@@ -24,12 +25,15 @@ export const BetaVersionBanner = () => {
 }
 
 export const BetaVersionMiniBanner = () => {
+  const theme = useTheme()
   return (
     <View
       style={{
         width: '100%',
         backgroundColor: '#FFD700',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 8,
+        borderRadius: theme.borderRadius
       }}
     >
       <Text.Body style={{ color: 'red' }}>BETA - Do not use for real assets</Text.Body>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { FlatList, TouchableOpacity, View } from 'react-native'
+import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { BetaVersionMiniBanner, Layout } from '@/components/index'
 import {
@@ -31,7 +31,7 @@ export default function Page() {
   const vaults = useAppSelector(selectVaults)
 
   useEffect(() => {
-    ; (async () => {
+    ;(async () => {
       if (!isFirstRender.current) {
         return
       }
@@ -87,25 +87,26 @@ export default function Page() {
       <Container>
         <SafeAreaView style={{ marginBottom: 40 }}>
           <AppBar>
-            <View>
-              <Text.H3>GnoKey Mobile</Text.H3>
+            <Text.H2 style={{ textAlign: 'center' }}>
+              {filteredAccounts.length} {filteredAccounts.length > 1 ? 'accounts' : 'account'}
+            </Text.H2>
+            <TouchableOpacity
+              onPress={() => route.navigate('/home/settings')}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+            >
+              <FontAwesome6 name="gear" size={12} color="#888" style={{ marginRight: 4 }} />
               <Text.Caption>{currentChain?.chainName}</Text.Caption>
-            </View>
-            <TouchableOpacity onPress={() => route.navigate('/home/settings')}>
-              <Text.Caption>Settings</Text.Caption>
             </TouchableOpacity>
           </AppBar>
           <TextField
             placeholder="Search Vault"
+            style={{ marginHorizontal: 10 }}
             value={nameSearch}
             onChangeText={setNameSearch}
             autoCapitalize="none"
             autoCorrect={false}
             hideError
           />
-          <Text.Body style={{ textAlign: 'center' }}>
-            {filteredAccounts.length} {filteredAccounts.length > 1 ? 'results' : 'result'}
-          </Text.Body>
           <BetaVersionMiniBanner />
           <Spacer />
           <Content>

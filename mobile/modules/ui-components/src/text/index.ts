@@ -11,7 +11,7 @@ export const H1 = styled.Text`
 `
 
 export const H2 = styled.Text`
-  font-weight: 400;
+  font-weight: 700;
   font-size: 32px;
   letter-spacing: -0.32px;
   color: ${(props) => props.theme.colors.black};

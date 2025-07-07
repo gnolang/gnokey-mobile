@@ -16,6 +16,7 @@ import { setVaultToEdit, fetchVaults } from '@/redux'
 import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView, BottonPanel } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
+import { EmptyView } from '@/views'
 
 export default function Page() {
   const isFirstRender = useRef(true)
@@ -109,6 +110,7 @@ export default function Page() {
           <Spacer />
           <Content>
             <Body>
+              {vaults?.length === 0 && <EmptyView />}
               {filteredAccounts && (
                 <FlatList
                   data={filteredAccounts}

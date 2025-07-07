@@ -1,12 +1,22 @@
 import { Alert, ScrollView } from 'react-native'
 import { Container, Form, SafeAreaView, Spacer } from '@/modules/ui-components'
-import { selectCurrentChain, selectDevMode, toggleDevMode, useAppDispatch, useAppSelector } from '@/redux'
+import {
+  hardReset,
+  selectCurrentChain,
+  selectDevMode,
+  selectForceAppReset,
+  toggleDevMode,
+  useAppDispatch,
+  useAppSelector
+} from '@/redux'
 import { nukeDatabase } from '@/providers/database-provider'
+import { useEffect } from 'react'
 
 export default function Page() {
   const currentChain = useAppSelector(selectCurrentChain)
   const dispatch = useAppDispatch()
   const devMode = useAppSelector(selectDevMode)
+  const forceAppReset = useAppSelector(selectForceAppReset)
 
   const deleteDatabase = async () => {
     Alert.alert('Confirm Deletion', 'Are you sure you want to delete the database? All data will be lost.', [
@@ -18,6 +28,26 @@ export default function Page() {
       { text: 'OK', onPress: () => nukeDatabase() }
     ])
   }
+
+  const confirmReset = () => {
+    Alert.alert('Confirm Reset', 'Are you sure you want to reset the app and erase all your data?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      },
+      { text: 'OK', onPress: () => dispatch(hardReset()) }
+    ])
+  }
+
+  useEffect(() => {
+    if (forceAppReset) {
+      Alert.alert(
+        'App Reset Required',
+        'For your security, the app must be reset before you can continue.\nPlease close the app.'
+      )
+    }
+  }, [forceAppReset])
 
   return (
     <Container>
@@ -42,6 +72,7 @@ export default function Page() {
 
           <Form.Section title="Advanced">
             <Form.Button onPress={() => deleteDatabase()}>Delete Database</Form.Button>
+            <Form.Button onPress={confirmReset}>Hard Reset</Form.Button>
             <Form.Button onPress={() => dispatch(toggleDevMode())}>Developer Mode {devMode ? 'On' : 'Off'}</Form.Button>
           </Form.Section>
         </ScrollView>

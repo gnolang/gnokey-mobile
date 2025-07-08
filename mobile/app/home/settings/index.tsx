@@ -1,4 +1,4 @@
-import { Alert, ScrollView } from 'react-native'
+import { Alert, Platform, ScrollView } from 'react-native'
 import { Container, Form, SafeAreaView, Spacer } from '@/modules/ui-components'
 import {
   enableBiometric,
@@ -85,7 +85,7 @@ export default function Page() {
           <Form.Section title="Security">
             <Form.Link href="/home/(modal)/change-master-pass">Change master password</Form.Link>
             <Form.Link href="/home/(modal)/logout">Logout</Form.Link>
-            {!isBiometricEnabled && <Form.Button onPress={enableFaceID}>Enable FaceID</Form.Button>}
+            {!isBiometricEnabled && Platform.OS === 'ios' && <Form.Button onPress={enableFaceID}>Enable FaceID</Form.Button>}
             {isBiometricEnabled && <Form.Button onPress={disableFaceID}>Disable FaceID</Form.Button>}
           </Form.Section>
           <Spacer />

@@ -1,7 +1,9 @@
 import { Alert, ScrollView } from 'react-native'
 import { Container, Form, SafeAreaView, Spacer } from '@/modules/ui-components'
 import {
+  enableBiometric,
   hardReset,
+  selectBiometricEnabled,
   selectCurrentChain,
   selectDevMode,
   selectForceAppReset,
@@ -17,6 +19,7 @@ export default function Page() {
   const dispatch = useAppDispatch()
   const devMode = useAppSelector(selectDevMode)
   const forceAppReset = useAppSelector(selectForceAppReset)
+  const isBiometricEnabled = useAppSelector(selectBiometricEnabled)
 
   const deleteDatabase = async () => {
     Alert.alert('Confirm Deletion', 'Are you sure you want to delete the database? All data will be lost.', [
@@ -49,6 +52,21 @@ export default function Page() {
     }
   }, [forceAppReset])
 
+  const enableFaceID = async () => {
+    dispatch(enableBiometric(true))
+  }
+
+  const disableFaceID = async () => {
+    Alert.alert('Disable FaceID', 'Are you sure you want to disable FaceID?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel'
+      },
+      { text: 'OK', onPress: () => dispatch(enableBiometric(false)) }
+    ])
+  }
+
   return (
     <Container>
       <SafeAreaView>
@@ -67,6 +85,8 @@ export default function Page() {
           <Form.Section title="Security">
             <Form.Link href="/home/(modal)/change-master-pass">Change master password</Form.Link>
             <Form.Link href="/home/(modal)/logout">Logout</Form.Link>
+            {!isBiometricEnabled && <Form.Button onPress={enableFaceID}>Enable FaceID</Form.Button>}
+            {isBiometricEnabled && <Form.Button onPress={disableFaceID}>Disable FaceID</Form.Button>}
           </Form.Section>
           <Spacer />
 

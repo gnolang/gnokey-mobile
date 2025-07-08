@@ -3,12 +3,15 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import * as SecureStore from 'expo-secure-store'
 import { GnoNativeApi } from '@gnolang/gnonative'
 import { nukeDatabase } from '@/providers/database-provider'
-import { DEV_MODE_KEY, MATER_PASS_KEY } from './constants'
+import { BIOMETRIC_ENABLED_KEY, DEV_MODE_KEY, MATER_PASS_KEY } from './constants'
+import * as LocalAuthentication from 'expo-local-authentication'
+import { Alert } from 'react-native'
 
 const initialState: SettingsState = {
   loading: false,
   forceAppReset: false,
-  devMode: SecureStore.getItem(DEV_MODE_KEY) === 'true'
+  isDevMode: SecureStore.getItem(DEV_MODE_KEY) === 'true',
+  isBiometricEnabled: SecureStore.getItem(BIOMETRIC_ENABLED_KEY) === 'true'
 }
 
 export const settingsSlice = createSlice({
@@ -28,26 +31,31 @@ export const settingsSlice = createSlice({
       state.loading = false
     })
     builder.addCase(toggleDevMode.fulfilled, (state, action) => {
-      state.devMode = action.payload
+      state.isDevMode = action.payload
     })
     builder.addCase(toggleDevMode.rejected, (state, err) => {
       console.log(err)
-      state.devMode = SecureStore.getItem(DEV_MODE_KEY) === 'true'
+      state.isDevMode = SecureStore.getItem(DEV_MODE_KEY) === 'true'
+    })
+    builder.addCase(enableBiometric.fulfilled, (state, action) => {
+      state.isBiometricEnabled = action.payload
     })
   },
   selectors: {
     selectLoadingReset: (state) => state.loading,
     selectForceAppReset: (state) => state.forceAppReset,
-    selectDevMode: (state) => state.devMode
+    selectDevMode: (state) => state.isDevMode,
+    selectBiometricEnabled: (state) => state.isBiometricEnabled
   }
 })
 
-export const { selectLoadingReset, selectForceAppReset, selectDevMode } = settingsSlice.selectors
+export const { selectLoadingReset, selectForceAppReset, selectDevMode, selectBiometricEnabled } = settingsSlice.selectors
 
 export interface SettingsState {
   loading: boolean
   forceAppReset: boolean
-  devMode: boolean
+  isDevMode: boolean
+  isBiometricEnabled: boolean
 }
 
 export const hardReset = createAsyncThunk<boolean, void, ThunkExtra>('settings/hardReset', async (param, thunkAPI) => {
@@ -60,6 +68,8 @@ export const hardReset = createAsyncThunk<boolean, void, ThunkExtra>('settings/h
   await nukeDatabase()
   if (await SecureStore.getItem(MATER_PASS_KEY)) {
     await SecureStore.deleteItemAsync(MATER_PASS_KEY)
+    await SecureStore.deleteItemAsync(BIOMETRIC_ENABLED_KEY)
+    await SecureStore.deleteItemAsync(DEV_MODE_KEY)
   }
   await new Promise((r) => setTimeout(r, 2000))
   return true
@@ -71,3 +81,41 @@ export const toggleDevMode = createAsyncThunk<boolean, void, ThunkExtra>('settin
   SecureStore.setItem(DEV_MODE_KEY, newMode)
   return newMode === 'true'
 })
+
+export const enableBiometric = createAsyncThunk<boolean, boolean, ThunkExtra>(
+  'settings/enableBiometric',
+  async (enabled, thunkAPI) => {
+    if (enabled) {
+      if (!LocalAuthentication.hasHardwareAsync()) {
+        Alert.alert('Biometric Authentication Not Available', 'This device does not support biometric authentication.')
+        return false
+      }
+
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+      if (!isEnrolled) {
+        Alert.alert(
+          'Biometric Authentication Not Enrolled',
+          'Please enroll at least one biometric credential (Face ID, Touch ID, etc.) in your device settings.'
+        )
+        return false
+      }
+
+      const res = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Enable Biometric Authentication',
+        fallbackLabel: 'Use Passcode'
+      })
+
+      if (res.success) {
+        await SecureStore.setItemAsync(BIOMETRIC_ENABLED_KEY, 'true')
+        Alert.alert('Success', 'Biometric authentication has been enabled.')
+        return true
+      } else {
+        throw new Error('Failed to enable biometric authentication. Please try again.')
+      }
+    } else {
+      await SecureStore.deleteItemAsync(BIOMETRIC_ENABLED_KEY)
+      Alert.alert('Success', 'Biometric authentication has been disabled.')
+      return false
+    }
+  }
+)

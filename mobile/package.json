@@ -52,7 +52,8 @@
     "styled-components": "^6.1.18",
     "text-encoding": "^0.7.0",
     "web-streams-polyfill": "^3.3.2",
-    "expo-sqlite": "~15.2.12"
+    "expo-sqlite": "~15.2.12",
+    "expo-local-authentication": "~16.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

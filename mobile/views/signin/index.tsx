@@ -1,6 +1,10 @@
 import { Button, Spacer, Text, TextField } from '@/modules/ui-components'
 import { useState } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Alert, TouchableOpacity } from 'react-native'
+import * as LocalAuthentication from 'expo-local-authentication'
+import * as SecureStore from 'expo-secure-store'
+import { MATER_PASS_KEY } from '@/redux/features/constants'
+import { selectBiometricEnabled, useAppSelector } from '@/redux'
 
 export interface Props {
   onUnlokPress: (password: string) => void
@@ -10,6 +14,34 @@ export interface Props {
 
 const SignInView: React.FC<Props> = ({ onUnlokPress, error, onForgotPasswordPress }) => {
   const [password, setPassword] = useState('')
+  const isBiometricEnabled = useAppSelector(selectBiometricEnabled)
+
+  const handleBiometricAuth = async () => {
+    const hasHardware = await LocalAuthentication.hasHardwareAsync()
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+
+    if (!hasHardware || !isEnrolled) {
+      Alert.alert(
+        'Biometric Authentication Not Available',
+        'Please ensure your device has biometric hardware and you have enrolled at least one biometric credential.'
+      )
+      return
+    }
+
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Unlock with Face ID',
+      fallbackLabel: 'Use Passcode'
+    })
+
+    if (result.success) {
+      const p = await SecureStore.getItemAsync(MATER_PASS_KEY)
+      console.log('Biometric authentication successful, retrieved password:', p)
+      setPassword(p!)
+      onUnlokPress(p!)
+    } else {
+      console.log('Biometric authentication failed')
+    }
+  }
 
   return (
     <>
@@ -22,6 +54,12 @@ const SignInView: React.FC<Props> = ({ onUnlokPress, error, onForgotPasswordPres
         error={error}
         onChangeText={setPassword}
       />
+      {isBiometricEnabled && (
+        <>
+          <Button onPress={handleBiometricAuth}>Unlock with FaceID</Button>
+          <Spacer />
+        </>
+      )}
       <Button style={{ width: '100%' }} onPress={() => onUnlokPress(password)} color="primary">
         Unlock
       </Button>

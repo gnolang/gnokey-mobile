@@ -18,7 +18,8 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
   const { type = 'text', label, error, value, hideError, ...rest } = props
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
-  const fadeAnim = React.useRef(new Animated.Value(0)).current
+  // const fadeAnim = React.useRef(new Animated.Value(0)).current
+  const fadeAnim = 1
 
   const handleChangeText = (text: string) => {
     setInputValue(text)
@@ -31,14 +32,14 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
     setInputValue(value)
   }, [value])
 
-  React.useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: inputValue ? 1 : 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue])
+  // React.useEffect(() => {
+  //   Animated.timing(fadeAnim, {
+  //     toValue: inputValue ? 1 : 0,
+  //     duration: 300,
+  //     useNativeDriver: true
+  //   }).start()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [inputValue])
 
   return (
     <>
@@ -59,6 +60,7 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
               <FontAwesome
                 size={28}
                 name={isSecureText ? 'eye-slash' : 'eye'}
+                color={rest.editable === false ? '#b0b0b0' : '#b0b0b0'}
                 onPress={() => setShowSecureText((prev) => !prev)}
               />
             </ToggleIcon>
@@ -83,8 +85,6 @@ const Content = styled.View<PropsWithTheme>`
   flex-direction: row;
   align-items: center;
   border-radius: 8px;
-  border-width: 1px;
-  border-color: ${(p) => p.theme.textinputs.border};
   padding: 0 8px;
   color: ${(p) => p.theme.colors.black};
   background-color: ${(p) => (p.editable === false ? '#f0f0f0' : p.theme.textinputs.background)};
@@ -94,7 +94,7 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
   placeholderTextColor: props.theme.textinputs.primary.placeholder.color || props.theme.textinputs.primary.placeholder.color
 }))`
   flex: 1;
-  height: 40px;
+  height: 46px;
   width: 100%;
   font-weight: 500;
   line-height: 20px;
@@ -104,13 +104,15 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
 `
 
 const ToggleIcon = styled.TouchableOpacity`
-  color: ${(p) => p.theme.colors.black};
+  color: ${(p) => p.theme.text.textMuted};
   padding: 2px;
 `
 
 const AnimatedLabel = styled(Animated.Text)<PropsWithTheme>`
-  color: ${(p) => (p.color ? p.theme.colors.gray : p.theme.colors.gray)};
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  font-weight: 500;
+  color: ${(p) => p.theme.textinputs.label};
+  font-weight: 590;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.24px;
+  margin-bottom: 6px;
 `

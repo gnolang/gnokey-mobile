@@ -18,8 +18,8 @@ const ThemeProvider = ({ children }: Props) => {
       white: '#ffffff',
       gray: '#A1A1A1',
       background: '#FDFDFD',
-      backgroundSecondary: '#F8F8F8',
-      border: '#D1D1D6' // Border, Ruller, Divider
+      backgroundSecondary: '#EBEBEB',
+      border: '#A1A1A1' // Border, Ruller, Divider
     },
 
     text: {
@@ -36,8 +36,8 @@ const ThemeProvider = ({ children }: Props) => {
         background: '#ffffff'
       },
       border: '#94A0AB',
-      label: '#8D8D8D',
-      background: '#E1E1E2'
+      label: '#000000',
+      background: '#EBEBEB'
     },
 
     buttons: {

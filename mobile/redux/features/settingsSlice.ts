@@ -114,7 +114,7 @@ export const enableBiometric = createAsyncThunk<boolean, boolean, ThunkExtra>(
       }
     } else {
       await SecureStore.deleteItemAsync(BIOMETRIC_ENABLED_KEY)
-      Alert.alert('Success', 'Biometric authentication has been disabled.')
+      Alert.alert('Done', 'Biometric authentication has been disabled. You can re-enable it later in settings.')
       return false
     }
   }

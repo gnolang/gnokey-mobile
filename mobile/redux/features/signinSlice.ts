@@ -1,8 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { enableBiometric } from '@/redux'
 import { ThunkExtra } from '@/providers/redux-provider'
 import * as SecureStore from 'expo-secure-store'
 import { ErrCode, GnoNativeApi, GRPCError } from '@gnolang/gnonative'
 import { MATER_PASS_KEY } from './constants'
+import { Alert } from 'react-native'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 export interface SignInState {
   masterPassword?: string
@@ -18,6 +21,11 @@ const initialState: SignInState = {
 
 interface CreateMasterParam {
   masterPassword: string
+}
+
+export interface DoSignInParam {
+  masterPassword: string
+  isBiometric?: boolean
 }
 
 interface ChangeMasterParam {
@@ -36,24 +44,50 @@ export const createMasterPass = createAsyncThunk<{ masterPassword: string | null
   }
 )
 
-export const changeMasterPass = createAsyncThunk<boolean, CreateMasterParam, ThunkExtra>(
-  'signin/changeMasterPass',
-  async (param, config) => {
-    const { masterPassword } = param
+export const doSignIn = createAsyncThunk<boolean, DoSignInParam, ThunkExtra>('signin/doSignIn', async (param, thunkAPI) => {
+  const { masterPassword, isBiometric } = param
 
-    const storedPass = await SecureStore.getItemAsync(MATER_PASS_KEY)
+  if (isBiometric) {
+    const hasHardware = await LocalAuthentication.hasHardwareAsync()
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync()
 
-    if (!storedPass) {
-      throw new Error('No master password defined. Please create one.')
+    if (!hasHardware || !isEnrolled) {
+      Alert.alert(
+        'Biometric Authentication Not Available',
+        'Please ensure your device has biometric hardware and you have enrolled at least one biometric credential.'
+      )
+      return false
     }
 
-    if (masterPassword !== storedPass) {
-      throw new Error('Invalid password')
-    }
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Unlock with Face ID',
+      fallbackLabel: 'Use Passcode'
+    })
 
-    return true
+    if (result.success) {
+      console.log('Biometric authentication successful, retrieved password')
+      return true
+    } else {
+      console.log('Biometric authentication failed', result.error)
+      if (result.error === 'user_cancel') {
+        thunkAPI.dispatch(enableBiometric(false))
+      }
+      return false
+    }
   }
-)
+
+  const storedPass = await SecureStore.getItemAsync(MATER_PASS_KEY)
+
+  if (!storedPass) {
+    throw new Error('No master password defined. Please create one.')
+  }
+
+  if (masterPassword !== storedPass) {
+    throw new Error('Invalid password')
+  }
+
+  return true
+})
 
 export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, ThunkExtra>(
   'user/changeMasterPass',
@@ -110,6 +144,33 @@ export const getInitialState = createAsyncThunk<{ masterPassword: string | null 
   }
 })
 
+export const doBiometricAuth = createAsyncThunk<void, void, ThunkExtra>('signin/doBiometricAuth', async () => {
+  const hasHardware = await LocalAuthentication.hasHardwareAsync()
+  const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+
+  if (!hasHardware || !isEnrolled) {
+    Alert.alert(
+      'Biometric Authentication Not Available',
+      'Please ensure your device has biometric hardware and you have enrolled at least one biometric credential.'
+    )
+    return
+  }
+
+  const result = await LocalAuthentication.authenticateAsync({
+    promptMessage: 'Unlock with Face ID',
+    fallbackLabel: 'Use Passcode'
+  })
+
+  if (result.success) {
+    const p = await SecureStore.getItemAsync(MATER_PASS_KEY)
+    console.log('Biometric authentication successful, retrieved password:', p)
+    // setPassword(p!)
+    // onUnlokPress(p!)
+  } else {
+    console.log('Biometric authentication failed')
+  }
+})
+
 export const signinSlice = createSlice({
   name: 'signIn',
   initialState,
@@ -128,8 +189,8 @@ export const signinSlice = createSlice({
     builder.addCase(getInitialState.rejected, (_, action) => {
       console.error('getInitialState.rejected', action)
     })
-    builder.addCase(changeMasterPass.fulfilled, (state) => {
-      state.signedIn = true
+    builder.addCase(doSignIn.fulfilled, (state, action) => {
+      state.signedIn = action.payload
     })
     builder.addCase(createMasterPass.fulfilled, (state, action) => {
       state.masterPassword = action.payload.masterPassword ?? undefined

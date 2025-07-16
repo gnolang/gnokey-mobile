@@ -48,7 +48,7 @@ export const Body = styled.Text<TextProps>`
 export const Caption = styled.Text<TextProps>`
   font-weight: 400;
   font-size: 13px;
-  line-height: 25px;
+  line-height: 20px;
   letter-spacing: 0.38px;
   color: ${(props) => props.theme.text.textMuted};
 `

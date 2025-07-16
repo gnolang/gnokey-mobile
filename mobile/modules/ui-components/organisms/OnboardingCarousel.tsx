@@ -13,6 +13,11 @@ const slides = [
     title: 'Feature',
     description: 'Another screen with GKM description for user to let him understand what this app is about',
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
+  },
+  {
+    title: 'Feature 2',
+    description: 'Another screen with GKM description for user to let him understand what this app is about',
+    image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   }
   // TODO: Add more slides if needed
 ]

@@ -10,7 +10,7 @@ interface OnboardingLayoutProps {
 export function OnboardingLayout({ children, footer }: OnboardingLayoutProps) {
   return (
     <SafeArea>
-      <ScrollContainer contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollContainer contentContainerStyle={{ flexGrow: 1, padding: 12 }}>
         <Content>{children}</Content>
         {footer && <FooterContainer>{footer}</FooterContainer>}
       </ScrollContainer>

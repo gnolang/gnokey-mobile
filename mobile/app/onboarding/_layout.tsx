@@ -1,3 +1,4 @@
+import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
 import { Stack } from 'expo-router'
 import { useTheme } from 'styled-components/native'
 
@@ -22,14 +23,7 @@ export default function OnboardingLayout() {
           headerShown: false
         }}
       />
-      <Stack.Screen
-        name="setup-pass"
-        options={{
-          headerBackVisible: true,
-          headerTitle: '',
-          headerShown: true
-        }}
-      />
+      <Stack.Screen name="setup-pass" />
     </Stack>
   )
 }

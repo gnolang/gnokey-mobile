@@ -16,7 +16,7 @@ export const Button: React.FC<ButtonProp> = (props) => {
   const isChildrenString = typeof props.children === 'string'
 
   return (
-    <ButtonWrapper {...props} $color={props.color} style={[props.style]} disabled={props.loading}>
+    <ButtonWrapper {...props} $color={props.color} style={[props.style]} disabled={props.loading || props.disabled}>
       {props.startIcon ? <StartIconWrapper>{props.startIcon}</StartIconWrapper> : null}
       {isChildrenString ? <Text.ButtonLabel $color={props.color}>{props.children}</Text.ButtonLabel> : props.children}
       {props.endIcon ? <EndIconWrapper>{props.endIcon}</EndIconWrapper> : null}
@@ -56,6 +56,7 @@ const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   padding-horizontal: 16px;
   border-radius: ${(props) => props.theme.borderRadius || 20}px;
   background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
+  opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 `
 
 // const ButtonProfileWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`

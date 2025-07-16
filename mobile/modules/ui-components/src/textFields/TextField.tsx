@@ -6,6 +6,7 @@ import { ErrorBox } from '../alert'
 
 export type Props = {
   label?: string
+  description?: string
   type?: 'password' | 'text'
   error?: string
   color?: 'secondary'
@@ -15,11 +16,9 @@ export type Props = {
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
 export const TextField = forwardRef<TextInput, Props>((props, ref) => {
-  const { type = 'text', label, error, value, hideError, ...rest } = props
+  const { type = 'text', label, description, error, value, hideError = true, ...rest } = props
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
-  // const fadeAnim = React.useRef(new Animated.Value(0)).current
-  const fadeAnim = 1
 
   const handleChangeText = (text: string) => {
     setInputValue(text)
@@ -32,21 +31,11 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
     setInputValue(value)
   }, [value])
 
-  // React.useEffect(() => {
-  //   Animated.timing(fadeAnim, {
-  //     toValue: inputValue ? 1 : 0,
-  //     duration: 300,
-  //     useNativeDriver: true
-  //   }).start()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [inputValue])
-
   return (
     <>
       <Container>
-        <AnimatedLabel {...rest} style={{ opacity: fadeAnim }}>
-          {label}
-        </AnimatedLabel>
+        {label && <Label>{label}</Label>}
+        {description && <Description>{description}</Description>}
         <Content {...rest}>
           <TextFieldStyled
             ref={ref}
@@ -80,7 +69,22 @@ const Container = styled.View`
   width: 100%;
   padding-bottom: 2px;
 `
-
+const Label = styled.Text`
+  font-weight: 590;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.24px;
+  color: ${(props) => props.theme.textinputs.label};
+`
+const Description = styled.Text`
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: -0.24px;
+  padding-bottom: 12px;
+  padding-top: 4px;
+  color: ${(props) => props.theme.text.textMuted};
+`
 const Content = styled.View<PropsWithTheme>`
   flex-direction: row;
   align-items: center;

@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, AntDesign, FontAwesome } from '@expo/vector-icons'
 import { Link } from 'expo-router'
 import { Text, TouchableOpacity } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
@@ -79,10 +79,10 @@ export const FormCheckBoxItem: React.FC<FormCheckBoxItemProps> = (props) => {
     <Wrapper>
       <Text>{children}</Text>
       <ViewSide>
-        {hint && <TextHint>{hint}</TextHint>}
-        <Ionicons
-          name={checked ? 'checkbox' : 'square-outline'}
-          size={16}
+        {hint && <TextHint onPress={onPress}>{hint}</TextHint>}
+        <FontAwesome
+          name={checked ? 'check-circle' : 'circle-o'}
+          size={18}
           color={checked ? theme.colors.primary : 'gray'}
           onPress={onPress}
           style={{ paddingLeft: 8 }}

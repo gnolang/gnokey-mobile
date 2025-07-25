@@ -8,7 +8,7 @@ export const EmptyView = () => {
         <Text.H1>Create your first account</Text.H1>
         <Spacer />
         <Text.Body>
-          As a new user, your first step is to create a new gno session account in the app to securely store your data.
+          As a new user, your first step is to create a new gno account in the app to securely store your data.
         </Text.Body>
       </CenteredView>
     </Container>

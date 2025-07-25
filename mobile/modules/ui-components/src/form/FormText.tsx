@@ -1,4 +1,4 @@
-import { Ionicons, AntDesign, FontAwesome } from '@expo/vector-icons'
+import { Ionicons, FontAwesome } from '@expo/vector-icons'
 import { Link } from 'expo-router'
 import { Text, TouchableOpacity } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'

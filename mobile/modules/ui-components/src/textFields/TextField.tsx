@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect } from 'react'
-import { TextInputProps, Animated, TextInput } from 'react-native'
+import { TextInputProps, TextInput } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
@@ -110,13 +110,4 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
 const ToggleIcon = styled.TouchableOpacity`
   color: ${(p) => p.theme.text.textMuted};
   padding: 2px;
-`
-
-const AnimatedLabel = styled(Animated.Text)<PropsWithTheme>`
-  color: ${(p) => p.theme.textinputs.label};
-  font-weight: 590;
-  font-size: 15px;
-  line-height: 20px;
-  letter-spacing: -0.24px;
-  margin-bottom: 6px;
 `

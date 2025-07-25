@@ -16,7 +16,7 @@ export type Props = {
 export function ModalHeaderTitle(props: Props) {
   return (
     <View style={{ alignSelf: 'center' }}>
-      <Text.H3 style={{ color: props.color }}>{props.title}</Text.H3>
+      <Text.H4 style={{ color: props.color }}>{props.title}</Text.H4>
       <Spacer />
     </View>
   )

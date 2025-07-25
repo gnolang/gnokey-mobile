@@ -10,7 +10,7 @@ interface OnboardingLayoutProps {
 export function OnboardingLayout({ children, footer }: OnboardingLayoutProps) {
   return (
     <SafeArea>
-      <ScrollContainer contentContainerStyle={{ flexGrow: 1, padding: 12 }}>
+      <ScrollContainer contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 22, paddingTop: 12 }}>
         <Content>{children}</Content>
         {footer && <FooterContainer>{footer}</FooterContainer>}
       </ScrollContainer>
@@ -32,6 +32,5 @@ const Content = styled.View`
 `
 
 const FooterContainer = styled.View`
-  padding: 16px 24px;
-  background-color: #ffffff;
+  padding: 0px 0px;
 `

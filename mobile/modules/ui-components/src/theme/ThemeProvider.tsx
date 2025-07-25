@@ -48,7 +48,7 @@ const ThemeProvider = ({ children }: Props) => {
 
       label: {
         primary: '#FFFFFF',
-        secondary: '#000000',
+        secondary: '#007AFF',
         tertirary: '#000000',
         danger: '#ffffff'
       }

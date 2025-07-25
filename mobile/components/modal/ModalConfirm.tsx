@@ -1,8 +1,9 @@
-import { Modal as NativeModal, TouchableWithoutFeedback, View, StyleSheet } from 'react-native'
+import { Modal as NativeModal, TouchableWithoutFeedback, View, TouchableHighlight } from 'react-native'
 import { ModalHeaderTitle } from './ModalHeader'
-import { useTheme } from 'styled-components/native'
+import styled, { useTheme } from 'styled-components/native'
 import { Text, Button, Spacer } from '@/modules/ui-components'
 import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export type Props = {
   title: string
@@ -11,27 +12,29 @@ export type Props = {
   visible: boolean
   onCancel: () => void
   onConfirm: () => void
+  loading?: boolean
 }
 
-const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm' }: Props) => {
+const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm', loading }: Props) => {
   const theme = useTheme()
 
   return (
     <NativeModal visible={visible} transparent animationType="slide">
       <TouchableWithoutFeedback onPress={onCancel}>
-        <View style={styles.modalContainer}>
+        <OpaqueBackgroundView>
           <TouchableWithoutFeedback>
-            <View style={styles.modalContent}>
+            <ModalContent>
               <ModalHeaderTitle title={title} color={theme.error.text} />
               <Spacer space={16} />
               <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Text.Body style={{ textAlign: 'center' }}>{message}</Text.Body>
+                <Text.H4_Regular style={{ textAlign: 'center' }}>{message}</Text.H4_Regular>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 16 }}>
                 <Button
                   onPress={onCancel}
                   color="secondary"
                   style={{ width: 110 }}
+                  loading={loading}
                   endIcon={<AntDesign name="reload1" size={16} color="black" />}
                 >
                   Cancel
@@ -39,90 +42,102 @@ const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, conf
                 <Button
                   onPress={onConfirm}
                   color="danger"
+                  loading={loading}
                   style={{ width: 110 }}
                   endIcon={<FontAwesome6 name="trash-alt" size={16} color="white" />}
                 >
                   {confirmText}
                 </Button>
               </View>
-            </View>
+            </ModalContent>
           </TouchableWithoutFeedback>
-        </View>
+        </OpaqueBackgroundView>
       </TouchableWithoutFeedback>
     </NativeModal>
   )
 }
 
-const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm' }: Props) => {
+const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm', loading }: Props) => {
   const theme = useTheme()
 
   return (
     <NativeModal visible={visible} transparent animationType="slide">
       <TouchableWithoutFeedback onPress={onCancel}>
-        <View style={styles.modalContainer}>
+        <OpaqueBackgroundView>
           <TouchableWithoutFeedback>
-            <View style={styles.modalContent}>
-              <ModalHeaderTitle title={title} color={theme.colors.primary} />
-              <Spacer space={16} />
-              <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Text.Body style={{ textAlign: 'center' }}>{message}</Text.Body>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 16 }}>
-                <Button onPress={onCancel} color="secondary" endIcon={<AntDesign name="reload1" size={16} color="black" />}>
-                  Cancel
-                </Button>
-                <Button onPress={onConfirm} color="primary" endIcon={<FontAwesome6 name="plus" size={16} color="white" />}>
+            <Container>
+              <Header>
+                <Title>{title}</Title>
+                <TouchableHighlight onPress={onCancel} underlayColor="transparent">
+                  <Ionicons name="close-circle-outline" size={28} color={theme.colors.gray} />
+                </TouchableHighlight>
+              </Header>
+              <Content>
+                <Text.Body style={{ textAlign: 'left' }}>{message}</Text.Body>
+              </Content>
+              <Footer>
+                <Button onPress={onConfirm} color="danger" loading={loading}>
                   {confirmText}
                 </Button>
-              </View>
-            </View>
+              </Footer>
+            </Container>
           </TouchableWithoutFeedback>
-        </View>
+        </OpaqueBackgroundView>
       </TouchableWithoutFeedback>
     </NativeModal>
   )
 }
 
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  modalContent: {
-    minHeight: '30%',
-    width: '100%',
-    borderTopRightRadius: 40,
-    borderTopLeftRadius: 40,
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20
-  },
-  selectBox: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5
-  },
-  selectedText: {
-    fontSize: 16
-  },
-  option: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
-  },
-  closeButton: {
-    marginTop: 10,
-    alignItems: 'center'
-  },
-  closeText: {
-    color: 'red',
-    fontSize: 16
-  }
-})
+const Container = styled.View`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+`
+
+const Header = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 8px;
+`
+
+const Title = styled(Text.H4)`
+  color: ${(props) => props.theme.colors.black};
+  text-align: flex-start;
+  margin-bottom: 16px;
+`
+
+const Content = styled.View`
+  flex: 1;
+  align-items: stretch;
+  text-align: left;
+  padding-bottom: 32px;
+`
+
+const Footer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 16px;
+`
+
+const OpaqueBackgroundView = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`
+
+const ModalContent = styled.View`
+  minHeight: '30%',
+  width: '100%',
+  position: 'absolute',
+  bottom: 0,
+  backgroundColor: 'white',
+  borderRadius: 10,
+  padding: 20
+`
 
 export { ModalConfirmDelete, ModalConfirm }

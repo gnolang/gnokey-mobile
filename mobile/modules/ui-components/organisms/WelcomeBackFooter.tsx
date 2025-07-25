@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { Button, ButtonText, Spacer, Text, TextField } from '../src'
 import { selectBiometricEnabled, useAppSelector } from '@/redux'
+import { useRouter } from 'expo-router'
 
 export interface Props {
   onUnlockPress: (password: string, isBiometric: boolean) => void
-  onForgotPasswordPress?: () => void
   error?: string
 }
 
-export const WelcomeBackFooter = ({ onUnlockPress: onUnlokPress, error, onForgotPasswordPress }: Props) => {
+export const WelcomeBackFooter = ({ onUnlockPress: onUnlokPress, error }: Props) => {
   const [password, setPassword] = useState('')
   const isBiometric = useAppSelector(selectBiometricEnabled)
+  const router = useRouter()
 
   return (
     <>
@@ -29,8 +30,8 @@ export const WelcomeBackFooter = ({ onUnlockPress: onUnlokPress, error, onForgot
       <Button color="primary" onPress={() => onUnlokPress(password, isBiometric)}>
         Unlock GKM
       </Button>
-      <Spacer space={4} />
-      <ButtonText onPress={onForgotPasswordPress}>
+      <Spacer space={16} />
+      <ButtonText onPress={() => router.push('/onboarding/forgot-pass')}>
         <Text.Caption>Forgot password?</Text.Caption>
       </ButtonText>
     </>

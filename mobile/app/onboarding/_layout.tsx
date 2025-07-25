@@ -1,4 +1,3 @@
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
 import { Stack } from 'expo-router'
 import { useTheme } from 'styled-components/native'
 
@@ -24,6 +23,7 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen name="setup-pass" />
+      <Stack.Screen name="forgot-pass" />
     </Stack>
   )
 }

@@ -61,7 +61,7 @@ export const Link = styled.Text<TextProps>`
 `
 
 export const ButtonLabel = styled.Text<{ $color?: ButtonColor }>`
-  font-weight: 400;
+  font-weight: 600;
   font-size: 17px;
   line-height: 22px;
   letter-spacing: -0.41px;

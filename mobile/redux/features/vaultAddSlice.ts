@@ -263,7 +263,6 @@ const checkForUserOnBlockchain = async (
 }
 
 function convertToJson(result: string | undefined) {
-  console.log('xxxxx:', result)
   if (!result || result === '("" string)') return undefined
 
   const userData = result.match(/\("(\w+)" std\.Address/)?.[1]

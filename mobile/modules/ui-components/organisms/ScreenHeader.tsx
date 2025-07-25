@@ -9,19 +9,18 @@ import { Spacer } from '../src'
 export type ScreenHeaderProps = {
   subtitle?: string
   title?: string
+  headerBackVisible?: boolean
 } & NativeStackHeaderProps
 
 function ScreenHeader(props: ScreenHeaderProps) {
-  const { title, subtitle } = props
+  const { title, subtitle, headerBackVisible = true } = props
   const theme = useTheme()
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.colors.backgroundSecondary }}>
       <StatusBar barStyle="dark-content" />
       <View style={{ marginHorizontal: 16, marginBottom: 12 }}>
-        <Row>
-          <BackButton />
-        </Row>
+        <Row>{headerBackVisible && <BackButton />}</Row>
         <Spacer space={8} />
         <Row>
           <Title>{title}</Title>
@@ -63,7 +62,6 @@ const Row = styled.View`
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
-  height: 29px;
 `
 
 const BackLabel = styled(Text)`

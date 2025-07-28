@@ -8,10 +8,8 @@ export const BetaVersionBanner = () => {
       style={{
         width: '100%',
         backgroundColor: '#FFD700',
-        paddingVertical: 6,
         alignItems: 'center',
-        zIndex: 1000,
-        top: 16
+        zIndex: 1000
       }}
     >
       <Text.Body style={{ color: '#000', textAlign: 'center' }}>
@@ -32,7 +30,6 @@ export const BetaVersionMiniBanner = () => {
         width: '100%',
         backgroundColor: '#FFD700',
         alignItems: 'center',
-        marginTop: 8,
         borderRadius: theme.borderRadius
       }}
     >

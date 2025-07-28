@@ -185,7 +185,7 @@ export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra
     } else if (currentChain.faucetUrl) {
       thunkAPI.dispatch(addProgress(`sending coins on ${currentChain.chainName} faucet`))
       const response = await sendCoins(address_bech32, currentChain.faucetUrl)
-      console.log(`coins sent, response: ${response}`)
+      console.log(`coins sent, response: ${JSON.stringify(response)}`)
       thunkAPI.dispatch(addProgress(`registering account on chain`))
       await registerOnChain(gnonative, account)
       thunkAPI.dispatch(addProgress(`account registered`))
@@ -318,7 +318,10 @@ const sendCoins = async (address: string, faucetRemote: string) => {
   myHeaders.append('Content-Type', 'application/json')
 
   const raw = JSON.stringify({
-    To: address
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'drip',
+    params: [{ address }, '1000000000ugnot']
   })
 
   const requestOptions = {

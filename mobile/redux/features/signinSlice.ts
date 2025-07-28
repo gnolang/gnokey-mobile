@@ -176,7 +176,6 @@ export const signinSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      state.masterPassword = undefined
       state.signedIn = false
     }
   },

@@ -185,7 +185,7 @@ export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra
     } else if (currentChain.faucetUrl) {
       thunkAPI.dispatch(addProgress(`sending coins on ${currentChain.chainName} faucet`))
       const response = await sendCoins(address_bech32, currentChain.faucetUrl)
-      console.log(`coins sent, response: ${JSON.stringify(response)}`)
+      console.log(`coins sent, response: ${JSON.stringify(await response.json())}`)
       thunkAPI.dispatch(addProgress(`registering account on chain`))
       await registerOnChain(gnonative, account)
       thunkAPI.dispatch(addProgress(`account registered`))

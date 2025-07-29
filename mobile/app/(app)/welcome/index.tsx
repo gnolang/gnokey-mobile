@@ -14,14 +14,14 @@ export default function Root() {
   const onUnlockPress = async (masterPassword: string, isBiometric: boolean) => {
     try {
       await dispatch(doSignIn({ masterPassword, isBiometric })).unwrap()
-      naviateTo()
+      navigateTo()
     } catch (error: any) {
       console.log('error', error)
       setError(error?.message)
     }
   }
 
-  const naviateTo = () => {
+  const navigateTo = () => {
     if (action) {
       route.replace(action)
     } else {

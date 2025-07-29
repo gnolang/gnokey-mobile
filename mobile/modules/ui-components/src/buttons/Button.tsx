@@ -24,18 +24,6 @@ export const Button: React.FC<ButtonProp> = (props) => {
   )
 }
 
-// export const ButtonProfile: React.FC<ButtonProp> = (props) => {
-//   const isChildrenString = typeof props.children === 'string'
-
-//   return (
-//     <ButtonProfileWrapper {...props} $color={props.color} style={[props.style]} disabled={props.loading}>
-//       {props.startIcon ? <StartIconWrapper>{props.startIcon}</StartIconWrapper> : null}
-//       {isChildrenString ? <ButtonProfileLabel $color={props.color}>{props.children}</ButtonProfileLabel> : props.children}
-//       {props.endIcon ? <EndIconWrapper>{props.endIcon}</EndIconWrapper> : null}
-//     </ButtonProfileWrapper>
-//   )
-// }
-
 const StartIconWrapper = styled.View`
   margin-right: 8px;
 `
@@ -58,22 +46,3 @@ const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
   opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 `
-
-// const ButtonProfileWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
-//   height: 60px;
-//   flex-direction: row;
-//   justify-content: left;
-//   align-items: center;
-//   padding-horizontal: 24px;
-//   border-radius: ${(props) => props.theme.borderRadius * 2 || 20}px;
-//   color: ${(props) => props.theme.colors.black};
-//   background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.tertirary)};
-// `
-// export const ButtonProfileLabel = styled.Text<{ $color?: ButtonColor }>`
-//   font-weight: 500;
-//   font-size: 16px;
-//   line-height: 19px;
-//   letter-spacing: -0.32px;
-//   width: 95%;
-//   color: ${(props) => (props.$color ? props.$color : props.theme.colors.black)};
-// `

@@ -321,7 +321,7 @@ const sendCoins = async (address: string, faucetRemote: string) => {
     jsonrpc: '2.0',
     id: 1,
     method: 'drip',
-    params: [{ address }, '1000000000ugnot']
+    params: [address, '1000000000ugnot']
   })
 
   const requestOptions = {

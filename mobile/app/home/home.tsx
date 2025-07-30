@@ -64,7 +64,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
-    route.push('home/vault')
+    route.push('home/vault/new-vault')
   }
 
   const onBookmarkPress = (keyInfo: Vault) => async () => {

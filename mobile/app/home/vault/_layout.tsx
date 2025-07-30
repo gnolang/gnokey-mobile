@@ -1,13 +1,7 @@
 import { Stack } from 'expo-router'
 
 const defaultOptions = {
-  headerTransparent: true,
-  headerLargeTitle: false,
-  headerShadowVisible: true,
-  headerLargeTitleShadowVisible: false,
-  headerLargeStyle: {
-    backgroundColor: 'transparent'
-  }
+  headerShown: true
 }
 
 export default function VaultModalLayout() {
@@ -36,7 +30,6 @@ export default function VaultModalLayout() {
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />
       <Stack.Screen name="option-phrase/enter-vault-name" options={{ ...defaultOptions, title: 'Master Key Name' }} />
-      {/* <Stack.Screen name="vault/new-vault/new-vault-success" options={{ ...defaultOptions, title: 'd' }} /> */}
     </Stack>
   )
 }

@@ -1,19 +1,16 @@
-import { View, TextInput as RNTextInput, Alert as RNAlert, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { TextInput as RNTextInput, Alert as RNAlert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { router, useFocusEffect } from 'expo-router'
-import { useGnoNativeContext } from '@gnolang/gnonative'
+import { router, Stack, useFocusEffect } from 'expo-router'
 import {
   selectMasterPassword,
   useAppDispatch,
   useAppSelector,
   VaultCreationState,
-  existingAccountSelector,
   newAccountSelector,
   registerAccount,
   createKey,
   signUpStateSelector,
   selectKeyName,
-  setKeyName,
   selectPhrase,
   generateNewPhrase,
   resetState,
@@ -24,19 +21,17 @@ import {
   clearProgress,
   selectCurrentChain
 } from '@/redux'
-import { TextCopy } from '@/components'
-import { Feather, Octicons } from '@expo/vector-icons'
-import { Button, Text, TextField, BottonPanel, Container, ButtonIcon, Spacer, SafeAreaView } from '@/modules/ui-components'
-import { useTheme } from 'styled-components/native'
+import { Button, OnboardingLayout } from '@/modules/ui-components'
 import { LoadingModal } from '@/components/loading'
+import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)
-  const [editable, setEditable] = useState<boolean>(true)
+  // const [editable, setEditable] = useState<boolean>(true)
 
   const inputRef = useRef<RNTextInput>(null)
 
-  const { gnonative } = useGnoNativeContext()
   const progress = useAppSelector(selectLastProgress)
 
   const dispatch = useAppDispatch()
@@ -44,7 +39,6 @@ export default function Page() {
   const masterPassword = useAppSelector(selectMasterPassword)
   const signUpState = useAppSelector(signUpStateSelector)
   const newAccount = useAppSelector(newAccountSelector)
-  const existingAccount = useAppSelector(existingAccountSelector)
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
   const loading = useAppSelector(selectLoadingAddVault)
@@ -74,7 +68,7 @@ export default function Page() {
         return
       }
       if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
-        setEditable(false)
+        // setEditable(false)
         setError(
           'This name is already registered locally on this device but NOT on chain. If you want to register your account on the Gno Blockchain, please press Register On-Chain. Your seed phrase will remain the same.'
         )
@@ -99,12 +93,18 @@ export default function Page() {
           await dispatch(registerAccount()).unwrap()
           return
         } else {
-          router.replace('/home/vault/new-vault/new-vault-success')
+          router.replace({
+            pathname: '/home/vault/new-vault/new-vault-success',
+            params: { keyName }
+          })
           return
         }
       }
       if (signUpState === VaultCreationState.account_registered) {
-        router.replace('/home/vault/new-vault/new-vault-success')
+        router.replace({
+          pathname: '/home/vault/new-vault/new-vault-success',
+          params: { keyName }
+        })
         return
       }
     })()
@@ -115,11 +115,13 @@ export default function Page() {
     setError(undefined)
 
     if (!keyName) {
+      console.error('Key name is required')
       setError('Please fill out all fields')
       return
     }
 
     if (!phrase) {
+      console.error('Seed phrase is required')
       setError('Phrase not found.')
       return
     }
@@ -148,29 +150,29 @@ export default function Page() {
   }
 
   // To be called when VaultCreationState.user_exists_only_on_local_storage
-  const onRegisterOnChainOnly = async () => {
-    if (!existingAccount || !keyName || !masterPassword) {
-      console.error('Some required data is missing to register on-chain.')
-      return
-    }
-    try {
-      await gnonative.activateAccount(keyName)
-      await gnonative.setPassword(masterPassword, existingAccount.address)
-      if (currentChain?.faucetPortalUrl) {
-        router.push('/home/vault/new-vault/external-faucet')
-        return
-      }
-      await dispatch(registerAccount()).unwrap()
-    } catch (error: any) {
-      console.log(error)
-      const msg = error['message'] || JSON.stringify(error)
-      RNAlert.alert('Error', msg)
-      setError(msg)
-    }
-  }
+  // const onRegisterOnChainOnly = async () => {
+  //   if (!existingAccount || !keyName || !masterPassword) {
+  //     console.error('Some required data is missing to register on-chain.')
+  //     return
+  //   }
+  //   try {
+  //     await gnonative.activateAccount(keyName)
+  //     await gnonative.setPassword(masterPassword, existingAccount.address)
+  //     if (currentChain?.faucetPortalUrl) {
+  //       router.push('/home/vault/new-vault/external-faucet')
+  //       return
+  //     }
+  //     await dispatch(registerAccount()).unwrap()
+  //   } catch (error: any) {
+  //     console.log(error)
+  //     const msg = error['message'] || JSON.stringify(error)
+  //     RNAlert.alert('Error', msg)
+  //     setError(msg)
+  //   }
+  // }
 
   const onResetForm = () => {
-    setEditable(true)
+    // setEditable(true)
     dispatch(resetState())
     setError(undefined)
     dispatch(clearProgress())
@@ -179,78 +181,34 @@ export default function Page() {
   }
 
   return (
-    <>
+    <OnboardingLayout footer={<Button onPress={onCreate}>Create new account</Button>}>
+      <Stack.Screen
+        options={{
+          header: (props) => <ScreenHeader {...props} title="New account" />
+        }}
+      />
       <LoadingModal visible={loading} message={progress} />
-      <SafeAreaView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Container>
-            <Spacer />
-            <TextField
-              label="Account Key Name"
-              placeholder="Account Key Name"
-              value={keyName}
-              onChangeText={(x) => dispatch(setKeyName(x))}
-              editable={editable}
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="off"
-              error={error}
-            />
-            <Spacer space={4} />
-            {/* <ChainSelectView /> */}
-          </Container>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
-
-      <BottonPanel>
-        <SeedPhraseBox phrase={phrase} signUpState={signUpState} />
-        <Spacer />
-        <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-          <View style={{ width: 120 }} />
-        </View>
-
-        {signUpState === VaultCreationState.user_exists_only_on_local_storage ? (
-          <>
-            <Button onPress={onRegisterOnChainOnly} style={{ marginTop: 10 }}>
-              Register On-Chain
-            </Button>
-            <Spacer />
-            <Button color="secondary" onPress={onResetForm}>
-              Cancel
-            </Button>
-          </>
-        ) : (
-          <Button onPress={onCreate} style={{ width: '100%' }}>
-            Continue
-          </Button>
-        )}
-      </BottonPanel>
-    </>
+      <NewVaultForm error={error} />
+    </OnboardingLayout>
   )
 }
 
-const SeedPhraseBox = ({ phrase, signUpState }: { phrase?: string; signUpState?: VaultCreationState }) => {
-  const theme = useTheme()
-  const dispatch = useAppDispatch()
-
-  if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
-    return null
-  }
-
-  return (
-    <>
-      <Text.H3 style={{ color: theme.colors.primary }}>Seed Phrase</Text.H3>
-      <Spacer />
-      <TextCopy text={phrase}>
-        <Text.Body style={{ textAlign: 'center' }}>
-          {phrase} &nbsp;
-          <Octicons name="copy" size={12} color={theme.colors.primary} />
-        </Text.Body>
-      </TextCopy>
-      <Spacer />
-      <ButtonIcon size={30} color="primary" onPress={() => dispatch(generateNewPhrase())}>
-        <Feather name="refresh-cw" size={15} color="white" />
-      </ButtonIcon>
-    </>
-  )
-}
+/* <>
+          {signUpState === VaultCreationState.user_exists_only_on_local_storage ? (
+            <>
+              <Button onPress={onRegisterOnChainOnly} style={{ marginTop: 10 }}>
+                Register On-Chain
+              </Button>
+              <Spacer />
+              <Button color="secondary" onPress={onResetForm}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <Button onPress={onCreate} style={{ width: '100%' }}>
+              Continue
+            </Button>
+          )}
+        </BottonPanel>
+      </> 
+  */

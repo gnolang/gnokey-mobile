@@ -56,7 +56,7 @@ export default function AppLayout() {
         }}
       />
 
-      <Stack.Screen name="vault" options={{ title: 'Vaults', headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name="vault" options={{ headerShown: false }} />
     </Stack>
   )
 }

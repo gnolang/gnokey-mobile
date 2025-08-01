@@ -2,9 +2,18 @@ import styled from 'styled-components/native'
 import { Spacer, Text, TextField } from '../src'
 import { Ruller } from '@/components'
 import { useEffect, useState } from 'react'
-import { selectKeyName, setKeyName, useAppDispatch, useAppSelector } from '@/redux'
+import {
+  selectChainsAvailable,
+  selectKeyName,
+  selectSelectedChain,
+  setKeyName,
+  setSelectedChain,
+  useAppDispatch,
+  useAppSelector
+} from '@/redux'
 import { CheckItem } from '../molecules/CheckItem'
 import { NavigationRow } from '../molecules/NavigationRow'
+import { NetworkSelectionModal } from './NetworkSelectionModal'
 
 export interface Props {
   error?: string
@@ -14,10 +23,14 @@ export const NewVaultForm = ({ error }: Props) => {
   const keyName = useAppSelector(selectKeyName)
   const [accountDescription, setAccountDescription] = useState('')
   const dispatch = useAppDispatch()
+  const networks = useAppSelector(selectChainsAvailable)
+  const currentNetwork = useAppSelector(selectSelectedChain)
 
   const [isMin6Chars, setIsMin6Chars] = useState(false)
   const [isDigitAtEnd, setIsDigitAtEnd] = useState(false)
   const [isLowercase, setIsLowercase] = useState(false)
+
+  const [showNetworkModal, setShowNetworkModal] = useState(false)
 
   useEffect(() => {
     setIsMin6Chars(keyName ? keyName.length >= 6 : false)
@@ -27,6 +40,17 @@ export const NewVaultForm = ({ error }: Props) => {
 
   return (
     <Container>
+      <NetworkSelectionModal
+        visible={showNetworkModal}
+        onClose={() => setShowNetworkModal(false)}
+        onNetworkSelect={(v) => {
+          dispatch(setSelectedChain(v))
+          setShowNetworkModal(false)
+        }}
+        onAddChain={() => {}}
+        networks={networks}
+        currentNetwork={currentNetwork}
+      />
       <TextField
         label="Account name"
         description="Enter your account name, something meaningful"
@@ -60,8 +84,8 @@ export const NewVaultForm = ({ error }: Props) => {
       <NavigationRow
         title="Select Chain to Register username"
         description="Register username will allow you to use your account on the Gno blockchain"
-        onPress={() => {}}
-        footer={<Text.Link>No Registration</Text.Link>}
+        onPress={() => setShowNetworkModal(true)}
+        footer={currentNetwork ? <Text.Link>{currentNetwork.chainName}</Text.Link> : <Text.Link>No Registration</Text.Link>}
       />
       <Spacer space={16} />
       <Ruller />

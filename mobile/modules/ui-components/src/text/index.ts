@@ -45,6 +45,10 @@ export const Body = styled.Text<TextProps>`
   color: ${(props) => props.theme.colors.black};
 `
 
+export const Body_Bold = styled(Body)`
+  font-weight: 500;
+`
+
 export const Caption = styled.Text<TextProps>`
   font-weight: 400;
   font-size: 13px;

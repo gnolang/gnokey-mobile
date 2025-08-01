@@ -1,7 +1,8 @@
 import styled from 'styled-components/native'
-import { Spacer, Text, TextField } from '../src'
+import { Spacer, TextField } from '../src'
 import { View } from 'react-native'
 import { useEffect, useState } from 'react'
+import { CheckItem } from '../molecules/CheckItem'
 
 interface Props {
   onPasswordsCompleted?: (password: string) => void
@@ -78,14 +79,6 @@ const PasswordCheckers = ({ password, confirmPassword, onPasswordsCompleted }: P
         <CheckItem isValid={passwordsMatch}>Both passwords must match</CheckItem>
       </LeftChild>
     </Row>
-  )
-}
-
-const CheckItem = ({ isValid, children }: { isValid: boolean; children: React.ReactNode }) => {
-  return (
-    <Text.Caption style={{ color: isValid ? 'green' : 'red' }}>
-      {isValid ? '✓' : '✗'} {children}
-    </Text.Caption>
   )
 }
 

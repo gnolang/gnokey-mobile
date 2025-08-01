@@ -1,7 +1,7 @@
 import { Text } from '@/modules/ui-components'
 import React from 'react'
-import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
-import { useTheme } from 'styled-components/native'
+import { ActivityIndicator, Modal, StyleSheet } from 'react-native'
+import styled, { useTheme } from 'styled-components/native'
 
 type Props = {
   visible: boolean
@@ -14,15 +14,20 @@ export default function LoadingModal({ visible, message = 'Loading' }: Props) {
 
   return (
     <Modal animationType="fade" transparent={true}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <ActivityIndicator size="large" color={theme.colors.primary} />
-          {message ? <Text.Body style={styles.modalText}>{message}</Text.Body> : null}
-        </View>
-      </View>
+      <Container>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        {message ? <Text.Body style={styles.modalText}>{message}</Text.Body> : null}
+      </Container>
     </Modal>
   )
 }
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`
 
 const styles = StyleSheet.create({
   centeredView: {

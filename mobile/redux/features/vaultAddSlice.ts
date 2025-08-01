@@ -3,6 +3,7 @@ import { CoinSchema, GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
 import { create } from '@bufbuild/protobuf'
+import { NetworkMetainfo } from '@/types'
 
 export enum VaultCreationState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -19,6 +20,7 @@ export interface VaultAddState {
   signUpState?: VaultCreationState
   newAccount?: KeyInfo
   existingAccount?: KeyInfo
+  selectedChain?: NetworkMetainfo // The chain selected by the user during onboarding
   loading: boolean
   progress: string[]
   registerAccount: boolean
@@ -30,6 +32,7 @@ const initialState: VaultAddState = {
   signUpState: undefined,
   newAccount: undefined,
   existingAccount: undefined,
+  selectedChain: undefined,
   loading: true,
   progress: [],
   registerAccount: false
@@ -60,12 +63,12 @@ type SignUpResponse = { newAccount?: KeyInfo; existingAccount?: KeyInfo; state: 
  */
 export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/createKey', async (param, thunkAPI) => {
   const { name, password, phrase } = param
-  const { currentChain } = (thunkAPI.getState() as RootState).chains
+  const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-  console.log('currentChain', currentChain)
+  console.log('selectedChain', selectedChain)
 
   // do not register on chain
-  if (!currentChain) {
+  if (!selectedChain) {
     thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
     const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name)
     thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
@@ -93,8 +96,8 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     return { newAccount, state: VaultCreationState.account_created }
   }
 
-  await gnonative.setRemote(currentChain.rpcUrl)
-  await gnonative.setChainID(currentChain.chainId)
+  await gnonative.setRemote(selectedChain.rpcUrl)
+  await gnonative.setChainID(selectedChain.chainId)
 
   thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase)
@@ -398,11 +401,15 @@ export const vaultAddSlice = createSlice({
     setKeyName: (state, action: PayloadAction<string>) => {
       state.keyName = action.payload
     },
+    setSelectedChain: (state, action: PayloadAction<NetworkMetainfo | undefined>) => {
+      state.selectedChain = action.payload
+    },
     resetState: (state) => {
       state.loading = false
       state.newAccount = undefined
       state.existingAccount = undefined
       state.signUpState = undefined
+      state.selectedChain = undefined
       state.keyName = ''
       state.phrase = ''
     }
@@ -452,12 +459,21 @@ export const vaultAddSlice = createSlice({
     selectRegisterAccount: (state) => state.registerAccount,
     selectKeyName: (state) => state.keyName,
     selectPhrase: (state) => state.phrase,
-    selectLastProgress: (state) => state.progress[state.progress.length - 1]
+    selectLastProgress: (state) => state.progress[state.progress.length - 1],
+    selectSelectedChain: (state) => state.selectedChain
   }
 })
 
-export const { addProgress, signUpState, clearProgress, setRegisterAccount, setKeyName, resetState, setPhrase } =
-  vaultAddSlice.actions
+export const {
+  addProgress,
+  signUpState,
+  clearProgress,
+  setRegisterAccount,
+  setKeyName,
+  resetState,
+  setPhrase,
+  setSelectedChain
+} = vaultAddSlice.actions
 
 export const {
   selectLoadingAddVault,
@@ -468,5 +484,6 @@ export const {
   existingAccountSelector,
   selectRegisterAccount,
   selectKeyName,
-  selectPhrase
+  selectPhrase,
+  selectSelectedChain
 } = vaultAddSlice.selectors

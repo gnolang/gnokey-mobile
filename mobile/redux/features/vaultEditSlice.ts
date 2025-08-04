@@ -27,7 +27,7 @@ export const vaultEditSlice = createSlice({
 })
 
 interface DeleteVaultParam {
-  vault: KeyInfo
+  vault: Vault
 }
 
 export const deleteVault = createAsyncThunk<boolean, DeleteVaultParam, ThunkExtra>(
@@ -36,7 +36,8 @@ export const deleteVault = createAsyncThunk<boolean, DeleteVaultParam, ThunkExtr
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     const { vault } = param
 
-    await gnonative.deleteAccount(vault.name, undefined, true)
+    await gnonative.deleteAccount(vault.keyInfo.name, undefined, true)
+    await DB.deleteVault(vault.id)
 
     return true
   }

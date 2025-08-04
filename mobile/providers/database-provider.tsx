@@ -138,6 +138,11 @@ export const insertVault = async (keyInfo: KeyInfo, description?: string, chainI
   return await db.runAsync(sql, keyInfo.name, description || '', chainId ? JSON.stringify([chainId]) : '[]')
 }
 
+export const deleteVault = async (id: string) => {
+  const sql = 'DELETE FROM app_vaults WHERE id = ?'
+  return await db.runAsync(sql, id)
+}
+
 export const listVaults = async (): Promise<Vault[]> => {
   return await db.getAllAsync<Vault>('SELECT * FROM app_vaults ORDER BY createdAt DESC')
 }

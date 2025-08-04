@@ -34,9 +34,11 @@ const Page = () => {
 
   const onConfirmDelete = async () => {
     if (!vault) return
-    await dispatch(deleteVault({ vault: vault.keyInfo })).unwrap()
+    await dispatch(deleteVault({ vault })).unwrap()
+    await dispatch(fetchVaults()).unwrap()
     setShowDeleteModal(false)
-    router.replace('/home')
+    router.replace({ pathname: '/home/vault/new-vault/delete-success', params: { keyName: vaultName } })
+    navigation.goBack()
   }
 
   const onUpdateAccount = async () => {

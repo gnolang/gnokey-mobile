@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { GnoNativeApi } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { NetworkMetainfo } from '@/types'
-import { insertChain, updateActiveChain } from '@/providers/database-provider'
+import { getChainById, insertChain, updateActiveChain } from '@/providers/database-provider'
 
 export interface ChainsState {
   chains: NetworkMetainfo[]
@@ -32,22 +32,38 @@ export const chainsSlice = createSlice({
   }
 })
 
-export const saveChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo, ThunkExtra>('chains/saveChain', async (chain, _) => {
-  await insertChain({
+export interface SaveChainRequest {
+  chainId: string
+  chainName: string
+  rpcUrl: string
+  faucetUrl?: string
+}
+
+export const saveChain = createAsyncThunk<NetworkMetainfo, SaveChainRequest, ThunkExtra>('chains/saveChain', async (chain, _) => {
+  const data = await insertChain({
     chainId: chain.chainId,
     chainName: chain.chainName,
     rpcUrl: chain.rpcUrl,
     faucetUrl: chain.faucetUrl || '',
     active: false // new chains are not active by default
   })
-  return chain
+  const savedChain = await getChainById(data.lastInsertRowId.toString())
+  if (!savedChain) {
+    throw new Error('Failed to save chain')
+  }
+  console.log('Chain saved:', JSON.stringify(savedChain, null, 2))
+  return savedChain
 })
 
-export const setCurrentChain = createAsyncThunk<NetworkMetainfo, NetworkMetainfo, ThunkExtra>(
+export const setCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, NetworkMetainfo | undefined, ThunkExtra>(
   'chains/setCurrentChain',
   async (chain, thunkAPI) => {
-    await updateActiveChain(chain.id)
+    await updateActiveChain(chain?.id)
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+    if (!chain) {
+      console.warn('No chain provided to setCurrentChain, returning undefined')
+      return undefined
+    }
     gnonative.setRemote(chain.rpcUrl)
     gnonative.setChainID(chain.chainId)
     return chain

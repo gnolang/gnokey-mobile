@@ -4,8 +4,10 @@ import { Ruller } from '@/components'
 import { useEffect, useState } from 'react'
 import {
   selectChainsAvailable,
+  selectDescription,
   selectKeyName,
   selectSelectedChain,
+  setDescription,
   setKeyName,
   setSelectedChain,
   useAppDispatch,
@@ -14,22 +16,25 @@ import {
 import { CheckItem } from '../molecules/CheckItem'
 import { NavigationRow } from '../molecules/NavigationRow'
 import { NetworkSelectionModal } from './NetworkSelectionModal'
+import { useRouter } from 'expo-router'
+import { Alert } from 'react-native'
 
 export interface Props {
   error?: string
 }
 
 export const NewVaultForm = ({ error }: Props) => {
-  const keyName = useAppSelector(selectKeyName)
-  const [accountDescription, setAccountDescription] = useState('')
+  const router = useRouter()
   const dispatch = useAppDispatch()
+
+  const keyName = useAppSelector(selectKeyName)
+  const description = useAppSelector(selectDescription)
   const networks = useAppSelector(selectChainsAvailable)
   const currentNetwork = useAppSelector(selectSelectedChain)
 
   const [isMin6Chars, setIsMin6Chars] = useState(false)
   const [isDigitAtEnd, setIsDigitAtEnd] = useState(false)
   const [isLowercase, setIsLowercase] = useState(false)
-
   const [showNetworkModal, setShowNetworkModal] = useState(false)
 
   useEffect(() => {
@@ -38,16 +43,29 @@ export const NewVaultForm = ({ error }: Props) => {
     setIsLowercase(keyName ? /[a-z]/.test(keyName) : false)
   }, [keyName])
 
+  useEffect(() => {
+    if (error && error.length > 0) {
+      Alert.alert('Error', error, [
+        {
+          text: 'OK'
+        }
+      ])
+    }
+  }, [error])
+
   return (
     <Container>
       <NetworkSelectionModal
         visible={showNetworkModal}
         onClose={() => setShowNetworkModal(false)}
         onNetworkSelect={(v) => {
-          dispatch(setSelectedChain(v))
           setShowNetworkModal(false)
+          dispatch(setSelectedChain(v))
         }}
-        onAddChain={() => {}}
+        onAddChain={() => {
+          setShowNetworkModal(false)
+          router.push('/home/(modal)/new-network')
+        }}
         networks={networks}
         currentNetwork={currentNetwork}
       />
@@ -75,8 +93,8 @@ export const NewVaultForm = ({ error }: Props) => {
         label="Account description"
         description="Describe your account, this will help you remember what it is for"
         placeholder="Enter vault description"
-        value={accountDescription}
-        onChangeText={setAccountDescription}
+        value={description}
+        onChangeText={(x) => dispatch(setDescription(x))}
       />
       <Spacer space={16} />
       <Ruller />

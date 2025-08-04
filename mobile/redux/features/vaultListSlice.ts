@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction, RootState } from '@reduxjs/toolkit'
 import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
+import { Vault } from '@/types'
+import { listVaultsByChain } from '@/providers/database-provider'
+import { selectCurrentChain } from '@/redux'
 
 export interface VaultListState {
   /** vaults fetched from gnonative */
@@ -8,9 +11,6 @@ export interface VaultListState {
 
   /** chains where the vaults have coins */
   vaultsChains?: Map<vaultAddress, vaultChains>
-
-  /** addresses of the vaults that are bookmarked */
-  bookmarkedAddresses: string[]
 
   loading: boolean
 
@@ -20,16 +20,8 @@ export interface VaultListState {
 type vaultAddress = string
 type vaultChains = string[]
 
-export type Vault = {
-  bookmarked?: boolean
-  description?: string
-  keyInfo: KeyInfo
-  chains?: string[]
-}
-
 const initialState: VaultListState = {
   vaults: undefined,
-  bookmarkedAddresses: [],
   loading: false,
   error: undefined
 }
@@ -40,21 +32,31 @@ const initialState: VaultListState = {
  */
 export const fetchVaults = createAsyncThunk<Vault[], void, ThunkExtra>('vaults/fetchVaults', async (_, thunkAPI) => {
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-  const bookmarks = selectBookmarkedAddresses(thunkAPI.getState() as RootState)
-  const vaultsChains = selectVaultsChains(thunkAPI.getState() as RootState)
+  const currentChain = selectCurrentChain(thunkAPI.getState() as RootState)
   const keyinfoList = await gnonative.listKeyInfo()
+  const databaseVaults = await listVaultsByChain(currentChain?.chainId || '')
 
-  return enrichData(keyinfoList, bookmarks, vaultsChains)
+  return enrichData(keyinfoList, databaseVaults)
 })
 
-const enrichData = (keyinfoList: KeyInfo[], bookmarks: string[], vaultsChains?: Map<vaultAddress, vaultChains>) => {
-  if (!keyinfoList || !bookmarks) return []
+const enrichData = (keyinfoList: KeyInfo[], databaseVaults: Vault[]) => {
+  if (!keyinfoList) return []
 
-  return keyinfoList.map((keyInfo) => ({
-    keyInfo,
-    bookmarked: Boolean(bookmarks?.includes(String.fromCharCode(...keyInfo.address))),
-    chains: vaultsChains instanceof Map ? vaultsChains.get(keyInfo.address.toString()) : []
-  })) as Vault[]
+  const data = databaseVaults.map((vault) => {
+    const keyInfo = keyinfoList.find((k) => k.name === vault.keyName)
+    if (!keyInfo) {
+      console.warn(`KeyInfo not found for vault: ${vault.keyInfo.name}`)
+      return vault
+    }
+    return {
+      ...vault,
+      keyInfo,
+      bookmarked: vault.bookmarked || false,
+      chains: [] as string[] // Initialize chains as empty array
+    } as Vault
+  })
+  // console.log('enriched data:', JSON.stringify(data, null, 2))
+  return data
 }
 
 // const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
@@ -127,22 +129,8 @@ export const vaultListSlice = createSlice({
   initialState,
   reducers: {
     setBookmark: (state, action: PayloadAction<Prop>) => {
-      const { keyAddress, value } = action.payload
-      const newaddr = String.fromCharCode(...keyAddress)
-
-      if (value) {
-        const exists = state.bookmarkedAddresses?.includes(newaddr)
-        if (!exists) {
-          state.bookmarkedAddresses = state.bookmarkedAddresses?.concat([newaddr])
-        }
-      } else {
-        state.bookmarkedAddresses = state.bookmarkedAddresses?.filter((addr) => addr !== newaddr)
-      }
-
-      const vault = state.vaults?.find((keyInfo) => keyInfo.keyInfo.address.toString() === keyAddress.toString())
-      if (vault) {
-        vault.bookmarked = value
-      }
+      // TODO: implement bookmark logic
+      console.log('setBookmark', action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -181,12 +169,9 @@ export const vaultListSlice = createSlice({
     })
   },
   selectors: {
-    selectVaults: (state) => state.vaults,
-    selectVaultsChains: (state) => state.vaultsChains,
-    selectChainsPerVault: (state) => (address: string) => state.vaultsChains?.get(address),
-    selectBookmarkedAddresses: (state) => state.bookmarkedAddresses
+    selectVaults: (state) => state.vaults
   }
 })
 
 export const { setBookmark } = vaultListSlice.actions
-export const { selectVaults, selectBookmarkedAddresses, selectVaultsChains, selectChainsPerVault } = vaultListSlice.selectors
+export const { selectVaults } = vaultListSlice.selectors

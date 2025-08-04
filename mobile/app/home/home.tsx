@@ -8,8 +8,9 @@ import {
   useAppSelector,
   selectVaults,
   setBookmark,
-  Vault,
-  selectCurrentChain
+  setCurrentChain,
+  selectCurrentChain,
+  selectChainsAvailable
 } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
@@ -17,14 +18,18 @@ import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView, Botto
 import { FontAwesome6 } from '@expo/vector-icons'
 import styled from 'styled-components/native'
 import { EmptyView } from '@/views'
+import { NetworkSelectionModal } from '@/modules/ui-components/organisms/NetworkSelectionModal'
+import { Vault } from '@/types'
 
 export default function Page() {
   const isFirstRender = useRef(true)
 
+  const [showNetworkModal, setShowNetworkModal] = useState(false)
   const [nameSearch, setNameSearch] = useState<string>('')
   const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([])
   const [loading, setLoading] = useState<string | undefined>(undefined)
   const currentChain = useAppSelector(selectCurrentChain)
+  const networks = useAppSelector(selectChainsAvailable)
 
   const route = useRouter()
   const dispatch = useAppDispatch()
@@ -60,7 +65,7 @@ export default function Page() {
 
   const onChangeAccountHandler = async (vault: Vault) => {
     await dispatch(setVaultToEdit({ vault }))
-    route.push('/home/vault-detail-modal')
+    route.push('/home/vault/edit')
   }
 
   const navigateToAddKey = () => {
@@ -84,18 +89,30 @@ export default function Page() {
 
   return (
     <>
+      <NetworkSelectionModal
+        visible={showNetworkModal}
+        onClose={() => setShowNetworkModal(false)}
+        onNetworkSelect={async (v) => {
+          setShowNetworkModal(false)
+          await dispatch(setCurrentChain(v)).unwrap()
+          dispatch(fetchVaults())
+        }}
+        onAddChain={() => {
+          setShowNetworkModal(false)
+          route.push('/home/(modal)/new-network')
+        }}
+        networks={networks}
+        currentNetwork={currentChain}
+      />
       <Container>
         <SafeAreaView style={{ marginBottom: 40 }}>
           <AppBar>
             <Text.H2 style={{ textAlign: 'center' }}>
               {filteredAccounts.length} {filteredAccounts.length > 1 ? 'accounts' : 'account'}
             </Text.H2>
-            <TouchableOpacity
-              onPress={() => route.navigate('/home/settings')}
-              style={{ flexDirection: 'row', alignItems: 'center' }}
-            >
+            <TouchableOpacity onPress={() => setShowNetworkModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesome6 name="gear" size={12} color="#888" style={{ marginRight: 4 }} />
-              <Text.Caption>{currentChain?.chainName}</Text.Caption>
+              <Text.Caption>{currentChain ? currentChain.chainName : 'No Registration'}</Text.Caption>
             </TouchableOpacity>
           </AppBar>
           <TextField
@@ -124,6 +141,7 @@ export default function Page() {
                     />
                   )}
                   keyExtractor={(item) => item.keyInfo.name}
+                  contentContainerStyle={{ paddingBottom: 80 }}
                 />
               )}
             </Body>

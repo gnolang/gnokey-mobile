@@ -2,14 +2,19 @@ import { TouchableOpacity, View } from 'react-native'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { AntDesign } from '@expo/vector-icons'
 import { Text } from '@/modules/ui-components'
-import { Vault } from '@reduxjs/toolkit'
 import Ruller from '@/components/row/Ruller'
+import { Vault } from '@/types'
 
 interface Props {
   vault: Vault
   chains?: string[]
   onVaultPress: (vault: Vault) => void
   onBookmarkPress?: (vault: Vault) => void
+}
+
+// SQLite date format is 'YYYY-MM-DD HH:mm:ss'
+const dateOnly = (sqliteIsoDate?: string) => {
+  return sqliteIsoDate ? sqliteIsoDate.split(' ')[0] : ''
 }
 
 const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Props) => {
@@ -21,7 +26,9 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
         <View style={{ flex: 1, paddingLeft: 12 }}>
           <Text.H3>{vault.keyInfo.name}</Text.H3>
           {vault.description ? <Text.Body style={{ textAlign: 'left' }}>{vault.description}</Text.Body> : null}
-          <Text.Caption style={{ textAlign: 'left', color: theme.text.textMuted }}>Created at 2025-02-19</Text.Caption>
+          <Text.Caption style={{ textAlign: 'left', color: theme.text.textMuted }}>
+            Created at {dateOnly(vault.createdAt)}
+          </Text.Caption>
         </View>
         <BookmarkAreaTopAligned>
           {/* {onBookmarkPress ? (

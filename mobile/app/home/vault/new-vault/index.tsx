@@ -1,5 +1,5 @@
-import { TextInput as RNTextInput, Alert as RNAlert } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { Alert as RNAlert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { router, Stack, useFocusEffect } from 'expo-router'
 import {
   selectMasterPassword,
@@ -13,12 +13,10 @@ import {
   selectKeyName,
   selectPhrase,
   generateNewPhrase,
-  resetState,
   fetchVaults,
   checkForKeyOnChains,
   selectLastProgress,
   selectLoadingAddVault,
-  clearProgress,
   selectCurrentChain
 } from '@/redux'
 import { Button, OnboardingLayout } from '@/modules/ui-components'
@@ -28,14 +26,9 @@ import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)
-  // const [editable, setEditable] = useState<boolean>(true)
-
-  const inputRef = useRef<RNTextInput>(null)
-
-  const progress = useAppSelector(selectLastProgress)
-
   const dispatch = useAppDispatch()
 
+  const progress = useAppSelector(selectLastProgress)
   const masterPassword = useAppSelector(selectMasterPassword)
   const signUpState = useAppSelector(signUpStateSelector)
   const newAccount = useAppSelector(newAccountSelector)
@@ -46,10 +39,18 @@ export default function Page() {
 
   useFocusEffect(
     React.useCallback(() => {
-      onResetForm()
+      dispatch(generateNewPhrase())
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   )
+
+  // const onResetForm = () => {
+  //   dispatch(resetState())
+  //   setError(undefined)
+  //   dispatch(clearProgress())
+  //   dispatch(generateNewPhrase())
+  //   inputRef.current?.focus()
+  // }
 
   useEffect(() => {
     ;(async () => {
@@ -68,7 +69,6 @@ export default function Page() {
         return
       }
       if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
-        // setEditable(false)
         setError(
           'This name is already registered locally on this device but NOT on chain. If you want to register your account on the Gno Blockchain, please press Register On-Chain. Your seed phrase will remain the same.'
         )
@@ -170,15 +170,6 @@ export default function Page() {
   //     setError(msg)
   //   }
   // }
-
-  const onResetForm = () => {
-    // setEditable(true)
-    dispatch(resetState())
-    setError(undefined)
-    dispatch(clearProgress())
-    dispatch(generateNewPhrase())
-    inputRef.current?.focus()
-  }
 
   return (
     <OnboardingLayout footer={<Button onPress={onCreate}>Create new account</Button>}>

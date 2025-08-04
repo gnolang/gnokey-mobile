@@ -23,8 +23,11 @@ const ReduxProvider: React.FC<Props> = ({ children }) => {
       if (store) return // Prevent re-initialization
       const chains = await listChains()
 
-      gnonative.setChainID(chains.currentChain.chainId)
-      gnonative.setRemote(chains.currentChain.rpcUrl)
+      console.log('currentChain loaded:', chains.currentChain)
+      if (chains.currentChain) {
+        gnonative.setChainID(chains.currentChain.chainId)
+        gnonative.setRemote(chains.currentChain.rpcUrl)
+      }
 
       const storeInstance = configureStore({
         reducer: rootReducer,

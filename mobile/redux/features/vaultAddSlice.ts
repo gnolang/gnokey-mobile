@@ -4,6 +4,7 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import { Alert } from 'react-native'
 import { create } from '@bufbuild/protobuf'
 import { NetworkMetainfo } from '@/types'
+import { insertVault } from '@/providers/database-provider'
 
 export enum VaultCreationState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -25,6 +26,7 @@ export interface VaultAddState {
   progress: string[]
   registerAccount: boolean
   keyName?: string
+  description?: string
   phrase?: string
 }
 
@@ -33,7 +35,9 @@ const initialState: VaultAddState = {
   newAccount: undefined,
   existingAccount: undefined,
   selectedChain: undefined,
-  loading: true,
+  loading: false,
+  keyName: '',
+  description: '',
   progress: [],
   registerAccount: false
 }
@@ -63,7 +67,7 @@ type SignUpResponse = { newAccount?: KeyInfo; existingAccount?: KeyInfo; state: 
  */
 export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtra>('user/createKey', async (param, thunkAPI) => {
   const { name, password, phrase } = param
-  const { selectedChain } = (thunkAPI.getState() as RootState).vaultAdd
+  const { selectedChain, description } = (thunkAPI.getState() as RootState).vaultAdd
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
   console.log('selectedChain', selectedChain)
 
@@ -90,6 +94,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
+    insertVault(newAccount, description, undefined)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase
     thunkAPI.dispatch(addProgress(`account_created`))
@@ -153,6 +158,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
+    insertVault(newAccount, description, selectedChain.chainId)
 
     thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
@@ -268,7 +274,7 @@ const checkForUserOnBlockchain = async (
 function convertToJson(result: string | undefined) {
   if (!result || result === '("" string)') return undefined
 
-  const userData = result.match(/\("(\w+)" std\.Address/)?.[1]
+  const userData = result.match(/\("(\w+)" \.uverse.address/)?.[1]
   if (!userData) throw new Error('Malformed response')
   return userData
 }
@@ -401,6 +407,9 @@ export const vaultAddSlice = createSlice({
     setKeyName: (state, action: PayloadAction<string>) => {
       state.keyName = action.payload
     },
+    setDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload
+    },
     setSelectedChain: (state, action: PayloadAction<NetworkMetainfo | undefined>) => {
       state.selectedChain = action.payload
     },
@@ -410,6 +419,8 @@ export const vaultAddSlice = createSlice({
       state.existingAccount = undefined
       state.signUpState = undefined
       state.selectedChain = undefined
+      state.description = ''
+      state.progress = []
       state.keyName = ''
       state.phrase = ''
     }
@@ -426,6 +437,7 @@ export const vaultAddSlice = createSlice({
       .addCase(createKey.pending, (state) => {
         state.loading = true
         state.progress = []
+        state.signUpState = undefined
       })
       .addCase(createKey.fulfilled, (state, action) => {
         state.loading = false
@@ -460,7 +472,8 @@ export const vaultAddSlice = createSlice({
     selectKeyName: (state) => state.keyName,
     selectPhrase: (state) => state.phrase,
     selectLastProgress: (state) => state.progress[state.progress.length - 1],
-    selectSelectedChain: (state) => state.selectedChain
+    selectSelectedChain: (state) => state.selectedChain,
+    selectDescription: (state) => state.description
   }
 })
 
@@ -472,7 +485,8 @@ export const {
   setKeyName,
   resetState,
   setPhrase,
-  setSelectedChain
+  setSelectedChain,
+  setDescription
 } = vaultAddSlice.actions
 
 export const {
@@ -485,5 +499,6 @@ export const {
   selectRegisterAccount,
   selectKeyName,
   selectPhrase,
-  selectSelectedChain
+  selectSelectedChain,
+  selectDescription
 } = vaultAddSlice.selectors

@@ -36,12 +36,6 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="(modal)/vault-detail-modal"
-        options={{
-          presentation: 'modal'
-        }}
-      />
-      <Stack.Screen
         name="(modal)/change-master-pass"
         options={{
           title: 'Change master password',

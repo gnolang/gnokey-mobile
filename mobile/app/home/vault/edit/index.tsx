@@ -44,7 +44,10 @@ const Page = () => {
     const params = { vault, keyName: vaultName, description }
     await dispatch(updateVault(params)).unwrap()
     await dispatch(fetchVaults()).unwrap()
-    router.back()
+    router.replace({
+      pathname: '/home/vault/new-vault/new-vault-success',
+      params: { keyName: vaultName }
+    })
   }
 
   if (!vault) {

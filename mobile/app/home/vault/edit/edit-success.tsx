@@ -10,9 +10,9 @@ const Page = () => {
   const router = useRouter()
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const params = useLocalSearchParams<{ keyName: string }>()
+  const params = useLocalSearchParams()
 
-  const keyname = params?.keyName || 'Updated'
+  const keyname = params?.keyName || ''
 
   useFocusEffect(
     useCallback(() => {
@@ -24,14 +24,14 @@ const Page = () => {
     <OnboardingLayout footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}>
       <Stack.Screen
         options={{
-          header: (props) => <ScreenHeader {...props} title={keyname} headerBackVisible={false} />
+          header: (props) => <ScreenHeader {...props} title="New account" headerBackVisible={false} />
         }}
       />
 
       <Container>
-        <Text.LargeTitle>Account Update</Text.LargeTitle>
-        <Text.LargeTitle style={{ color: theme.success.text }}>Completed</Text.LargeTitle>
-        <Text.Caption>{keyname} has been updated successfully!</Text.Caption>
+        <Text.H1>New Account Creation </Text.H1>
+        <Text.H1 style={{ color: theme.success.text }}>Completed</Text.H1>
+        <Text.Caption>You can now use your {keyname} key!</Text.Caption>
       </Container>
     </OnboardingLayout>
   )

@@ -17,7 +17,8 @@ import {
   checkForKeyOnChains,
   selectLastProgress,
   selectLoadingAddVault,
-  selectCurrentChain
+  selectCurrentChain,
+  selectSelectedChain
 } from '@/redux'
 import { Button, OnboardingLayout } from '@/modules/ui-components'
 import { LoadingModal } from '@/components/loading'
@@ -35,7 +36,7 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
   const loading = useAppSelector(selectLoadingAddVault)
-  const currentChain = useAppSelector(selectCurrentChain)
+  const currentNetwork = useAppSelector(selectSelectedChain)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -85,11 +86,11 @@ export default function Page() {
         return
       }
       if (signUpState === VaultCreationState.account_created) {
-        if (currentChain?.faucetPortalUrl) {
+        if (currentNetwork?.faucetPortalUrl) {
           router.push('/home/vault/add/external-faucet')
           return
         }
-        if (currentChain?.faucetUrl) {
+        if (currentNetwork?.faucetUrl) {
           await dispatch(registerAccount()).unwrap()
           return
         } else {

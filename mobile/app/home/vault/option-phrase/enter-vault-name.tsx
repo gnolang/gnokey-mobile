@@ -13,7 +13,7 @@ export default function Page() {
 
   const onContinue = () => {
     try {
-      router.replace({ pathname: 'home/vault/new-vault/new-vault-success' })
+      router.replace({ pathname: 'home/vault/add/new-vault-success' })
     } catch (error) {
       console.error('Error importing vault:', error)
     }

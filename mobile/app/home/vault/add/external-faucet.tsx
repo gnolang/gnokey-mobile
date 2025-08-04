@@ -50,7 +50,7 @@ export default function Page() {
 
   useEffect(() => {
     if (signUpState === VaultCreationState.account_registered) {
-      router.replace('/home/vault/new-vault/new-vault-success')
+      router.replace('/home/vault/add/new-vault-success')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signUpState])

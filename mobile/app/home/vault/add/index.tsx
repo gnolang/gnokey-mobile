@@ -86,7 +86,7 @@ export default function Page() {
       }
       if (signUpState === VaultCreationState.account_created) {
         if (currentChain?.faucetPortalUrl) {
-          router.push('/home/vault/new-vault/external-faucet')
+          router.push('/home/vault/add/external-faucet')
           return
         }
         if (currentChain?.faucetUrl) {
@@ -94,7 +94,7 @@ export default function Page() {
           return
         } else {
           router.replace({
-            pathname: '/home/vault/new-vault/new-vault-success',
+            pathname: '/home/vault/add/new-vault-success',
             params: { keyName }
           })
           return
@@ -102,7 +102,7 @@ export default function Page() {
       }
       if (signUpState === VaultCreationState.account_registered) {
         router.replace({
-          pathname: '/home/vault/new-vault/new-vault-success',
+          pathname: '/home/vault/add/new-vault-success',
           params: { keyName }
         })
         return

@@ -19,13 +19,13 @@ export default function VaultModalLayout() {
 
       {/* Create a new vault stack */}
       <Stack.Screen
-        name="new-vault/index"
+        name="add/index"
         options={{
           title: 'New Account Key',
           ...defaultOptions
         }}
       />
-      <Stack.Screen name="new-vault/new-vault-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
+      <Stack.Screen name="add/new-vault-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
 
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />

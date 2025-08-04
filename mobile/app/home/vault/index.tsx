@@ -25,7 +25,7 @@ export default function NewVaultPage() {
         <ActionItem
           title="Create an Account Key"
           subtitle="Quick and easy to set up"
-          onPress={() => router.push('/home/vault/new-vault')}
+          onPress={() => router.push('/home/vault/add')}
         />
         <Ruller />
         {devMode && (

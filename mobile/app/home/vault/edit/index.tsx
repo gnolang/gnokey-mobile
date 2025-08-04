@@ -37,7 +37,7 @@ const Page = () => {
     await dispatch(deleteVault({ vault })).unwrap()
     await dispatch(fetchVaults()).unwrap()
     setShowDeleteModal(false)
-    router.replace({ pathname: '/home/vault/new-vault/delete-success', params: { keyName: vaultName } })
+    router.replace({ pathname: '/home/vault/add/delete-success', params: { keyName: vaultName } })
     navigation.goBack()
   }
 
@@ -47,7 +47,7 @@ const Page = () => {
     await dispatch(updateVault(params)).unwrap()
     await dispatch(fetchVaults()).unwrap()
     router.replace({
-      pathname: '/home/vault/new-vault/new-vault-success',
+      pathname: '/home/vault/add/new-vault-success',
       params: { keyName: vaultName }
     })
   }

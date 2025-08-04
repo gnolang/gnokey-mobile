@@ -1,12 +1,13 @@
 import { Layout } from '@/components'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
-import { fetchVaults, Vault, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
+import { fetchVaults, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router, useNavigation } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
 import { Button, Spacer, Text } from '@/modules/ui-components'
+import { Vault } from '@/types'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)

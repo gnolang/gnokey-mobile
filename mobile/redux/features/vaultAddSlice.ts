@@ -5,6 +5,7 @@ import { Alert } from 'react-native'
 import { create } from '@bufbuild/protobuf'
 import { NetworkMetainfo } from '@/types'
 import { insertVault } from '@/providers/database-provider'
+import { setCurrentChain, fetchVaults } from '@/redux'
 
 export enum VaultCreationState {
   user_exists_on_blockchain_and_local_storage = 'user_exists_on_blockchain_and_local_storage',
@@ -95,6 +96,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     // await gnonative.activateAccount(name)
     // await gnonative.setPassword(password, newAccount.address)
     insertVault(newAccount, description, undefined)
+    await setCurrentChainAndRefresh(thunkAPI, undefined)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase
     thunkAPI.dispatch(addProgress(`account_created`))
@@ -159,11 +161,21 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
     insertVault(newAccount, description, selectedChain.chainId)
-
+    await setCurrentChainAndRefresh(thunkAPI, selectedChain)
     thunkAPI.dispatch(addProgress(`account_created`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 })
+
+/**
+ * Sets the current chain and refreshes the vaults.
+ * This is used after the user has selected a chain during onboarding.
+ * When the user goes to Home, the vaults will be fetched for the selected chain.
+ */
+const setCurrentChainAndRefresh = async (thunkAPI: any, chain: NetworkMetainfo | undefined) => {
+  await thunkAPI.dispatch(setCurrentChain(chain)).unwrap()
+  thunkAPI.dispatch(fetchVaults())
+}
 
 export const registerAccount = createAsyncThunk<SignUpResponse, void, ThunkExtra>('user/registerKey', async (_, thunkAPI) => {
   thunkAPI.dispatch(addProgress(`onboarding started`))

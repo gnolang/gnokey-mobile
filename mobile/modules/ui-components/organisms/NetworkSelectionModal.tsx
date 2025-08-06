@@ -16,7 +16,7 @@ interface Props {
 }
 
 const noUserRegistrationItem = {
-  id: 'no-user-registration',
+  id: null,
   chainName: 'No User Registration',
   chainId: null,
   rpcUrl: null,
@@ -40,8 +40,8 @@ export const NetworkSelectionModal = ({ visible, onClose, onNetworkSelect, onAdd
       <NetworkListItem
         key={item.id}
         name={item.chainName}
-        onPress={() => onNetworkSelect(item)}
-        isSelected={currentNetwork?.id === item.id}
+        onPress={() => onNetworkSelect(item.id === noUserRegistrationItem.id ? undefined : item)}
+        isSelected={currentNetwork?.id === item.id || (item.id === null && !currentNetwork)}
       />
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps

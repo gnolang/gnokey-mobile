@@ -58,13 +58,14 @@ export const NewVaultForm = ({ error }: Props) => {
       <NetworkSelectionModal
         visible={showNetworkModal}
         onClose={() => setShowNetworkModal(false)}
-        onNetworkSelect={(v) => {
+        onNetworkSelect={async (v) => {
           setShowNetworkModal(false)
-          dispatch(setSelectedChain(v))
+          await dispatch(setSelectedChain(v)).unwrap()
+          console.log('Selected network:', v)
         }}
         onAddChain={() => {
           setShowNetworkModal(false)
-          router.push('/home/(modal)/new-network')
+          router.push({ pathname: '/home/(modal)/new-network', params: { fromScreen: 'NewVault' } })
         }}
         networks={networks}
         currentNetwork={currentNetwork}

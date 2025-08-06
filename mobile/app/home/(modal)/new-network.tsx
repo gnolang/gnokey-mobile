@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { Stack, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { LoadingModal } from '@/components/loading'
 import { OnboardingLayout } from '@/modules/ui-components'
 import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
-import { NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
-import { useAppDispatch, saveChain } from '@/redux'
-import { Form } from '@/views/chains/modal/chain-add-modal'
+import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
+import { useAppDispatch, saveChain, setSelectedChain } from '@/redux'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const params = useLocalSearchParams<{ fromScreen: string | 'NewVault' }>()
 
   const [loading, setLoading] = useState(false)
   const onSaveChain = async (data: Form) => {
@@ -20,8 +19,12 @@ const Page = () => {
     }
     try {
       setLoading(true)
-      dispatch(saveChain(data)).unwrap()
-      setLoading(false)
+      const savedChain = await dispatch(saveChain(data)).unwrap()
+
+      if (params.fromScreen === 'NewVault') {
+        await dispatch(setSelectedChain(savedChain))
+      }
+      // setLoading(false)
       router.back()
     } catch (error) {
       Alert.alert('Error', 'Failed to save chain. Please try again.', [{ text: 'OK' }])
@@ -37,8 +40,8 @@ const Page = () => {
           header: (props) => <ScreenHeader {...props} title="New chain" />
         }}
       />
-      <LoadingModal visible={loading} />
-      <NetworkForm onSaveChain={onSaveChain} />
+      {/* <LoadingModal visible={loading} /> */}
+      <NetworkForm onSaveChain={onSaveChain} loading={loading} />
     </OnboardingLayout>
   )
 }

@@ -17,7 +17,6 @@ import {
   checkForKeyOnChains,
   selectLastProgress,
   selectLoadingAddVault,
-  selectCurrentChain,
   selectSelectedChain
 } from '@/redux'
 import { Button, OnboardingLayout } from '@/modules/ui-components'

@@ -1,6 +1,7 @@
-import { TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components/native'
 import { Text } from '../src'
+import { Ionicons } from '@expo/vector-icons'
 
 interface Props {
   isSelected: boolean
@@ -10,22 +11,31 @@ interface Props {
 
 export const NetworkListItem = ({ isSelected, name, onPress }: Props) => (
   <TouchableOpacity onPress={onPress}>
-    <Row>
+    <View style={styles.container}>
       <LeftSide>
         {isSelected ? (
-          <SelectedCircle>
-            <InnerCircle />
-          </SelectedCircle>
+          <SelectedCircleSelected>
+            <Ionicons name="checkmark" size={18} color="#fff" />
+          </SelectedCircleSelected>
         ) : (
-          <SelectedCircle />
+          <SelectedCircleUnselected />
         )}
       </LeftSide>
       <RightSide>
         <Text.Body>{name}</Text.Body>
       </RightSide>
-    </Row>
+    </View>
   </TouchableOpacity>
 )
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+})
 
 const LeftSide = styled.View`
   width: 40px;
@@ -35,32 +45,32 @@ const LeftSide = styled.View`
 
 const RightSide = styled.View`
   flex: 1;
-  height: 100%;
-  justify-content: center;
+  justify-content: left;
   border-bottom-width: 0.5px;
   border-color: ${(props) => props.theme.colors.border};
-`
-
-const Row = styled.View`
-  flex: 1;
   height: 48px;
   flex-direction: row;
   align-items: center;
 `
 
-const SelectedCircle = styled.View`
+const SelectedCircleUnselected = styled.View`
   width: 28px;
   height: 28px;
   border-radius: 14px;
-  background-color: ${(props) => props.theme.text.textMuted};
+  border-width: 2px;
+  border-color: #c7c7cc;
+  background-color: #fff;
   margin-right: 12px;
   justify-content: center;
   align-items: center;
 `
 
-const InnerCircle = styled.View`
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.colors.primary};
+const SelectedCircleSelected = styled.View`
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  background-color: #007aff;
+  margin-right: 12px;
+  justify-content: center;
+  align-items: center;
 `

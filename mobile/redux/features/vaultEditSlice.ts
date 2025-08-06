@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
+import { GnoNativeApi } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Vault } from '@/types'
 import * as DB from '@/providers/database-provider'

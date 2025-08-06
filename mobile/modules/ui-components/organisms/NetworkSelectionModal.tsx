@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ModalTemplate } from '../templates'
-import { NetworkList } from './NetworkList'
 import { NetworkMetainfo } from '@/types'
-import styled from 'styled-components/native'
 import { ModalHeaderSearch } from '../molecules/Modal'
 import { Button } from '../src'
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
+import { NetworkListItem } from '../molecules/NetworkListItem'
 
 interface Props {
   visible: boolean
@@ -16,6 +16,7 @@ interface Props {
 }
 
 const noUserRegistrationItem = {
+  id: 'no-user-registration',
   chainName: 'No User Registration',
   chainId: null,
   rpcUrl: null,
@@ -34,26 +35,34 @@ export const NetworkSelectionModal = ({ visible, onClose, onNetworkSelect, onAdd
     return networksWithNoUser.filter((network) => network.chainName.toLowerCase().includes(searchQuery.toLowerCase()))
   }, [searchQuery, networksWithNoUser])
 
+  const renderItem = useCallback(
+    ({ item }: { item: NetworkMetainfo }) => (
+      <NetworkListItem
+        key={item.id}
+        name={item.chainName}
+        onPress={() => onNetworkSelect(item)}
+        isSelected={currentNetwork?.id === item.id}
+      />
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentNetwork]
+  )
+
   return (
     <ModalTemplate
       visible={visible}
       onClose={onClose}
-      header={<ModalHeaderSearch searchQuery={searchQuery} onChangeText={setSearchQuery} />}
       footer={<Button onPress={onAddChain}>Add a chain</Button>}
+      header={<ModalHeaderSearch searchQuery={searchQuery} onChangeText={setSearchQuery} />}
     >
-      <>
-        <Container>
-          <NetworkList
-            networks={filteredNetworks}
-            onNetworkSelect={(n) => (n?.id ? onNetworkSelect(n) : onNetworkSelect(undefined))}
-            currentNetwork={currentNetwork}
-          />
-        </Container>
-      </>
+      <BottomSheetFlatList
+        data={filteredNetworks}
+        keyExtractor={(i) => i.id}
+        renderItem={renderItem}
+        style={{
+          marginBottom: 80
+        }}
+      />
     </ModalTemplate>
   )
 }
-
-const Container = styled.View`
-  height: 250px;
-`

@@ -142,7 +142,6 @@ export const NewVaultView = (props: Props) => {
           error={error}
         />
         <Spacer space={16} />
-        {/* <ChainSelectView /> */}
       </View>
       <Button onPress={onCreate} loading={loading}>
         Continue

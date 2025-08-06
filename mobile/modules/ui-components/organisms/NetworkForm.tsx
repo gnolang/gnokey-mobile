@@ -13,9 +13,10 @@ export interface Form {
 
 export interface Props {
   onSaveChain: (form: Form) => void
+  loading?: boolean
 }
 
-export const NetworkForm = ({ onSaveChain }: Props) => {
+export const NetworkForm = ({ onSaveChain, loading }: Props) => {
   const initialForm: Form = {
     chainName: '',
     chainId: '',
@@ -133,7 +134,7 @@ export const NetworkForm = ({ onSaveChain }: Props) => {
         <Spacer />
       </View>
 
-      <Button color="primary" onPress={onSave}>
+      <Button color="primary" onPress={onSave} loading={loading} disabled={loading}>
         Save new Chain
       </Button>
     </>

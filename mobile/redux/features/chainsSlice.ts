@@ -27,7 +27,7 @@ export const chainsSlice = createSlice({
       state.currentChain = action.payload
     })
     builder.addCase(saveChain.fulfilled, (state, action) => {
-      state.chains.push(action.payload)
+      state.chains = [action.payload, ...state.chains]
     })
   }
 })

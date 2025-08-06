@@ -53,7 +53,8 @@
     "text-encoding": "^0.7.0",
     "web-streams-polyfill": "^3.3.2",
     "expo-sqlite": "~15.2.12",
-    "expo-local-authentication": "~16.0.5"
+    "expo-local-authentication": "~16.0.5",
+    "react-native-reanimated": "~3.17.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

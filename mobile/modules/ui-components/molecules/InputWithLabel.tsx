@@ -18,7 +18,14 @@ export const InputWithLabel = ({ label, placeholder, onChangeText = () => {}, va
     <Row>
       <Text.Body style={{ minWidth }}>{label}</Text.Body>
       <RightGroup>
-        <TextInputStyled numberOfLines={2} multiline value={value} placeholder={placeholder} onChangeText={onChangeText} />
+        <TextInputStyled
+          numberOfLines={2}
+          multiline
+          value={value}
+          placeholder={placeholder}
+          onChangeText={onChangeText}
+          editable={!noEdit}
+        />
         {value && !noEdit ? (
           <MaterialIcons name="highlight-remove" size={24} color={theme.text.textMuted} onPress={() => onChangeText('')} />
         ) : null}

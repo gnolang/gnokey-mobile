@@ -92,8 +92,8 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
       throw new Error(`Failed to create account "${name}"`)
     }
 
-    await gnonative.activateAccount(name)
-    await gnonative.setPassword(password, newAccount.address)
+    // await gnonative.activateAccount(name)
+    // await gnonative.setPassword(password, newAccount.address)
     insertVault(newAccount, description, undefined)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase

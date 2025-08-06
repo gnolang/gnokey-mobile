@@ -1,7 +1,7 @@
 import { Ruller } from '@/components'
 import { ModalConfirm } from '@/components/modal'
 import { useEffect, useState } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Alert, TouchableOpacity } from 'react-native'
 import { useSelector } from 'react-redux'
 import { deleteVault, fetchVaults, selectVaultToEdit, updateVault, useAppDispatch } from '@/redux'
 import { Stack, useNavigation, useRouter } from 'expo-router'
@@ -42,14 +42,22 @@ const Page = () => {
   }
 
   const onUpdateAccount = async () => {
-    if (!vault) return
+    if (!vault) {
+      Alert.alert('Error', 'No vault selected for update.')
+      return
+    }
     const params = { vault, keyName: vaultName, description }
-    await dispatch(updateVault(params)).unwrap()
-    await dispatch(fetchVaults()).unwrap()
-    router.replace({
-      pathname: '/home/vault/edit/edit-success',
-      params: { keyName: vaultName }
-    })
+    try {
+      await dispatch(updateVault(params)).unwrap()
+      await dispatch(fetchVaults()).unwrap()
+      router.replace({
+        pathname: '/home/vault/edit/edit-success',
+        params: { keyName: vaultName }
+      })
+    } catch (error: any) {
+      Alert.alert('Error', `Failed to update vault: ${error.message}`)
+      console.error('Update vault error:', error)
+    }
   }
 
   if (!vault) {
@@ -74,7 +82,7 @@ const Page = () => {
       <OnboardingLayout
         footer={
           <Button onPress={onUpdateAccount} color="primary">
-            Update Account 2
+            Update Account
           </Button>
         }
       >
@@ -88,7 +96,7 @@ const Page = () => {
           </RowSpaceBetween>
 
           <Ruller spacer={16} />
-          <InputWithLabel label="Name" placeholder="Name" onChangeText={setVaultName} value={vaultName} />
+          <InputWithLabel label="Name" placeholder="Name" onChangeText={setVaultName} value={vaultName} noEdit />
           <Ruller spacer={16} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />
           <Ruller spacer={16} />

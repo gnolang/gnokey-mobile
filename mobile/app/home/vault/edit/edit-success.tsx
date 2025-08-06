@@ -24,14 +24,14 @@ const Page = () => {
     <OnboardingLayout footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}>
       <Stack.Screen
         options={{
-          header: (props) => <ScreenHeader {...props} title="New account" headerBackVisible={false} />
+          header: (props) => <ScreenHeader {...props} title={keyname.toString()} headerBackVisible={false} />
         }}
       />
 
       <Container>
-        <Text.H1>New Account Creation </Text.H1>
+        <Text.H1>Account Updated</Text.H1>
         <Text.H1 style={{ color: theme.success.text }}>Completed</Text.H1>
-        <Text.Caption>You can now use your {keyname} key!</Text.Caption>
+        <Text.Caption>{keyname} has been updated successfully.</Text.Caption>
       </Container>
     </OnboardingLayout>
   )

@@ -29,19 +29,6 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="settings/change-network"
-        options={{
-          title: 'Network',
-          ...defaultOptions
-        }}
-      />
-      <Stack.Screen
-        name="(modal)/vault-detail-modal"
-        options={{
-          presentation: 'modal'
-        }}
-      />
-      <Stack.Screen
         name="(modal)/change-master-pass"
         options={{
           title: 'Change master password',
@@ -56,7 +43,7 @@ export default function AppLayout() {
         }}
       />
 
-      <Stack.Screen name="vault" options={{ title: 'Vaults', headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name="vault" options={{ headerShown: false }} />
     </Stack>
   )
 }

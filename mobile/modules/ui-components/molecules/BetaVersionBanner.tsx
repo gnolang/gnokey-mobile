@@ -33,7 +33,8 @@ export const BetaVersionMiniBanner = () => {
         borderRadius: theme.borderRadius
       }}
     >
-      <Text.Body style={{ color: 'red' }}>BETA - Do not use for real assets</Text.Body>
+      <Text.Body style={{ color: 'red', textAlign: 'center' }}>Warning: This is a BETA Version of GnoKey Mobile</Text.Body>
+      <Text.Body style={{ color: 'red', textAlign: 'center' }}>Do not use for real assets</Text.Body>
     </View>
   )
 }

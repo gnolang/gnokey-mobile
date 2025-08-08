@@ -1,7 +1,8 @@
 import styled from 'styled-components/native'
-import { Spacer, Text, TextField } from '../src'
+import { Spacer, TextField } from '../src'
 import { View } from 'react-native'
 import { useEffect, useState } from 'react'
+import { CheckItem } from '../molecules/CheckItem'
 
 interface Props {
   onPasswordsCompleted?: (password: string) => void
@@ -11,7 +12,7 @@ export const SetupPassForm = ({ onPasswordsCompleted }: Props) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   return (
-    <View style={{}}>
+    <View>
       <TextField
         label="Setup your master password"
         description="This password will allow you to enter GKM to create, update and sign with your gno accounts"
@@ -69,27 +70,16 @@ const PasswordCheckers = ({ password, confirmPassword, onPasswordsCompleted }: P
   }, [passwordsMatch, min8Chars, hasUpperCase, hasSymbol, hasDigit, onPasswordsCompleted, password])
 
   return (
-    <Row>
-      <LeftChild>
-        <CheckItem isValid={min8Chars}>Minimum 8 characters</CheckItem>
-        <CheckItem isValid={hasUpperCase}>At least one upper case</CheckItem>
-        <CheckItem isValid={hasSymbol}>At least one symbol</CheckItem>
-        <CheckItem isValid={hasDigit}>At least one digit</CheckItem>
-        <CheckItem isValid={passwordsMatch}>Both passwords must match</CheckItem>
-      </LeftChild>
-    </Row>
+    <LeftChild>
+      <CheckItem isValid={min8Chars}>Minimum 8 characters</CheckItem>
+      <CheckItem isValid={hasUpperCase}>At least one upper case</CheckItem>
+      <CheckItem isValid={hasSymbol}>At least one symbol</CheckItem>
+      <CheckItem isValid={hasDigit}>At least one digit</CheckItem>
+      <CheckItem isValid={passwordsMatch}>Both passwords must match</CheckItem>
+    </LeftChild>
   )
 }
 
-const CheckItem = ({ isValid, children }: { isValid: boolean; children: React.ReactNode }) => {
-  return (
-    <Text.Caption style={{ color: isValid ? 'green' : 'red' }}>
-      {isValid ? '✓' : '✗'} {children}
-    </Text.Caption>
-  )
-}
-
-const Row = styled.View``
 const LeftChild = styled.View`
   align-self: flex-start;
 `

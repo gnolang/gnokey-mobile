@@ -1,8 +1,7 @@
-import { BetaVersionMiniBanner, Layout } from '@/components'
+import { Layout } from '@/components'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import {
   clearLinking,
-  Vault,
   selectCallback,
   selectClientName,
   selectVaults,
@@ -17,6 +16,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
 import { Button, Container, SafeAreaView, Spacer, Text } from '@/modules/ui-components'
+import { Vault } from '@/types'
+import { BetaVersionMiniBanner } from '@/modules/ui-components/molecules'
 
 export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)

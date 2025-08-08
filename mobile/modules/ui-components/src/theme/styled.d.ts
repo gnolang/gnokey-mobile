@@ -47,6 +47,8 @@ declare module 'styled-components/native' {
       backgroundSecondary: string // Secondary background color, used for surfaces like cards, panels, etc.
 
       border: string // Border, Ruller, Divider
+
+      link: string // Link color, used for links in text, buttons, etc.
     }
 
     text: {

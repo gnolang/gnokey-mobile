@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Stack, useFocusEffect, useRouter } from 'expo-router'
+import { useFocusEffect, useRouter } from 'expo-router'
 import { OnboardingLayout, Spacer, Text } from '@/modules/ui-components'
 import ActivityIndicator from '@/components/atoms/activity-indicator'
 
@@ -8,7 +8,7 @@ export default function Page() {
 
   useFocusEffect(() => {
     const timer = setTimeout(() => {
-      router.navigate('/welcome')
+      router.replace('/home')
     }, 3000)
 
     return () => clearTimeout(timer)
@@ -16,11 +16,6 @@ export default function Page() {
 
   return (
     <OnboardingLayout>
-      <Stack.Screen
-        options={{
-          header: () => null
-        }}
-      />
       <Container>
         <ActivityIndicator />
         <Spacer space={64} />

@@ -6,4 +6,4 @@ export const ModalView = {
   Content: ModalContent
 }
 
-export { ModalConfirmDelete, ModalConfirm } from './ModalConfirm'
+export { ModalConfirm } from './ModalConfirm'

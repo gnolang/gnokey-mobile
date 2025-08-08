@@ -3,6 +3,7 @@ import { TextInputProps, TextInput } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import { ErrorBox } from '../alert'
+import { Text } from '..'
 
 export type Props = {
   label?: string
@@ -69,14 +70,12 @@ const Container = styled.View`
   width: 100%;
   padding-bottom: 2px;
 `
-const Label = styled.Text`
-  font-weight: 590;
-  font-size: 15px;
-  line-height: 20px;
-  letter-spacing: -0.24px;
+export const Label = styled(Text.Subheadline)`
   color: ${(props) => props.theme.textinputs.label};
+  font-weight: 590;
+  padding-bottom: 8px;
 `
-const Description = styled.Text`
+export const Description = styled.Text`
   font-weight: 400;
   font-size: 13px;
   line-height: 20px;
@@ -100,9 +99,9 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
   flex: 1;
   height: 46px;
   width: 100%;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px;
-  font-size: 18px;
+  font-size: 17px;
   placeholder: ${(p) => p.theme.textinputs.label};
   border-style: solid;
 `

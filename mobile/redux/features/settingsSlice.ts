@@ -2,14 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
 import * as SecureStore from 'expo-secure-store'
 import { GnoNativeApi } from '@gnolang/gnonative'
-import { nukeDatabase } from '@/providers/database-provider'
+import { initDatabase, nukeDatabase } from '@/providers/database-provider'
 import { BIOMETRIC_ENABLED_KEY, DEV_MODE_KEY, MATER_PASS_KEY } from './constants'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { Alert } from 'react-native'
 
 const initialState: SettingsState = {
   loading: false,
-  forceAppReset: false,
   isDevMode: SecureStore.getItem(DEV_MODE_KEY) === 'true',
   isBiometricEnabled: SecureStore.getItem(BIOMETRIC_ENABLED_KEY) === 'true'
 }
@@ -24,7 +23,6 @@ export const settingsSlice = createSlice({
     })
     builder.addCase(hardReset.fulfilled, (state) => {
       state.loading = false
-      state.forceAppReset = true
     })
     builder.addCase(hardReset.rejected, (state, err) => {
       console.log(err)
@@ -43,17 +41,15 @@ export const settingsSlice = createSlice({
   },
   selectors: {
     selectLoadingReset: (state) => state.loading,
-    selectForceAppReset: (state) => state.forceAppReset,
     selectDevMode: (state) => state.isDevMode,
     selectBiometricEnabled: (state) => state.isBiometricEnabled
   }
 })
 
-export const { selectLoadingReset, selectForceAppReset, selectDevMode, selectBiometricEnabled } = settingsSlice.selectors
+export const { selectLoadingReset, selectDevMode, selectBiometricEnabled } = settingsSlice.selectors
 
 export interface SettingsState {
   loading: boolean
-  forceAppReset: boolean
   isDevMode: boolean
   isBiometricEnabled: boolean
 }
@@ -66,6 +62,7 @@ export const hardReset = createAsyncThunk<boolean, void, ThunkExtra>('settings/h
     await gnonative.deleteAccount(key.name, undefined, true)
   }
   await nukeDatabase()
+  await initDatabase()
   if (await SecureStore.getItem(MATER_PASS_KEY)) {
     await SecureStore.deleteItemAsync(MATER_PASS_KEY)
     await SecureStore.deleteItemAsync(BIOMETRIC_ENABLED_KEY)

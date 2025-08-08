@@ -1,8 +1,6 @@
-import { Modal as NativeModal, TouchableWithoutFeedback, View, TouchableHighlight } from 'react-native'
-import { ModalHeaderTitle } from './ModalHeader'
+import { Modal as NativeModal, TouchableWithoutFeedback, TouchableHighlight } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
-import { Text, Button, Spacer } from '@/modules/ui-components'
-import { AntDesign, FontAwesome6 } from '@expo/vector-icons'
+import { Text, Button } from '@/modules/ui-components'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export type Props = {
@@ -13,48 +11,6 @@ export type Props = {
   onCancel: () => void
   onConfirm: () => void
   loading?: boolean
-}
-
-const ModalConfirmDelete = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm', loading }: Props) => {
-  const theme = useTheme()
-
-  return (
-    <NativeModal visible={visible} transparent animationType="slide">
-      <TouchableWithoutFeedback onPress={onCancel}>
-        <OpaqueBackgroundView>
-          <TouchableWithoutFeedback>
-            <ModalContent>
-              <ModalHeaderTitle title={title} color={theme.error.text} />
-              <Spacer space={16} />
-              <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
-                <Text.H4_Regular style={{ textAlign: 'center' }}>{message}</Text.H4_Regular>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 16 }}>
-                <Button
-                  onPress={onCancel}
-                  color="secondary"
-                  style={{ width: 110 }}
-                  loading={loading}
-                  endIcon={<AntDesign name="reload1" size={16} color="black" />}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onPress={onConfirm}
-                  color="danger"
-                  loading={loading}
-                  style={{ width: 110 }}
-                  endIcon={<FontAwesome6 name="trash-alt" size={16} color="white" />}
-                >
-                  {confirmText}
-                </Button>
-              </View>
-            </ModalContent>
-          </TouchableWithoutFeedback>
-        </OpaqueBackgroundView>
-      </TouchableWithoutFeedback>
-    </NativeModal>
-  )
 }
 
 const ModalConfirm = ({ visible, onCancel, onConfirm, title, message, confirmText = 'Confirm', loading }: Props) => {
@@ -130,14 +86,4 @@ const OpaqueBackgroundView = styled.View`
   background-color: rgba(0, 0, 0, 0.5);
 `
 
-const ModalContent = styled.View`
-  minHeight: '30%',
-  width: '100%',
-  position: 'absolute',
-  bottom: 0,
-  backgroundColor: 'white',
-  borderRadius: 10,
-  padding: 20
-`
-
-export { ModalConfirmDelete, ModalConfirm }
+export { ModalConfirm }

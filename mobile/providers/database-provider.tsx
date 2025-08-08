@@ -1,8 +1,9 @@
 import * as SQLite from 'expo-sqlite'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
-import { NetworkMetainfo } from '@/types'
+import { NetworkMetainfo, Vault } from '@/types'
 import defaultChains from '@/assets/chains.json'
+import { KeyInfo } from '@gnolang/gnonative'
 
 interface Props {
   children: React.ReactNode
@@ -18,13 +19,7 @@ export const DatabaseProvider = ({ children }: Props) => {
   useEffect(() => {
     ;(async () => {
       try {
-        await executeMigrations(db)
-        const initialized = await isDataLoaded(db)
-        if (initialized) {
-          console.log('Database already initialized')
-        } else {
-          await initialDataLoad(db)
-        }
+        await initDatabase()
         setLoading(false)
       } catch (error) {
         console.error('Error opening database:', error)
@@ -38,7 +33,7 @@ export const DatabaseProvider = ({ children }: Props) => {
     const chains = await db.getAllAsync<NetworkMetainfo>('SELECT * FROM app_chains ORDER BY createdAt DESC')
     return {
       chains,
-      currentChain: chains.find((chain) => chain.active) || chains[0] // Fallback to the first chain if no active chain is found
+      currentChain: chains.find((chain) => chain.active) || undefined
     }
   }
 
@@ -80,6 +75,18 @@ const executeMigrations = async (db: SQLite.SQLiteDatabase) => {
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `)
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS app_vaults (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      keyName TEXT NOT NULL,
+      description TEXT,
+      chainIds TEXT,
+      bookmarked BOOLEAN DEFAULT 0,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(keyName)
+    );
+  `)
 }
 
 /**
@@ -115,13 +122,58 @@ const isDataLoaded = async (db: SQLite.SQLiteDatabase) => {
   return result && result.total > 0
 }
 
+export const initDatabase = async () => {
+  await executeMigrations(db)
+  const initialized = await isDataLoaded(db)
+  if (!initialized) {
+    await initialDataLoad(db)
+  }
+  console.log(initialized ? 'Database already initialized' : 'Database initialized with default chains')
+}
+
 export const insertChain = async ({ chainId, chainName, rpcUrl, faucetUrl, faucetPortalUrl, active }: AddChainProp) => {
   const sql = 'INSERT INTO app_chains (chainId, chainName, rpcUrl, faucetUrl, faucetPortalUrl, active) VALUES (?, ?, ?, ?, ?, ?)'
   return await db.runAsync(sql, chainId, chainName, rpcUrl, faucetUrl || '', faucetPortalUrl || '', active)
 }
 
-export const updateActiveChain = async (id: string) => {
+export const insertVault = async (keyInfo: KeyInfo, description?: string, chainId?: string) => {
+  const sql = 'INSERT INTO app_vaults (keyName, description, chainIds) VALUES (?, ?, ?)'
+  return await db.runAsync(sql, keyInfo.name, description || '', chainId ? JSON.stringify([chainId]) : '[]')
+}
+
+export const deleteVault = async (id: string) => {
+  const sql = 'DELETE FROM app_vaults WHERE id = ?'
+  return await db.runAsync(sql, id)
+}
+
+export const listVaults = async (): Promise<Vault[]> => {
+  return await db.getAllAsync<Vault>('SELECT * FROM app_vaults ORDER BY createdAt DESC')
+}
+
+export const listVaultsByChain = async (chainId?: string): Promise<Vault[]> => {
+  if (!chainId) {
+    return await db.getAllAsync<Vault>("SELECT * FROM app_vaults WHERE chainIds = '[]'")
+  }
+
+  return await db.getAllAsync<Vault>("SELECT * FROM app_vaults WHERE JSON_EXTRACT(chainIds, '$') LIKE ?", `%${chainId}%`)
+}
+
+export const getChainById = async (id: string): Promise<NetworkMetainfo | null> => {
+  const result = await db.getFirstAsync<NetworkMetainfo>('SELECT * FROM app_chains WHERE id = ?', id)
+  return result || null
+}
+
+export const updateVault = async (vault: Vault, keyName: string, description?: string) => {
+  const sql = 'UPDATE app_vaults SET keyName = ?, description = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?'
+  return await db.runAsync(sql, keyName, description || '', vault.id)
+}
+
+export const updateActiveChain = async (id?: string) => {
   await db.runAsync('UPDATE app_chains SET active = 0')
+  if (!id) {
+    console.warn('No chain ID provided to updateActiveChain, skipping update')
+    return
+  }
   return await db.runAsync('UPDATE app_chains SET active = 1 WHERE id = ?', id)
 }
 
@@ -140,7 +192,7 @@ type AddChainProp = Omit<NetworkMetainfo, 'id' | 'createdAt'>
 
 interface ListChainsResult {
   chains: NetworkMetainfo[]
-  currentChain: NetworkMetainfo
+  currentChain?: NetworkMetainfo
 }
 
 interface DatabaseContextProps {

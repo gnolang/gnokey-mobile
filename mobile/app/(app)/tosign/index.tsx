@@ -1,4 +1,4 @@
-import { BetaVersionMiniBanner, Layout, Ruller } from '@/components'
+import { Layout, Ruller } from '@/components'
 import {
   estimateGasWanted,
   selectClientName,
@@ -22,6 +22,7 @@ import * as Linking from 'expo-linking'
 import { ScrollView, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native'
 import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
+import { BetaVersionMiniBanner } from '@/modules/ui-components/molecules'
 
 export default function Page() {
   const dispatch = useAppDispatch()

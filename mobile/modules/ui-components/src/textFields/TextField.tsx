@@ -70,8 +70,10 @@ const Container = styled.View`
   width: 100%;
   padding-bottom: 2px;
 `
-export const Label = styled(Text.Body_Bold)`
+export const Label = styled(Text.Subheadline)`
   color: ${(props) => props.theme.textinputs.label};
+  font-weight: 590;
+  padding-bottom: 8px;
 `
 export const Description = styled.Text`
   font-weight: 400;
@@ -97,9 +99,9 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
   flex: 1;
   height: 46px;
   width: 100%;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px;
-  font-size: 18px;
+  font-size: 17px;
   placeholder: ${(p) => p.theme.textinputs.label};
   border-style: solid;
 `

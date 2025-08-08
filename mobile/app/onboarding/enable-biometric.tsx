@@ -14,7 +14,7 @@ export default function Page() {
       const res = await dispatch(enableBiometric(true)).unwrap()
       console.log('Biometric enabled successfully: ', res)
       if (res) {
-        router.push('/onboarding/loading-screen')
+        router.replace('/onboarding/loading-screen')
       }
     } catch (error: any) {
       console.error('Failed to enable biometric:', error)

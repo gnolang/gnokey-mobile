@@ -1,4 +1,3 @@
 export * from './progress'
-export * from './new-vault/new-vault-view'
 export * from './seed-input'
 export * from './home'

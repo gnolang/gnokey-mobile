@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
-import { BetaVersionMiniBanner, Layout } from '@/components/index'
+import { Layout } from '@/components/index'
 import {
   checkForKeyOnChains,
   useAppDispatch,
@@ -14,9 +14,9 @@ import {
 } from '@/redux'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { AppBar, Button, TextField, Spacer, Text, Container, SafeAreaView, BottonPanel } from '@/modules/ui-components'
+import { AppBar, Button, TextField, Text, Container, SafeAreaView, BottonPanel } from '@/modules/ui-components'
 import { FontAwesome6 } from '@expo/vector-icons'
-import styled from 'styled-components/native'
+import styled, { useTheme } from 'styled-components/native'
 import { EmptyView } from '@/views'
 import { NetworkSelectionModal } from '@/modules/ui-components/organisms/NetworkSelectionModal'
 import { Vault } from '@/types'
@@ -30,6 +30,7 @@ export default function Page() {
   const [loading, setLoading] = useState<string | undefined>(undefined)
   const currentChain = useAppSelector(selectCurrentChain)
   const networks = useAppSelector(selectChainsAvailable)
+  const theme = useTheme()
 
   const route = useRouter()
   const dispatch = useAppDispatch()
@@ -111,8 +112,8 @@ export default function Page() {
               {filteredAccounts.length} {filteredAccounts.length > 1 ? 'accounts' : 'account'}
             </Text.H2>
             <TouchableOpacity onPress={() => setShowNetworkModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome6 name="gear" size={12} color="#888" style={{ marginRight: 4 }} />
-              <Text.Caption>{currentChain ? currentChain.chainName : 'No Registration'}</Text.Caption>
+              <FontAwesome6 name="gear" size={20} color={theme.colors.link} style={{ marginRight: 4 }} />
+              <Text.LinkText>{currentChain ? currentChain.chainName : 'No Registration'}</Text.LinkText>
             </TouchableOpacity>
           </AppBar>
           <TextField
@@ -124,8 +125,6 @@ export default function Page() {
             autoCorrect={false}
             hideError
           />
-          <BetaVersionMiniBanner />
-          <Spacer />
           <Content>
             <Body>
               {vaults?.length === 0 && <EmptyView />}
@@ -165,7 +164,7 @@ export default function Page() {
           </Button>
           <Link href="/home/settings" asChild>
             <TouchableOpacity>
-              <Text.Link>Settings</Text.Link>
+              <Text.LinkText>Settings</Text.LinkText>
             </TouchableOpacity>
           </Link>
         </HorizontalGroup>

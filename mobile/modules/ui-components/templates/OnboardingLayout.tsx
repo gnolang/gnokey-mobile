@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, ScrollView } from 'react-native'
 import styled from 'styled-components/native'
 
 interface OnboardingLayoutProps {
@@ -10,10 +10,10 @@ interface OnboardingLayoutProps {
 export function OnboardingLayout({ children, footer }: OnboardingLayoutProps) {
   return (
     <SafeArea>
-      <ScrollContainer contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 22, paddingTop: 12 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20, paddingTop: 12 }}>
         <Content>{children}</Content>
         {footer && <FooterContainer>{footer}</FooterContainer>}
-      </ScrollContainer>
+      </ScrollView>
     </SafeArea>
   )
 }
@@ -21,10 +21,6 @@ export function OnboardingLayout({ children, footer }: OnboardingLayoutProps) {
 const SafeArea = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
-`
-
-const ScrollContainer = styled.ScrollView`
-  flex: 1;
 `
 
 const Content = styled.View`

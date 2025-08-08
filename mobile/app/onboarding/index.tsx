@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router'
-import { BetaVersionBanner } from '@/components/index'
 import { OnboardingCarousel, OnboardingLayout } from '@/modules/ui-components'
 import { OnboardingFooter } from '@/modules/ui-components/organisms/OnboardingFooter'
+import { BetaVersionBanner } from '@/modules/ui-components/molecules'
 
 export default function Page() {
   const route = useRouter()

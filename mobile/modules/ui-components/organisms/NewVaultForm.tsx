@@ -18,6 +18,7 @@ import { NavigationRow } from '../molecules/NavigationRow'
 import { NetworkSelectionModal } from './NetworkSelectionModal'
 import { useRouter } from 'expo-router'
 import { Alert } from 'react-native'
+import { BetaVersionMiniBanner } from '../molecules'
 
 export interface Props {
   error?: string
@@ -108,6 +109,8 @@ export const NewVaultForm = ({ error }: Props) => {
       />
       <Spacer space={16} />
       <Ruller />
+      <Spacer space={16} />
+      <BetaVersionMiniBanner />
     </Container>
   )
 }

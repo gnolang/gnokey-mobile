@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { BetaVersionBanner } from '@/components/index'
 import { selectAction, useAppDispatch, useAppSelector, doSignIn } from '@/redux'
 import { OnboardingLayout, WelcomeBack, WelcomeBackFooter } from '@/modules/ui-components'
 import { WelcomeBackError } from '@/modules/ui-components/organisms/WelcomeBackError'
+import { BetaVersionBanner } from '@/modules/ui-components/molecules'
 
 export default function Root() {
   const [error, setError] = useState<string | undefined>(undefined)
-  const route = useRouter()
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const action = useAppSelector(selectAction)
 
@@ -23,9 +23,9 @@ export default function Root() {
 
   const navigateTo = () => {
     if (action) {
-      route.replace(action)
+      router.replace(action)
     } else {
-      route.replace('/home')
+      router.replace('/home')
     }
   }
 

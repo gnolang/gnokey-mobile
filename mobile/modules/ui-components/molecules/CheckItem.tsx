@@ -7,8 +7,8 @@ import { Text } from '../src'
  */
 export const CheckItem = ({ isValid, children }: { isValid: boolean; children: React.ReactNode }) => {
   return (
-    <Text.Caption style={{ color: isValid ? 'green' : 'red' }}>
+    <Text.Footnote style={{ color: isValid ? 'green' : 'red' }}>
       {isValid ? '✓' : '✗'} {children}
-    </Text.Caption>
+    </Text.Footnote>
   )
 }

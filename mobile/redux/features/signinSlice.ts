@@ -19,17 +19,47 @@ const initialState: SignInState = {
   initialized: false
 }
 
+export const signinSlice = createSlice({
+  name: 'signIn',
+  initialState,
+  reducers: {
+    signOut: (state) => {
+      state.signedIn = false
+    }
+  },
+
+  extraReducers(builder) {
+    builder.addCase(getInitialState.fulfilled, (state, action) => {
+      state.masterPassword = action.payload.masterPassword ?? undefined
+      state.initialized = true
+    })
+    builder.addCase(getInitialState.rejected, (_, action) => {
+      console.error('getInitialState.rejected', action)
+    })
+    builder.addCase(doSignIn.fulfilled, (state, action) => {
+      state.signedIn = action.payload
+    })
+    builder.addCase(createMasterPass.fulfilled, (state, action) => {
+      state.masterPassword = action.payload.masterPassword ?? undefined
+      state.signedIn = true
+    })
+    builder.addCase(changeMasterPassword.fulfilled, (state, action) => {
+      state.masterPassword = action.payload
+    })
+  },
+
+  selectors: {
+    selectMasterPassword: (state) => state.masterPassword,
+    selectInitialized: (state) => state.initialized,
+    selectSignedIn: (state) => state.signedIn
+  }
+})
+
+export const { signOut } = signinSlice.actions
+
+export const { selectInitialized, selectMasterPassword, selectSignedIn } = signinSlice.selectors
+
 interface CreateMasterParam {
-  masterPassword: string
-}
-
-export interface DoSignInParam {
-  masterPassword: string
-  isBiometric?: boolean
-}
-
-interface ChangeMasterParam {
-  newPassword: string
   masterPassword: string
 }
 
@@ -43,6 +73,11 @@ export const createMasterPass = createAsyncThunk<{ masterPassword: string | null
     return { masterPassword }
   }
 )
+
+export interface DoSignInParam {
+  masterPassword: string
+  isBiometric?: boolean
+}
 
 export const doSignIn = createAsyncThunk<boolean, DoSignInParam, ThunkExtra>('signin/doSignIn', async (param, thunkAPI) => {
   const { masterPassword, isBiometric } = param
@@ -88,6 +123,11 @@ export const doSignIn = createAsyncThunk<boolean, DoSignInParam, ThunkExtra>('si
 
   return true
 })
+
+interface ChangeMasterParam {
+  newPassword: string
+  masterPassword: string
+}
 
 export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, ThunkExtra>(
   'user/changeMasterPass',
@@ -170,42 +210,3 @@ export const doBiometricAuth = createAsyncThunk<void, void, ThunkExtra>('signin/
     console.log('Biometric authentication failed')
   }
 })
-
-export const signinSlice = createSlice({
-  name: 'signIn',
-  initialState,
-  reducers: {
-    signOut: (state) => {
-      state.signedIn = false
-    }
-  },
-
-  extraReducers(builder) {
-    builder.addCase(getInitialState.fulfilled, (state, action) => {
-      state.masterPassword = action.payload.masterPassword ?? undefined
-      state.initialized = true
-    })
-    builder.addCase(getInitialState.rejected, (_, action) => {
-      console.error('getInitialState.rejected', action)
-    })
-    builder.addCase(doSignIn.fulfilled, (state, action) => {
-      state.signedIn = action.payload
-    })
-    builder.addCase(createMasterPass.fulfilled, (state, action) => {
-      state.masterPassword = action.payload.masterPassword ?? undefined
-    })
-    builder.addCase(changeMasterPassword.fulfilled, (state, action) => {
-      state.masterPassword = action.payload
-    })
-  },
-
-  selectors: {
-    selectMasterPassword: (state) => state.masterPassword,
-    selectInitialized: (state) => state.initialized,
-    selectSignedIn: (state) => state.signedIn
-  }
-})
-
-export const { signOut } = signinSlice.actions
-
-export const { selectInitialized, selectMasterPassword, selectSignedIn } = signinSlice.selectors

@@ -22,6 +22,12 @@ export default function OnboardingLayout() {
           headerShown: false
         }}
       />
+      <Stack.Screen
+        name="loading-screen"
+        options={{
+          headerShown: false
+        }}
+      />
       <Stack.Screen name="setup-pass" />
       <Stack.Screen name="forgot-pass" />
     </Stack>

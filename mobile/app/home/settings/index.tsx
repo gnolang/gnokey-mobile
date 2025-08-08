@@ -6,19 +6,16 @@ import {
   selectBiometricEnabled,
   selectCurrentChain,
   selectDevMode,
-  selectForceAppReset,
   toggleDevMode,
   useAppDispatch,
   useAppSelector
 } from '@/redux'
 import { nukeDatabase } from '@/providers/database-provider'
-import { useEffect } from 'react'
 
 export default function Page() {
   const currentChain = useAppSelector(selectCurrentChain)
   const dispatch = useAppDispatch()
   const devMode = useAppSelector(selectDevMode)
-  const forceAppReset = useAppSelector(selectForceAppReset)
   const isBiometricEnabled = useAppSelector(selectBiometricEnabled)
 
   const deleteDatabase = async () => {
@@ -42,15 +39,6 @@ export default function Page() {
       { text: 'OK', onPress: () => dispatch(hardReset()) }
     ])
   }
-
-  useEffect(() => {
-    if (forceAppReset) {
-      Alert.alert(
-        'App Reset Required',
-        'For your security, the app must be reset before you can continue.\nPlease close the app.'
-      )
-    }
-  }, [forceAppReset])
 
   const enableFaceID = async () => {
     dispatch(enableBiometric(true))

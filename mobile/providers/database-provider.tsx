@@ -19,13 +19,7 @@ export const DatabaseProvider = ({ children }: Props) => {
   useEffect(() => {
     ;(async () => {
       try {
-        await executeMigrations(db)
-        const initialized = await isDataLoaded(db)
-        if (initialized) {
-          console.log('Database already initialized')
-        } else {
-          await initialDataLoad(db)
-        }
+        await initDatabase()
         setLoading(false)
       } catch (error) {
         console.error('Error opening database:', error)
@@ -126,6 +120,15 @@ const initialDataLoad = async (db: SQLite.SQLiteDatabase) => {
 const isDataLoaded = async (db: SQLite.SQLiteDatabase) => {
   const result = await db.getFirstAsync<{ total: number }>('SELECT COUNT(*) as total FROM app_chains')
   return result && result.total > 0
+}
+
+export const initDatabase = async () => {
+  await executeMigrations(db)
+  const initialized = await isDataLoaded(db)
+  if (!initialized) {
+    await initialDataLoad(db)
+  }
+  console.log(initialized ? 'Database already initialized' : 'Database initialized with default chains')
 }
 
 export const insertChain = async ({ chainId, chainName, rpcUrl, faucetUrl, faucetPortalUrl, active }: AddChainProp) => {

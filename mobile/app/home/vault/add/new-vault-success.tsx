@@ -29,9 +29,9 @@ const Page = () => {
       />
 
       <Container>
-        <Text.LargeTitle>Account Update</Text.LargeTitle>
+        <Text.LargeTitle>Account Created</Text.LargeTitle>
         <Text.LargeTitle style={{ color: theme.success.text }}>Completed</Text.LargeTitle>
-        <Text.Caption>{keyname} has been updated successfully!</Text.Caption>
+        <Text.Caption>{keyname} has been created successfully!</Text.Caption>
       </Container>
     </OnboardingLayout>
   )

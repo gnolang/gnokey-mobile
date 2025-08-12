@@ -30,10 +30,9 @@ export default function Root() {
   }
 
   return (
-    <OnboardingLayout>
+    <OnboardingLayout keyboardAware footer={<WelcomeBackFooter onUnlockPress={onUnlockPress} />}>
       <BetaVersionBanner />
       {!error ? <WelcomeBack /> : <WelcomeBackError error={error} />}
-      <WelcomeBackFooter onUnlockPress={onUnlockPress} />
     </OnboardingLayout>
   )
 }

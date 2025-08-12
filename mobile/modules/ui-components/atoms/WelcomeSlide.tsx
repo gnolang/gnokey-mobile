@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 import { Text } from '../src'
 
 export const SlideTitle = styled(Text.LargeTitle)`
+  margin-top: 54px;
   margin-bottom: 12px;
 `
 
@@ -14,13 +15,6 @@ export const SlideDescription = styled(Text.Title3)`
 export const SlideImage = styled.Image`
   width: 255px;
   height: 255px;
-  margin-bottom: 54px;
-`
-
-export const SlideItem = styled.View<{ width: string }>`
-  width: ${(props) => props.width};
-  padding: 0px 52px;
-  align-items: center;
 `
 
 export const DotContainer = styled.View`
@@ -40,9 +34,13 @@ export const Dot = styled.View<{ active: boolean }>`
   margin: 0 4px;
 `
 
-export const Container = styled.View`
+export const TopCenterContainer = styled.View`
   flex: 1;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 32px;
+  justify-content: center;
+`
+
+export const BoxToScroll = styled.View<{ width: string }>`
+  width: ${(props) => props.width};
+  padding: 0px 52px;
 `

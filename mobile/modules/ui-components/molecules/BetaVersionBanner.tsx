@@ -1,11 +1,13 @@
-import { Text } from '@/modules/ui-components'
 import { View } from 'react-native'
+import { Text } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
 
 export const BetaVersionBanner = () => {
   return (
     <View
       style={{
+        position: 'absolute',
+        top: 0,
         width: '100%',
         backgroundColor: '#FFD700',
         alignItems: 'center',

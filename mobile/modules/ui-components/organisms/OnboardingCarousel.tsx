@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { FlatList, useWindowDimensions } from 'react-native'
 import { Spacer } from '../src'
-import { Dot, DotContainer, SlideDescription, SlideImage, SlideItem, SlideTitle, Container } from '../atoms/WelcomeSlide'
+import { Dot, DotContainer, SlideImage, BoxToScroll, TopCenterContainer } from '../atoms/WelcomeSlide'
+import HeroBox from '../molecules/HeroBox'
 
 const slides = [
   {
@@ -34,7 +35,7 @@ export function OnboardingCarousel() {
   }).current
 
   return (
-    <Container>
+    <TopCenterContainer>
       <FlatList
         style={{ width }}
         data={slides}
@@ -46,11 +47,13 @@ export function OnboardingCarousel() {
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
         renderItem={({ item }) => (
-          <SlideItem width={width + 'px'}>
-            <SlideImage source={item.image} resizeMode="contain" />
-            <SlideTitle>{item.title}</SlideTitle>
-            <SlideDescription>{item.description}</SlideDescription>
-          </SlideItem>
+          <BoxToScroll width={width + 'px'}>
+            <HeroBox
+              img={<SlideImage source={item.image} resizeMode="contain" />}
+              title={item.title}
+              description={item.description}
+            />
+          </BoxToScroll>
         )}
       />
       <DotContainer>
@@ -59,6 +62,6 @@ export function OnboardingCarousel() {
         ))}
       </DotContainer>
       <Spacer space={48} />
-    </Container>
+    </TopCenterContainer>
   )
 }

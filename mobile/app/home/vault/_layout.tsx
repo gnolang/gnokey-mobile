@@ -26,6 +26,12 @@ export default function VaultModalLayout() {
         }}
       />
       <Stack.Screen name="add/new-vault-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
+      <Stack.Screen
+        name="add/new-vault-loading"
+        options={{
+          headerShown: false
+        }}
+      />
 
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />

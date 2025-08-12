@@ -1,26 +1,16 @@
-import { Alert as RNAlert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Alert as RNAlert, View } from 'react-native'
+import React, { useState } from 'react'
 import { router, Stack, useFocusEffect } from 'expo-router'
 import {
   selectMasterPassword,
   useAppDispatch,
   useAppSelector,
-  VaultCreationState,
-  newAccountSelector,
-  registerAccount,
   createKey,
-  signUpStateSelector,
   selectKeyName,
   selectPhrase,
-  generateNewPhrase,
-  fetchVaults,
-  checkForKeyOnChains,
-  selectLastProgress,
-  selectLoadingAddVault,
-  selectSelectedChain
+  generateNewPhrase
 } from '@/redux'
-import { Button, OnboardingLayout } from '@/modules/ui-components'
-import { LoadingModal } from '@/components/loading'
+import { Button, ErrorBox, OnboardingLayout, Spacer } from '@/modules/ui-components'
 import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
 import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
@@ -28,14 +18,9 @@ export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)
   const dispatch = useAppDispatch()
 
-  const progress = useAppSelector(selectLastProgress)
   const masterPassword = useAppSelector(selectMasterPassword)
-  const signUpState = useAppSelector(signUpStateSelector)
-  const newAccount = useAppSelector(newAccountSelector)
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
-  const loading = useAppSelector(selectLoadingAddVault)
-  const currentNetwork = useAppSelector(selectSelectedChain)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -43,73 +28,6 @@ export default function Page() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   )
-
-  // const onResetForm = () => {
-  //   dispatch(resetState())
-  //   setError(undefined)
-  //   dispatch(clearProgress())
-  //   dispatch(generateNewPhrase())
-  //   inputRef.current?.focus()
-  // }
-
-  useEffect(() => {
-    ;(async () => {
-      if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {
-        setError('This name is already registered on the blockchain and on this device. Please choose another name.')
-        return
-      }
-      if (signUpState === VaultCreationState.user_already_exists_on_blockchain) {
-        setError('This name is already registered on the blockchain. Please, choose another name.')
-        return
-      }
-      if (signUpState === VaultCreationState.user_already_exists_on_blockchain_under_different_name) {
-        setError(
-          'This account is already registered on the blockchain under a different name. Please press Back and sign up again with another Seed Phrase, or for a normal sign in with a different account if available.'
-        )
-        return
-      }
-      if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
-        setError(
-          'This name is already registered locally on this device but NOT on chain. If you want to register your account on the Gno Blockchain, please press Register On-Chain. Your seed phrase will remain the same.'
-        )
-        return
-      }
-      if (signUpState === VaultCreationState.user_exists_under_differente_key) {
-        setError(
-          'This name is already registered locally and on the blockchain under a different key. Please choose another name.'
-        )
-        return
-      }
-      if (signUpState === VaultCreationState.user_exists_under_differente_key_local) {
-        setError('This name is already registered locally under a different key. Please choose another name.')
-        return
-      }
-      if (signUpState === VaultCreationState.account_created) {
-        if (currentNetwork?.faucetPortalUrl) {
-          router.push('/home/vault/add/external-faucet')
-          return
-        }
-        if (currentNetwork?.faucetUrl) {
-          await dispatch(registerAccount()).unwrap()
-          return
-        } else {
-          router.replace({
-            pathname: '/home/vault/add/new-vault-success',
-            params: { keyName }
-          })
-          return
-        }
-      }
-      if (signUpState === VaultCreationState.account_registered) {
-        router.replace({
-          pathname: '/home/vault/add/new-vault-success',
-          params: { keyName }
-        })
-        return
-      }
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signUpState, newAccount, dispatch])
 
   const onCreate = async () => {
     setError(undefined)
@@ -138,9 +56,10 @@ export default function Page() {
     }
 
     try {
-      await dispatch(createKey({ name: keyName, password: masterPassword, phrase })).unwrap()
-      await dispatch(fetchVaults()).unwrap()
-      dispatch(checkForKeyOnChains())
+      dispatch(createKey({ name: keyName, password: masterPassword, phrase }))
+      router.navigate('/home/vault/add/new-vault-loading')
+      // await dispatch(fetchVaults()).unwrap()
+      // dispatch(checkForKeyOnChains())
     } catch (error: any) {
       console.log(error)
       const msg = error['message'] || JSON.stringify(error)
@@ -172,13 +91,20 @@ export default function Page() {
   // }
 
   return (
-    <OnboardingLayout footer={<Button onPress={onCreate}>Create new account</Button>}>
+    <OnboardingLayout
+      footer={
+        <View>
+          <ErrorBox>{error}</ErrorBox>
+          <Spacer space={8} />
+          <Button onPress={onCreate}>Create new account</Button>
+        </View>
+      }
+    >
       <Stack.Screen
         options={{
-          header: (props) => <ScreenHeader {...props} title="New account" />
+          header: (props) => <ScreenHeader {...props} title="New account" subtitle="1/2" />
         }}
       />
-      <LoadingModal visible={loading} message={progress} />
       <NewVaultForm error={error} />
     </OnboardingLayout>
   )

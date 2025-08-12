@@ -27,7 +27,7 @@ const VaultListItem = ({ vault, onVaultPress, chains = [], onBookmarkPress }: Pr
           <Text.H3>{vault.keyInfo.name}</Text.H3>
           {vault.description ? <Text.Body style={{ textAlign: 'left' }}>{vault.description}</Text.Body> : null}
           <Text.Caption style={{ textAlign: 'left', color: theme.text.textMuted }}>
-            Created at {dateOnly(vault.createdAt)}
+            Created on {dateOnly(vault.createdAt)}
           </Text.Caption>
         </View>
         <BookmarkAreaTopAligned>

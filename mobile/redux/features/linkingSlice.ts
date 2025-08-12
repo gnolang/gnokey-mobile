@@ -234,6 +234,9 @@ export const linkingSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+    builder.addCase(estimateGasWanted.fulfilled, (state, action) => {
+      state.txInput = action.payload.tx
+    })
     builder.addCase(setLinkingData.fulfilled, (state, action) => {
       state.chainId = action.payload.chainId
       state.remote = action.payload.remote

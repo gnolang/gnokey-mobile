@@ -74,22 +74,21 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
   // do not register on chain
   if (!selectedChain) {
-    thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
+    thunkAPI.dispatch(addProgress(`Checking if account ${name} already exists...`))
     const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name)
-    thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
 
     if (userOnLocalStorage) {
-      thunkAPI.dispatch(addProgress(`user_exists_under_differente_key_local`))
+      thunkAPI.dispatch(addProgress(`An account with the name "${name}" already exists locally. Please choose a different name.`))
       // CASE 1.1: Bad case. Choose new name. (Delete name in keystore?)
       return { newAccount: undefined, state: VaultCreationState.user_exists_under_differente_key_local }
     }
 
-    thunkAPI.dispatch(addProgress(`registerAccount is false`))
+    thunkAPI.dispatch(addProgress(`Creating account "${name}" without registering on chain.`))
     const newAccount = await gnonative.createAccount(name, phrase, password)
     console.log('createAccount response: ' + JSON.stringify(newAccount))
 
     if (!newAccount) {
-      thunkAPI.dispatch(addProgress(`Failed to create account "${name}"`))
+      thunkAPI.dispatch(addProgress(`Unable to create account "${name}".`))
       throw new Error(`Failed to create account "${name}"`)
     }
 
@@ -99,39 +98,37 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     await setCurrentChainAndRefresh(thunkAPI, undefined)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase
-    thunkAPI.dispatch(addProgress(`account_created`))
+    thunkAPI.dispatch(addProgress(`Account "${name}" created successfully without registering on chain.`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 
   await gnonative.setRemote(selectedChain.rpcUrl)
   await gnonative.setChainID(selectedChain.chainId)
 
-  thunkAPI.dispatch(addProgress(`checking if "${name}" is already registered on the blockchain.`))
+  thunkAPI.dispatch(addProgress(`Checking if "${name}" is already on the blockchain...`))
   const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase)
-  thunkAPI.dispatch(addProgress(`response: "${JSON.stringify(blockchainUser)}"`))
+  console.log(`blockchainUser: "${JSON.stringify(blockchainUser)}"`)
 
-  thunkAPI.dispatch(addProgress(`checking if "${name}" is already on local storage`))
+  thunkAPI.dispatch(addProgress(`Checking if "${name}" is already on local storage...`))
   const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name)
-  thunkAPI.dispatch(addProgress(`response for "${name}": ${JSON.stringify(userOnLocalStorage)}`))
+  console.log(`userOnLocalStorage: ${JSON.stringify(userOnLocalStorage)}`)
 
   if (userOnLocalStorage) {
     if (blockchainUser) {
       const localAddress = await gnonative.addressToBech32(userOnLocalStorage.address)
-      thunkAPI.dispatch(
-        addProgress(`existing local address "${localAddress}" and blockchain Users Addr "${blockchainUser.address}"`)
-      )
+      thunkAPI.dispatch(addProgress(`Local address "${localAddress}", Blockchain address "${blockchainUser.address}"`))
 
       if (blockchainUser.address === localAddress) {
-        thunkAPI.dispatch(addProgress(`CASE 1.0 user_exists_on_blockchain_and_local_storage`))
+        thunkAPI.dispatch(addProgress(`User exists on both blockchain and local storage.`))
         // CASE 1.0: Offer to do normal signin, or choose new name
         return { newAccount: undefined, state: VaultCreationState.user_exists_on_blockchain_and_local_storage }
       } else {
-        thunkAPI.dispatch(addProgress(`user_exists_under_differente_key`))
+        thunkAPI.dispatch(addProgress(`User exists under different key.`))
         // CASE 1.1: Bad case. Choose new name. (Delete name in keystore?)
         return { newAccount: undefined, state: VaultCreationState.user_exists_under_differente_key }
       }
     } else {
-      thunkAPI.dispatch(addProgress(`user_exists_only_on_local_storage`))
+      thunkAPI.dispatch(addProgress(`User exists only on local storage.`))
       // CASE 1.2: Offer to onboard existing account, replace it, or choose new name
       return {
         newAccount: undefined,
@@ -162,7 +159,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     await gnonative.setPassword(password, newAccount.address)
     insertVault(newAccount, description, selectedChain.chainId)
     await setCurrentChainAndRefresh(thunkAPI, selectedChain)
-    thunkAPI.dispatch(addProgress(`account_created`))
+    thunkAPI.dispatch(addProgress(`Account "${name}" created successfully.`))
     return { newAccount, state: VaultCreationState.account_created }
   }
 })

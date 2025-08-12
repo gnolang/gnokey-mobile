@@ -131,14 +131,7 @@ export default function Page() {
               {filteredAccounts && (
                 <FlatList
                   data={filteredAccounts}
-                  renderItem={({ item }) => (
-                    <VaultListItem
-                      vault={item}
-                      onVaultPress={onChangeAccountHandler}
-                      chains={item.chains}
-                      onBookmarkPress={onBookmarkPress(item)}
-                    />
-                  )}
+                  renderItem={({ item }) => <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} />}
                   keyExtractor={(item) => item.keyInfo.name}
                   contentContainerStyle={{ paddingBottom: 80 }}
                 />

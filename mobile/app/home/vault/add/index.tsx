@@ -8,7 +8,8 @@ import {
   createKey,
   selectKeyName,
   selectPhrase,
-  generateNewPhrase
+  generateNewPhrase,
+  resetState
 } from '@/redux'
 import { Button, ErrorBox, OnboardingLayout, Spacer } from '@/modules/ui-components'
 import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
@@ -90,6 +91,11 @@ export default function Page() {
   //   }
   // }
 
+  const onBackPress = () => {
+    dispatch(resetState()) // clean the form
+    router.back()
+  }
+
   return (
     <OnboardingLayout
       footer={
@@ -102,7 +108,7 @@ export default function Page() {
     >
       <Stack.Screen
         options={{
-          header: (props) => <ScreenHeader {...props} title="New account" subtitle="1/2" />
+          header: (props) => <ScreenHeader {...props} title="New account" subtitle="1/2" onBackPress={onBackPress} />
         }}
       />
       <NewVaultForm error={error} />

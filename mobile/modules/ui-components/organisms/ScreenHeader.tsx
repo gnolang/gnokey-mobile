@@ -10,17 +10,18 @@ export type ScreenHeaderProps = {
   subtitle?: string
   title?: string
   headerBackVisible?: boolean
+  onBackPress?: () => void
 } & NativeStackHeaderProps
 
 function ScreenHeader(props: ScreenHeaderProps) {
-  const { title, subtitle, headerBackVisible = true } = props
+  const { title, subtitle, headerBackVisible = true, onBackPress } = props
   const theme = useTheme()
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.colors.backgroundSecondary }}>
       <StatusBar barStyle="dark-content" />
       <View style={{ marginHorizontal: 16, marginBottom: 12 }}>
-        <Row>{headerBackVisible && <BackButton />}</Row>
+        <Row>{headerBackVisible && <BackButton onBackPress={onBackPress} />}</Row>
         <Spacer space={8} />
         <Row>
           <Text.LargeTitle>{title}</Text.LargeTitle>
@@ -31,13 +32,13 @@ function ScreenHeader(props: ScreenHeaderProps) {
   )
 }
 
-const BackButton = () => {
+const BackButton = ({ onBackPress }: { onBackPress?: () => void }) => {
   const navigation = useRouter()
   if (!navigation.canGoBack()) {
     return null
   }
   return (
-    <TouchableOpacity style={styles.backButton} onPress={() => navigation.back()}>
+    <TouchableOpacity style={styles.backButton} onPress={() => (onBackPress ? onBackPress() : navigation.back())}>
       <Ionicons name="chevron-back" size={20} color="#007aff" />
       <BackLabel>Back</BackLabel>
     </TouchableOpacity>

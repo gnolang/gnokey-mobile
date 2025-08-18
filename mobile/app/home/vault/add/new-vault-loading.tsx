@@ -10,9 +10,10 @@ import {
   useAppSelector,
   VaultCreationState
 } from '@/redux'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { ButtonBack } from '@/modules/ui-components/molecules'
+import ErrorBox from '@/modules/ui-components/molecules/ErrorBox'
 
 const Page = () => {
   const signUpState = useAppSelector(signUpStateSelector)
@@ -25,25 +26,18 @@ const Page = () => {
   const params = useLocalSearchParams<{ keyName: string }>()
   const keyName = params?.keyName || 'Updated'
 
-  const [enteredTime, setEnteredTime] = useState(Date.now())
-
-  // useFocusEffect(() => {
-  //   setEnteredTime(Date.now())
-  // })
-
-  const navigateOnlyAfter3Seconds = (cb: () => void) => {
-    const elapsedTime = Date.now() - enteredTime
-    if (elapsedTime >= 3000) {
+  const navigateOnlyAfter3Seconds = useCallback((cb: () => void) => {
+    setTimeout(() => {
       cb()
-    } else {
-      setTimeout(() => {
-        cb()
-      }, 3000 - elapsedTime)
-    }
-  }
+    }, 3000)
+  }, [])
 
   useEffect(() => {
     ;(async () => {
+      if (signUpState === VaultCreationState.generic_error) {
+        setError('An unexpected error occurred. Please try again.')
+        return
+      }
       if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {
         setError('This name is already registered on the blockchain and on this device. Please choose another name.')
         return
@@ -108,9 +102,9 @@ const Page = () => {
   return (
     <OnboardingLayout footer={error ? <ButtonBack /> : null}>
       {error ? (
-        <HeroBox title="Error" description={error || progress} />
+        <ErrorBox title="Error" description={error} errorDetails={progress} />
       ) : (
-        <HeroBox img={<ActivityIndicator />} title="Loading" description={progress} />
+        <HeroBox img={<ActivityIndicator />} title={`Loading`} description={progress} />
       )}
     </OnboardingLayout>
   )

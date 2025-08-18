@@ -1,17 +1,27 @@
-import { SlideDescription, SlideTitle, TopCenterContainer } from '../atoms/WelcomeSlide'
+import { TopCenterContainer } from '../atoms/WelcomeSlide'
+import { Spacer, Text } from '../src'
 
 interface Props {
   img?: React.ReactNode
   title: string
   description?: string
+  children?: React.ReactNode
 }
 
-const HeroBox = ({ img, title, description }: Props) => {
+const HeroBox = ({ img, title, description, children }: Props) => {
   return (
     <TopCenterContainer>
       {img ? img : null}
-      <SlideTitle>{title}</SlideTitle>
-      <SlideDescription>{description}</SlideDescription>
+      <Spacer space={56} />
+      <Text.LargeTitle>{title}</Text.LargeTitle>
+      <Spacer space={16} />
+      <Text.Title3CenterGray>{description}</Text.Title3CenterGray>
+      {children ? (
+        <>
+          <Spacer space={16} />
+          {children}
+        </>
+      ) : null}
     </TopCenterContainer>
   )
 }

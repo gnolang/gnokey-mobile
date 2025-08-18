@@ -261,3 +261,12 @@ export const colors = {
 export const Body_Bold = styled(Body)`
   font-weight: 500;
 `
+export const BodyCenterGray = styled(Body)`
+  text-align: center;
+  color: ${({ theme }) => theme.text.textMuted};
+`
+
+export const Title3CenterGray = styled(Title3)`
+  text-align: center;
+  color: ${({ theme }) => theme.text.textMuted};
+`

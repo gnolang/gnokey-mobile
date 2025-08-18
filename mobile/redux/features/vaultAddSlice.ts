@@ -15,7 +15,8 @@ export enum VaultCreationState {
   user_already_exists_on_blockchain_under_different_name = 'user_already_exists_on_blockchain_under_different_name',
   user_already_exists_on_blockchain = 'user_already_exists_on_blockchain',
   account_created = 'account_created',
-  account_registered = 'account_registered'
+  account_registered = 'account_registered',
+  generic_error = 'generic_error'
 }
 
 export interface VaultAddState {
@@ -106,7 +107,14 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
   await gnonative.setChainID(selectedChain.chainId)
 
   thunkAPI.dispatch(addProgress(`Checking if "${name}" is already on the blockchain...`))
-  const blockchainUser = await checkForUserOnBlockchain(gnonative, name, phrase)
+  let byNameStrEval = ''
+  try {
+    byNameStrEval = await gnonative.qEval('gno.land/r/sys/users', `ResolveName("${name}")`)
+  } catch (error: any) {
+    thunkAPI.dispatch(addProgress(`Error checking blockchain: ${error.message}`))
+    throw new Error(`Error checking blockchain: ${error.message}`)
+  }
+  const blockchainUser = await checkForUserOnBlockchain(byNameStrEval, gnonative, name, phrase)
   console.log(`blockchainUser: "${JSON.stringify(blockchainUser)}"`)
 
   thunkAPI.dispatch(addProgress(`Checking if "${name}" is already on local storage...`))
@@ -242,13 +250,13 @@ const checkForUserOnLocalStorage = async (gnonative: GnoNativeApi, name: string)
 }
 
 const checkForUserOnBlockchain = async (
+  byNameStrEval: string,
   gnonative: GnoNativeApi,
   name: string,
   phrase: string
 ): Promise<{ address: string; state: VaultCreationState } | undefined> => {
   let addressByName: string | undefined = undefined
-  const byNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveName("${name}")`)
-  if (!byNameStr.startsWith('(nil')) {
+  if (!byNameStrEval.startsWith('(nil')) {
     const addressByNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveName("${name}")`)
     addressByName = convertToJson(addressByNameStr)
   }
@@ -441,6 +449,7 @@ export const vaultAddSlice = createSlice({
           state.progress = [...state.progress, action.error.message]
         }
         state.loading = false
+        state.signUpState = VaultCreationState.generic_error
         console.error('signUp.rejected', action)
       })
       .addCase(createKey.pending, (state) => {

@@ -1,16 +1,4 @@
 import styled from 'styled-components/native'
-import { Text } from '../src'
-
-export const SlideTitle = styled(Text.LargeTitle)`
-  margin-top: 54px;
-  margin-bottom: 12px;
-`
-
-export const SlideDescription = styled(Text.Title3)`
-  margin-top: 12px;
-  text-align: center;
-  color: ${(props) => props.theme.colors.gray};
-`
 
 export const SlideImage = styled.Image`
   width: 255px;

@@ -18,7 +18,7 @@ const ThemeProvider = ({ children }: Props) => {
       white: '#ffffff',
       gray: '#A1A1A1',
       background: '#FDFDFD',
-      backgroundSecondary: '#EBEBEB',
+      backgroundSecondary: '#f8f8f8',
       border: '#A1A1A1', // Border, Ruller, Divider
       link: '#007AFF'
     },

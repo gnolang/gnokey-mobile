@@ -13,14 +13,7 @@ export default function AppLayout() {
 
   return (
     <Stack>
-      <Stack.Screen
-        name="home"
-        options={{
-          headerShown: false,
-          headerLargeTitle: true,
-          headerBackVisible: false
-        }}
-      />
+      <Stack.Screen name="home" />
       <Stack.Screen
         name="settings/index"
         options={{

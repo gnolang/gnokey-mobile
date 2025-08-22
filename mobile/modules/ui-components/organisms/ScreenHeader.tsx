@@ -11,22 +11,26 @@ export type ScreenHeaderProps = {
   title?: string
   headerBackVisible?: boolean
   onBackPress?: () => void
+  children?: React.ReactNode
+  rightComponent?: React.ReactNode
 } & NativeStackHeaderProps
 
 function ScreenHeader(props: ScreenHeaderProps) {
-  const { title, subtitle, headerBackVisible = true, onBackPress } = props
+  const { title, subtitle, headerBackVisible = true, onBackPress, children, rightComponent } = props
   const theme = useTheme()
 
   return (
     <SafeAreaView style={{ backgroundColor: theme.colors.backgroundSecondary }}>
       <StatusBar barStyle="dark-content" />
-      <View style={{ marginHorizontal: 16, marginBottom: 12 }}>
-        <Row>{headerBackVisible && <BackButton onBackPress={onBackPress} />}</Row>
+      <View style={styles.horizontalGroup}>
+        <Row style={styles.backButtonBox}>{headerBackVisible && <BackButton onBackPress={onBackPress} />}</Row>
         <Spacer space={8} />
         <Row>
           <Text.LargeTitle>{title}</Text.LargeTitle>
           <Text.Title3>{subtitle}</Text.Title3>
+          {rightComponent && <View style={{ marginLeft: 'auto' }}>{rightComponent}</View>}
         </Row>
+        {children}
       </View>
     </SafeAreaView>
   )
@@ -61,7 +65,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1
-  }
+  },
+  backButtonBox: {
+    minHeight: 25
+  },
+  horizontalGroup: { marginHorizontal: 20, marginBottom: 12 }
 })
 
 export default ScreenHeader

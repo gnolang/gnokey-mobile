@@ -41,21 +41,20 @@ export const ModalTemplate = ({ header, children, footer, visible, onClose, poin
 }
 
 const Header = styled(View)`
-  padding-horizontal: 16px;
+  padding-horizontal: 20px;
   border-bottom-width: 0.5px;
   padding-bottom: 8px;
   border-top-right-radius: 12px;
-  border-bottom-color: ${(props) => props.theme.colors.gray};
+  border-bottom-color: ${(props) => props.theme.colors.border};
 `
 
 const Footer = styled(View)`
-  padding-horizontal: 16px;
+  padding-horizontal: 20px;
   background-color: ${({ theme }) => theme.colors.background};
 `
 
 const Content = styled(View)`
-  background-color: ${({ theme }) => theme.colors.background};
-  padding-horizontal: 16px;
+  padding-horizontal: 20px;
 `
 
 const ModalContainer = styled.View`

@@ -12,12 +12,13 @@ export type Props = {
   error?: string
   color?: 'secondary'
   hideError?: boolean
+  leftIcon?: React.ReactNode
 } & TextInputProps
 
 type PropsWithTheme = Props & { theme: DefaultTheme }
 
 export const TextField = forwardRef<TextInput, Props>((props, ref) => {
-  const { type = 'text', label, description, error, value, hideError = true, ...rest } = props
+  const { type = 'text', label, description, error, value, hideError = true, leftIcon, ...rest } = props
   const [isSecureText, setShowSecureText] = React.useState(type === 'password')
   const [inputValue, setInputValue] = React.useState<string | undefined>(value)
 
@@ -38,6 +39,7 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
         {label && <Label>{label}</Label>}
         {description && <Description>{description}</Description>}
         <Content {...rest}>
+          {leftIcon ? <LeftIconContainer>{leftIcon}</LeftIconContainer> : null}
           <TextFieldStyled
             ref={ref}
             {...rest}
@@ -63,6 +65,12 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
 })
 
 TextField.displayName = 'TextField'
+
+const LeftIconContainer = styled.View`
+  margin-right: 8px;
+  justify-content: center;
+  align-items: center;
+`
 
 const Container = styled.View`
   flex-direction: column;

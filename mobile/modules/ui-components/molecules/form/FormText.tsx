@@ -1,16 +1,19 @@
-import { Ionicons, FontAwesome } from '@expo/vector-icons'
-import { Link } from 'expo-router'
-import { Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
+import { Ionicons, FontAwesome } from '@expo/vector-icons'
+import { Spacer, Text } from '../../src'
 
 interface FormTextProps {
   hint?: string
   children?: React.ReactNode
 }
 interface FormLinkProps extends FormTextProps {
-  href: string
+  title: string
+  onPress: () => void
+  description?: string
 }
 interface FormButtonProps extends FormTextProps {
+  title: string
   onPress: () => void
 }
 interface FormCheckBoxItemProps extends FormTextProps {
@@ -22,39 +25,51 @@ export const FormText: React.FC<FormTextProps> = (props) => {
   const { hint, children } = props
   return (
     <Wrapper>
-      <Text>{children}</Text>
+      <Text.Body>{children}</Text.Body>
       <TextHint>{hint}</TextHint>
     </Wrapper>
   )
 }
 
 export const FormLink: React.FC<FormLinkProps> = (props) => {
-  const { hint, children, href } = props
+  const { description, onPress, title } = props
   return (
-    <Link href={href}>
-      <Wrapper>
-        <Text>{children}</Text>
-        <ViewSide>
-          {hint && <TextHint>{hint}</TextHint>}
-          <Ionicons name="chevron-forward-outline" size={16} color="gray" />
-        </ViewSide>
-      </Wrapper>
-    </Link>
+    <TouchableOpacity onPress={onPress}>
+      <Spacer space={16} />
+      <RowSpaced>
+        <Text.SubheadlineSemiBold>{title}</Text.SubheadlineSemiBold>
+        <Ionicons name="chevron-forward-outline" size={16} color="gray" />
+      </RowSpaced>
+      <Spacer space={8} />
+      <Text.SubheadlineMuted>{description}</Text.SubheadlineMuted>
+      <Spacer space={24} />
+    </TouchableOpacity>
   )
 }
 
+const RowSpaced = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`
+// const TitleMuted = styled.Text`
+//   color: ${({ theme }) => theme.text.textMuted};
+//   weight: ${Text.weights.regular};
+// `
+
 export const FormButton: React.FC<FormButtonProps> = (props) => {
-  const { hint, children, onPress } = props
+  const { title, hint, onPress } = props
   return (
-    <TouchableOpacity onPress={onPress}>
-      <Wrapper>
-        <Text>{children}</Text>
-        <ViewSide>
-          {hint && <TextHint>{hint}</TextHint>}
-          <Ionicons name="chevron-forward-outline" size={16} color="gray" />
-        </ViewSide>
-      </Wrapper>
-    </TouchableOpacity>
+    <TouchableOpacityHorizontal onPress={onPress}>
+      {/* <Wrapper> */}
+      <Text.Subheadline weight={Text.weights.semibold}>{title}</Text.Subheadline>
+      <ViewSide>
+        {hint && <TextHint>{hint}</TextHint>}
+        <Ionicons name="chevron-forward-outline" size={16} color="gray" />
+      </ViewSide>
+      {/* </Wrapper> */}
+    </TouchableOpacityHorizontal>
   )
 }
 
@@ -66,7 +81,7 @@ export const FormAddButton: React.FC<FormButtonProps> = (props) => {
       <Centered>
         <Ionicons name="add" size={16} color={theme.colors.primary} />
         {hint && <TextHint>{hint}</TextHint>}
-        {children && <Text>{children}</Text>}
+        {children && <Text.Body>{children}</Text.Body>}
       </Centered>
     </TouchableOpacity>
   )
@@ -77,7 +92,7 @@ export const FormCheckBoxItem: React.FC<FormCheckBoxItemProps> = (props) => {
   const theme = useTheme()
   return (
     <Wrapper>
-      <Text>{children}</Text>
+      <Text.Body>{children}</Text.Body>
       <ViewSide>
         {hint && <TextHint onPress={onPress}>{hint}</TextHint>}
         <FontAwesome
@@ -92,7 +107,19 @@ export const FormCheckBoxItem: React.FC<FormCheckBoxItemProps> = (props) => {
   )
 }
 
+// const styles = StyleSheet.create({
+//   content: {
+//     alignItems: 'center'
+//   }
+// })
+
 const Centered = styled.View`
+  align-items: center;
+`
+const TouchableOpacityHorizontal = styled(TouchableOpacity)`
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
   align-items: center;
 `
 const Wrapper = styled.View`

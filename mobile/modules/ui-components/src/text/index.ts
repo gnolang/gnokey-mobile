@@ -126,6 +126,11 @@ export const Headline = styled(BaseText)`
   letter-spacing: -0.41px;
 `
 
+export const HeaderActionLink = styled(Headline)`
+  color: #007aff;
+  font-weight: 400;
+`
+
 // Body Text
 export const Body = styled(BaseText)`
   font-size: 17px;
@@ -146,6 +151,14 @@ export const Subheadline = styled(BaseText)`
   font-weight: ${(props) => props.weight || '400'};
   line-height: 20px;
   letter-spacing: -0.24px;
+`
+
+export const SubheadlineSemiBold = styled(Subheadline)`
+  font-weight: ${(props) => props.weight || '600'};
+`
+
+export const SubheadlineMuted = styled(Subheadline)`
+  color: ${(props) => props.theme.text.textMuted};
 `
 
 export const Footnote = styled(BaseText)`
@@ -216,7 +229,10 @@ export const PlaceholderText = styled(Body)`
 `
 
 // Weight variants for any component
-export const weights = {
+export const weights: Record<
+  'ultraLight' | 'thin' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold' | 'heavy' | 'black',
+  '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
+> = {
   ultraLight: '100',
   thin: '200',
   light: '300',

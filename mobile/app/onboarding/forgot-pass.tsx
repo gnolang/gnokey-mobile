@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
 import { ForgotPassView } from '@/modules/ui-components/organisms/ForgotPassView'
 import { ModalConfirm } from '@/components/modal'
 import { hardReset, selectLoadingReset, useAppDispatch, useAppSelector } from '@/redux'

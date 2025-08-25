@@ -1,7 +1,6 @@
 import { Alert, View } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout, Spacer } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { Button, OnboardingLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { enableBiometric, useAppDispatch } from '@/redux'
 import { SetupBiometrics } from '@/modules/ui-components/organisms/SetupBiometrics'
 

@@ -1,4 +1,3 @@
-import { Ruller } from '@/components'
 import { ModalConfirm } from '@/components/modal'
 import { useEffect, useState } from 'react'
 import { Alert, TouchableOpacity } from 'react-native'
@@ -6,10 +5,10 @@ import { useSelector } from 'react-redux'
 import { deleteVault, fetchVaults, selectVaultToEdit, updateVault, useAppDispatch } from '@/redux'
 import { Stack, useNavigation, useRouter } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
-import { Button, Text, Container, Spacer, OnboardingLayout } from '@/modules/ui-components'
+import { Button, Text, Container, Spacer, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
 import styled from 'styled-components/native'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
 import { InputWithLabel } from '@/modules/ui-components/molecules'
+import { Ruller } from '@/modules/ui-components/atoms'
 
 const Page = () => {
   const dispatch = useAppDispatch()

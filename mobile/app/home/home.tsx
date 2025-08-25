@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
-import { Link, Stack, useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
 import {
   checkForKeyOnChains,
@@ -17,9 +17,9 @@ import { Button, TextField, Text, Container, HomeLayout, Spacer } from '@/module
 import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { HomeEmptyBox, HomeNotFoundBox } from '@/modules/ui-components/molecules'
-import { ScreenHeader, NetworkSelectionModal } from '@/modules/ui-components/organisms'
+import { NetworkSelectionModal } from '@/modules/ui-components/organisms'
 import { Vault } from '@/types'
-import { HorizontalGroup } from '@/modules/ui-components/templates'
+import { HorizontalGroup, ScreenHeader } from '@/modules/ui-components/templates'
 
 export default function Page() {
   const isFirstRender = useRef(true)
@@ -100,38 +100,30 @@ export default function Page() {
         networks={networks}
         currentNetwork={currentChain}
       />
-      <Stack.Screen
-        options={{
-          header: (props) => (
-            <ScreenHeader
-              {...props}
-              title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}
-              headerBackVisible={false}
-              rightComponent={
-                <TouchableOpacity
-                  onPress={() => setShowNetworkModal(true)}
-                  style={{ flexDirection: 'row', alignItems: 'center' }}
-                >
-                  <FontAwesome5 name="network-wired" size={20} color={theme.colors.link} style={{ marginRight: 4 }} />
-                  <Text.LinkText>{currentChain ? currentChain.chainName : 'No Registration'}</Text.LinkText>
-                </TouchableOpacity>
-              }
-            >
-              <Spacer space={16} />
-              <TextField
-                placeholder="Search"
-                value={nameSearch}
-                onChangeText={setNameSearch}
-                autoCapitalize="none"
-                autoCorrect={false}
-                hideError
-                leftIcon={<FontAwesome6 name="magnifying-glass" size={16} color={theme.text.textMuted} />}
-              />
-            </ScreenHeader>
-          )
-        }}
-      />
       <HomeLayout
+        header={
+          <ScreenHeader
+            title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}
+            headerBackVisible={false}
+            rightComponent={
+              <TouchableOpacity onPress={() => setShowNetworkModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <FontAwesome5 name="network-wired" size={20} color={theme.colors.link} style={{ marginRight: 4 }} />
+                <Text.LinkText>{currentChain ? currentChain.chainName : 'No Registration'}</Text.LinkText>
+              </TouchableOpacity>
+            }
+          >
+            <Spacer space={16} />
+            <TextField
+              placeholder="Search"
+              value={nameSearch}
+              onChangeText={setNameSearch}
+              autoCapitalize="none"
+              autoCorrect={false}
+              hideError
+              leftIcon={<FontAwesome6 name="magnifying-glass" size={16} color={theme.text.textMuted} />}
+            />
+          </ScreenHeader>
+        }
         footer={
           <HorizontalGroup>
             <Button
@@ -150,17 +142,15 @@ export default function Page() {
           </HorizontalGroup>
         }
       >
-        <>
-          {filteredAccounts && (
-            <FlatList
-              data={filteredAccounts}
-              ListEmptyComponent={vaults?.length === 0 ? <HomeEmptyBox /> : <HomeNotFoundBox />}
-              renderItem={({ item }) => <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} />}
-              keyExtractor={(item) => item.keyInfo.name}
-              contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
-            />
-          )}
-        </>
+        {filteredAccounts && (
+          <FlatList
+            data={filteredAccounts}
+            ListEmptyComponent={vaults?.length === 0 ? <HomeEmptyBox /> : <HomeNotFoundBox />}
+            renderItem={({ item }) => <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} />}
+            keyExtractor={(item) => item.keyInfo.name}
+            contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
+          />
+        )}
       </HomeLayout>
     </>
   )

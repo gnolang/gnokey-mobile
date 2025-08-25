@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 import React from 'react'
 import { StyleProp, TextStyle } from 'react-native'
-import * as Text from '../text'
+import { Text } from '../../src'
 
 type Props = {
   label: string

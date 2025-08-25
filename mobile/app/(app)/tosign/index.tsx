@@ -1,4 +1,4 @@
-import { Layout, Ruller } from '@/components'
+import { Layout } from '@/components'
 import {
   estimateGasWanted,
   selectClientName,
@@ -23,6 +23,7 @@ import { ScrollView, View, TouchableOpacity, SafeAreaView, ActivityIndicator } f
 import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
 import styled from 'styled-components/native'
 import { BetaVersionMiniBanner } from '@/modules/ui-components/molecules'
+import { Ruller } from '@/modules/ui-components/atoms'
 
 export default function Page() {
   const dispatch = useAppDispatch()

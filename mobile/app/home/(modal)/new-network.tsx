@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { OnboardingLayout } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
 import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
 import { useAppDispatch, saveChain, setSelectedChain } from '@/redux'
 

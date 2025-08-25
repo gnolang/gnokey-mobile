@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { View } from 'react-native'
-import { Button, OnboardingLayout, Text } from '@/modules/ui-components'
+import { Button, OnboardingLayout, ScreenHeader, Text } from '@/modules/ui-components'
 import { resetState, useAppDispatch } from '@/redux'
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
 import styled, { useTheme } from 'styled-components/native'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
 
 const Page = () => {
   const router = useRouter()

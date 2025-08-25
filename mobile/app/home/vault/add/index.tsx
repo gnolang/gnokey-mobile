@@ -11,8 +11,7 @@ import {
   generateNewPhrase,
   resetState
 } from '@/redux'
-import { Button, ErrorBox, OnboardingLayout, Spacer } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { Button, ErrorBox, OnboardingLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
 export default function Page() {

@@ -1,6 +1,5 @@
 import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
 import { ForgotPassSuccessView } from '@/modules/ui-components/organisms/ForgotPassSuccessView'
 
 export default function Page() {

@@ -2,7 +2,7 @@ import { Button, Spacer, TextField } from '@/modules/ui-components'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { isEmpty, isInvalidURL } from '@/modules/validation'
-import { Ruller } from '@/components'
+import { Ruller } from '../atoms'
 
 export interface Form {
   chainName: string

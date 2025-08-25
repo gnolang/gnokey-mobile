@@ -1,6 +1,5 @@
 import styled from 'styled-components/native'
 import { Spacer, Text, TextField } from '../src'
-import { Ruller } from '@/components'
 import { useEffect, useState } from 'react'
 import {
   selectChainsAvailable,
@@ -19,6 +18,7 @@ import { NetworkSelectionModal } from './NetworkSelectionModal'
 import { useRouter } from 'expo-router'
 import { Alert } from 'react-native'
 import { BetaVersionMiniBanner } from '../molecules'
+import { Ruller } from '../atoms'
 
 export interface Props {
   error?: string

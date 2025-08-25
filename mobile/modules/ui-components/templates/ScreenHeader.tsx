@@ -1,10 +1,9 @@
 import React from 'react'
 import { useRouter } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
-import { NativeStackHeaderProps } from '@react-navigation/native-stack'
-import { SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native'
-import styled, { useTheme } from 'styled-components/native'
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
+import { useTheme } from 'styled-components/native'
 import { Spacer, Text } from '../src'
+import HeaderActionButton from '../atoms/button/HeaderActionButton'
 
 export type ScreenHeaderProps = {
   subtitle?: string
@@ -13,7 +12,7 @@ export type ScreenHeaderProps = {
   onBackPress?: () => void
   children?: React.ReactNode
   rightComponent?: React.ReactNode
-} & NativeStackHeaderProps
+}
 
 function ScreenHeader(props: ScreenHeaderProps) {
   const { title, subtitle, headerBackVisible = true, onBackPress, children, rightComponent } = props
@@ -23,13 +22,13 @@ function ScreenHeader(props: ScreenHeaderProps) {
     <SafeAreaView style={{ backgroundColor: theme.colors.backgroundSecondary }}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.horizontalGroup}>
-        <Row style={styles.backButtonBox}>{headerBackVisible && <BackButton onBackPress={onBackPress} />}</Row>
+        <View style={styles.backButtonBox}>{headerBackVisible && <BackButton onBackPress={onBackPress} />}</View>
         <Spacer space={8} />
-        <Row>
+        <View style={styles.row}>
           <Text.LargeTitle>{title}</Text.LargeTitle>
           <Text.Title3>{subtitle}</Text.Title3>
           {rightComponent && <View style={{ marginLeft: 'auto' }}>{rightComponent}</View>}
-        </Row>
+        </View>
         {children}
       </View>
     </SafeAreaView>
@@ -41,24 +40,8 @@ const BackButton = ({ onBackPress }: { onBackPress?: () => void }) => {
   if (!navigation.canGoBack()) {
     return null
   }
-  return (
-    <TouchableOpacity style={styles.backButton} onPress={() => (onBackPress ? onBackPress() : navigation.back())}>
-      <Ionicons name="chevron-back" size={20} color="#007aff" />
-      <BackLabel>Back</BackLabel>
-    </TouchableOpacity>
-  )
+  return <HeaderActionButton onPress={() => (onBackPress ? onBackPress() : navigation.back())} label="Back" icon="chevron-back" />
 }
-
-const Row = styled.View`
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-`
-
-const BackLabel = styled(Text.Title3)`
-  color: #007aff;
-  font-weight: 400;
-`
 
 const styles = StyleSheet.create({
   backButton: {
@@ -68,6 +51,11 @@ const styles = StyleSheet.create({
   },
   backButtonBox: {
     minHeight: 25
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'space-between'
   },
   horizontalGroup: { marginHorizontal: 20, marginBottom: 12 }
 })

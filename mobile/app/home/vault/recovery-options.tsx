@@ -1,9 +1,10 @@
-import { Layout, Ruller } from '@/components'
+import { Layout } from '@/components'
 import { Container, Spacer, Text } from '@/modules/ui-components'
 import { ActionItem } from '@/modules/ui-components/src/ui/ActionItem'
 import { View } from 'react-native'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { useRouter } from 'expo-router'
+import { Ruller } from '@/modules/ui-components/atoms'
 
 export default function Page() {
   const route = useRouter()

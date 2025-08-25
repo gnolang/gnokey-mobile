@@ -1,7 +1,6 @@
 import { Alert } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout } from '@/modules/ui-components'
-import ScreenHeader from '@/modules/ui-components/organisms/ScreenHeader'
+import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
 import { SetupPassForm } from '@/modules/ui-components/organisms/SetupPassForm'
 import { useState } from 'react'
 import { createMasterPass, useAppDispatch } from '@/redux'

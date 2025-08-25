@@ -1,36 +1,34 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, SafeAreaView, View } from 'react-native'
+import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import styled from 'styled-components/native'
 
-interface OnboardingLayoutProps {
+interface Props {
   children: ReactNode
-  footer: ReactNode
+  footer?: ReactNode
+  header: ReactNode
+  contentPadding?: 20 | 32
 }
 
-export function HomeLayout({ children, footer }: OnboardingLayoutProps) {
+export function HomeLayout({ children, footer, header, contentPadding = 32 }: Props) {
   const insets = useSafeAreaInsets()
   return (
     <>
-      <SafeArea>
-        <View style={styles.content}>{children}</View>
-      </SafeArea>
-      <BottonPanel style={{ paddingBottom: Math.max(insets.bottom, 16) }}>{footer}</BottonPanel>
+      {header}
+      <Content style={{ paddingHorizontal: contentPadding }}>{children}</Content>
+      {footer && (
+        <BottonPanel style={{ paddingHorizontal: contentPadding, paddingBottom: Math.max(insets.bottom, 16) }}>
+          {footer}
+        </BottonPanel>
+      )}
     </>
   )
 }
 
-const SafeArea = styled(SafeAreaView)`
+const Content = styled(View)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
 `
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    paddingHorizontal: 20
-  }
-})
 
 export const BottonPanel = styled.View`
   border-top-width: 0.5px;

@@ -2,23 +2,45 @@ import { Stack } from 'expo-router'
 
 export default function AppLayout() {
   const defaultOptions = {
-    headerTransparent: true,
-    headerShadowVisible: true,
+    headerTransparent: false,
+    headerShadowVisible: false,
     headerLargeTitleShadowVisible: false,
-    headerLargeStyle: {
-      backgroundColor: 'transparent'
-    },
-    headerLargeTitle: false
+    headerLargeTitle: false,
+    headerShown: false
   }
 
   return (
     <Stack>
-      <Stack.Screen name="home" />
+      <Stack.Screen
+        name="home"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
       <Stack.Screen
         name="settings/index"
         options={{
-          title: 'Settings',
-          ...defaultOptions
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="settings/networks-list"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="settings/security-center"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
         }}
       />
       <Stack.Screen

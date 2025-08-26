@@ -10,10 +10,9 @@ interface Props {
   network: NetworkMetainfo
   onEdit: (network: NetworkMetainfo) => void
   onDelete: (network: NetworkMetainfo) => void
-  showSwipeActions?: boolean
 }
 
-export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete, showSwipeActions = true }) => {
+export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
   const swipeableRef = useRef(null)
 
   const handleEdit = () => {
@@ -30,8 +29,8 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete, showSw
 
   function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
     const styleAnimation = useAnimatedStyle(() => {
-      console.log('showRightProgress:', prog.value)
-      console.log('appliedTranslation:', drag.value)
+      // console.log('showRightProgress:', prog.value)
+      // console.log('appliedTranslation:', drag.value)
 
       return {
         transform: [{ translateX: drag.value + 140 }]
@@ -40,7 +39,7 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete, showSw
 
     return (
       <Reanimated.View style={[styleAnimation, { flexDirection: 'row' }]}>
-        <SwipeEditButton label="Edit" color="#007aff" onPress={handleEdit} />
+        <SwipeEditButton label="View" color="#007aff" onPress={handleEdit} />
         <SwipeEditButton label="Delete" color="#ff3b30" onPress={handleDelete} />
       </Reanimated.View>
     )

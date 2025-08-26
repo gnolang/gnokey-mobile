@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { GnoNativeApi } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { NetworkMetainfo } from '@/types'
-import { getChainById, insertChain, updateActiveChain } from '@/providers/database-provider'
+import * as db from '@/providers/database-provider'
 
 export interface ChainsState {
   chains: NetworkMetainfo[]
@@ -29,6 +29,12 @@ export const chainsSlice = createSlice({
     builder.addCase(saveChain.fulfilled, (state, action) => {
       state.chains = [action.payload, ...state.chains]
     })
+    builder.addCase(deleteChain.fulfilled, (state, action) => {
+      state.chains = action.payload
+      if (state.currentChain && !state.chains.find((chain) => chain.id === state.currentChain?.id)) {
+        state.currentChain = undefined
+      }
+    })
   }
 })
 
@@ -40,14 +46,14 @@ export interface SaveChainRequest {
 }
 
 export const saveChain = createAsyncThunk<NetworkMetainfo, SaveChainRequest, ThunkExtra>('chains/saveChain', async (chain, _) => {
-  const data = await insertChain({
+  const data = await db.insertChain({
     chainId: chain.chainId,
     chainName: chain.chainName,
     rpcUrl: chain.rpcUrl,
     faucetUrl: chain.faucetUrl || '',
     active: false // new chains are not active by default
   })
-  const savedChain = await getChainById(data.lastInsertRowId.toString())
+  const savedChain = await db.getChainById(data.lastInsertRowId.toString())
   if (!savedChain) {
     throw new Error('Failed to save chain')
   }
@@ -55,10 +61,19 @@ export const saveChain = createAsyncThunk<NetworkMetainfo, SaveChainRequest, Thu
   return savedChain
 })
 
+export const deleteChain = createAsyncThunk<NetworkMetainfo[], number, ThunkExtra>('chains/deleteChain', async (id, _) => {
+  const res = await db.deleteChain(id)
+  if (res.changes === 0) {
+    throw new Error('No chain found with the given ID')
+  }
+  console.log('Chain deleted with ID:', id)
+  return await db.listChains()
+})
+
 export const setCurrentChain = createAsyncThunk<NetworkMetainfo | undefined, NetworkMetainfo | undefined, ThunkExtra>(
   'chains/setCurrentChain',
   async (chain, thunkAPI) => {
-    await updateActiveChain(chain?.id)
+    await db.updateActiveChain(chain?.id)
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     if (!chain) {
       console.warn('No chain provided to setCurrentChain, returning undefined')

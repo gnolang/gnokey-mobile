@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
+import { HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
 import { useAppDispatch, saveChain, setSelectedChain } from '@/redux'
 
@@ -11,7 +11,7 @@ const Page = () => {
   const params = useLocalSearchParams<{ fromScreen: string | 'NewVault' }>()
 
   const [loading, setLoading] = useState(false)
-  const onSaveChain = async (data: Form) => {
+  const onSubmit = async (data: Form) => {
     if (!data) {
       Alert.alert('No chain provided')
       return
@@ -33,15 +33,10 @@ const Page = () => {
   }
 
   return (
-    <OnboardingLayout>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title="New chain" />
-        }}
-      />
+    <HomeLayout header={<ScreenHeader title="New chain" />} footer={null}>
       {/* <LoadingModal visible={loading} /> */}
-      <NetworkForm onSaveChain={onSaveChain} loading={loading} />
-    </OnboardingLayout>
+      <NetworkForm onSubmit={onSubmit} loading={loading} />
+    </HomeLayout>
   )
 }
 

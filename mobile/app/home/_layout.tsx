@@ -28,7 +28,7 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="settings/networks-list"
+        name="settings/security-center"
         options={{
           ...defaultOptions,
           headerBackVisible: false,
@@ -36,7 +36,31 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="settings/security-center"
+        name="settings/developer-options"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="network/list/index"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="network/edit/[id]"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="network/new/index"
         options={{
           ...defaultOptions,
           headerBackVisible: false,

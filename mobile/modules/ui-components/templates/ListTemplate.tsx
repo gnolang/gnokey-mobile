@@ -4,10 +4,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Ruller } from '../atoms'
 import { Spacer } from '../src'
 import { useTheme } from 'styled-components/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface ListTemplateProps<T> {
   header: React.ReactNode
   subHeader: React.ReactNode
+  footer: React.ReactNode
   data: T[]
   renderItem: ({ item, index }: { item: T; index: number }) => React.ReactElement
   keyExtractor: (item: T) => string
@@ -18,6 +20,7 @@ interface ListTemplateProps<T> {
 export function ListTemplate<T>({
   header,
   subHeader,
+  footer,
   data,
   renderItem,
   keyExtractor,
@@ -25,6 +28,9 @@ export function ListTemplate<T>({
   contentContainerStyle = { paddingVertical: 10 }
 }: ListTemplateProps<T>) {
   const theme = useTheme()
+  const insets = useSafeAreaInsets()
+  const paddingBottom = insets.bottom || 20
+
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {header}
@@ -40,6 +46,7 @@ export function ListTemplate<T>({
         contentContainerStyle={contentContainerStyle}
         ItemSeparatorComponent={() => <Ruller />}
       />
+      <View style={{ paddingBottom, paddingHorizontal: 20 }}>{footer}</View>
     </GestureHandlerRootView>
   )
 }

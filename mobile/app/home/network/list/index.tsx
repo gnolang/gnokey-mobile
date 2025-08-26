@@ -1,21 +1,36 @@
-import { ListTemplate, ScreenHeader } from '@/modules/ui-components'
+import { Button, ListTemplate, ScreenHeader } from '@/modules/ui-components'
 import { Ruller } from '@/modules/ui-components/atoms'
 import { Form } from '@/modules/ui-components/molecules'
 import { NetworkItem } from '@/modules/ui-components/organisms/NetworkItem'
-import { selectChainsAvailable, useAppSelector } from '@/redux'
+import { deleteChain, selectChainsAvailable, useAppDispatch, useAppSelector } from '@/redux'
 import { NetworkMetainfo } from '@/types'
+import { useRouter } from 'expo-router'
+import { Alert } from 'react-native'
 
 const Page: React.FC = () => {
   const networks = useAppSelector(selectChainsAvailable)
+  const dispatch = useAppDispatch()
+  const route = useRouter()
 
-  const handleEdit = (network: NetworkMetainfo) => {
-    // Handle edit action
-    console.log('Edit network with ID:', network.id)
+  const handleEdit = async (network: NetworkMetainfo) => {
+    route.push(`/home/network/edit/${network.id}`)
   }
 
   const handleDelete = (network: NetworkMetainfo) => {
-    // Handle delete action
-    console.log('Delete network with ID:', network.id)
+    Alert.alert('Delete Network', `Are you sure you want to delete the network "${network.chainName}"?`, [
+      {
+        text: 'Cancel',
+        style: 'cancel'
+      },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          console.log('Network deleted:', network.id)
+          await dispatch(deleteChain(network.id))
+        }
+      }
+    ])
   }
 
   const renderNetworkItem = ({ item, index }: { item: NetworkMetainfo; index: number }) => {
@@ -25,7 +40,7 @@ const Page: React.FC = () => {
     return (
       <>
         {isFirst && <Ruller />}
-        <NetworkItem network={item} onEdit={handleEdit} onDelete={handleDelete} showSwipeActions={true} />
+        <NetworkItem network={item} onEdit={handleEdit} onDelete={handleDelete} />
         {isLast && <Ruller />}
       </>
     )
@@ -42,6 +57,11 @@ const Page: React.FC = () => {
             title="Network List"
             // rightActions={<HeaderActionLink>Delete All</HeaderActionLink>}
           />
+        }
+        footer={
+          <>
+            <Button onPress={() => route.push('/home/network/new')}>Add Network</Button>
+          </>
         }
         data={networks || []}
         renderItem={renderNetworkItem}

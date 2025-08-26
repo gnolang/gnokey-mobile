@@ -41,7 +41,7 @@ export interface GetJsonFollowingResult {
 }
 
 export type NetworkMetainfo = {
-  id: string
+  id: number
   chainId: string
   chainName: string
   rpcUrl: string

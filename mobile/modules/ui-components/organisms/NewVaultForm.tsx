@@ -66,7 +66,7 @@ export const NewVaultForm = ({ error }: Props) => {
         }}
         onAddChain={() => {
           setShowNetworkModal(false)
-          router.push({ pathname: '/home/(modal)/new-network', params: { fromScreen: 'NewVault' } })
+          router.push({ pathname: '/home/network/new', params: { fromScreen: 'NewVault' } })
         }}
         networks={networks}
         currentNetwork={currentNetwork}

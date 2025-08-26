@@ -53,10 +53,6 @@ const RowSpaced = styled.View`
   align-items: center;
   width: 100%;
 `
-// const TitleMuted = styled.Text`
-//   color: ${({ theme }) => theme.text.textMuted};
-//   weight: ${Text.weights.regular};
-// `
 
 export const FormButton: React.FC<FormButtonProps> = (props) => {
   const { title, hint, onPress } = props

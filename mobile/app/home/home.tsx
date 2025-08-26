@@ -95,7 +95,7 @@ export default function Page() {
         }}
         onAddChain={() => {
           setShowNetworkModal(false)
-          route.push('/home/(modal)/new-network')
+          route.push('/home/network/new')
         }}
         networks={networks}
         currentNetwork={currentChain}

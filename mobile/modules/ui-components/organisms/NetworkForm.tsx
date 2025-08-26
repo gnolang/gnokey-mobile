@@ -1,8 +1,9 @@
-import { Button, Spacer, TextField } from '@/modules/ui-components'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
+import { Button, Spacer, TextField } from '@/modules/ui-components'
 import { isEmpty, isInvalidURL } from '@/modules/validation'
 import { Ruller } from '../atoms'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export interface Form {
   chainName: string
@@ -12,21 +13,25 @@ export interface Form {
 }
 
 export interface Props {
-  onSaveChain: (form: Form) => void
+  onSubmit: (form: Form) => void
   loading?: boolean
+  initialData?: Form
+  mode?: 'add' | 'edit'
 }
 
-export const NetworkForm = ({ onSaveChain, loading }: Props) => {
+export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Props) => {
   const initialForm: Form = {
-    chainName: '',
-    chainId: '',
-    rpcUrl: '',
-    faucetUrl: ''
+    chainName: initialData?.chainName || '',
+    chainId: initialData?.chainId || '',
+    rpcUrl: initialData?.rpcUrl || '',
+    faucetUrl: initialData?.faucetUrl || ''
   }
 
   const [form, setForm] = React.useState<Form>(initialForm)
-  const [errors, setErrors] = React.useState(initialForm)
+  const [errors, setErrors] = React.useState<Form>({} as Form)
   const [isInitial, setInitial] = React.useState(true)
+  const insets = useSafeAreaInsets()
+  const marginBottom = insets.bottom || 20
 
   useEffect(() => {
     if (isInitial) {
@@ -70,7 +75,7 @@ export const NetworkForm = ({ onSaveChain, loading }: Props) => {
       console.log('Errors', err)
       return
     }
-    onSaveChain(form)
+    onSubmit(form)
   }
 
   return (
@@ -134,9 +139,11 @@ export const NetworkForm = ({ onSaveChain, loading }: Props) => {
         <Spacer />
       </View>
 
-      <Button color="primary" onPress={onSave} loading={loading} disabled={loading}>
-        Save new Chain
-      </Button>
+      {mode === 'add' ? (
+        <Button style={{ marginBottom }} color="primary" onPress={onSave} loading={loading} disabled={loading}>
+          Save Changes
+        </Button>
+      ) : null}
     </>
   )
 }

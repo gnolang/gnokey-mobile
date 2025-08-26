@@ -136,6 +136,15 @@ export const insertChain = async ({ chainId, chainName, rpcUrl, faucetUrl, fauce
   return await db.runAsync(sql, chainId, chainName, rpcUrl, faucetUrl || '', faucetPortalUrl || '', active)
 }
 
+export const deleteChain = async (id: number) => {
+  const sql = 'DELETE FROM app_chains WHERE id = ?'
+  return await db.runAsync(sql, id)
+}
+
+export const listChains = async (): Promise<NetworkMetainfo[]> => {
+  return await db.getAllAsync<NetworkMetainfo>('SELECT * FROM app_chains ORDER BY createdAt DESC')
+}
+
 export const insertVault = async (keyInfo: KeyInfo, description?: string, chainId?: string) => {
   const sql = 'INSERT INTO app_vaults (keyName, description, chainIds) VALUES (?, ?, ?)'
   return await db.runAsync(sql, keyInfo.name, description || '', chainId ? JSON.stringify([chainId]) : '[]')
@@ -168,7 +177,7 @@ export const updateVault = async (vault: Vault, keyName: string, description?: s
   return await db.runAsync(sql, keyName, description || '', vault.id)
 }
 
-export const updateActiveChain = async (id?: string) => {
+export const updateActiveChain = async (id?: number) => {
   await db.runAsync('UPDATE app_chains SET active = 0')
   if (!id) {
     console.warn('No chain ID provided to updateActiveChain, skipping update')

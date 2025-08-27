@@ -16,7 +16,7 @@ const Page: React.FC = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel'
       },
-      { text: 'OK', onPress: () => nukeDatabase() }
+      { text: 'OK', style: 'destructive', onPress: () => nukeDatabase() }
     ])
   }
 
@@ -27,7 +27,7 @@ const Page: React.FC = () => {
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel'
       },
-      { text: 'OK', onPress: () => dispatch(hardReset()) }
+      { text: 'OK', style: 'destructive', onPress: () => dispatch(hardReset()) }
     ])
   }
 

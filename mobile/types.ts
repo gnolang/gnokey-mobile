@@ -56,8 +56,9 @@ export type Vault = {
   keyName: string
   description?: string
   bookmarked?: boolean
-  chainIds: string // This is a JSON stringified array of chain IDs
-  chains?: string[]
+  // chainIds: string // This is a JSON stringified array of chain IDs
+  // chains?: string[]
+  chain: NetworkMetainfo | null
   /**
    * SQLite date format is 'YYYY-MM-DD HH:mm:ss'
    */

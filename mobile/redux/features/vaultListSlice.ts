@@ -34,7 +34,7 @@ export const fetchVaults = createAsyncThunk<Vault[], void, ThunkExtra>('vaults/f
   const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
   const currentChain = selectCurrentChain(thunkAPI.getState() as RootState)
   const keyinfoList = await gnonative.listKeyInfo()
-  const databaseVaults = await listVaultsByChain(currentChain?.chainId || '')
+  const databaseVaults = await listVaultsByChain(currentChain?.id || undefined)
 
   return enrichData(keyinfoList, databaseVaults)
 })
@@ -149,23 +149,6 @@ export const vaultListSlice = createSlice({
     builder.addCase(fetchVaults.rejected, (state, action) => {
       state.loading = false
       state.error = action.error as Error
-    })
-    builder.addCase(checkForKeyOnChains.rejected, (state, action) => {
-      console.error('checkForKeyOnChains.rejected', action.error)
-    })
-    builder.addCase(checkForKeyOnChains.fulfilled, (state, action) => {
-      if (!action.payload) return
-      state.vaultsChains = action.payload.infoOnChains
-
-      // update vaults with chains
-      state.vaults?.forEach((vault) => {
-        const chains = state.vaultsChains?.get(vault.keyInfo.address.toString())
-        if (chains) {
-          vault.chains = chains
-        } else {
-          vault.chains = []
-        }
-      })
     })
   },
   selectors: {

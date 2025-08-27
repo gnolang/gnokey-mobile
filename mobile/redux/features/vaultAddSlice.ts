@@ -165,7 +165,7 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
-    insertVault(newAccount, description, selectedChain.chainId)
+    insertVault(newAccount, description, selectedChain.id)
     await setCurrentChainAndRefresh(thunkAPI, selectedChain)
     thunkAPI.dispatch(addProgress(`Account "${name}" created successfully.`))
     return { newAccount, state: VaultCreationState.account_created }

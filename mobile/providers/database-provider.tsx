@@ -80,7 +80,7 @@ const executeMigrations = async (db: SQLite.SQLiteDatabase) => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       keyName TEXT NOT NULL,
       description TEXT,
-      chainIds TEXT,
+      appChainId INTEGER,
       bookmarked BOOLEAN DEFAULT 0,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -145,9 +145,9 @@ export const listChains = async (): Promise<NetworkMetainfo[]> => {
   return await db.getAllAsync<NetworkMetainfo>('SELECT * FROM app_chains ORDER BY createdAt DESC')
 }
 
-export const insertVault = async (keyInfo: KeyInfo, description?: string, chainId?: string) => {
-  const sql = 'INSERT INTO app_vaults (keyName, description, chainIds) VALUES (?, ?, ?)'
-  return await db.runAsync(sql, keyInfo.name, description || '', chainId ? JSON.stringify([chainId]) : '[]')
+export const insertVault = async (keyInfo: KeyInfo, description?: string, appChainId?: number) => {
+  const sql = 'INSERT INTO app_vaults (keyName, description, appChainId) VALUES (?, ?, ?)'
+  return await db.runAsync(sql, keyInfo.name, description || '', appChainId || null)
 }
 
 export const deleteVault = async (id: string) => {
@@ -159,12 +159,25 @@ export const listVaults = async (): Promise<Vault[]> => {
   return await db.getAllAsync<Vault>('SELECT * FROM app_vaults ORDER BY createdAt DESC')
 }
 
-export const listVaultsByChain = async (chainId?: string): Promise<Vault[]> => {
+export const listVaultsByChain = async (chainId?: number): Promise<Vault[]> => {
   if (!chainId) {
-    return await db.getAllAsync<Vault>("SELECT * FROM app_vaults WHERE chainIds = '[]'")
+    return await db.getAllAsync<Vault>("SELECT * FROM app_vaults WHERE appChainId IS NULL OR appChainId = ''")
   }
-
-  return await db.getAllAsync<Vault>("SELECT * FROM app_vaults WHERE JSON_EXTRACT(chainIds, '$') LIKE ?", `%${chainId}%`)
+  const data = await db.getAllAsync<any>(
+    `SELECT 
+      app_vaults.*,
+      app_chains.id as chainId,
+      app_chains.chainName as chainName
+    FROM app_vaults INNER JOIN app_chains ON app_vaults.appChainId = app_chains.id WHERE appChainId = ?`,
+    chainId
+  )
+  return data.map((vault) => ({
+    ...vault,
+    chain: {
+      id: vault.chainId,
+      chainName: vault.chainName
+    }
+  }))
 }
 
 export const getChainById = async (id: string): Promise<NetworkMetainfo | null> => {

@@ -25,6 +25,12 @@ export default function VaultModalLayout() {
           ...defaultOptions
         }}
       />
+      <Stack.Screen
+        name="edit/index"
+        options={{
+          headerShown: false
+        }}
+      />
       <Stack.Screen name="add/new-vault-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
       <Stack.Screen
         name="add/new-vault-loading"

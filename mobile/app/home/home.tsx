@@ -101,6 +101,7 @@ export default function Page() {
         currentNetwork={currentChain}
       />
       <HomeLayout
+        footerWithBorder
         header={
           <ScreenHeader
             title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}

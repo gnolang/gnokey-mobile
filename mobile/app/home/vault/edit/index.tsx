@@ -1,14 +1,14 @@
-import { ModalConfirm } from '@/components/modal'
+import { Alert } from 'react-native'
 import { useEffect, useState } from 'react'
-import { Alert, TouchableOpacity } from 'react-native'
+import { ModalConfirm } from '@/components/modal'
 import { useSelector } from 'react-redux'
 import { deleteVault, fetchVaults, selectVaultToEdit, updateVault, useAppDispatch } from '@/redux'
-import { Stack, useNavigation, useRouter } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 import { useGnoNativeContext } from '@gnolang/gnonative'
-import { Button, Text, Container, Spacer, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
-import styled from 'styled-components/native'
-import { InputWithLabel } from '@/modules/ui-components/molecules'
+import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
+import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller } from '@/modules/ui-components/atoms'
+import { HeaderActionLink } from '@/modules/ui-components/src/text'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -73,12 +73,15 @@ const Page = () => {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title={vault.keyName} />
-        }}
-      />
-      <OnboardingLayout
+      <HomeLayout
+        contentPadding={20}
+        header={<ScreenHeader title={vault.keyName} />}
+        subHeader={
+          <Form.Section
+            title="Network List"
+            rightActions={<HeaderActionLink onPress={() => setShowDeleteModal(true)}>Delete</HeaderActionLink>}
+          />
+        }
         footer={
           <Button onPress={onUpdateAccount} color="primary">
             Update Account
@@ -86,14 +89,6 @@ const Page = () => {
         }
       >
         <Container style={{ flex: 1 }}>
-          <Spacer space={16} />
-          <RowSpaceBetween>
-            <Text.Title2>Info</Text.Title2>
-            <TouchableOpacity onPress={() => setShowDeleteModal(true)}>
-              <Text.LinkText>Delete</Text.LinkText>
-            </TouchableOpacity>
-          </RowSpaceBetween>
-
           <Ruller spacer={16} />
           <InputWithLabel label="Name" placeholder="Name" onChangeText={setVaultName} value={vaultName} noEdit />
           <Ruller spacer={16} />
@@ -101,7 +96,12 @@ const Page = () => {
           <Ruller spacer={16} />
           <InputWithLabel label="Address" placeholder="Address" value={addressBech32} noEdit />
           <Ruller spacer={16} />
-          <InputWithLabel label="Chain" placeholder="Chain" value={vault.chainIds} noEdit />
+          <InputWithLabel
+            label="Chain"
+            placeholder="Chain"
+            value={vault.chain ? vault.chain.chainName : 'No User Registration'}
+            noEdit
+          />
           <Ruller spacer={16} />
         </Container>
 
@@ -113,15 +113,9 @@ const Page = () => {
           onConfirm={onConfirmDelete}
           onCancel={() => setShowDeleteModal(false)}
         />
-      </OnboardingLayout>
+      </HomeLayout>
     </>
   )
 }
-
-const RowSpaceBetween = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`
 
 export default Page

@@ -13,7 +13,7 @@ interface Props {
   footerWithBorder?: boolean
 }
 
-export function HomeLayout({ children, footer, header, subHeader, contentPadding = 32, footerWithBorder }: Props) {
+export function HomeLayout({ children, footer, header, subHeader, contentPadding = 20, footerWithBorder }: Props) {
   const insets = useSafeAreaInsets()
   return (
     <>
@@ -30,7 +30,8 @@ export function HomeLayout({ children, footer, header, subHeader, contentPadding
       {footer && (
         <BottonPanel
           $footerWithBorder={footerWithBorder}
-          style={{ paddingHorizontal: contentPadding, paddingBottom: Math.max(insets.bottom, 16) }}>
+          style={{ paddingHorizontal: contentPadding, paddingBottom: Math.max(insets.bottom, 16) }}
+        >
           {footer}
         </BottonPanel>
       )}

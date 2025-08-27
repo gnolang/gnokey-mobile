@@ -13,7 +13,7 @@ const HeroBox = ({ img, title, description, children }: Props) => {
     <TopCenterContainer>
       {img ? img : null}
       <Spacer space={56} />
-      <Text.LargeTitle>{title}</Text.LargeTitle>
+      <Text.LargeTitle style={{ textAlign: 'center' }}>{title}</Text.LargeTitle>
       <Spacer space={16} />
       <Text.Title3CenterGray>{description}</Text.Title3CenterGray>
       {children ? (

@@ -12,7 +12,7 @@ const HeaderActionButton: React.FC<Props> = ({ onPress, label, icon }) => {
   return (
     <TouchableOpacity style={styles.backButton} onPress={onPress}>
       {icon && <Ionicons name={icon} size={20} color="#007aff" />}
-      <Text.HeaderActionLink>{label}</Text.HeaderActionLink>
+      <Text.LinkHeader>{label}</Text.LinkHeader>
     </TouchableOpacity>
   )
 }

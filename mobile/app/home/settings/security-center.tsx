@@ -33,8 +33,12 @@ const Page: React.FC = () => {
             title="Change master password"
             description="Update your master password to keep your account secure."
           />
-          {!isBiometricEnabled && Platform.OS === 'ios' && <Form.Link onPress={enableFaceID} title="Enable FaceID" />}
-          {isBiometricEnabled && <Form.Link onPress={disableFaceID} title="Disable FaceID" />}
+          {!isBiometricEnabled && Platform.OS === 'ios' && (
+            <Form.Link onPress={enableFaceID} title="Enable FaceID" description="Use FaceID for faster authentication." />
+          )}
+          {isBiometricEnabled && (
+            <Form.Link onPress={disableFaceID} title="Disable FaceID" description="Disable FaceID for authentication." />
+          )}
         </Form.Section>
       </ScrollView>
     </HomeLayout>

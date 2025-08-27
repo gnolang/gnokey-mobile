@@ -15,7 +15,7 @@ export const WelcomeBackFooter = ({ onUnlockPress: onUnlokPress, error }: Props)
   const router = useRouter()
 
   return (
-    <View>
+    <View style={{ width: '100%' }}>
       {!isBiometric ? (
         <TextField
           placeholder="Enter password"

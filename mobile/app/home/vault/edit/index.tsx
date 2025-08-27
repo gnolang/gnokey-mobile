@@ -8,7 +8,7 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller } from '@/modules/ui-components/atoms'
-import { HeaderActionLink } from '@/modules/ui-components/src/text'
+import { LinkHeader } from '@/modules/ui-components/src/text'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -79,7 +79,7 @@ const Page = () => {
         subHeader={
           <Form.Section
             title="Network List"
-            rightActions={<HeaderActionLink onPress={() => setShowDeleteModal(true)}>Delete</HeaderActionLink>}
+            rightActions={<LinkHeader onPress={() => setShowDeleteModal(true)}>Delete</LinkHeader>}
           />
         }
         footer={

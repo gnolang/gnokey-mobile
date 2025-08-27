@@ -1,4 +1,3 @@
-import styled from 'styled-components/native'
 import { Button, ButtonText, Spacer, Text } from '../src'
 
 interface Props {
@@ -13,12 +12,8 @@ export const OnboardingFooter = ({ onStartOnboardingPress }: Props) => {
       </Button>
       <Spacer space={16} />
       <ButtonText onPress={() => console.log('TODO: visit GKM support')}>
-        <Link>Need help? Visit GKM Support</Link>
+        <Text.LinkTextMutedSmall>Need help? Visit GKM Support</Text.LinkTextMutedSmall>
       </ButtonText>
     </>
   )
 }
-
-const Link = styled(Text.Link)`
-  color: ${({ theme }) => theme.text.textMuted};
-`

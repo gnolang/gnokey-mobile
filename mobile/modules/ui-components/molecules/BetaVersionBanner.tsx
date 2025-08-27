@@ -1,17 +1,30 @@
 import { View } from 'react-native'
 import { Text } from '@/modules/ui-components'
 import { useTheme } from 'styled-components/native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export const BetaVersionBanner = () => {
+export const BetaVersionHeader = () => {
+  const insets = useSafeAreaInsets()
+  const marginTop = insets.top || 20
+
   return (
     <View
       style={{
-        position: 'absolute',
-        top: 0,
+        marginTop
+      }}
+    >
+      <BetaVersionBanner />
+    </View>
+  )
+}
+
+const BetaVersionBanner = () => {
+  return (
+    <View
+      style={{
         width: '100%',
         backgroundColor: '#FFD700',
-        alignItems: 'center',
-        zIndex: 1000
+        alignItems: 'center'
       }}
     >
       <Text.Body style={{ color: '#000', textAlign: 'center' }}>

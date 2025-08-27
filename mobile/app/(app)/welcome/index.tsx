@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
 import { selectAction, useAppDispatch, useAppSelector, doSignIn } from '@/redux'
-import { OnboardingLayout, WelcomeBack, WelcomeBackFooter } from '@/modules/ui-components'
+import { HomeLayout, WelcomeBack, WelcomeBackFooter } from '@/modules/ui-components'
 import { WelcomeBackError } from '@/modules/ui-components/organisms/WelcomeBackError'
-import { BetaVersionBanner } from '@/modules/ui-components/molecules'
+import { BetaVersionHeader } from '@/modules/ui-components/molecules'
+import { KeyboardAvoidingView, Platform } from 'react-native'
 
 export default function Root() {
   const [error, setError] = useState<string | undefined>(undefined)
@@ -30,9 +31,10 @@ export default function Root() {
   }
 
   return (
-    <OnboardingLayout keyboardAware footer={<WelcomeBackFooter onUnlockPress={onUnlockPress} />}>
-      <BetaVersionBanner />
-      {!error ? <WelcomeBack /> : <WelcomeBackError error={error} />}
-    </OnboardingLayout>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <HomeLayout header={<BetaVersionHeader />} footer={<WelcomeBackFooter onUnlockPress={onUnlockPress} />}>
+        {!error ? <WelcomeBack /> : <WelcomeBackError error={error} />}
+      </HomeLayout>
+    </KeyboardAvoidingView>
   )
 }

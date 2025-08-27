@@ -7,17 +7,17 @@ import HeroBox from '../molecules/HeroBox'
 const slides = [
   {
     title: 'GnoKey Mobile',
-    description: 'A short, complete sentence that takes up first, second and third line of the paragraph',
+    description: 'Welcome to GnoKey Mobile, the secure and user-friendly app for managing your Gno accounts.',
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   },
   {
-    title: 'Feature',
-    description: 'Another screen with GKM description for user to let him understand what this app is about',
+    title: 'Multi-Gno-Chain Support',
+    description: 'Easily manage multiple Gno chains and switch between them seamlessly within the app.',
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   },
   {
-    title: 'Feature 2',
-    description: 'Another screen with GKM description for user to let him understand what this app is about',
+    title: 'Secure Vaults',
+    description: 'Protect your sensitive information with secure vaults for each of your Gno accounts.',
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   }
   // TODO: Add more slides if needed

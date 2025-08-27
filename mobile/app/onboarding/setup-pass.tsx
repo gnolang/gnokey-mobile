@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
-import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
+import { useRouter } from 'expo-router'
+import { Button, HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { SetupPassForm } from '@/modules/ui-components/organisms/SetupPassForm'
 import { useState } from 'react'
 import { createMasterPass, useAppDispatch } from '@/redux'
@@ -27,19 +27,15 @@ export default function Page() {
   }
 
   return (
-    <OnboardingLayout
+    <HomeLayout
+      header={<ScreenHeader title="GKM Account" subtitle="1/2" />}
       footer={
         <Button disabled={!masterPassword} onPress={onCreateMasterPassword}>
           Confirm password
         </Button>
       }
     >
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title="GKM Account" subtitle="1/2" />
-        }}
-      />
       <SetupPassForm onPasswordsCompleted={(pass) => setMasterPassword(pass)} />
-    </OnboardingLayout>
+    </HomeLayout>
   )
 }

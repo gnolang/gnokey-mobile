@@ -102,6 +102,7 @@ export default function Page() {
       />
       <HomeLayout
         footerWithBorder
+        contentPadding={32}
         header={
           <ScreenHeader
             title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}

@@ -126,11 +126,6 @@ export const Headline = styled(BaseText)`
   letter-spacing: -0.41px;
 `
 
-export const HeaderActionLink = styled(Headline)`
-  color: #007aff;
-  font-weight: 400;
-`
-
 // Body Text
 export const Body = styled(BaseText)`
   font-size: 17px;
@@ -219,8 +214,17 @@ export const WarningText = styled(Footnote)`
   color: #ff9500;
 `
 
+export const LinkHeader = styled(Headline)`
+  color: #007aff;
+  font-weight: 400;
+`
+
 export const LinkText = styled(Body)`
   color: #007aff;
+`
+
+export const LinkTextMutedSmall = styled(Footnote)`
+  color: ${({ theme }) => theme.text.textMuted};
 `
 
 export const PlaceholderText = styled(Body)`

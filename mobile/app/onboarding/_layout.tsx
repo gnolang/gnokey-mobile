@@ -6,8 +6,8 @@ export default function OnboardingLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
-        headerBackVisible: true,
+        headerShown: false,
+        headerBackVisible: false,
         headerTitle: '',
         contentStyle: { backgroundColor: 'transparent' },
         headerStyle: {
@@ -15,21 +15,6 @@ export default function OnboardingLayout() {
         },
         headerShadowVisible: false
       }}
-    >
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false
-        }}
-      />
-      <Stack.Screen
-        name="loading-screen"
-        options={{
-          headerShown: false
-        }}
-      />
-      <Stack.Screen name="setup-pass" />
-      <Stack.Screen name="forgot-pass" />
-    </Stack>
+    />
   )
 }

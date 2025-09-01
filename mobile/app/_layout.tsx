@@ -3,6 +3,7 @@ import { Guard } from '@/components/auth/guard'
 import { IndexerProvider, LinkingProvider, ReduxProvider, DatabaseProvider, GnoNativeProvider } from '@/providers'
 import { ThemeProvider } from '@/modules/ui-components'
 import { useFonts } from 'expo-font'
+import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 // Extend the BigInt interface to include toJSON
 declare global {
@@ -31,19 +32,21 @@ export default function AppLayout() {
       <GnoNativeProvider>
         <IndexerProvider>
           <ReduxProvider>
-            <ThemeProvider>
-              <LinkingProvider>
-                <Guard>
-                  <Stack
-                    screenOptions={{
-                      headerShown: false,
-                      headerLargeTitle: true,
-                      headerBackVisible: false
-                    }}
-                  />
-                </Guard>
-              </LinkingProvider>
-            </ThemeProvider>
+            <KeyboardProvider>
+              <ThemeProvider>
+                <LinkingProvider>
+                  <Guard>
+                    <Stack
+                      screenOptions={{
+                        headerShown: false,
+                        headerLargeTitle: true,
+                        headerBackVisible: false
+                      }}
+                    />
+                  </Guard>
+                </LinkingProvider>
+              </ThemeProvider>
+            </KeyboardProvider>
           </ReduxProvider>
         </IndexerProvider>
       </GnoNativeProvider>

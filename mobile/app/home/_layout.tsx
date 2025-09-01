@@ -80,7 +80,7 @@ export default function AppLayout() {
         options={{
           ...defaultOptions,
           headerBackVisible: false,
-          headerShown: false
+          headerShown: true
         }}
       />
       <Stack.Screen

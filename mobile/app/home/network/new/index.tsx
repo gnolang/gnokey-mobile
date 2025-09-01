@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
 import { HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
 import { useAppDispatch, saveChain, setSelectedChain } from '@/redux'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -33,10 +34,16 @@ const Page = () => {
   }
 
   return (
-    <HomeLayout header={<ScreenHeader title="New chain" />} footer={null}>
-      {/* <LoadingModal visible={loading} /> */}
-      <NetworkForm onSubmit={onSubmit} loading={loading} />
-    </HomeLayout>
+    <KeyboardAwareScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <Stack.Screen
+        options={{
+          header: (props) => <ScreenHeader {...props} title="GKM Account" subtitle="2/2" />
+        }}
+      />
+      <HomeLayout header={null} footer={null}>
+        <NetworkForm onSubmit={onSubmit} loading={loading} />
+      </HomeLayout>
+    </KeyboardAwareScrollView>
   )
 }
 

@@ -1,7 +1,11 @@
 import styled from 'styled-components/native'
 
-export const LeftContainer = styled.View`
+export const LeftTopContainer = styled.View`
   flex: 1;
   align-items: flex-start;
-  justify-content: center;
+`
+
+export const TopContainer = styled.View`
+  flex: 1;
+  background-color: red;
 `

@@ -2,8 +2,8 @@ import React, { forwardRef, useEffect } from 'react'
 import { TextInputProps, TextInput } from 'react-native'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
-import { ErrorBox } from '../alert'
 import { Text } from '..'
+import { Form } from '../../molecules'
 
 export type Props = {
   label?: string
@@ -59,7 +59,7 @@ export const TextField = forwardRef<TextInput, Props>((props, ref) => {
           ) : null}
         </Content>
       </Container>
-      {hideError ? null : <ErrorBox>{error}</ErrorBox>}
+      {hideError ? null : <Form.ErrorBox>{error}</Form.ErrorBox>}
     </>
   )
 })

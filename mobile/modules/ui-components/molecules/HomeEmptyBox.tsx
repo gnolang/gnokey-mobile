@@ -1,4 +1,4 @@
-import { HeroBoxLeft } from './HeroBoxLeft'
+import { HeroBoxLeft } from './hero/HeroBoxLeft'
 
 export const HomeEmptyBox = () => {
   return (

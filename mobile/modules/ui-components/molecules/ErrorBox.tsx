@@ -1,5 +1,5 @@
 import { Text } from '../src'
-import HeroBox from './HeroBox'
+import { HeroBox } from './hero'
 
 interface Props {
   title: string

@@ -146,10 +146,7 @@ export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, 
 
     try {
       const response = await gnonative.listKeyInfo()
-
-      if (response.length === 0) {
-        throw new Error('No accounts found.')
-      }
+      console.log('got accounts', response)
 
       for (const account of response) {
         console.log('change password for account', account)
@@ -161,7 +158,7 @@ export const changeMasterPassword = createAsyncThunk<string, ChangeMasterParam, 
         console.log('updated password for account', account)
       }
 
-      console.log('done changing password for all accounts')
+      console.log('done changing password for all accounts: ', response.length)
       // update the master password in the secure store
       await SecureStore.setItemAsync(MATER_PASS_KEY, newPassword)
 

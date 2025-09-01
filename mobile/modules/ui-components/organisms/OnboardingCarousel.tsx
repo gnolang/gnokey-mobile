@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { FlatList, useWindowDimensions } from 'react-native'
 import { Spacer } from '../src'
-import { Dot, DotContainer, SlideImage, BoxToScroll, TopCenterContainer } from '../atoms/WelcomeSlide'
-import HeroBox from '../molecules/HeroBox'
+import { Dot, DotContainer, SlideImage, BoxToScroll, ContainerCenter } from '../atoms/WelcomeSlide'
+import { HeroBox } from '../molecules'
 
 const slides = [
   {
@@ -35,7 +35,7 @@ export function OnboardingCarousel() {
   }).current
 
   return (
-    <TopCenterContainer>
+    <ContainerCenter>
       <FlatList
         style={{ width }}
         data={slides}
@@ -62,6 +62,6 @@ export function OnboardingCarousel() {
         ))}
       </DotContainer>
       <Spacer space={48} />
-    </TopCenterContainer>
+    </ContainerCenter>
   )
 }

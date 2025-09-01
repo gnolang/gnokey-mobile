@@ -5,7 +5,7 @@ type Props = {
   children?: string
 } & React.ComponentProps<typeof View>
 
-export const ErrorBox = ({ children, style, ...rest }: Props) => {
+export const FormErrorBox = ({ children, style, ...rest }: Props) => {
   if (!children) return <View style={[{ minHeight: 30 }, style]} {...rest} />
 
   return (

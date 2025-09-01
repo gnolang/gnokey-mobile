@@ -1,6 +1,6 @@
 import './theme/styled.d.ts'
 
-import { ErrorBox, Alert } from './alert'
+import { Alert } from './alert'
 import { Container, Spacer, TopModalBar } from './layout/index'
 import * as Text from './text/index'
 import { TextField, Label, Description } from './textFields/TextField'
@@ -18,4 +18,4 @@ export const TextFieldComp = {
   Description
 }
 
-export { ThemeProvider, DefaultTheme, TextField, Container, Spacer, ErrorBox, Alert, Text, TopModalBar, Checkbox }
+export { ThemeProvider, DefaultTheme, TextField, Container, Spacer, Alert, Text, TopModalBar, Checkbox }

@@ -1,6 +1,5 @@
 import ActivityIndicator from '@/components/atoms/activity-indicator'
 import { OnboardingLayout } from '@/modules/ui-components'
-import HeroBox from '@/modules/ui-components/molecules/HeroBox'
 import {
   registerAccount,
   selectLastProgress,
@@ -12,8 +11,7 @@ import {
 } from '@/redux'
 import { useCallback, useEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
-import { ButtonBack } from '@/modules/ui-components/molecules'
-import ErrorBox from '@/modules/ui-components/molecules/ErrorBox'
+import { ButtonBack, HeroBox, ErrorBox } from '@/modules/ui-components/molecules'
 
 const Page = () => {
   const signUpState = useAppSelector(signUpStateSelector)

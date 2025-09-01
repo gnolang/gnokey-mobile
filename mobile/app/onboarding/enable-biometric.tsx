@@ -1,8 +1,8 @@
 import { Alert, View } from 'react-native'
 import { useRouter } from 'expo-router'
-import { Button, HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { enableBiometric, useAppDispatch } from '@/redux'
-import HeroBox from '@/modules/ui-components/molecules/HeroBox'
+import { Button, HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
+import { HeroBox } from '@/modules/ui-components/molecules'
 import { LocalSvg } from 'react-native-svg/css'
 
 export default function Page() {

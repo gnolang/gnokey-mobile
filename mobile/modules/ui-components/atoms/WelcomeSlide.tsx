@@ -22,7 +22,7 @@ export const Dot = styled.View<{ active: boolean }>`
   margin: 0 4px;
 `
 
-export const TopCenterContainer = styled.View`
+export const ContainerCenter = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;

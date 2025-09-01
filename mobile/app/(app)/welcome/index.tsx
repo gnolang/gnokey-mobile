@@ -1,16 +1,19 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
 import { selectAction, useAppDispatch, useAppSelector, doSignIn } from '@/redux'
-import { HomeLayout, WelcomeBack, WelcomeBackFooter } from '@/modules/ui-components'
-import { WelcomeBackError } from '@/modules/ui-components/organisms/WelcomeBackError'
-import { BetaVersionHeader } from '@/modules/ui-components/molecules'
+import { HomeLayout, WelcomeBackFooter } from '@/modules/ui-components'
+import { BetaVersionHeader, HeroBox } from '@/modules/ui-components/molecules'
 import { KeyboardAvoidingView, Platform } from 'react-native'
+import { SlideImage } from '@/modules/ui-components/atoms'
+import { useKeyboard } from '@/hooks/useKeyboard'
 
 export default function Root() {
   const [error, setError] = useState<string | undefined>(undefined)
   const router = useRouter()
   const dispatch = useAppDispatch()
   const action = useAppSelector(selectAction)
+  const image = require('../../../assets/images/icon.png')
+  const { willShow } = useKeyboard()
 
   const onUnlockPress = async (masterPassword: string, isBiometric: boolean) => {
     try {
@@ -33,7 +36,15 @@ export default function Root() {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <HomeLayout header={<BetaVersionHeader />} footer={<WelcomeBackFooter onUnlockPress={onUnlockPress} />}>
-        {!error ? <WelcomeBack /> : <WelcomeBackError error={error} />}
+        {!error ? (
+          <HeroBox
+            img={!willShow && <SlideImage source={image} resizeMode="contain" />}
+            title="Welcome back"
+            description="Enter your password to unlock GnoKey Mobile"
+          />
+        ) : (
+          <HeroBox title="Login Error" description={error} />
+        )}
       </HomeLayout>
     </KeyboardAvoidingView>
   )

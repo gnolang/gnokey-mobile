@@ -1,6 +1,6 @@
-import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
-import { ForgotPassSuccessView } from '@/modules/ui-components/organisms/ForgotPassSuccessView'
+import { useRouter } from 'expo-router'
+import { Button, HomeLayout } from '@/modules/ui-components'
+import { HeroBox } from '@/modules/ui-components/molecules'
 
 export default function Page() {
   const router = useRouter()
@@ -10,13 +10,11 @@ export default function Page() {
   }
 
   return (
-    <OnboardingLayout footer={<Button onPress={onCreateAccount}>Create GKM Account</Button>}>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title="Forgot password" headerBackVisible={false} />
-        }}
+    <HomeLayout header={null} footer={<Button onPress={onCreateAccount}>Create GKM Account</Button>}>
+      <HeroBox
+        title="Your account is now erased"
+        description="All the account data have been removed and are now impossible to retrieve. Please create a new account."
       />
-      <ForgotPassSuccessView />
-    </OnboardingLayout>
+    </HomeLayout>
   )
 }

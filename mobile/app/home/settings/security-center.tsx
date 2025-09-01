@@ -29,7 +29,7 @@ const Page: React.FC = () => {
         <Spacer space={16} />
         <Form.Section title="Security Center">
           <Form.Link
-            onPress={() => router.navigate('/home/(modal)/change-master-pass')}
+            onPress={() => router.navigate('/home/settings/change-master-pass')}
             title="Change master password"
             description="Update your master password to keep your account secure."
           />

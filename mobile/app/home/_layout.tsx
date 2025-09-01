@@ -44,6 +44,14 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="settings/change-master-pass"
+        options={{
+          ...defaultOptions,
+          headerBackVisible: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
         name="network/list/index"
         options={{
           ...defaultOptions,

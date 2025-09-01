@@ -11,7 +11,7 @@ import {
   generateNewPhrase,
   resetState
 } from '@/redux'
-import { Button, ErrorBox, OnboardingLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
+import { Button, Form, OnboardingLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
 export default function Page() {
@@ -99,7 +99,7 @@ export default function Page() {
     <OnboardingLayout
       footer={
         <View>
-          <ErrorBox>{error}</ErrorBox>
+          <Form.ErrorBox>{error}</Form.ErrorBox>
           <Spacer space={8} />
           <Button onPress={onCreate}>Create new account</Button>
         </View>

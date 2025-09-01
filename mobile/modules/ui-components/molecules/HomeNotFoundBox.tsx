@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { HeroBoxLeft } from './HeroBoxLeft'
+import { HeroBoxLeft } from './hero/HeroBoxLeft'
 
 export const HomeNotFoundBox = () => {
   return (

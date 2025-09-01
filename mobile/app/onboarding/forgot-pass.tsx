@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Stack, useRouter } from 'expo-router'
-import { Button, OnboardingLayout, ScreenHeader } from '@/modules/ui-components'
-import { ForgotPassView } from '@/modules/ui-components/organisms/ForgotPassView'
+import { useRouter } from 'expo-router'
+import { Button, HeroBoxInternal, HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { ModalConfirm } from '@/components/modal'
 import { hardReset, selectLoadingReset, useAppDispatch, useAppSelector } from '@/redux'
+import { LeftTopContainer } from '@/modules/ui-components/atoms'
 
 export default function Page() {
   const router = useRouter()
@@ -18,13 +18,18 @@ export default function Page() {
   }
 
   return (
-    <OnboardingLayout footer={<Button onPress={() => setShowModal(true)}>Reset GnoKey Mobile</Button>}>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title="Forgot password" />
-        }}
-      />
-      <ForgotPassView />
+    <HomeLayout
+      header={<ScreenHeader title="Forgot password" />}
+      footer={<Button onPress={() => setShowModal(true)}>Reset GnoKey Mobile</Button>}
+    >
+      <LeftTopContainer>
+        <HeroBoxInternal
+          title="Forgot password"
+          description={`There is no way to recover your lost or forgotten GKM password. You can only reset the GKM wallet and that will remove all accounts you created or imported.
+
+You will lose access to those accounts - and all of their assets.`}
+        />
+      </LeftTopContainer>
       <ModalConfirm
         visible={showModal}
         title="Reset GnoKey Mobile"
@@ -34,6 +39,6 @@ export default function Page() {
         loading={loading}
         onCancel={() => setShowModal(false)}
       />
-    </OnboardingLayout>
+    </HomeLayout>
   )
 }

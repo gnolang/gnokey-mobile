@@ -1,5 +1,6 @@
 import { FormText, FormLink, FormCheckBoxItem, FormButton, FormAddButton } from './FormText'
 import { Section } from './FormSection'
+import { FormErrorBox } from './FormErrorBox'
 
 export const Form = {
   Section,
@@ -7,5 +8,6 @@ export const Form = {
   Link: FormLink,
   CheckBox: FormCheckBoxItem,
   Button: FormButton,
-  AddButton: FormAddButton
+  AddButton: FormAddButton,
+  ErrorBox: FormErrorBox
 }

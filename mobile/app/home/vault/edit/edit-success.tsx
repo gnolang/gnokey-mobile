@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
-import { View } from 'react-native'
-import { Button, OnboardingLayout, ScreenHeader, Text } from '@/modules/ui-components'
+import { Button, HomeLayout, ScreenHeader, Template, Text } from '@/modules/ui-components'
 import { resetState, useAppDispatch } from '@/redux'
-import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
-import styled, { useTheme } from 'styled-components/native'
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
+import { useTheme } from 'styled-components/native'
 
 const Page = () => {
   const router = useRouter()
@@ -20,25 +19,17 @@ const Page = () => {
   )
 
   return (
-    <OnboardingLayout footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title={keyname.toString()} headerBackVisible={false} />
-        }}
-      />
-
-      <Container>
-        <Text.H1>Account Updated</Text.H1>
-        <Text.H1 style={{ color: theme.success.text }}>Completed</Text.H1>
+    <HomeLayout
+      header={<ScreenHeader title={keyname.toString()} headerBackVisible={false} />}
+      footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}
+    >
+      <Template.ContainerCenterLeft>
+        <Text.LargeTitle>Account Updated</Text.LargeTitle>
+        <Text.LargeTitle style={{ color: theme.success.text }}>Completed</Text.LargeTitle>
         <Text.Caption>{keyname} has been updated successfully.</Text.Caption>
-      </Container>
-    </OnboardingLayout>
+      </Template.ContainerCenterLeft>
+    </HomeLayout>
   )
 }
-
-const Container = styled(View)`
-  flex: 1;
-  justify-content: center;
-`
 
 export default Page

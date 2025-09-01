@@ -1,6 +1,6 @@
-import { Alert as RNAlert, View } from 'react-native'
+import { Alert as RNAlert } from 'react-native'
 import React, { useState } from 'react'
-import { router, Stack, useFocusEffect } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import {
   selectMasterPassword,
   useAppDispatch,
@@ -11,7 +11,7 @@ import {
   generateNewPhrase,
   resetState
 } from '@/redux'
-import { Button, Form, OnboardingLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
+import { Button, Form, HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
 
 export default function Page() {
@@ -96,22 +96,16 @@ export default function Page() {
   }
 
   return (
-    <OnboardingLayout
-      footer={
-        <View>
-          <Form.ErrorBox>{error}</Form.ErrorBox>
-          <Spacer space={8} />
-          <Button onPress={onCreate}>Create new account</Button>
-        </View>
-      }
+    <HomeLayout
+      header={<ScreenHeader title="New account" subtitle="1/2" onBackPress={onBackPress} />}
+      footer={<Button onPress={onCreate}>Create new account</Button>}
     >
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title="New account" subtitle="1/2" onBackPress={onBackPress} />
-        }}
-      />
-      <NewVaultForm error={error} />
-    </OnboardingLayout>
+      <>
+        <NewVaultForm error={error} />
+        <Form.ErrorBox>{error}</Form.ErrorBox>
+        <Spacer space={8} />
+      </>
+    </HomeLayout>
   )
 }
 

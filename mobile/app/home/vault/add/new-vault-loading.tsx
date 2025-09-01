@@ -1,5 +1,5 @@
 import ActivityIndicator from '@/components/atoms/activity-indicator'
-import { OnboardingLayout } from '@/modules/ui-components'
+import { HomeLayout } from '@/modules/ui-components'
 import {
   registerAccount,
   selectLastProgress,
@@ -98,13 +98,13 @@ const Page = () => {
   }, [signUpState, dispatch])
 
   return (
-    <OnboardingLayout footer={error ? <ButtonBack /> : null}>
+    <HomeLayout header={null} footer={error ? <ButtonBack /> : null}>
       {error ? (
         <ErrorBox title="Error" description={error} errorDetails={progress} />
       ) : (
         <HeroBox img={<ActivityIndicator />} title={`Loading`} description={progress} />
       )}
-    </OnboardingLayout>
+    </HomeLayout>
   )
 }
 

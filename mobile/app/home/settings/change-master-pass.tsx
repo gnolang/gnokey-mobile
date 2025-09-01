@@ -1,11 +1,11 @@
-import { useNavigation } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { useState } from 'react'
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from '@/redux'
 import { Alert, Button, Spacer, TextField } from '@/modules/ui-components'
 
 const Page = () => {
-  const navigation = useNavigation()
+  const router = useRouter()
 
   const [loadingMasterPassword, setLoadingMasterPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -37,12 +37,12 @@ const Page = () => {
     try {
       setLoadingMasterPassword(true)
       await dispatch(changeMasterPassword({ newPassword: password, masterPassword })).unwrap()
-      onClose(true)
+      onClose()
     } catch (error: any) {
       if (error instanceof Error) {
         setError(JSON.stringify(error.message) || 'An error occurred while changing the master password.')
       } else {
-        console.error('xxx', error)
+        console.error(error)
         setError(error.toString() || 'An error occurred while changing the master password.')
       }
     } finally {
@@ -50,8 +50,8 @@ const Page = () => {
     }
   }
 
-  const onClose = (_: boolean) => {
-    navigation.goBack()
+  const onClose = () => {
+    router.replace('/home/settings/change-master-success')
   }
 
   return (
@@ -63,7 +63,7 @@ const Page = () => {
             Update Password
           </Button>
           <Spacer />
-          <Button color="secondary" onPress={() => onClose(false)} loading={loadingMasterPassword}>
+          <Button color="secondary" onPress={() => onClose()} loading={loadingMasterPassword}>
             Cancel
           </Button>
         </>

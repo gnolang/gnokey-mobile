@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
-import { View } from 'react-native'
-import { Button, OnboardingLayout, ScreenHeader, Text } from '@/modules/ui-components'
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
+import { Button, HomeLayout, ScreenHeader, Template, Text } from '@/modules/ui-components'
 import { resetState, useAppDispatch } from '@/redux'
-import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
-import styled, { useTheme } from 'styled-components/native'
+import { useTheme } from 'styled-components/native'
 
 const Page = () => {
   const router = useRouter()
@@ -11,7 +10,7 @@ const Page = () => {
   const dispatch = useAppDispatch()
   const params = useLocalSearchParams<{ keyName: string }>()
 
-  const keyname = params?.keyName || 'Updated'
+  const keyname = params?.keyName || 'Your account'
 
   useFocusEffect(
     useCallback(() => {
@@ -20,25 +19,17 @@ const Page = () => {
   )
 
   return (
-    <OnboardingLayout footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}>
-      <Stack.Screen
-        options={{
-          header: (props) => <ScreenHeader {...props} title={keyname} headerBackVisible={false} />
-        }}
-      />
-
-      <Container>
+    <HomeLayout
+      header={<ScreenHeader title="Account Created" headerBackVisible={false} />}
+      footer={<Button onPress={() => router.replace('/home')}>Back to account list</Button>}
+    >
+      <Template.ContainerCenterLeft>
         <Text.LargeTitle>Account Created</Text.LargeTitle>
         <Text.LargeTitle style={{ color: theme.success.text }}>Completed</Text.LargeTitle>
         <Text.Caption>{keyname} has been created successfully!</Text.Caption>
-      </Container>
-    </OnboardingLayout>
+      </Template.ContainerCenterLeft>
+    </HomeLayout>
   )
 }
-
-const Container = styled(View)`
-  flex: 1;
-  justify-content: center;
-`
 
 export default Page

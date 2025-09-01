@@ -15,3 +15,19 @@ export const HorizontalGroup = styled.View`
   justify-content: space-between;
   width: 100%;
 `
+
+const ContainerCenterLeft = styled.View`
+  flex: 1;
+  justify-content: center;
+`
+
+const ContainerCenter = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`
+
+export const Template = {
+  ContainerCenterLeft,
+  ContainerCenter
+}

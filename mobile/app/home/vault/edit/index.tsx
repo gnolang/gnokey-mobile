@@ -37,7 +37,6 @@ const Page = () => {
     await dispatch(fetchVaults()).unwrap()
     setShowDeleteModal(false)
     router.replace({ pathname: '/home/vault/edit/remove-success', params: { keyName: vaultName } })
-    navigation.goBack()
   }
 
   const onUpdateAccount = async () => {

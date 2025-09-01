@@ -1,6 +1,5 @@
-import styled from 'styled-components/native'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { OnboardingLayout, Spacer, Text } from '@/modules/ui-components'
+import { HomeLayout, Spacer, Template, Text } from '@/modules/ui-components'
 import ActivityIndicator from '@/components/atoms/activity-indicator'
 
 export default function Page() {
@@ -15,18 +14,12 @@ export default function Page() {
   })
 
   return (
-    <OnboardingLayout>
-      <Container>
+    <HomeLayout header={null} footer={null}>
+      <Template.ContainerCenter>
         <ActivityIndicator />
         <Spacer space={64} />
-        <Text.H1 style={{ textAlign: 'center' }}>Securing your session...</Text.H1>
-      </Container>
-    </OnboardingLayout>
+        <Text.LargeTitle style={{ textAlign: 'center', padding: 12 }}>Securing your session...</Text.LargeTitle>
+      </Template.ContainerCenter>
+    </HomeLayout>
   )
 }
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-`

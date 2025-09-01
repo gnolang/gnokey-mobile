@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import { ContainerCenter } from '../../atoms/WelcomeSlide'
 import { Spacer, Text } from '../../src'
 
@@ -27,15 +26,3 @@ export const HeroBox = ({ img, title, description, children, light }: Props) => 
     </ContainerCenter>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
-// flex: 1;
-// align-items: center;
-// justify-content: center;
-

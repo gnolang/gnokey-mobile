@@ -2,9 +2,18 @@ import { ScrollView } from 'react-native'
 import { HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
 import { Form } from '@/modules/ui-components/molecules'
 import { useRouter } from 'expo-router'
+import { ModalConfirm } from '@/components/modal'
+import { useState } from 'react'
+import { signOut, useAppDispatch } from '@/redux'
 
 export default function Page() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
+
+  const onLogout = () => {
+    dispatch(signOut())
+  }
 
   return (
     <HomeLayout contentPadding={20} header={<ScreenHeader title="Settings" />}>
@@ -26,14 +35,18 @@ export default function Page() {
             title="Developers options"
             description="Access developer settings and tools."
           />
-          <Form.Link
-            onPress={() => router.navigate('/home/(modal)/logout')}
-            title="Logout"
-            description="Log out of your Gno.land account."
-          />
+          <Form.Link onPress={() => setShowLogoutModal(true)} title="Logout" description="Log out of your Gno.land account." />
         </Form.Section>
         <Spacer />
       </ScrollView>
+      <ModalConfirm
+        visible={showLogoutModal}
+        title="Logout"
+        confirmText="Logout"
+        message="Are you sure you want to log out?"
+        onConfirm={onLogout}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </HomeLayout>
   )
 }

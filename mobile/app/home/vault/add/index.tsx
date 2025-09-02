@@ -97,7 +97,7 @@ export default function Page() {
 
   return (
     <HomeLayout
-      header={<ScreenHeader title="New account" subtitle="1/2" onBackPress={onBackPress} />}
+      header={<ScreenHeader title="New account" subtitle="" onBackPress={onBackPress} />}
       footer={<Button onPress={onCreate}>Create new account</Button>}
     >
       <>

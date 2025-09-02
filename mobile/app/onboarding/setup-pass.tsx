@@ -28,7 +28,7 @@ export default function Page() {
 
   return (
     <HomeLayout
-      header={<ScreenHeader title="GKM Account" subtitle="1/2" />}
+      header={<ScreenHeader title="GKM Account" subtitle="" />}
       footer={
         <Button disabled={!masterPassword} onPress={onCreateMasterPassword}>
           Confirm password

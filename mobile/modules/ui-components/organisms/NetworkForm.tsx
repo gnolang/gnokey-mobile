@@ -32,6 +32,7 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
   const [isInitial, setInitial] = React.useState(true)
   const insets = useSafeAreaInsets()
   const marginBottom = insets.bottom || 20
+  const canEdit = mode === 'add' // TODO: allow edit in edit mode
 
   useEffect(() => {
     if (isInitial) {
@@ -91,6 +92,7 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoComplete="off"
           autoCapitalize="none"
           autoCorrect={false}
+          editable={canEdit}
           color="secondary"
         />
         <Ruller />
@@ -105,6 +107,7 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoCapitalize="none"
           autoCorrect={false}
           error={errors.chainId}
+          editable={canEdit}
           color="secondary"
         />
         <Ruller />
@@ -119,6 +122,7 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoComplete="off"
           autoCapitalize="none"
           autoCorrect={false}
+          editable={canEdit}
           color="secondary"
         />
         <Ruller />
@@ -133,6 +137,7 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoComplete="off"
           autoCapitalize="none"
           autoCorrect={false}
+          editable={canEdit}
           color="secondary"
         />
         <Ruller />

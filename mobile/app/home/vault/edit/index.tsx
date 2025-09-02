@@ -76,10 +76,7 @@ const Page = () => {
         contentPadding={20}
         header={<ScreenHeader title={vault.keyName} />}
         subHeader={
-          <Form.Section
-            title="Network List"
-            rightActions={<LinkHeader onPress={() => setShowDeleteModal(true)}>Delete</LinkHeader>}
-          />
+          <Form.Section title="Info" rightActions={<LinkHeader onPress={() => setShowDeleteModal(true)}>Delete</LinkHeader>} />
         }
         footer={
           <Button onPress={onUpdateAccount} color="primary">
@@ -106,9 +103,9 @@ const Page = () => {
 
         <ModalConfirm
           visible={showDeleteModal}
-          title="Delete Vault"
+          title="Delete Account"
           confirmText="Delete"
-          message="Are you sure you want to delete this vault?"
+          message="Are you sure you want to delete this account?"
           onConfirm={onConfirmDelete}
           onCancel={() => setShowDeleteModal(false)}
         />

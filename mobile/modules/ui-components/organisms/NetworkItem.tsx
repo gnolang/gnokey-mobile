@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { SwipeEditButton } from '../atoms'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
-  const swipeableRef = useRef(null)
+  const swipeableRef = useRef<any>(null)
 
   const handleEdit = () => {
     // @ts-ignore
@@ -54,7 +54,7 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
       rightThreshold={40}
       renderRightActions={RightAction}
     >
-      <TouchableOpacity style={styles.rowContent} activeOpacity={0.7} onPress={handleEdit}>
+      <TouchableOpacity style={styles.rowContent} activeOpacity={0.7} onPress={() => swipeableRef.current?.openRight()}>
         <Text.Body>{network.chainName}</Text.Body>
         <Text.SubheadlineMuted>{network.chainId}</Text.SubheadlineMuted>
       </TouchableOpacity>

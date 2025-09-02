@@ -80,16 +80,15 @@ const Container = styled.View`
 `
 export const Label = styled(Text.Subheadline)`
   color: ${(props) => props.theme.textinputs.label};
-  font-weight: 590;
-  padding-bottom: 8px;
-`
-export const Description = styled.Text`
-  font-weight: 400;
-  font-size: 13px;
   line-height: 20px;
+  font-weight: ${Text.weights.semibold};
+  padding-bottom: 4px;
+`
+export const Description = styled(Text.Subheadline)`
+  font-weight: ${Text.weights.regular};
   letter-spacing: -0.24px;
-  padding-bottom: 12px;
-  padding-top: 4px;
+  line-height: 20px;
+  padding-bottom: 8px;
   color: ${(props) => props.theme.text.textMuted};
 `
 const Content = styled.View<PropsWithTheme>`

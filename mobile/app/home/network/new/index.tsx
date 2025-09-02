@@ -37,7 +37,7 @@ const Page = () => {
     <KeyboardAwareScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <Stack.Screen
         options={{
-          header: (props) => <ScreenHeader {...props} title="GKM Account" subtitle="2/2" />
+          header: (props) => <ScreenHeader {...props} title="New Network" subtitle="" />
         }}
       />
       <HomeLayout header={null} footer={null}>

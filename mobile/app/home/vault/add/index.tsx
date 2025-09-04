@@ -1,6 +1,6 @@
 import { Alert as RNAlert } from 'react-native'
 import React, { useState } from 'react'
-import { router, useFocusEffect } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import {
   selectMasterPassword,
   useAppDispatch,
@@ -22,9 +22,14 @@ export default function Page() {
   const keyName = useAppSelector(selectKeyName)
   const phrase = useAppSelector(selectPhrase)
 
+  const params = useLocalSearchParams()
+  const skipNewPhraseGeneration = params.skipNewPhraseGeneration === 'true'
+
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(generateNewPhrase())
+      if (!skipNewPhraseGeneration) {
+        dispatch(generateNewPhrase())
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   )

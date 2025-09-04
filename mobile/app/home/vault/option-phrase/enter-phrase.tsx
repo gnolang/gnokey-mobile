@@ -1,4 +1,4 @@
-import { Button, Spacer, Text, Container, SafeAreaView } from '@/modules/ui-components'
+import { Button, Spacer, Text, SafeAreaView, HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
 import {
   Alert,
@@ -46,11 +46,24 @@ export default function Page() {
       return
     }
 
-    route.push('/home/vault/option-phrase/enter-vault-name')
+    route.push({ pathname: '/home/vault/add', params: { skipNewPhraseGeneration: 'true' } })
   }
 
   return (
-    <Container>
+    <HomeLayout
+      header={<ScreenHeader title="Import Seed Phrase" />}
+      footer={
+        <View style={styles.footer}>
+          <Button color="secondary" onPress={pasteClipboard}>
+            Paste
+          </Button>
+          <Spacer />
+          <Button color="primary" onPress={onContinue}>
+            Continue
+          </Button>
+        </View>
+      }
+    >
       <SafeAreaView>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -85,25 +98,16 @@ export default function Page() {
               <View style={styles.container}>
                 <SeedInputs length={menomicLength} />
               </View>
-              <View style={styles.footer}>
-                <Button color="secondary" onPress={pasteClipboard}>
-                  Paste
-                </Button>
-                <Spacer />
-                <Button color="primary" onPress={onContinue}>
-                  Continue
-                </Button>
-              </View>
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </Container>
+    </HomeLayout>
   )
 }
 
 const SmallButton = styled(Button)`
-  width: 100px;
+  width: 120px;
 `
 
 const styles = StyleSheet.create({

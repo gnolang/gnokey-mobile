@@ -1,12 +1,12 @@
+import { useCallback, useEffect, useState } from 'react'
 import { Layout } from '@/components'
 import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { fetchVaults, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router, useNavigation } from 'expo-router'
-import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
-import { Button, Spacer, Text } from '@/modules/ui-components'
+import { Button, HomeLayout, Spacer, Text } from '@/modules/ui-components'
 import { Vault } from '@/types'
 
 export default function Page() {
@@ -52,7 +52,7 @@ export default function Page() {
 
   return (
     <>
-      <Layout.Container>
+      <HomeLayout header={null} footer={null}>
         <Layout.BodyAlignedBotton>
           <Text.H3>Select a key to create the transaction</Text.H3>
           <Spacer space={16} />
@@ -69,7 +69,7 @@ export default function Page() {
             Cancel
           </Button>
         </Layout.BodyAlignedBotton>
-      </Layout.Container>
+      </HomeLayout>
     </>
   )
 }

@@ -56,6 +56,13 @@ const Page: React.FC = () => {
             title="Developer Mode"
             description={`Toggle developer mode features. Currently ${devMode ? 'ON' : 'OFF'}.`}
           />
+          {devMode && (
+            <Form.Link
+              onPress={() => router.navigate('/home/vault/option-phrase/enter-phrase')}
+              title="Import Seed Phrase"
+              description="Register a new account using a seed phrase."
+            />
+          )}
         </Form.Section>
       </ScrollView>
     </HomeLayout>

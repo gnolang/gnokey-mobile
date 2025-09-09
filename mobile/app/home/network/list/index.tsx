@@ -1,11 +1,8 @@
-import { Button, ListTemplate, ScreenHeader } from '@/modules/ui-components'
-import { Ruller } from '@/modules/ui-components/atoms'
-import { Form } from '@/modules/ui-components/molecules'
-import { NetworkItem } from '@/modules/ui-components/organisms/NetworkItem'
+import { Alert } from 'react-native'
+import { useRouter } from 'expo-router'
+import { Button, ListTemplate, ScreenHeader, Ruller, Form, NetworkItem } from '@/modules/ui-components'
 import { deleteChain, selectChainsAvailable, useAppDispatch, useAppSelector } from '@/redux'
 import { NetworkMetainfo } from '@/types'
-import { useRouter } from 'expo-router'
-import { Alert } from 'react-native'
 
 const Page: React.FC = () => {
   const networks = useAppSelector(selectChainsAvailable)
@@ -34,14 +31,10 @@ const Page: React.FC = () => {
   }
 
   const renderNetworkItem = ({ item, index }: { item: NetworkMetainfo; index: number }) => {
-    const isFirst = index === 0
-    const isLast = networks && index === networks.length - 1
-
     return (
       <>
-        {isFirst && <Ruller />}
+        {index === 0 && <Ruller />}
         <NetworkItem network={item} onEdit={handleEdit} onDelete={handleDelete} />
-        {isLast && <Ruller />}
       </>
     )
   }
@@ -50,6 +43,7 @@ const Page: React.FC = () => {
 
   return (
     <>
+      <Ruller />
       <ListTemplate<NetworkMetainfo>
         header={<ScreenHeader title="Settings" />}
         subHeader={

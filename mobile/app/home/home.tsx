@@ -2,34 +2,32 @@ import { useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
-import {
-  checkForKeyOnChains,
-  useAppDispatch,
-  useAppSelector,
-  selectVaults,
-  setCurrentChain,
-  selectCurrentChain,
-  selectChainsAvailable
-} from '@/redux'
-import VaultListItem from '@/components/list/vault-list/VaultListItem'
+import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults } from '@/redux'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import { Button, TextField, Text, Container, HomeLayout, Spacer } from '@/modules/ui-components'
-import { FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
+import {
+  Button,
+  TextField,
+  Text,
+  Container,
+  HomeLayout,
+  Spacer,
+  HomeEmptyBox,
+  HomeNotFoundBox,
+  HorizontalGroup,
+  ScreenHeader,
+  NetworkButtonModal
+} from '@/modules/ui-components'
+import VaultListItem from '@/components/list/vault-list/VaultListItem'
+import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
-import { HomeEmptyBox, HomeNotFoundBox } from '@/modules/ui-components/molecules'
-import { NetworkSelectionModal } from '@/modules/ui-components/organisms'
 import { Vault } from '@/types'
-import { HorizontalGroup, ScreenHeader } from '@/modules/ui-components/templates'
 
 export default function Page() {
   const isFirstRender = useRef(true)
 
-  const [showNetworkModal, setShowNetworkModal] = useState(false)
   const [nameSearch, setNameSearch] = useState<string>('')
   const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([])
   const [loading, setLoading] = useState<string | undefined>(undefined)
-  const currentChain = useAppSelector(selectCurrentChain)
-  const networks = useAppSelector(selectChainsAvailable)
   const theme = useTheme()
 
   const route = useRouter()
@@ -85,21 +83,6 @@ export default function Page() {
 
   return (
     <>
-      <NetworkSelectionModal
-        visible={showNetworkModal}
-        onClose={() => setShowNetworkModal(false)}
-        onNetworkSelect={async (v) => {
-          setShowNetworkModal(false)
-          await dispatch(setCurrentChain(v)).unwrap()
-          dispatch(fetchVaults())
-        }}
-        onAddChain={() => {
-          setShowNetworkModal(false)
-          route.push('/home/network/new')
-        }}
-        networks={networks}
-        currentNetwork={currentChain}
-      />
       <HomeLayout
         footerWithBorder
         contentPadding={32}
@@ -107,12 +90,7 @@ export default function Page() {
           <ScreenHeader
             title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}
             headerBackVisible={false}
-            rightComponent={
-              <TouchableOpacity onPress={() => setShowNetworkModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <FontAwesome5 name="network-wired" size={20} color={theme.colors.link} style={{ marginRight: 4 }} />
-                <Text.LinkText>{currentChain ? currentChain.chainName : 'No Registration'}</Text.LinkText>
-              </TouchableOpacity>
-            }
+            rightComponent={<NetworkButtonModal />}
           >
             <Spacer space={16} />
             <TextField

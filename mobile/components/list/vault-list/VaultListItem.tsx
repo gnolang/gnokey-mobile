@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { AntDesign } from '@expo/vector-icons'
 import { Text } from '@/modules/ui-components'
@@ -9,6 +9,7 @@ import { Ruller } from '@/modules/ui-components/atoms'
 interface Props {
   vault: Vault
   onVaultPress: (vault: Vault) => void
+  style?: StyleProp<ViewStyle>
 }
 
 // SQLite date format is 'YYYY-MM-DD HH:mm:ss'
@@ -16,10 +17,10 @@ const dateOnly = (sqliteIsoDate?: string) => {
   return sqliteIsoDate ? sqliteIsoDate.split(' ')[0] : ''
 }
 
-const VaultListItem = ({ vault, onVaultPress }: Props) => {
+const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
   const theme = useTheme()
   return (
-    <TouchableOpacity style={styles.box} onPress={() => onVaultPress(vault)}>
+    <TouchableOpacity style={[styles.box, style]} onPress={() => onVaultPress(vault)}>
       <View style={styles.content}>
         <PlaceHolder />
         <View style={styles.labels}>

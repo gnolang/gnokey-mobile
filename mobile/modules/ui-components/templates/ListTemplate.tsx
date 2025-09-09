@@ -1,7 +1,6 @@
 import React from 'react'
 import { FlatList, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { Ruller } from '../atoms'
 import { Spacer } from '../src'
 import { useTheme } from 'styled-components/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -34,19 +33,18 @@ export function ListTemplate<T>({
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {header}
-      <View style={{ paddingHorizontal: 20 }}>
+      <View style={{ flex: 1, paddingHorizontal: 20 }}>
         <Spacer space={16} />
         {subHeader}
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+          contentContainerStyle={contentContainerStyle}
+        />
+        <View style={{ paddingBottom }}>{footer}</View>
       </View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-        contentContainerStyle={contentContainerStyle}
-        ItemSeparatorComponent={() => <Ruller />}
-      />
-      <View style={{ paddingBottom, paddingHorizontal: 20 }}>{footer}</View>
     </GestureHandlerRootView>
   )
 }

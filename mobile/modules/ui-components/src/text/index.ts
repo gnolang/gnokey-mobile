@@ -118,6 +118,11 @@ export const Title3 = styled(BaseText)`
   letter-spacing: 0.38px;
 `
 
+export const Title3_Muted = styled(Title3)`
+  color: ${(props) => props.theme.text.textMuted};
+  font-weight: 400;
+`
+
 // Headlines
 export const Headline = styled(BaseText)`
   font-size: 17px;
@@ -232,22 +237,6 @@ export const PlaceholderText = styled(Body)`
   opacity: 0.3;
 `
 
-// Weight variants for any component
-export const weights: Record<
-  'ultraLight' | 'thin' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold' | 'heavy' | 'black',
-  '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
-> = {
-  ultraLight: '100',
-  thin: '200',
-  light: '300',
-  regular: '400',
-  medium: '500',
-  semibold: '600',
-  bold: '700',
-  heavy: '800',
-  black: '900'
-}
-
 // Color system
 export const colors = {
   // iOS System Colors
@@ -275,6 +264,22 @@ export const colors = {
   systemBackground: '#FFFFFF',
   secondarySystemBackground: '#F2F2F7',
   tertiarySystemBackground: '#FFFFFF'
+}
+
+// Weight variants for any component
+export const weights: Record<
+  'ultraLight' | 'thin' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold' | 'heavy' | 'black',
+  '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
+> = {
+  ultraLight: '100',
+  thin: '200',
+  light: '300',
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
+  heavy: '800',
+  black: '900'
 }
 
 // -----------------------------------------------------------------------------

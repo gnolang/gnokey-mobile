@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { SwipeEditButton } from '../atoms'
+import { Ruller, SwipeEditButton } from '../atoms'
 import { NetworkMetainfo } from '@/types'
 import { Text } from '../src'
 
@@ -33,7 +33,7 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
       // console.log('appliedTranslation:', drag.value)
 
       return {
-        transform: [{ translateX: drag.value + 140 }]
+        transform: [{ translateX: drag.value + 160 }]
       }
     })
 
@@ -46,19 +46,22 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
   }
 
   return (
-    <ReanimatedSwipeable
-      ref={swipeableRef}
-      containerStyle={styles.swipeable}
-      friction={2}
-      enableTrackpadTwoFingerGesture
-      rightThreshold={40}
-      renderRightActions={RightAction}
-    >
-      <TouchableOpacity style={styles.rowContent} activeOpacity={0.7} onPress={() => swipeableRef.current?.openRight()}>
-        <Text.Body>{network.chainName}</Text.Body>
-        <Text.SubheadlineMuted>{network.chainId}</Text.SubheadlineMuted>
-      </TouchableOpacity>
-    </ReanimatedSwipeable>
+    <>
+      <ReanimatedSwipeable
+        ref={swipeableRef}
+        containerStyle={styles.swipeable}
+        friction={2}
+        enableTrackpadTwoFingerGesture
+        rightThreshold={40}
+        renderRightActions={RightAction}
+      >
+        <TouchableOpacity style={styles.rowContent} activeOpacity={0.7} onPress={() => swipeableRef.current?.openRight()}>
+          <Text.Body>{network.chainName}</Text.Body>
+          <Text.SubheadlineMuted>{network.chainId}</Text.SubheadlineMuted>
+        </TouchableOpacity>
+      </ReanimatedSwipeable>
+      <Ruller />
+    </>
   )
 }
 
@@ -72,7 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    paddingHorizontal: 20,
     height: '100%'
   }
 })

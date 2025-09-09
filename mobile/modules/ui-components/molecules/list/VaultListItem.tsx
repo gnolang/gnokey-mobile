@@ -60,4 +60,4 @@ const PlaceHolder = styled.View`
   border-radius: ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};
 `
 
-export default VaultListItem
+export { VaultListItem }

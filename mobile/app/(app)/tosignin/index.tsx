@@ -1,4 +1,6 @@
-import VaultListItem from '@/components/list/vault-list/VaultListItem'
+import { useCallback, useEffect } from 'react'
+import { router, useNavigation } from 'expo-router'
+import * as Linking from 'expo-linking'
 import {
   clearLinking,
   selectCallback,
@@ -10,12 +12,9 @@ import {
   fetchVaults,
   checkForKeyOnChains
 } from '@/redux'
-import { router, useNavigation } from 'expo-router'
-import { useCallback, useEffect } from 'react'
-import * as Linking from 'expo-linking'
-import { ListTemplate, ScreenHeader, NetworkButtonModal } from '@/modules/ui-components'
+import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
 import { Vault } from '@/types'
-import { Form } from '@/modules/ui-components/molecules'
+import { View } from 'react-native'
 
 export default function Page() {
   const navigation = useNavigation()
@@ -58,13 +57,20 @@ export default function Page() {
 
   return (
     <ListTemplate<Vault>
-      header={<ScreenHeader title={`Sign In`} rightComponent={<NetworkButtonModal />} />}
-      subHeader={<Form.Section title={`Select an Account to Sign In into ${clientName}`} />}
+      contentContainerStyle={{ flexGrow: 1 }}
+      header={<ScreenHeader title="Sign In" rightComponent={<NetworkButtonModal />} onBackPress={onCancel} />}
+      subHeader={vaults && vaults.length > 0 ? <Form.Section title={`Select an account to sign in to ${clientName}`} /> : null}
       footer={null}
       data={vaults || []}
       renderItem={({ item }) => (
         <VaultListItem style={{ paddingHorizontal: 20 }} vault={item} onVaultPress={returnKeyAddressToSoliciting} />
       )}
+      emptyComponent={
+        <HeroBoxLeft
+          title="No Accounts"
+          description={`You don't have any accounts yet on this network to sign in to ${clientName}.`}
+        />
+      }
       keyExtractor={(item) => item.keyInfo.name}
     />
   )

@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components/native'
-import { Text } from '../src'
+import { Text } from '../../src'
 import { Ionicons } from '@expo/vector-icons'
 
 interface Props {

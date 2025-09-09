@@ -1,4 +1,3 @@
-import { useTheme } from 'styled-components/native'
 import { Spacer, Text } from '../../src'
 
 interface Props {

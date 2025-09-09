@@ -15,9 +15,9 @@ import {
   HomeNotFoundBox,
   HorizontalGroup,
   ScreenHeader,
-  NetworkButtonModal
+  NetworkButtonModal,
+  VaultListItem
 } from '@/modules/ui-components'
-import VaultListItem from '@/components/list/vault-list/VaultListItem'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { Vault } from '@/types'

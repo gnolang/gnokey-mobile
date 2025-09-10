@@ -30,6 +30,7 @@ import {
   BetaVersionMiniBanner,
   Ruller
 } from '@/modules/ui-components'
+import styled from 'styled-components/native'
 
 export default function Page() {
   const dispatch = useAppDispatch()
@@ -187,7 +188,7 @@ export default function Page() {
               <FormItem label="Callback" value={callback} />
               <Ruller />
               <FormItem label="Address">
-                <Text.LinkText weight="500" style={{ flexShrink: 1, textAlign: 'right' }}>{`${bech32Address}`}</Text.LinkText>
+                <LinkJsonText style={{ textAlign: 'right' }}>{`${bech32Address}`}</LinkJsonText>
               </FormItem>
               <Ruller />
               <FormItem label="Account Name" value={JSON.stringify(keyInfo?.name)} />
@@ -199,31 +200,23 @@ export default function Page() {
 
               <HiddenGroup>
                 <FormItem label="Raw Tx Data">
-                  <Text.LinkText weight="500" style={{ flexShrink: 1 }}>
-                    {txInput}
-                  </Text.LinkText>
+                  <LinkJsonText>{txInput}</LinkJsonText>
+                </FormItem>
+                <Ruller />
+                <FormItem label="Raw Signed Data">
+                  {signedTx ? <LinkJsonText>{signedTx?.toString()}</LinkJsonText> : <ActivityIndicator />}
                 </FormItem>
                 {/* <FormItem label="Session wanted">
                 <TextBodyWhite>{JSON.stringify(sessionWanted)}</TextBodyWhite>
               </FormItem>
-
               <Ruller />
-
               <FormItem label="Session">
                 <TextBodyWhite>{session ? JSON.stringify(session) : 'undefined'}</TextBodyWhite>
               </FormItem>
-
               <Ruller />
-
               <FormItem label="Realms Allowed">
                 <TextBodyWhite>gno.land/r/berty/social</TextBodyWhite>
               </FormItem>*/}
-
-                <Ruller />
-
-                <FormItem label="Raw Signed Data">
-                  {signedTx ? <Text.Body_Bold>{signedTx?.toString()}</Text.Body_Bold> : <ActivityIndicator />}
-                </FormItem>
               </HiddenGroup>
             </ScrollView>
           </>
@@ -232,6 +225,11 @@ export default function Page() {
     </>
   )
 }
+
+const LinkJsonText = styled(Text.LinkText)`
+  weight: 500;
+  flex-shrink: 1;
+`
 
 const HiddenGroup = ({ children }: React.PropsWithChildren) => {
   const [visible, setVisible] = useState(false)

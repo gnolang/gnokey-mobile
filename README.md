@@ -36,7 +36,9 @@ tech.berty.dsocial://signin-callback?address=g19h0el2p7z8thtqy4rze0n6en94xux9faz
 
 - Base URL: The `callback` from the request. In this case, `tech.berty.dsocial://signin-callback`
 - Parameters:
-  - address: the address of the selected user
+  - address: the address of the selected account
+  - remote: the RPC url associated to the selected account
+  - chain_id: the chain ID associated to the selected account
   - cachekill: For testing. Ignore this.
 
 ### Sign a transaction

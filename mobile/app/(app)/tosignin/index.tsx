@@ -39,8 +39,8 @@ export default function Page() {
   }, [navigation])
 
   const returnKeyAddressToSoliciting = useCallback(
-    async (keyInfo: Vault) => {
-      await dispatch(sendAddressToSoliciting({ keyInfo: keyInfo.keyInfo })).unwrap()
+    async (vault: Vault) => {
+      await dispatch(sendAddressToSoliciting({ vault })).unwrap()
 
       router.push('/home')
     },

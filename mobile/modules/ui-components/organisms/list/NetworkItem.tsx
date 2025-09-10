@@ -2,9 +2,9 @@ import React, { useRef } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { Ruller, SwipeEditButton } from '../atoms'
+import { Ruller, SwipeEditButton } from '../../atoms'
 import { NetworkMetainfo } from '@/types'
-import { Text } from '../src'
+import { Text } from '../../src'
 
 interface Props {
   network: NetworkMetainfo

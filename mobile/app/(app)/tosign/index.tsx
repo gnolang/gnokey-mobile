@@ -1,4 +1,6 @@
-import { Layout } from '@/components'
+import { useEffect, useState } from 'react'
+import { router } from 'expo-router'
+import * as Linking from 'expo-linking'
 import {
   estimateGasWanted,
   selectClientName,
@@ -16,14 +18,18 @@ import {
   selectRemote
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
-import { router } from 'expo-router'
-import { useEffect, useState } from 'react'
-import * as Linking from 'expo-linking'
-import { ScrollView, View, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native'
-import { Button, Container, FormItem, FormItemInline, Spacer, Text } from '@/modules/ui-components'
-import styled from 'styled-components/native'
-import { BetaVersionMiniBanner } from '@/modules/ui-components/molecules'
-import { Ruller } from '@/modules/ui-components/atoms'
+import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import {
+  Button,
+  FormItem,
+  FormItemInline,
+  HomeLayout,
+  ScreenHeader,
+  Spacer,
+  Text,
+  BetaVersionMiniBanner,
+  Ruller
+} from '@/modules/ui-components'
 
 export default function Page() {
   const dispatch = useAppDispatch()
@@ -140,75 +146,63 @@ export default function Page() {
 
   return (
     <>
-      <Container>
-        <SafeAreaView>
+      <HomeLayout
+        header={<ScreenHeader title="Approval Request" />}
+        footer={
+          <View style={{ width: '100%' }}>
+            <BetaVersionMiniBanner />
+            <Spacer />
+            <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
+              Approve
+            </Button>
+            <Spacer />
+            <Button color="secondary" onPress={onCancel} loading={loading}>
+              Cancel
+            </Button>
+          </View>
+        }
+      >
+        <>
           {/* <View style={{ flexDirection: 'row', paddingTop: 16 }}>
             <ButtonText onPress={onCancel}>
               <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
             </ButtonText>
           </View> */}
-          <Layout.Body>
-            <BetaVersionMiniBanner />
-            <Text.H3 style={{ textAlign: 'center', marginVertical: 16 }}>
-              {clientName} is requiring permission to {reason}
-            </Text.H3>
+          <>
+            <Text.Title3 weight="400">{`${clientName} is requiring permission to ${reason}`}</Text.Title3>
+            <Spacer space={24} />
 
             <ScrollView contentContainerStyle={{}}>
               <Ruller />
-
-              <FormItem label="Client name">
-                <TextBodyBlack>{clientName}</TextBodyBlack>
-              </FormItem>
-
+              {/* <Text.BodyCenterGray>CLIENT INFORMATION</Text.BodyCenterGray> */}
+              <FormItem label="Client name" value={clientName} />
               <Ruller />
-
-              <FormItemInline label="Gas Wanted">
-                {gasWanted ? <TextBodyWhite>{gasWanted?.toString()}</TextBodyWhite> : <ActivityIndicator />}
-              </FormItemInline>
-
+              <FormItemInline
+                label="Gas Wanted"
+                value={gasWanted ? <Text.Body_Bold>{gasWanted?.toString()}</Text.Body_Bold> : <ActivityIndicator />}
+              />
+              <Ruller />
+              <FormItem label="Reason" value={reason} />
+              <Ruller />
+              <FormItem label="Callback" value={callback} />
+              <Ruller />
+              <FormItem label="Address">
+                <Text.LinkText weight="500" style={{ flexShrink: 1, textAlign: 'right' }}>{`${bech32Address}`}</Text.LinkText>
+              </FormItem>
+              <Ruller />
+              <FormItem label="Account Name" value={JSON.stringify(keyInfo?.name)} />
+              <Ruller />
+              <FormItem label="Chain ID" value={chainId} />
+              <Ruller />
+              <FormItem label="Remote" value={remote} linkStyle />
               <Ruller />
 
               <HiddenGroup>
-                <FormItem label="Client name">
-                  <TextBodyWhite>{clientName}</TextBodyWhite>
+                <FormItem label="Raw Tx Data">
+                  <Text.LinkText weight="500" style={{ flexShrink: 1 }}>
+                    {txInput}
+                  </Text.LinkText>
                 </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Reason">
-                  <TextBodyWhite>{reason}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Callback">
-                  <TextBodyWhite>{callback}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Address">
-                  <TextBodyWhite>{bech32Address}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Key name (local key store info)">
-                  <TextBodyWhite>{JSON.stringify(keyInfo?.name)}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Remote">
-                  <TextBodyWhite>{remote}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
-                <FormItem label="Chain ID">
-                  <TextBodyWhite>{chainId}</TextBodyWhite>
-                </FormItem>
-
                 {/* <FormItem label="Session wanted">
                 <TextBodyWhite>{JSON.stringify(sessionWanted)}</TextBodyWhite>
               </FormItem>
@@ -227,30 +221,14 @@ export default function Page() {
 
                 <Ruller />
 
-                <FormItem label="Raw Transaction Data">
-                  <TextBodyWhite>{txInput}</TextBodyWhite>
-                </FormItem>
-
-                <Ruller />
-
                 <FormItem label="Raw Signed Data">
-                  {signedTx ? <TextBodyWhite>{signedTx?.toString()}</TextBodyWhite> : <ActivityIndicator />}
+                  {signedTx ? <Text.Body_Bold>{signedTx?.toString()}</Text.Body_Bold> : <ActivityIndicator />}
                 </FormItem>
               </HiddenGroup>
             </ScrollView>
-
-            <View style={{ height: 100 }}>
-              <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
-                Approve
-              </Button>
-              <Spacer />
-              <Button color="secondary" onPress={onCancel} loading={loading}>
-                Cancel
-              </Button>
-            </View>
-          </Layout.Body>
-        </SafeAreaView>
-      </Container>
+          </>
+        </>
+      </HomeLayout>
     </>
   )
 }
@@ -278,11 +256,3 @@ const HiddenGroup = ({ children }: React.PropsWithChildren) => {
     </>
   )
 }
-
-const TextBodyWhite = styled(Text.Body)`
-  color: black;
-`
-const TextBodyBlack = styled(Text.Body)`
-  font-weight: 400;
-  color: black;
-`

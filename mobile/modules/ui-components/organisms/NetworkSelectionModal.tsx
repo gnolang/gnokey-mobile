@@ -4,7 +4,7 @@ import { NetworkMetainfo } from '@/types'
 import { ModalHeaderSearch } from '../molecules/Modal'
 import { Button } from '../src'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-import { NetworkListItem } from '../molecules/list/NetworkListItem'
+import { NetworkListItem } from './list'
 
 interface Props {
   visible: boolean

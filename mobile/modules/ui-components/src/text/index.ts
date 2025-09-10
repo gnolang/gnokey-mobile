@@ -284,7 +284,7 @@ export const weights: Record<
 
 // -----------------------------------------------------------------------------
 export const Body_Bold = styled(Body)`
-  font-weight: 500;
+  font-weight: ${weights.bold};
 `
 export const BodyCenterGray = styled(Body)`
   text-align: center;

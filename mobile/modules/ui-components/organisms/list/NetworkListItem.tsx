@@ -1,7 +1,7 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components/native'
 import { Text } from '../../src'
 import { Ionicons } from '@expo/vector-icons'
+import { ListRow } from '../../atoms'
 
 interface Props {
   isSelected: boolean
@@ -10,32 +10,21 @@ interface Props {
 }
 
 export const NetworkListItem = ({ isSelected, name, onPress }: Props) => (
-  <TouchableOpacity onPress={onPress}>
-    <View style={styles.container}>
-      <LeftSide>
-        {isSelected ? (
-          <SelectedCircleSelected>
-            <Ionicons name="checkmark" size={18} color="#fff" />
-          </SelectedCircleSelected>
-        ) : (
-          <SelectedCircleUnselected />
-        )}
-      </LeftSide>
-      <RightSide>
-        <Text.Body>{name}</Text.Body>
-      </RightSide>
-    </View>
-  </TouchableOpacity>
+  <ListRow onPress={onPress}>
+    <LeftSide>
+      {isSelected ? (
+        <SelectedCircleSelected>
+          <Ionicons name="checkmark" size={18} color="#fff" />
+        </SelectedCircleSelected>
+      ) : (
+        <SelectedCircleUnselected />
+      )}
+    </LeftSide>
+    <RightSide>
+      <Text.Body>{name}</Text.Body>
+    </RightSide>
+  </ListRow>
 )
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
-})
 
 const LeftSide = styled.View`
   width: 40px;

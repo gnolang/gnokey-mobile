@@ -14,7 +14,6 @@ import {
 } from '@/redux'
 import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
 import { Vault } from '@/types'
-import { View } from 'react-native'
 
 export default function Page() {
   const navigation = useNavigation()

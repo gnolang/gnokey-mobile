@@ -13,15 +13,10 @@
     "faucetPortalUrl": "https://faucet.gno.land"
   },
   {
-    "chainId": "test5",
-    "chainName": "Testnet 5",
-    "rpcUrl": "http://rpc.test5.gno.land",
-    "faucetUrl": "https://faucet-api.test5.gno.land"
-  },
-  {
-    "chainId": "test6",
-    "chainName": "Testnet 6",
-    "rpcUrl": "https://test6.gno.berty.io:26657",
-    "faucetUrl": "https://faucet.test6.gno.berty.io"
+    "chainId": "test8",
+    "chainName": "Testnet 8",
+    "rpcUrl": "https://rpc.test8.testnets.gno.land",
+    "faucetUrl": "",
+    "faucetPortalUrl": "https://faucet.gno.land"
   }
 ]

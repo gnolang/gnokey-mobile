@@ -99,7 +99,7 @@ const initialDataLoad = async (db: SQLite.SQLiteDatabase) => {
     const chain = defaultChains[i]
     const result = await db.getFirstAsync<{ total: number }>(
       'SELECT COUNT(*) as total FROM app_chains WHERE chainId = ?',
-      chain.chainId
+      chain.chainId as string
     )
     console.log('Checking chain:', chain.chainId, 'Result:', result)
     if (result && result.total > 0) {
@@ -107,7 +107,7 @@ const initialDataLoad = async (db: SQLite.SQLiteDatabase) => {
     }
     // the first chain in the list is the default chain
     await insertChain({
-      chainId: chain.chainId,
+      chainId: chain.chainId as string,
       chainName: chain.chainName,
       rpcUrl: chain.rpcUrl,
       faucetUrl: chain.faucetUrl || '',
@@ -150,6 +150,11 @@ export const insertVault = async (keyInfo: KeyInfo, description?: string, appCha
   return await db.runAsync(sql, keyInfo.name, description || '', appChainId || null)
 }
 
+export const getChainById = async (id: number): Promise<NetworkMetainfo | null> => {
+  const result = await db.getFirstAsync<NetworkMetainfo>('SELECT * FROM app_chains WHERE id = ?', id)
+  return result || null
+}
+
 export const deleteVault = async (id: string) => {
   const sql = 'DELETE FROM app_vaults WHERE id = ?'
   return await db.runAsync(sql, id)
@@ -178,11 +183,6 @@ export const listVaultsByChain = async (chainId?: number): Promise<Vault[]> => {
       chainName: vault.chainName
     }
   }))
-}
-
-export const getChainById = async (id: string): Promise<NetworkMetainfo | null> => {
-  const result = await db.getFirstAsync<NetworkMetainfo>('SELECT * FROM app_chains WHERE id = ?', id)
-  return result || null
 }
 
 export const updateVault = async (vault: Vault, keyName: string, description?: string) => {

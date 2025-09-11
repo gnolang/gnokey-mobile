@@ -53,7 +53,7 @@ export const saveChain = createAsyncThunk<NetworkMetainfo, SaveChainRequest, Thu
     faucetUrl: chain.faucetUrl || '',
     active: false // new chains are not active by default
   })
-  const savedChain = await db.getChainById(data.lastInsertRowId.toString())
+  const savedChain = await db.getChainById(data.lastInsertRowId)
   if (!savedChain) {
     throw new Error('Failed to save chain')
   }

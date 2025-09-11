@@ -3,6 +3,7 @@ import { ThunkExtra } from '@/providers/redux-provider'
 import { GnoNativeApi, KeyInfo, SignTxResponse } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
 import { Vault } from '@/types'
+import { getChainById } from '@/providers/database-provider'
 
 const DEFAULT_GAS_MARGIN = 110 // 1.1%
 
@@ -51,7 +52,7 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { vault: Vault }, 
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     const { callback } = (thunkAPI.getState() as RootState).linking
 
-    console.log('sendAddressToSoliciting', vault, callback)
+    console.log('sendAddressToSoliciting callback', callback)
 
     if (!callback) {
       throw new Error('No callback found.')
@@ -59,16 +60,15 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { vault: Vault }, 
 
     const bech32 = await gnonative.addressToBech32(vault.keyInfo.address)
 
+    let network
+    if (vault.chain) {
+      network = await getChainById(vault.chain.id)
+    }
+
+    console.log('sendAddressToSoliciting', bech32, network?.rpcUrl)
+
     Linking.openURL(
-      callback +
-        '?address=' +
-        bech32 +
-        '&remote=' +
-        vault.chain?.rpcUrl +
-        '&chain_id=' +
-        vault.chain?.chainId +
-        '&cachekill=' +
-        new Date().getTime()
+      `${callback}?address=${encodeURIComponent(bech32)}&remote=${encodeURIComponent(network?.rpcUrl ?? '')}&chain_id=${encodeURIComponent(network?.chainId ?? '')}&cachekill=${Date.now()}`
     )
   }
 )

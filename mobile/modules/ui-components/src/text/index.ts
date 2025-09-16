@@ -136,7 +136,6 @@ export const Body = styled(BaseText)`
   font-size: 17px;
   font-weight: ${(props) => props.weight || '400'};
   line-height: 22px;
-  letter-spacing: -0.41px;
 `
 
 export const Callout = styled(BaseText)`
@@ -294,4 +293,9 @@ export const BodyCenterGray = styled(Body)`
 export const Title3CenterGray = styled(Title3)`
   text-align: center;
   color: ${({ theme }) => theme.text.textMuted};
+`
+
+export const CalloutMutedBold = styled(Callout)`
+  color: ${(props) => props.theme.text.textMuted};
+  font-weight: ${weights.bold};
 `

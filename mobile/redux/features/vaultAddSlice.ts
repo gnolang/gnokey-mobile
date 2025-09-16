@@ -95,7 +95,8 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
     // await gnonative.activateAccount(name)
     // await gnonative.setPassword(password, newAccount.address)
-    insertVault(newAccount, description, undefined)
+    const addressBech32 = await gnonative.addressToBech32(newAccount.address)
+    insertVault(newAccount, addressBech32, description, undefined)
     await setCurrentChainAndRefresh(thunkAPI, undefined)
 
     thunkAPI.dispatch(setPhrase('')) // clear the phrase
@@ -165,7 +166,8 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
 
     await gnonative.activateAccount(name)
     await gnonative.setPassword(password, newAccount.address)
-    insertVault(newAccount, description, selectedChain.id)
+    const addressBech32 = await gnonative.addressToBech32(newAccount.address)
+    insertVault(newAccount, addressBech32, description, selectedChain.id)
     await setCurrentChainAndRefresh(thunkAPI, selectedChain)
     thunkAPI.dispatch(addProgress(`Account "${name}" created successfully.`))
     return { newAccount, state: VaultCreationState.account_created }

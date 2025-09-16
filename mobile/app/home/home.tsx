@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
-import { checkForKeyOnChains, useAppDispatch, useAppSelector, selectVaults } from '@/redux'
+import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances } from '@/redux'
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import {
   Button,
@@ -26,13 +26,19 @@ export default function Page() {
   const isFirstRender = useRef(true)
 
   const [nameSearch, setNameSearch] = useState<string>('')
-  const [filteredAccounts, setFilteredAccounts] = useState<Vault[]>([])
   const [loading, setLoading] = useState<string | undefined>(undefined)
   const theme = useTheme()
 
   const route = useRouter()
   const dispatch = useAppDispatch()
-  const vaults = useAppSelector(selectVaults)
+  const vaults = useAppSelector(selectVaultsWithBalances)
+
+  const filteredAccounts = useMemo(() => {
+    if (nameSearch) {
+      return vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : []
+    }
+    return vaults || []
+  }, [nameSearch, vaults])
 
   useEffect(() => {
     ;(async () => {
@@ -42,8 +48,8 @@ export default function Page() {
 
       try {
         setLoading('Loading accounts...')
-        await dispatch(fetchVaults()).unwrap()
-        dispatch(checkForKeyOnChains()).unwrap()
+        const v = await dispatch(fetchVaults()).unwrap()
+        dispatch(fetchBalances(v))
       } catch (error: unknown | Error) {
         console.error(error)
       } finally {
@@ -53,14 +59,6 @@ export default function Page() {
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    if (nameSearch) {
-      setFilteredAccounts(vaults ? vaults.filter((account) => account.keyInfo.name.includes(nameSearch)) : [])
-    } else {
-      setFilteredAccounts(vaults || [])
-    }
-  }, [nameSearch, vaults])
 
   const onChangeAccountHandler = async (vault: Vault) => {
     await dispatch(setVaultToEdit({ vault }))
@@ -85,7 +83,7 @@ export default function Page() {
     <>
       <HomeLayout
         footerWithBorder
-        contentPadding={32}
+        contentPadding={20}
         header={
           <ScreenHeader
             title={`${filteredAccounts.length} ${filteredAccounts.length > 1 ? 'accounts' : 'account'}`}

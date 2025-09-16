@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction, RootState } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice, PayloadAction, RootState } from '@reduxjs/toolkit'
 import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Vault } from '@/types'
@@ -59,66 +59,6 @@ const enrichData = (keyinfoList: KeyInfo[], databaseVaults: Vault[]) => {
   return data
 }
 
-// const hasCoins = async (gnonative: GnoNativeApi, address: Uint8Array) => {
-//   try {
-//     console.log('checking if user has balance')
-//     const balance = await gnonative.queryAccount(address)
-//     console.log('account balance: %s', balance.accountInfo?.coins)
-
-//     if (!balance.accountInfo) return false
-
-//     const hasCoins = balance.accountInfo.coins.length > 0
-//     const hasBalance = hasCoins && balance.accountInfo.coins[0].amount > 0
-
-//     return hasBalance
-//   } catch (error: any) {
-//     console.log('error on hasBalance', error['rawMessage'])
-//     if (error['rawMessage'] === 'invoke bridge method error: unknown: ErrUnknownAddress(#206)') return false
-//     return false
-//   }
-// }
-
-type CheckOnChain = { infoOnChains: Map<vaultAddress, vaultChains> } | undefined
-/**
- * Check if each key is present in which chain.
- * */
-export const checkForKeyOnChains = createAsyncThunk<CheckOnChain, void, ThunkExtra>(
-  'vault/checkForKeyOnChains',
-  async (_, thunkAPI) => {
-    if (true) return undefined
-    // const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    // const vaults = await selectVaults(thunkAPI.getState() as RootState)
-    // const chains = await selectChainsAvailable(thunkAPI.getState() as RootState)
-
-    // const infoOnChains = new Map<string, string[]>()
-
-    // if (!chains || !vaults) {
-    //   return undefined
-    // }
-
-    // for (const chain of chains) {
-    //   console.log('checking keys on chain', chain.chainName)
-    //   await gnonative.setChainID(chain.chainId)
-    //   await gnonative.setRemote(chain.rpcUrl)
-
-    //   for (const vault of vaults) {
-    //     console.log(`Checking key ${vault.keyInfo.name} on chain ${chain.chainName}`)
-    //     const keyHasCoins = await hasCoins(gnonative, vault.keyInfo.address)
-    //     console.log(`Key ${vault.keyInfo.name} on chain ${chain.chainName} has coins: ${keyHasCoins}`)
-
-    //     if (keyHasCoins) {
-    //       if (infoOnChains.has(vault.keyInfo.address.toString())) {
-    //         infoOnChains.get(vault.keyInfo.address.toString())?.push(chain.chainName)
-    //       } else {
-    //         infoOnChains.set(vault.keyInfo.address.toString(), [chain.chainName])
-    //       }
-    //     }
-    //   }
-    // }
-    // return { infoOnChains }
-  }
-)
-
 interface Prop {
   keyAddress: Uint8Array
   value?: boolean
@@ -158,3 +98,17 @@ export const vaultListSlice = createSlice({
 
 export const { setBookmark } = vaultListSlice.actions
 export const { selectVaults } = vaultListSlice.selectors
+
+export const selectVaultsWithBalances = createSelector(
+  [(state: RootState) => state.vaultList.vaults, (state: RootState) => state.vaultBalance],
+  (vaults, balances) => {
+    if (!vaults) return []
+
+    return vaults?.map((vault: Vault) => {
+      return {
+        ...vault,
+        balance: vault && vault.keyInfo ? (balances[vault.keyInfo.address.toString()] ?? 0n) : 0n
+      } as Vault
+    })
+  }
+)

@@ -84,6 +84,7 @@ const executeMigrations = async (db: SQLite.SQLiteDatabase) => {
       bookmarked BOOLEAN DEFAULT 0,
       createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      address TEXT NOT NULL,
       UNIQUE(keyName)
     );
   `)
@@ -145,17 +146,17 @@ export const listChains = async (): Promise<NetworkMetainfo[]> => {
   return await db.getAllAsync<NetworkMetainfo>('SELECT * FROM app_chains ORDER BY createdAt DESC')
 }
 
-export const insertVault = async (keyInfo: KeyInfo, description?: string, appChainId?: number) => {
-  const sql = 'INSERT INTO app_vaults (keyName, description, appChainId) VALUES (?, ?, ?)'
-  return await db.runAsync(sql, keyInfo.name, description || '', appChainId || null)
-}
-
 export const getChainById = async (id: number): Promise<NetworkMetainfo | null> => {
   const result = await db.getFirstAsync<NetworkMetainfo>('SELECT * FROM app_chains WHERE id = ?', id)
   return result || null
 }
 
-export const deleteVault = async (id: string) => {
+export const insertVault = async (keyInfo: KeyInfo, addressBech32: string, description?: string, appChainId?: number) => {
+  const sql = 'INSERT INTO app_vaults (keyName, description, appChainId, address) VALUES (?, ?, ?, ?)'
+  return await db.runAsync(sql, keyInfo.name, description || '', appChainId || null, addressBech32)
+}
+
+export const deleteVault = async (id: number) => {
   const sql = 'DELETE FROM app_vaults WHERE id = ?'
   return await db.runAsync(sql, id)
 }

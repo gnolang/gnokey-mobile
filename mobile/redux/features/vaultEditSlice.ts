@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice, RootState } from '@reduxjs/toolkit'
 import { GnoNativeApi } from '@gnolang/gnonative'
 import { ThunkExtra } from '@/providers/redux-provider'
 import { Vault } from '@/types'
@@ -63,3 +63,14 @@ export const updateVault = createAsyncThunk<boolean, UpdateVaultParam, ThunkExtr
 export const { setVaultToEdit } = vaultEditSlice.actions
 
 export const { selectVaultToEdit } = vaultEditSlice.selectors
+
+export const selectVaultToEditWithBalance = createSelector(
+  [(state: RootState) => state.vaultEdit.vaultToEdit, (state: RootState) => state.vaultBalance],
+  (vault, balances) => {
+    if (!vault) return undefined
+    return {
+      ...vault,
+      balance: vault && vault.keyInfo ? (balances[vault.keyInfo.address.toString()] ?? 0n) : 0n
+    }
+  }
+)

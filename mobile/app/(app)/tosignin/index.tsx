@@ -9,8 +9,7 @@ import {
   sendAddressToSoliciting,
   useAppDispatch,
   useAppSelector,
-  fetchVaults,
-  checkForKeyOnChains
+  fetchVaults
 } from '@/redux'
 import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
 import { Vault } from '@/types'
@@ -28,7 +27,7 @@ export default function Page() {
       try {
         if (!vaults || vaults.length === 0) {
           await dispatch(fetchVaults()).unwrap()
-          dispatch(checkForKeyOnChains()).unwrap()
+          // dispatch(checkForKeyOnChains()).unwrap()
         }
       } catch (error: unknown | Error) {
         console.error(error)

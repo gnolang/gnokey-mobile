@@ -1,10 +1,10 @@
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { AntDesign } from '@expo/vector-icons'
-import { Text } from '@/modules/ui-components'
+import { Text, Ruller } from '@/modules/ui-components'
 import { Vault } from '@/types'
 import { weights } from '@/modules/ui-components/src/text'
-import { Ruller } from '@/modules/ui-components/atoms'
+import { formatter } from '@/modules/utils/format'
 
 interface Props {
   vault: Vault
@@ -12,9 +12,13 @@ interface Props {
   style?: StyleProp<ViewStyle>
 }
 
-// SQLite date format is 'YYYY-MM-DD HH:mm:ss'
-const dateOnly = (sqliteIsoDate?: string) => {
-  return sqliteIsoDate ? sqliteIsoDate.split(' ')[0] : ''
+const showOnlyInitialAndFinalValues = (str: string, initialChars = 6, finalChars = 4) => {
+  if (str.length <= initialChars + finalChars) {
+    return str
+  }
+  const initial = str.slice(0, 8)
+  const final = str.slice(-8)
+  return `${initial}...${final}`
 }
 
 const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
@@ -25,8 +29,13 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
         <PlaceHolder />
         <View style={styles.labels}>
           <Text.Callout weight={weights.bold}>{vault.keyInfo.name}</Text.Callout>
-          {vault.description ? <Text.Subheadline style={{ textAlign: 'left' }}>{vault.description}</Text.Subheadline> : null}
-          <Text.Caption>Created on {dateOnly(vault.createdAt)}</Text.Caption>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text.SubheadlineMuted style={{ textAlign: 'left', maxWidth: 160 }} ellipsizeMode="tail" numberOfLines={1}>
+              {vault.description}
+            </Text.SubheadlineMuted>
+            <Text.CalloutMutedBold>{formatter.balance(vault.balance)} ugnot</Text.CalloutMutedBold>
+          </View>
+          <Text.SubheadlineMuted>{showOnlyInitialAndFinalValues(vault.address)}</Text.SubheadlineMuted>
         </View>
         <View style={styles.arrow}>
           <AntDesign name="right" size={24} color={theme.colors.border} />
@@ -43,7 +52,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 16
+    paddingVertical: 16,
+    alignItems: 'center'
   },
   labels: { flex: 1, paddingLeft: 12 },
   arrow: {
@@ -53,8 +63,8 @@ const styles = StyleSheet.create({
 })
 
 const PlaceHolder = styled.View`
-  height: 60px;
-  width: 60px;
+  height: 40px;
+  width: 40px;
   background-color: ${({ theme }) => theme.colors.border};
   border-color: ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};

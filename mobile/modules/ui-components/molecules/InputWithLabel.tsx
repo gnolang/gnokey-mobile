@@ -45,8 +45,10 @@ const TextInputStyled = styled.TextInput`
   font-size: 17px;
   font-weight: 400;
   padding-right: 30px;
-  height: 100%;
+  min-height: 30px;
 `
+
 const Row = styled.View`
   flex-direction: row;
+  align-items: center;
 `

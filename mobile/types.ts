@@ -52,7 +52,7 @@ export type NetworkMetainfo = {
 }
 
 export type Vault = {
-  id: string
+  id: number
   keyName: string
   description?: string
   bookmarked?: boolean
@@ -67,5 +67,16 @@ export type Vault = {
    * SQLite date format is 'YYYY-MM-DD HH:mm:ss'
    */
   updatedAt?: string
-  keyInfo: KeyInfo // KeyInfo is a type from GnoNative that contains information about the key
+  /**
+   * KeyInfo is a type from GnoNative that contains information about the key
+   */
+  keyInfo: KeyInfo
+  /**
+   * Vault balance, loaded from the blockchain kept in memory
+   */
+  balance?: bigint
+  /**
+   * Bech32 address of the vault, stored in database
+   */
+  address: string
 }

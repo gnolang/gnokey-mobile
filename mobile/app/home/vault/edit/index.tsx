@@ -1,35 +1,25 @@
 import { Alert } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ModalConfirm } from '@/components/modal'
 import { useSelector } from 'react-redux'
-import { deleteVault, fetchVaults, selectVaultToEdit, updateVault, useAppDispatch } from '@/redux'
+import { deleteVault, fetchVaults, selectVaultToEditWithBalance, updateVault, useAppDispatch } from '@/redux'
 import { useNavigation, useRouter } from 'expo-router'
-import { useGnoNativeContext } from '@gnolang/gnonative'
 import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller } from '@/modules/ui-components/atoms'
 import { LinkHeader } from '@/modules/ui-components/src/text'
+import { formatter } from '@/modules/utils/format'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const navigation = useNavigation()
-  const { gnonative } = useGnoNativeContext()
 
-  const vault = useSelector(selectVaultToEdit)
+  const vault = useSelector(selectVaultToEditWithBalance)
 
   const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
   const [description, setDescription] = useState(vault?.description || '')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [addressBech32, setAddressBech32] = useState('')
-
-  useEffect(() => {
-    ;(async () => {
-      if (!vault) return
-      const address = await gnonative.addressToBech32(vault.keyInfo.address)
-      setAddressBech32(address)
-    })()
-  }, [vault, gnonative])
 
   const onConfirmDelete = async () => {
     if (!vault) return
@@ -90,7 +80,7 @@ const Page = () => {
           <Ruller spacer={16} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />
           <Ruller spacer={16} />
-          <InputWithLabel label="Address" placeholder="Address" value={addressBech32} noEdit />
+          <InputWithLabel label="Address" placeholder="Address" value={vault.address} noEdit />
           <Ruller spacer={16} />
           <InputWithLabel
             label="Chain"
@@ -99,6 +89,14 @@ const Page = () => {
             noEdit
           />
           <Ruller spacer={16} />
+          <InputWithLabel
+            label="Created At"
+            placeholder="Created At"
+            value={vault.createdAt ? formatter.date(vault.createdAt) : ''}
+            noEdit
+          />
+          <Ruller spacer={16} />
+          <InputWithLabel label="Balance" placeholder="Balance" value={formatter.balance(vault.balance)} noEdit />
         </Container>
 
         <ModalConfirm

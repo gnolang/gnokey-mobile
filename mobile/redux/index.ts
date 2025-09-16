@@ -16,9 +16,10 @@ import {
   LinkingState,
   SessionKeyState,
   settingsSlice,
-  SettingsState
+  SettingsState,
+  vaultBalanceSlice
 } from '@/redux/features'
-import { combineSlices, configureStore } from '@reduxjs/toolkit'
+import { BalanceState, combineSlices, configureStore } from '@reduxjs/toolkit'
 
 export const rootReducer = combineSlices({
   [vaultAddSlice.name]: vaultAddSlice.reducer,
@@ -28,7 +29,8 @@ export const rootReducer = combineSlices({
   [linkingSlice.name]: linkingSlice.reducer,
   [chainsSlice.name]: chainsSlice.reducer,
   [sessionKeySlice.name]: sessionKeySlice.reducer,
-  [settingsSlice.name]: settingsSlice.reducer
+  [settingsSlice.name]: settingsSlice.reducer,
+  [vaultBalanceSlice.name]: vaultBalanceSlice.reducer
 })
 
 export type RootState = {
@@ -40,6 +42,7 @@ export type RootState = {
   chains: ChainsState
   sessionKey: SessionKeyState
   settings: SettingsState
+  vaultBalance: BalanceState
 }
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

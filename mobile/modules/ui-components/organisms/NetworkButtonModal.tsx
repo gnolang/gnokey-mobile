@@ -20,6 +20,7 @@ const NetworkButtonModal = () => {
       <TouchableOpacity onPress={() => setShowNetworkModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
         <FontAwesome5 name="network-wired" size={20} color={theme.colors.link} style={{ marginRight: 4 }} />
         <Text.LinkText>{currentChain ? currentChain.chainName : 'No Registration'}</Text.LinkText>
+        <FontAwesome5 name="chevron-down" size={12} color={theme.colors.link} style={{ margin: 4 }} />
       </TouchableOpacity>
 
       <NetworkSelectionModal

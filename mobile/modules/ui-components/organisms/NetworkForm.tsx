@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { Button, Spacer, TextField } from '@/modules/ui-components'
-import { isEmpty, isInvalidURL } from '@/modules/validation'
+import { isEmpty, isInvalidURL } from '@/modules/utils/validation'
 import { Ruller } from '../atoms'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 

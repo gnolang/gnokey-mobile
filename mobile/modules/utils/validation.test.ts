@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { isEmpty, isInvalidURL } from '../validation'
+import { isEmpty, isInvalidURL } from './validation'
 
 test('is URL invalid', () => {
   expect(isInvalidURL('')).toBe(true)

@@ -56,7 +56,8 @@
     "reselect": "^5.1.1",
     "styled-components": "^6.1.18",
     "text-encoding": "^0.7.0",
-    "web-streams-polyfill": "^3.3.2"
+    "web-streams-polyfill": "^3.3.2",
+    "expo-localization": "~16.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

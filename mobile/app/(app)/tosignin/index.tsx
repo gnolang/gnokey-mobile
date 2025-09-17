@@ -5,11 +5,12 @@ import {
   clearLinking,
   selectCallback,
   selectClientName,
-  selectVaults,
   sendAddressToSoliciting,
   useAppDispatch,
   useAppSelector,
-  fetchVaults
+  fetchVaults,
+  fetchBalances,
+  selectVaultsWithBalances
 } from '@/redux'
 import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
 import { Vault } from '@/types'
@@ -18,7 +19,7 @@ export default function Page() {
   const navigation = useNavigation()
   const dispatch = useAppDispatch()
 
-  const vaults = useAppSelector(selectVaults)
+  const vaults = useAppSelector(selectVaultsWithBalances)
   const callback = useAppSelector(selectCallback)
   const clientName = useAppSelector(selectClientName)
 
@@ -26,8 +27,8 @@ export default function Page() {
     const unsubscribe = navigation.addListener('focus', async () => {
       try {
         if (!vaults || vaults.length === 0) {
-          await dispatch(fetchVaults()).unwrap()
-          // dispatch(checkForKeyOnChains()).unwrap()
+          const v = await dispatch(fetchVaults()).unwrap()
+          dispatch(fetchBalances(v))
         }
       } catch (error: unknown | Error) {
         console.error(error)
@@ -60,9 +61,7 @@ export default function Page() {
       subHeader={vaults && vaults.length > 0 ? <Form.Section title={`Select an account to sign in to ${clientName}`} /> : null}
       footer={null}
       data={vaults || []}
-      renderItem={({ item }) => (
-        <VaultListItem style={{ paddingHorizontal: 20 }} vault={item} onVaultPress={returnKeyAddressToSoliciting} />
-      )}
+      renderItem={({ item }) => <VaultListItem vault={item} onVaultPress={returnKeyAddressToSoliciting} />}
       emptyComponent={
         <HeroBoxLeft
           title="No Accounts"

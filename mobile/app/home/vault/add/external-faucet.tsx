@@ -1,5 +1,4 @@
 import { Container, Spacer, Text } from '@/modules/ui-components'
-import { Linking } from 'react-native'
 import { Button } from '@/modules/ui-components'
 import {
   existingAccountSelector,
@@ -18,6 +17,7 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { LoadingModal } from '@/components/loading'
+import { openFaucet } from '@/modules/utils'
 
 export default function Page() {
   const newAccount = useAppSelector(newAccountSelector)
@@ -54,10 +54,6 @@ export default function Page() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signUpState])
-
-  const openFaucet = () => {
-    Linking.openURL('https://faucet.gno.land/')
-  }
 
   const continueToVaultCreation = async () => {
     const account = newAccount || existingAccount

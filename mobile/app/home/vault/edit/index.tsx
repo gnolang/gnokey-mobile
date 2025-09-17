@@ -1,21 +1,27 @@
 import { Alert } from 'react-native'
 import { useState } from 'react'
-import { ModalConfirm } from '@/components/modal'
+import { ModalConfirm, TextCopy } from '@/components'
 import { useSelector } from 'react-redux'
-import { deleteVault, fetchVaults, selectVaultToEditWithBalance, updateVault, useAppDispatch } from '@/redux'
+import { deleteVault, fetchVaults, selectCurrentChain, selectVaultToEditWithBalance, updateVault, useAppDispatch } from '@/redux'
 import { useNavigation, useRouter } from 'expo-router'
-import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
+import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, ButtonText } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller } from '@/modules/ui-components/atoms'
 import { LinkHeader } from '@/modules/ui-components/src/text'
 import { formatter } from '@/modules/utils/format'
+import { openFaucet } from '@/modules/utils'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { useTheme } from 'styled-components/native'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const navigation = useNavigation()
+  const theme = useTheme()
 
   const vault = useSelector(selectVaultToEditWithBalance)
+  const network = useSelector(selectCurrentChain)
+  const hasFaucetPortal = network?.faucetPortalUrl && network?.faucetPortalUrl.length > 0
 
   const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
   const [description, setDescription] = useState(vault?.description || '')
@@ -80,7 +86,9 @@ const Page = () => {
           <Ruller spacer={16} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />
           <Ruller spacer={16} />
-          <InputWithLabel label="Address" placeholder="Address" value={vault.address} noEdit />
+          <TextCopy text={vault.address}>
+            <InputWithLabel label="Address" placeholder="Address" value={vault.address} noEdit />
+          </TextCopy>
           <Ruller spacer={16} />
           <InputWithLabel
             label="Chain"
@@ -96,7 +104,14 @@ const Page = () => {
             noEdit
           />
           <Ruller spacer={16} />
-          <InputWithLabel label="Balance" placeholder="Balance" value={formatter.balance(vault.balance)} noEdit />
+          <InputWithLabel
+            label="Balance"
+            placeholder="Balance"
+            value={`${formatter.balance(vault.balance)} ugnot`}
+            noEdit
+            slotRight={hasFaucetPortal && <AntDesign name="right" size={24} color={theme.colors.border} onPress={openFaucet} />}
+          />
+          <Ruller spacer={16} />
         </Container>
 
         <ModalConfirm

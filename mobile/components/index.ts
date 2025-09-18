@@ -8,6 +8,7 @@ export const Layout = { Container, Header, Body, BodyAlignedBotton, Footer }
 export * from './controls/toggle/Toggle'
 export * from './items'
 export * from './shared-components/UnifiedText'
+export * from './modal'
 
 export { default as TextCopy } from './text/text-copy'
 export { default as ModalHeader } from './modal/ModalHeader'

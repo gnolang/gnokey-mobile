@@ -57,7 +57,7 @@ export const NetworkSelectionModal = ({ visible, onClose, onNetworkSelect, onAdd
     >
       <BottomSheetFlatList
         data={filteredNetworks}
-        keyExtractor={(i) => i.id?.toString() || 'no-user-registration'}
+        keyExtractor={(i: NetworkMetainfo) => i.id?.toString() || 'no-user-registration'}
         renderItem={renderItem}
         style={{
           marginBottom: 80

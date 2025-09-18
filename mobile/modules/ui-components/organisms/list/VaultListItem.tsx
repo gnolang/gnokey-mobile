@@ -33,7 +33,7 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
             <Text.SubheadlineMuted style={{ textAlign: 'left', maxWidth: 160 }} ellipsizeMode="tail" numberOfLines={1}>
               {vault.description}
             </Text.SubheadlineMuted>
-            <Text.CalloutMutedBold>{formatter.balance(vault.balance)} ugnot</Text.CalloutMutedBold>
+            <Text.CalloutMutedBold>{formatter.balance(vault.balance)} ugnot </Text.CalloutMutedBold>
           </View>
           <Text.SubheadlineMuted>{showOnlyInitialAndFinalValues(vault.address)}</Text.SubheadlineMuted>
         </View>
@@ -47,7 +47,7 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
 }
 
 const styles = StyleSheet.create({
-  box: { marginHorizontal: 0 },
+  box: { marginHorizontal: 0, height: 80 },
   content: {
     flex: 1,
     flexDirection: 'row',

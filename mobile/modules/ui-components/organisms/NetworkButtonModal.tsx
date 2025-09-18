@@ -5,7 +5,15 @@ import { useTheme } from 'styled-components/native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Text } from '../src'
 import { NetworkSelectionModal } from '.'
-import { useAppDispatch, useAppSelector, setCurrentChain, selectCurrentChain, selectChainsAvailable, fetchVaults } from '@/redux'
+import {
+  useAppDispatch,
+  useAppSelector,
+  setCurrentChain,
+  selectCurrentChain,
+  selectChainsAvailable,
+  fetchVaults,
+  fetchBalances
+} from '@/redux'
 
 const NetworkButtonModal = () => {
   const theme = useTheme()
@@ -26,10 +34,11 @@ const NetworkButtonModal = () => {
       <NetworkSelectionModal
         visible={showNetworkModal}
         onClose={() => setShowNetworkModal(false)}
-        onNetworkSelect={async (v) => {
+        onNetworkSelect={async (network) => {
           setShowNetworkModal(false)
-          await dispatch(setCurrentChain(v)).unwrap()
-          dispatch(fetchVaults())
+          await dispatch(setCurrentChain(network)).unwrap()
+          const v = await dispatch(fetchVaults()).unwrap()
+          dispatch(fetchBalances(v))
         }}
         onAddChain={() => {
           setShowNetworkModal(false)

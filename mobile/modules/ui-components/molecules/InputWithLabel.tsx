@@ -9,9 +9,18 @@ interface Props {
   value?: string
   minWidth?: number
   noEdit?: boolean
+  slotRight?: React.ReactNode
 }
 
-export const InputWithLabel = ({ label, placeholder, onChangeText = () => {}, value, minWidth = 100, noEdit = false }: Props) => {
+export const InputWithLabel = ({
+  label,
+  placeholder,
+  onChangeText = () => {},
+  value,
+  minWidth = 100,
+  noEdit = false,
+  slotRight
+}: Props) => {
   const theme = useTheme()
 
   return (
@@ -29,6 +38,7 @@ export const InputWithLabel = ({ label, placeholder, onChangeText = () => {}, va
         {value && !noEdit ? (
           <MaterialIcons name="highlight-remove" size={24} color={theme.text.textMuted} onPress={() => onChangeText('')} />
         ) : null}
+        {slotRight}
       </RightGroup>
     </Row>
   )

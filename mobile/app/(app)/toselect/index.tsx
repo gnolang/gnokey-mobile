@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Layout } from '@/components'
-import { fetchVaults, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
+import { fetchBalances, fetchVaults, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router, useNavigation } from 'expo-router'
 import { FlatList } from 'react-native'
@@ -24,7 +24,8 @@ export default function Page() {
       try {
         setLoading('Loading accounts...')
 
-        dispatch(fetchVaults())
+        const v = await dispatch(fetchVaults()).unwrap()
+        dispatch(fetchBalances(v))
       } catch (error: unknown | Error) {
         console.error(error)
       } finally {

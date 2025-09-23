@@ -2,15 +2,22 @@ import { Alert } from 'react-native'
 import { useState } from 'react'
 import { ModalConfirm, TextCopy } from '@/components'
 import { useSelector } from 'react-redux'
-import { deleteVault, fetchVaults, selectCurrentChain, selectVaultToEditWithBalance, updateVault, useAppDispatch } from '@/redux'
+import {
+  deleteVault,
+  fetchBalances,
+  fetchVaults,
+  selectCurrentChain,
+  selectVaultToEditWithBalance,
+  updateVault,
+  useAppDispatch
+} from '@/redux'
 import { useNavigation, useRouter } from 'expo-router'
-import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, ButtonText } from '@/modules/ui-components'
+import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
-import { Ruller } from '@/modules/ui-components/atoms'
-import { LinkHeader } from '@/modules/ui-components/src/text'
+import { Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/utils/format'
 import { openFaucet } from '@/modules/utils'
-import { AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 
 const Page = () => {
@@ -26,6 +33,7 @@ const Page = () => {
   const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
   const [description, setDescription] = useState(vault?.description || '')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   const onConfirmDelete = async () => {
     if (!vault) return
@@ -54,6 +62,18 @@ const Page = () => {
     }
   }
 
+  const refreshBalance = async () => {
+    if (!vault) return
+    try {
+      setRefreshing(true)
+      await dispatch(fetchBalances([vault]))
+    } catch (error: unknown | Error) {
+      console.error(error)
+    } finally {
+      setRefreshing(false)
+    }
+  }
+
   if (!vault) {
     return (
       <Container>
@@ -72,7 +92,16 @@ const Page = () => {
         contentPadding={20}
         header={<ScreenHeader title={vault.keyName} />}
         subHeader={
-          <Form.Section title="Info" rightActions={<LinkHeader onPress={() => setShowDeleteModal(true)}>Delete</LinkHeader>} />
+          <Form.Section
+            title="Info"
+            rightActions={
+              <VaultOptionsButton
+                onTransfer={() => console.log('Transfer')}
+                onDelete={() => setShowDeleteModal(true)}
+                onRefreshBalance={refreshBalance}
+              />
+            }
+          />
         }
         footer={
           <Button onPress={onUpdateAccount} color="primary">
@@ -107,7 +136,7 @@ const Page = () => {
           <InputWithLabel
             label="Balance"
             placeholder="Balance"
-            value={`${formatter.balance(vault.balance)} ugnot`}
+            value={refreshing ? 'Refreshing...' : `${formatter.balance(vault.balance)} ugnot`}
             noEdit
             slotRight={hasFaucetPortal && <AntDesign name="right" size={24} color={theme.colors.border} onPress={openFaucet} />}
           />

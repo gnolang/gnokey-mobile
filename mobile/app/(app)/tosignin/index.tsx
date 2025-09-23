@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import * as Linking from 'expo-linking'
 import {
@@ -22,6 +22,8 @@ export default function Page() {
   const vaults = useAppSelector(selectVaultsWithBalances)
   const callback = useAppSelector(selectCallback)
   const clientName = useAppSelector(selectClientName)
+
+  const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
@@ -54,6 +56,19 @@ export default function Page() {
     router.replace('/home')
   }
 
+  const refreshBalances = async () => {
+    if (vaults) {
+      try {
+        setRefreshing(true)
+        await dispatch(fetchBalances(vaults))
+      } catch (error: unknown | Error) {
+        console.error(error)
+      } finally {
+        setRefreshing(false)
+      }
+    }
+  }
+
   return (
     <ListTemplate<Vault>
       contentContainerStyle={{ flexGrow: 1 }}
@@ -69,6 +84,8 @@ export default function Page() {
         />
       }
       keyExtractor={(item) => item.keyInfo.name}
+      refreshing={refreshing}
+      onRefresh={refreshBalances}
     />
   )
 }

@@ -27,6 +27,7 @@ export default function Page() {
 
   const [nameSearch, setNameSearch] = useState<string>('')
   const [loading, setLoading] = useState<string | undefined>(undefined)
+  const [refreshing, setRefreshing] = useState(false)
   const theme = useTheme()
 
   const route = useRouter()
@@ -59,6 +60,19 @@ export default function Page() {
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const refreshBalances = async () => {
+    if (vaults) {
+      try {
+        setRefreshing(true)
+        await dispatch(fetchBalances(vaults))
+      } catch (error: unknown | Error) {
+        console.error(error)
+      } finally {
+        setRefreshing(false)
+      }
+    }
+  }
 
   const onChangeAccountHandler = async (vault: Vault) => {
     await dispatch(setVaultToEdit({ vault }))
@@ -127,6 +141,8 @@ export default function Page() {
             renderItem={({ item }) => <VaultListItem vault={item} onVaultPress={onChangeAccountHandler} />}
             keyExtractor={(item) => item.keyInfo.name}
             contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
+            refreshing={refreshing}
+            onRefresh={refreshBalances}
           />
         )}
       </HomeLayout>

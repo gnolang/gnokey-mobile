@@ -59,10 +59,9 @@ export const NewVaultForm = ({ error }: Props) => {
       <NetworkSelectionModal
         visible={showNetworkModal}
         onClose={() => setShowNetworkModal(false)}
-        onNetworkSelect={async (v) => {
+        onNetworkSelect={(v) => {
           setShowNetworkModal(false)
-          await dispatch(setSelectedChain(v)).unwrap()
-          console.log('Selected network:', v)
+          dispatch(setSelectedChain(v))
         }}
         onAddChain={() => {
           setShowNetworkModal(false)

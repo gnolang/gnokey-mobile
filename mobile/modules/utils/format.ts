@@ -1,13 +1,32 @@
 import { getLocales } from 'expo-localization'
+import BigNumber from 'bignumber.js'
+import { GNOT_TOKEN } from '@/redux/features/constants'
 
 const locale = getLocales()[0]?.languageTag || 'en-US'
 
+/**
+ * Converts ugnot to gnot and formats with locale-aware thousands separators
+ * If 0, return "0"
+ * If no decimal part, return integer only
+ * If decimal part, return up to 6 decimal places, trimming trailing zeros
+ * @param value bignit in ugnot, where 1000000ugnot = 1 gnot
+ * @returns gnot converted to string with locale-aware thousands separators
+ */
 const balance = (value?: bigint) => {
-  // Figure out the grouping separator for this locale
-  const sample = new Intl.NumberFormat(locale).format(1000)
-  const groupSeparator = sample.replace(/\p{Number}/gu, '')[0] || ','
+  if (value === undefined) {
+    return '0'
+  }
 
-  return value === undefined ? '' : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator)
+  if (BigNumber(value).isInteger()) {
+    return BigNumber(value)
+      .shiftedBy(GNOT_TOKEN.decimals * -1)
+      .toNumber()
+  }
+
+  return BigNumber(value)
+    .shiftedBy(GNOT_TOKEN.decimals * -1)
+    .toFormat(6)
+    .replace(/\.?0+$/, '')
 }
 
 // Convert SQLite date (YYYY-MM-DD HH:mm:ss) to local date string

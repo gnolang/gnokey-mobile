@@ -15,6 +15,8 @@ interface ListTemplateProps<T> {
   showsVerticalScrollIndicator?: boolean
   contentContainerStyle?: object
   emptyComponent?: React.ComponentType<any> | React.ReactElement | null
+  refreshing?: boolean
+  onRefresh?: () => void
 }
 
 export function ListTemplate<T>({
@@ -22,6 +24,8 @@ export function ListTemplate<T>({
   subHeader,
   footer,
   data,
+  refreshing = false,
+  onRefresh,
   renderItem,
   keyExtractor,
   showsVerticalScrollIndicator = false,
@@ -45,6 +49,8 @@ export function ListTemplate<T>({
           showsVerticalScrollIndicator={showsVerticalScrollIndicator}
           contentContainerStyle={contentContainerStyle}
           ListEmptyComponent={emptyComponent}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
         <View style={{ paddingBottom }}>{footer}</View>
       </View>

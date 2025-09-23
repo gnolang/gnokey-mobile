@@ -28,17 +28,19 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
       <View style={styles.content}>
         <PlaceHolder />
         <View style={styles.labels}>
-          <Text.Callout weight={weights.bold}>{vault.keyInfo.name}</Text.Callout>
+          <HStack>
+            <Text.Callout weight={weights.bold}>{vault.keyInfo.name}</Text.Callout>
+            <Text.CalloutMutedBold>{formatter.balance(vault.balance)} GNOT </Text.CalloutMutedBold>
+          </HStack>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Text.SubheadlineMuted style={{ textAlign: 'left', maxWidth: 160 }} ellipsizeMode="tail" numberOfLines={1}>
               {vault.description}
             </Text.SubheadlineMuted>
-            <Text.CalloutMutedBold>{formatter.balance(vault.balance)} ugnot </Text.CalloutMutedBold>
           </View>
           <Text.SubheadlineMuted>{showOnlyInitialAndFinalValues(vault.address)}</Text.SubheadlineMuted>
         </View>
         <View style={styles.arrow}>
-          <AntDesign name="right" size={24} color={theme.colors.border} />
+          <AntDesign name="right" size={14} color={theme.text.textMuted} />
         </View>
       </View>
       <Ruller />
@@ -46,8 +48,14 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
   )
 }
 
+const HStack = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`
+
 const styles = StyleSheet.create({
-  box: { marginHorizontal: 0, height: 80 },
+  box: { height: 80 },
   content: {
     flex: 1,
     flexDirection: 'row',

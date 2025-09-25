@@ -104,7 +104,6 @@ export const enableBiometric = createAsyncThunk<boolean, boolean, ThunkExtra>(
 
       if (res.success) {
         await SecureStore.setItemAsync(BIOMETRIC_ENABLED_KEY, 'true')
-        Alert.alert('Success', 'Biometric authentication has been enabled.')
         return true
       } else {
         throw new Error('Failed to enable biometric authentication. Please try again.')

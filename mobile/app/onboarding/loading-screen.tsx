@@ -1,6 +1,5 @@
 import { useFocusEffect, useRouter } from 'expo-router'
-import { HomeLayout, Spacer, Template, Text } from '@/modules/ui-components'
-import ActivityIndicator from '@/components/atoms/activity-indicator'
+import { ActivityIndicator, HomeLayout, Spacer, Template, Text } from '@/modules/ui-components'
 
 export default function Page() {
   const router = useRouter()

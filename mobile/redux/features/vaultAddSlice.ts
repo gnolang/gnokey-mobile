@@ -115,19 +115,19 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
     thunkAPI.dispatch(addProgress(`Error checking blockchain: ${error.message}`))
     throw new Error(`Error checking blockchain: ${error.message}`)
   }
-  const blockchainUser = await checkForUserOnBlockchain(byNameStrEval, gnonative, name, phrase)
-  console.log(`blockchainUser: "${JSON.stringify(blockchainUser)}"`)
+  const blockchainUserCheckResult = await checkForUserOnBlockchain(byNameStrEval, gnonative, name, phrase)
+  console.log(`blockchainUser: "${JSON.stringify(blockchainUserCheckResult)}"`)
 
   thunkAPI.dispatch(addProgress(`Checking if "${name}" is already on local storage...`))
   const userOnLocalStorage = await checkForUserOnLocalStorage(gnonative, name)
   console.log(`userOnLocalStorage: ${JSON.stringify(userOnLocalStorage)}`)
 
   if (userOnLocalStorage) {
-    if (blockchainUser) {
+    if (blockchainUserCheckResult) {
       const localAddress = await gnonative.addressToBech32(userOnLocalStorage.address)
-      thunkAPI.dispatch(addProgress(`Local address "${localAddress}", Blockchain address "${blockchainUser.address}"`))
+      thunkAPI.dispatch(addProgress(`Local address "${localAddress}", Blockchain address "${blockchainUserCheckResult.address}"`))
 
-      if (blockchainUser.address === localAddress) {
+      if (blockchainUserCheckResult.address === localAddress) {
         thunkAPI.dispatch(addProgress(`User exists on both blockchain and local storage.`))
         // CASE 1.0: Offer to do normal signin, or choose new name
         return { newAccount: undefined, state: VaultCreationState.user_exists_on_blockchain_and_local_storage }
@@ -146,12 +146,12 @@ export const createKey = createAsyncThunk<SignUpResponse, SignUpParam, ThunkExtr
       }
     }
   } else {
-    if (blockchainUser) {
+    if (blockchainUserCheckResult) {
       // This name is already registered on the blockchain.
       // CASE 2.0: Offer to rename keystoreInfoByAddr.name to name in keystore (password check), and do signin
       // CASE 2.1: "This name is already registered on the blockchain. Please choose another name."
-      thunkAPI.dispatch(addProgress(blockchainUser.state))
-      return { newAccount: undefined, state: blockchainUser.state }
+      thunkAPI.dispatch(addProgress(blockchainUserCheckResult.state))
+      return { newAccount: undefined, state: blockchainUserCheckResult.state }
     }
 
     // Proceed to create the account.
@@ -275,8 +275,12 @@ const checkForUserOnBlockchain = async (
 
     const accountNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveAddress("${addressBech32}")`)
     console.log('GetUserByAddress result:', accountNameStr)
-    const accountName = accountNameStr.match(/\("(\w+)"/)?.[1]
-    console.log('GetUserByAddress after regex', accountName)
+
+    const matches = [...accountNameStr.matchAll(/\("([^"]+)"/g)]
+    const key = matches[0]?.[1]
+    const accountName = matches[1]?.[1]
+    console.log('existing key:', key)
+    console.log('existing account name:', accountName)
 
     if (accountName) {
       console.log('user KEY already exists on the blockchain under name %s', accountName)

@@ -1,4 +1,4 @@
-import { Container, Spacer, Text } from '@/modules/ui-components'
+import { Container, CopyIcon, Spacer, Text } from '@/modules/ui-components'
 import { Button } from '@/modules/ui-components'
 import {
   existingAccountSelector,
@@ -12,7 +12,6 @@ import {
 } from '@/redux'
 import { TextCopy } from '@/components'
 import { useTheme } from 'styled-components/native'
-import { Octicons } from '@expo/vector-icons'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
@@ -75,7 +74,7 @@ export default function Page() {
         <Text.Body style={{ color: theme.colors.primary }}>1 - Press here to copy address:</Text.Body>
         <Text.Body style={{ textAlign: 'center' }}>
           {addressBech32} &nbsp;
-          <Octicons name="copy" size={12} color={theme.colors.primary} />
+          <CopyIcon />
         </Text.Body>
       </TextCopy>
       <Spacer />

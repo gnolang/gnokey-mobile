@@ -1,5 +1,4 @@
-import ActivityIndicator from '@/components/atoms/activity-indicator'
-import { HomeLayout } from '@/modules/ui-components'
+import { HomeLayout, ActivityIndicator } from '@/modules/ui-components'
 import {
   registerAccount,
   selectLastProgress,

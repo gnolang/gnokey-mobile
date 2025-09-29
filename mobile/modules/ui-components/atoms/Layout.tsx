@@ -9,3 +9,9 @@ export const TopContainer = styled.View`
   flex: 1;
   background-color: red;
 `
+
+export const HStack = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`

@@ -5,25 +5,31 @@ type Props = {
   onTransfer: () => void
   onDelete: () => void
   onRefreshBalance: () => void
+  isDevMode?: boolean
 }
 
 const VaultOptionsButton = (props: Props) => {
-  const { onTransfer, onDelete, onRefreshBalance } = props
+  const { onTransfer, onDelete, onRefreshBalance, isDevMode } = props
+
+  const options = ['Cancel', 'Refresh Balance']
+  if (isDevMode) options.push('Transfer')
+  options.push('Delete')
+
   return (
     <Pressable
       onPress={() => {
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            options: ['Cancel', 'Refresh Balance', 'Transfer', 'Delete'],
-            destructiveButtonIndex: 3,
+            options,
+            destructiveButtonIndex: options.length - 1,
             cancelButtonIndex: 0
           },
           (buttonIndex) => {
             if (buttonIndex === 1) {
               onRefreshBalance()
-            } else if (buttonIndex === 2) {
+            } else if (isDevMode && buttonIndex === 2) {
               onTransfer()
-            } else if (buttonIndex === 3) {
+            } else if ((isDevMode && buttonIndex === 3) || (!isDevMode && buttonIndex === 2)) {
               onDelete()
             }
           }

@@ -16,7 +16,7 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { LoadingModal } from '@/components/loading'
-import { openFaucet } from '@/modules/utils'
+import { openFaucet } from '@/modules/ui-components/utils/index'
 
 export default function Page() {
   const newAccount = useAppSelector(newAccountSelector)

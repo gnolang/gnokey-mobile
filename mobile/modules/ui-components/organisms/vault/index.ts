@@ -1,0 +1,1 @@
+export { VaultItem } from './VaultItem'

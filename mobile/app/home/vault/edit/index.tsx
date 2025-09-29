@@ -1,33 +1,34 @@
 import { Alert } from 'react-native'
 import { useState } from 'react'
 import { ModalConfirm, TextCopy } from '@/components'
-import { useSelector } from 'react-redux'
 import {
   deleteVault,
   fetchBalances,
   fetchVaults,
   selectCurrentChain,
+  selectDevMode,
   selectVaultToEditWithBalance,
   updateVault,
-  useAppDispatch
+  useAppDispatch,
+  useAppSelector
 } from '@/redux'
-import { useNavigation, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
-import { formatter } from '@/modules/utils/format'
-import { openFaucet } from '@/modules/utils'
+import { formatter } from '@/modules/ui-components/utils/format'
+import { openFaucet } from '@/modules/ui-components/utils/index'
 import { AntDesign } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const navigation = useNavigation()
   const theme = useTheme()
 
-  const vault = useSelector(selectVaultToEditWithBalance)
-  const network = useSelector(selectCurrentChain)
+  const vault = useAppSelector(selectVaultToEditWithBalance)
+  const network = useAppSelector(selectCurrentChain)
+  const isDevMode = useAppSelector(selectDevMode)
   const hasFaucetPortal = network?.faucetPortalUrl && network?.faucetPortalUrl.length > 0
 
   const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
@@ -79,7 +80,7 @@ const Page = () => {
       <Container>
         <Text.Body>No vault selected.</Text.Body>
         <Spacer />
-        <Button onPress={() => navigation.goBack()} color="primary">
+        <Button onPress={() => router.back()} color="primary">
           Go Back
         </Button>
       </Container>
@@ -96,7 +97,8 @@ const Page = () => {
             title="Info"
             rightActions={
               <VaultOptionsButton
-                onTransfer={() => console.log('Transfer')}
+                isDevMode={isDevMode}
+                onTransfer={() => router.navigate({ pathname: '/home/vault/transfer-funds' })}
                 onDelete={() => setShowDeleteModal(true)}
                 onRefreshBalance={refreshBalance}
               />

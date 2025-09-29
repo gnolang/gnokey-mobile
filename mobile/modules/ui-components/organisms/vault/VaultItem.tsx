@@ -1,7 +1,6 @@
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
-import styled, { DefaultTheme, useTheme } from 'styled-components/native'
-import { AntDesign } from '@expo/vector-icons'
-import { Text, Ruller } from '@/modules/ui-components'
+import styled, { DefaultTheme } from 'styled-components/native'
+import { Text } from '@/modules/ui-components'
 import { Vault } from '@/types'
 import { weights } from '@/modules/ui-components/src/text'
 import { formatter } from '@/modules/ui-components/utils/format'
@@ -13,8 +12,7 @@ interface Props {
   style?: StyleProp<ViewStyle>
 }
 
-const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
-  const theme = useTheme()
+const VaultItem = ({ vault, onVaultPress, style }: Props) => {
   return (
     <TouchableOpacity style={[styles.box, style]} onPress={() => onVaultPress(vault)}>
       <View style={styles.content}>
@@ -31,11 +29,7 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
           </View>
           <Text.SubheadlineMuted>{sliceString(vault.address)}</Text.SubheadlineMuted>
         </View>
-        <View style={styles.arrow}>
-          <AntDesign name="right" size={14} color={theme.text.textMuted} />
-        </View>
       </View>
-      <Ruller />
     </TouchableOpacity>
   )
 }
@@ -70,4 +64,4 @@ const PlaceHolder = styled.View`
   border-radius: ${({ theme }: { theme: DefaultTheme }) => theme.borderRadius + 'px'};
 `
 
-export { VaultListItem }
+export { VaultItem }

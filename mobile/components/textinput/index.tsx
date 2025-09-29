@@ -8,6 +8,9 @@ interface Props extends TextInputProps {
   containerStyle?: ViewProps['style']
 }
 
+/**
+ * Deprecated: Use TextField from ui-components instead
+ */
 export const TextInput = React.forwardRef<RNTextInput, Props>((props, ref) => {
   const { children, ...rest } = props
   const [isSecureText, setShowSecureText] = React.useState(props.secureTextEntry)

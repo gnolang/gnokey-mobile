@@ -107,7 +107,6 @@ const TextFieldStyled = styled.TextInput.attrs((props: PropsWithTheme) => ({
   height: 46px;
   width: 100%;
   font-weight: 400;
-  line-height: 20px;
   font-size: 17px;
   placeholder: ${(p) => p.theme.textinputs.label};
   border-style: solid;

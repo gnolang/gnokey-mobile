@@ -5,20 +5,12 @@ import { Text, Ruller } from '@/modules/ui-components'
 import { Vault } from '@/types'
 import { weights } from '@/modules/ui-components/src/text'
 import { formatter } from '@/modules/utils/format'
+import { sliceString } from '../../utils'
 
 interface Props {
   vault: Vault
   onVaultPress: (vault: Vault) => void
   style?: StyleProp<ViewStyle>
-}
-
-const showOnlyInitialAndFinalValues = (str: string, initialChars = 6, finalChars = 4) => {
-  if (str.length <= initialChars + finalChars) {
-    return str
-  }
-  const initial = str.slice(0, 8)
-  const final = str.slice(-8)
-  return `${initial}...${final}`
 }
 
 const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
@@ -37,7 +29,7 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
               {vault.description}
             </Text.SubheadlineMuted>
           </View>
-          <Text.SubheadlineMuted>{showOnlyInitialAndFinalValues(vault.address)}</Text.SubheadlineMuted>
+          <Text.SubheadlineMuted>{sliceString(vault.address)}</Text.SubheadlineMuted>
         </View>
         <View style={styles.arrow}>
           <AntDesign name="right" size={14} color={theme.text.textMuted} />

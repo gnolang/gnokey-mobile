@@ -290,6 +290,12 @@ export const BodyCenterGray = styled(Body)`
   color: ${({ theme }) => theme.text.textMuted};
 `
 
+export const Json = styled(LinkText)`
+  weight: 500;
+  flex-shrink: 1;
+  text-align: right;
+`
+
 export const Title3CenterGray = styled(Title3)`
   text-align: center;
   color: ${({ theme }) => theme.text.textMuted};

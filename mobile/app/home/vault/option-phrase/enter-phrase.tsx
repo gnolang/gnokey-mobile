@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { SeedInputs } from '@/views'
-import { useAppDispatch, setPhrase, resetState, checkPhrase } from '@/redux'
+import { useAppDispatch, setPhrase, resetAddVaultState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 import styled from 'styled-components/native'
 
@@ -25,7 +25,7 @@ export default function Page() {
 
   useFocusEffect(() => {
     if (!hasReset.current) {
-      dispatch(resetState())
+      dispatch(resetAddVaultState())
       hasReset.current = true
     }
   })
@@ -91,7 +91,7 @@ export default function Page() {
                   {'24 words'}
                 </SmallButton>
                 <Spacer spaceH={8} />
-                <SmallButton color="secondary" onPress={() => dispatch(resetState())}>
+                <SmallButton color="secondary" onPress={() => dispatch(resetAddVaultState())}>
                   Clear
                 </SmallButton>
               </View>

@@ -24,7 +24,8 @@ const BetaVersionBanner = () => {
       style={{
         width: '100%',
         backgroundColor: '#FFD700',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: 4
       }}
     >
       <Text.Body style={{ color: '#000', textAlign: 'center' }}>
@@ -42,6 +43,8 @@ export const BetaVersionMiniBanner = () => {
   return (
     <View
       style={{
+        width: '100%',
+        padding: 4,
         backgroundColor: '#FFD700',
         alignItems: 'center',
         borderRadius: theme.borderRadius

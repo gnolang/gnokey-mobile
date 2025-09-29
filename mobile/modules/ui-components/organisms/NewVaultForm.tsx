@@ -2,12 +2,11 @@ import styled from 'styled-components/native'
 import { Spacer, Text, TextField } from '../src'
 import { useEffect, useState } from 'react'
 import {
+  selectAddVaultDescription,
+  selectAddVaultName,
   selectChainsAvailable,
-  selectDescription,
-  selectKeyName,
   selectSelectedChain,
-  setDescription,
-  setKeyName,
+  setAddVaultFormField,
   setSelectedChain,
   useAppDispatch,
   useAppSelector
@@ -17,7 +16,6 @@ import { NavigationRow } from '../molecules/NavigationRow'
 import { NetworkSelectionModal } from './NetworkSelectionModal'
 import { useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { BetaVersionMiniBanner } from '../molecules'
 import { Ruller } from '../atoms'
 
 export interface Props {
@@ -28,10 +26,10 @@ export const NewVaultForm = ({ error }: Props) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
 
-  const keyName = useAppSelector(selectKeyName)
-  const description = useAppSelector(selectDescription)
   const networks = useAppSelector(selectChainsAvailable)
   const currentNetwork = useAppSelector(selectSelectedChain)
+  const keyName = useAppSelector(selectAddVaultName)
+  const description = useAppSelector(selectAddVaultDescription)
 
   const [isMin6Chars, setIsMin6Chars] = useState(false)
   const [isDigitAtEnd, setIsDigitAtEnd] = useState(false)
@@ -75,7 +73,7 @@ export const NewVaultForm = ({ error }: Props) => {
         description="Enter your account name, something meaningful"
         placeholder="Enter vault name"
         value={keyName}
-        onChangeText={(x) => dispatch(setKeyName(x))}
+        onChangeText={(value) => dispatch(setAddVaultFormField({ field: 'keyName', value }))}
         autoCapitalize="none"
         autoCorrect={false}
         autoComplete="off"
@@ -95,7 +93,7 @@ export const NewVaultForm = ({ error }: Props) => {
         description="Describe your account, this will help you remember what it is for"
         placeholder="Enter vault description"
         value={description}
-        onChangeText={(x) => dispatch(setDescription(x))}
+        onChangeText={(value) => dispatch(setAddVaultFormField({ field: 'description', value }))}
       />
       <Spacer space={16} />
       <Ruller />
@@ -109,7 +107,6 @@ export const NewVaultForm = ({ error }: Props) => {
       <Spacer space={16} />
       <Ruller />
       <Spacer space={16} />
-      <BetaVersionMiniBanner />
     </Container>
   )
 }

@@ -2,7 +2,7 @@ import { Layout } from '@/components'
 import { Container } from '@/modules/ui-components'
 import { ActionItem } from '@/modules/ui-components/src/ui/ActionItem'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { resetState, selectDevMode, useAppDispatch, useAppSelector } from '@/redux'
+import { resetAddVaultState, selectDevMode, useAppDispatch, useAppSelector } from '@/redux'
 import { View } from 'react-native'
 import { Ruller } from '@/modules/ui-components/atoms'
 
@@ -14,7 +14,7 @@ export default function NewVaultPage() {
   // const currentRoute = router..split('/').pop() || 'unknown'
 
   useFocusEffect(() => {
-    dispatch(resetState())
+    dispatch(resetAddVaultState())
   })
 
   return (

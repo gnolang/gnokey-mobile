@@ -1,4 +1,4 @@
-import { Alert as RNAlert } from 'react-native'
+import { Alert as RNAlert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import {
@@ -6,20 +6,19 @@ import {
   useAppDispatch,
   useAppSelector,
   createKey,
-  selectKeyName,
   selectPhrase,
   generateNewPhrase,
-  resetState
+  resetAddVaultState,
+  selectAddVaultName
 } from '@/redux'
-import { Button, Form, HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
-import { NewVaultForm } from '@/modules/ui-components/organisms/NewVaultForm'
+import { Button, Form, HomeLayout, ScreenHeader, Spacer, NewVaultForm, BetaVersionMiniBanner } from '@/modules/ui-components'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)
   const dispatch = useAppDispatch()
 
   const masterPassword = useAppSelector(selectMasterPassword)
-  const keyName = useAppSelector(selectKeyName)
+  const keyName = useAppSelector(selectAddVaultName)
   const phrase = useAppSelector(selectPhrase)
 
   const params = useLocalSearchParams()
@@ -96,19 +95,27 @@ export default function Page() {
   // }
 
   const onBackPress = () => {
-    dispatch(resetState()) // clean the form
+    dispatch(resetAddVaultState()) // clean the form
     router.back()
   }
 
   return (
     <HomeLayout
       header={<ScreenHeader title="New account" subtitle="" onBackPress={onBackPress} />}
-      footer={<Button onPress={onCreate}>Create new account</Button>}
+      footer={
+        <>
+          <BetaVersionMiniBanner />
+          <Spacer space={8} />
+          <Button onPress={onCreate}>Create new account</Button>
+        </>
+      }
     >
       <>
-        <NewVaultForm error={error} />
-        <Form.ErrorBox>{error}</Form.ErrorBox>
-        <Spacer space={8} />
+        <ScrollView>
+          <NewVaultForm error={error} />
+          <Form.ErrorBox>{error}</Form.ErrorBox>
+          <Spacer space={8} />
+        </ScrollView>
       </>
     </HomeLayout>
   )

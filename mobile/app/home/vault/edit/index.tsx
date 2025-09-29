@@ -13,7 +13,7 @@ import {
   useAppSelector
 } from '@/redux'
 import { useRouter } from 'expo-router'
-import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout } from '@/modules/ui-components'
+import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, FormItem } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/ui-components/utils/format'
@@ -112,7 +112,9 @@ const Page = () => {
         }
       >
         <Container style={{ flex: 1 }}>
-          <Ruller spacer={16} />
+          <Ruller spacer={4} />
+          <FormItem label="From" value={vaultName} />
+          <Ruller spacer={4} />
           <InputWithLabel label="Name" placeholder="Name" onChangeText={setVaultName} value={vaultName} noEdit />
           <Ruller spacer={16} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />

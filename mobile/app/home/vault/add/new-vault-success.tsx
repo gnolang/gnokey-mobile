@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
 import { Button, HomeLayout, ScreenHeader, Template, Text } from '@/modules/ui-components'
-import { resetState, useAppDispatch } from '@/redux'
+import { resetAddVaultState, useAppDispatch } from '@/redux'
 import { useTheme } from 'styled-components/native'
 
 const Page = () => {
@@ -14,7 +14,7 @@ const Page = () => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(resetState())
+      dispatch(resetAddVaultState())
     }, [dispatch])
   )
 

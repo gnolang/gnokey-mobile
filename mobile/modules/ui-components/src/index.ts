@@ -11,7 +11,7 @@ export * from './chip/index'
 export * from './surfaces/index'
 export * from './buttons/index'
 export * from './ui/SafeAreaView'
-export { FormItem, FormItemInline } from '../molecules/form/FormItem'
+export { FormItem } from '../molecules/form/FormItem'
 
 export const TextFieldComp = {
   Label,

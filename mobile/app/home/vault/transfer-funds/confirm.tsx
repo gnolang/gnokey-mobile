@@ -47,7 +47,7 @@ const Page = () => {
         <Ruller />
         <FormItem label="Amount" value={`${form.amount} GNOT`} />
         <Ruller />
-        <FormItem label="Estimated Gas Fee" value={`${formatter.balance(txGasWanted)} GNOT`} />
+        <FormItem label="Gas Fee" value={`${formatter.balance(txGasWanted)} GNOT (estimated)`} />
         <Ruller />
         <FormItem label="Memo" value={form.memo} />
         <Ruller />

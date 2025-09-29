@@ -32,7 +32,9 @@ export const FormItem: React.FC<Props> = ({
   return (
     <>
       <ListRow {...props} onPress={copyToClipboard}>
+        {/* Label */}
         <Text.Body style={labelStyle}>{label}</Text.Body>
+        {/* Value */}
         {value !== undefined && <ValueContent linkStyle={linkStyle}>{value}</ValueContent>}
         {endAdornment && <View style={{ marginLeft: 8 }}>{endAdornment}</View>}
       </ListRow>
@@ -41,22 +43,20 @@ export const FormItem: React.FC<Props> = ({
   )
 }
 
-const ValueContent = ({ children, linkStyle }: { children: React.ReactNode; linkStyle?: boolean }) => {
+const ValueContent = ({
+  children,
+  linkStyle,
+  valueStyle
+}: {
+  children: React.ReactNode
+  linkStyle?: boolean
+  valueStyle?: StyleProp<TextStyle>
+}) => {
   if (linkStyle) {
-    return (
-      <Text.LinkText weight="500" style={{ flexShrink: 1, textAlign: 'right' }}>
-        {children}
-      </Text.LinkText>
-    )
+    return <Text.LinkText style={[{ flexShrink: 1, textAlign: 'right' }, valueStyle]}>{children}</Text.LinkText>
   }
-  return <Text.Body_Bold style={{ flexShrink: 1 }}>{children}</Text.Body_Bold>
+  return <Text.Body style={[{ flexShrink: 1, width: '100%' }, valueStyle]}>{children}</Text.Body>
 }
-
-export const FormItemInline = styled(FormItem)`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`
 
 export const FormTextValue = styled.Text`
   color: ${({ theme }) => theme.colors.white};

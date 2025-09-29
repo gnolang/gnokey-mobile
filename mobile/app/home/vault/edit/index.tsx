@@ -15,7 +15,7 @@ import {
 import { useRouter } from 'expo-router'
 import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, FormItem } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
-import { Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
+import { CopyIcon, Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/ui-components/utils/format'
 import { openFaucet } from '@/modules/ui-components/utils/index'
 import { AntDesign } from '@expo/vector-icons'
@@ -113,38 +113,31 @@ const Page = () => {
       >
         <Container style={{ flex: 1 }}>
           <Ruller spacer={4} />
-          <FormItem label="From" value={vaultName} />
+          <FormItem label="Name" value={vaultName} />
           <Ruller spacer={4} />
-          <InputWithLabel label="Name" placeholder="Name" onChangeText={setVaultName} value={vaultName} noEdit />
-          <Ruller spacer={16} />
+          <Spacer spaceH={4} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />
           <Ruller spacer={16} />
-          <TextCopy text={vault.address}>
-            <InputWithLabel label="Address" placeholder="Address" value={vault.address} noEdit />
-          </TextCopy>
-          <Ruller spacer={16} />
-          <InputWithLabel
-            label="Chain"
-            placeholder="Chain"
-            value={vault.chain ? vault.chain.chainName : 'No User Registration'}
-            noEdit
+          <FormItem
+            label="Address"
+            copyTextValue={vault.address}
+            endAdornment={<CopyIcon muted />}
+            value={<Text.Body>{vault.address}</Text.Body>}
           />
-          <Ruller spacer={16} />
-          <InputWithLabel
-            label="Created At"
-            placeholder="Created At"
-            value={vault.createdAt ? formatter.date(vault.createdAt) : ''}
-            noEdit
-          />
-          <Ruller spacer={16} />
-          <InputWithLabel
+          <Spacer spaceH={4} />
+          <Ruller spacer={4} />
+          <FormItem label="Chain" value={vault.chain ? vault.chain.chainName : 'No User Registration'} />
+          <Ruller spacer={4} />
+          <FormItem label="Created At" value={vault.createdAt ? formatter.date(vault.createdAt) : ''} />
+          <Ruller spacer={4} />
+          <FormItem
             label="Balance"
-            placeholder="Balance"
-            value={refreshing ? 'Refreshing...' : `${formatter.balance(vault.balance)} ugnot`}
-            noEdit
-            slotRight={hasFaucetPortal && <AntDesign name="right" size={24} color={theme.colors.border} onPress={openFaucet} />}
+            value={refreshing ? 'Refreshing...' : `${formatter.balance(vault.balance)} GNOT`}
+            endAdornment={
+              hasFaucetPortal && <AntDesign name="right" size={18} color={theme.colors.border} onPress={openFaucet} />
+            }
           />
-          <Ruller spacer={16} />
+          <Ruller spacer={4} />
         </Container>
 
         <ModalConfirm

@@ -22,7 +22,6 @@ import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-nat
 import {
   Button,
   FormItem,
-  FormItemInline,
   HomeLayout,
   ScreenHeader,
   Spacer,
@@ -175,9 +174,9 @@ export default function Page() {
 
             <ScrollView>
               <Ruller />
-              <FormItem label="Client name" value={clientName} />
+              <FormItem label="Client" value={clientName} />
               <Ruller />
-              <FormItemInline
+              <FormItem
                 label="Gas Wanted"
                 value={gasWanted ? <Text.Body_Bold>{gasWanted?.toString()}</Text.Body_Bold> : <ActivityIndicator />}
               />
@@ -197,7 +196,7 @@ export default function Page() {
                 }
               />
               <Ruller />
-              <FormItem label="Account Name" copyTextValue={keyInfo?.name} value={keyInfo?.name} />
+              <FormItem label="Account" copyTextValue={keyInfo?.name} value={keyInfo?.name} />
               <Ruller />
               <FormItem label="Chain ID" copyTextValue={chainId} value={chainId} />
               <Ruller />

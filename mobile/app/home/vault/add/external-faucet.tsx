@@ -1,4 +1,4 @@
-import { Container, CopyIcon, Spacer, Text } from '@/modules/ui-components'
+import { Container, CopyIcon, FormItem, HomeLayout, ScreenHeader, Spacer, Text } from '@/modules/ui-components'
 import { Button } from '@/modules/ui-components'
 import {
   existingAccountSelector,
@@ -16,7 +16,7 @@ import { useGnoNativeContext } from '@gnolang/gnonative'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { LoadingModal } from '@/components/loading'
-import { openFaucet } from '@/modules/ui-components/utils/index'
+import { openFaucet, sliceString } from '@/modules/ui-components'
 
 export default function Page() {
   const newAccount = useAppSelector(newAccountSelector)
@@ -65,27 +65,35 @@ export default function Page() {
   }
 
   return (
-    <Container>
+    <HomeLayout header={<ScreenHeader title="External Faucet" />}>
       <LoadingModal visible={loading} />
       <Spacer />
-      <Text.H3>To fund your Account Key, please open the Gno Faucet website and request tokens for your address.</Text.H3>
+      <Text.Title2>To fund your Account Key, please open the Gno Faucet website and request tokens for your address.</Text.Title2>
       <Spacer space={24} />
       <TextCopy text={addressBech32}>
-        <Text.Body style={{ color: theme.colors.primary }}>1 - Press here to copy address:</Text.Body>
-        <Text.Body style={{ textAlign: 'center' }}>
-          {addressBech32} &nbsp;
+        <Text.Body style={{ color: theme.colors.primary }}>1 - Press here to copy your address:</Text.Body>
+        <Spacer space={8} />
+        <Text.Body style={{ textAlign: 'left' }}>
+          {addressBech32 ? sliceString(addressBech32) : 'Loading...'} &nbsp;
           <CopyIcon />
         </Text.Body>
       </TextCopy>
-      <Spacer />
 
-      <Text.Body style={{ color: theme.colors.primary }}>2 - Open Gno Faucet:</Text.Body>
-      <Button onPress={openFaucet}>Open Gno Faucet</Button>
       <Spacer space={24} />
+
+      <Text.Body style={{ color: theme.colors.primary }}>2 - Open Gno Faucet and request tokens:</Text.Body>
+      <Spacer space={8} />
+      <Text.Body style={{ color: theme.error.text }}>(Minimum 20 GNOTs)</Text.Body>
+      <Spacer space={8} />
+      <Button onPress={openFaucet}>Open Gno Faucet and request tokens</Button>
+
+      <Spacer space={24} />
+
       <Text.Body style={{ color: theme.colors.primary }}>
         3 - After completing the faucet process, return to this app to continue.
       </Text.Body>
+      <Spacer space={8} />
       <Button onPress={() => continueToVaultCreation()}>Continue to Account Key Creation</Button>
-    </Container>
+    </HomeLayout>
   )
 }

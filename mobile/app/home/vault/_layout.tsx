@@ -23,6 +23,7 @@ export default function VaultModalLayout() {
           ...defaultOptions
         }}
       />
+      <Stack.Screen name="add/external-faucet" options={{ ...defaultOptions }} />
       <Stack.Screen
         name="edit/index"
         options={{

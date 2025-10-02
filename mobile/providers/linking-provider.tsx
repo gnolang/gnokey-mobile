@@ -4,7 +4,7 @@ import * as Linking from 'expo-linking'
 import { useEffect } from 'react'
 
 const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
-  const url = Linking.useURL()
+  const url = Linking.useLinkingURL()
 
   const dispatch = useAppDispatch()
 

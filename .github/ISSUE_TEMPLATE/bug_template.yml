@@ -1,0 +1,76 @@
+name: "Bug report"
+description: Report a bug found while using the Gnokey Mobile app.
+labels: ["bug"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+      - label: I have searched the existing issues
+        required: true
+  - type: input
+    id: product-version
+    attributes:
+      label:  Gnokey Mobile version
+      description: |+
+                  What is the version of Gnokey Mobile?
+      placeholder: e.g. 2.396.1
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      description: What OS are you seeing the problem on?
+      options:
+        - iOS
+        - Android
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: OS version
+      description: What is the version of the OS you are using?
+      placeholder: e.g. iOS 15.4 or Android 11.0
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: What device are you using?
+      placeholder: e.g. iPhone 12 Pro Max or Samsung Galaxy A36
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+       1. Navigate to the ...
+       2. Click on the user ...
+       3. Change name of ...
+       4. Click Save button ...
+    validations:
+      required: true
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current behavior
+      description: A description including screenshots, stack traces, debug logs, etc.
+      placeholder: Currently ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: Please provide what would be your expectation to happen.
+      placeholder: In this situation, Gnokey Mobile should ...
+  - type: textarea
+    id: other
+    attributes:
+      label: Other
+      placeholder: Any other details?

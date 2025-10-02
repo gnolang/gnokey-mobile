@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
 import { useState } from 'react'
-import { ModalConfirm, TextCopy } from '@/components'
+import { ModalConfirm } from '@/components'
 import {
   deleteVault,
   fetchBalances,
@@ -31,7 +31,6 @@ const Page = () => {
   const isDevMode = useAppSelector(selectDevMode)
   const hasFaucetPortal = network?.faucetPortalUrl && network?.faucetPortalUrl.length > 0
 
-  const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
   const [description, setDescription] = useState(vault?.description || '')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
@@ -41,7 +40,7 @@ const Page = () => {
     await dispatch(deleteVault({ vault })).unwrap()
     await dispatch(fetchVaults()).unwrap()
     setShowDeleteModal(false)
-    router.replace({ pathname: '/home/vault/edit/remove-success', params: { keyName: vaultName } })
+    router.replace({ pathname: '/home/vault/edit/remove-success', params: { keyName: vault?.keyInfo.name } })
   }
 
   const onUpdateAccount = async () => {
@@ -49,13 +48,13 @@ const Page = () => {
       Alert.alert('Error', 'No vault selected for update.')
       return
     }
-    const params = { vault, keyName: vaultName, description }
+    const params = { vault, keyName: vault?.keyInfo.name, description }
     try {
       await dispatch(updateVault(params)).unwrap()
       await dispatch(fetchVaults()).unwrap()
       router.replace({
         pathname: '/home/vault/edit/edit-success',
-        params: { keyName: vaultName }
+        params: { keyName: vault?.keyInfo.name }
       })
     } catch (error: any) {
       Alert.alert('Error', `Failed to update vault: ${error.message}`)
@@ -113,7 +112,7 @@ const Page = () => {
       >
         <Container style={{ flex: 1 }}>
           <Ruller spacer={4} />
-          <FormItem label="Name" value={vaultName} />
+          <FormItem label="Name" value={vault?.keyInfo.name} />
           <Ruller spacer={4} />
           <Spacer spaceH={4} />
           <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />

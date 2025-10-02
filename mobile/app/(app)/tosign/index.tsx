@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { router } from 'expo-router'
 import * as Linking from 'expo-linking'
 import {
-  estimateGasWanted,
+  estimateGasWantedAndSign,
   selectClientName,
   selectBech32Address,
   selectTxInput,
-  selectUpdateTx,
-  signTx,
   useAppDispatch,
   useAppSelector,
   reasonSelector,
   selectCallback,
   selectKeyInfo,
-  clearLinking,
   selectChainId,
-  selectRemote
+  selectRemote,
+  selectSignedTx,
+  selectGasWanted,
+  selectLinkIsLoading
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-native'
@@ -39,16 +39,15 @@ export default function Page() {
   const reason = useAppSelector(reasonSelector)
   const bech32Address = useAppSelector(selectBech32Address)
   const txInput = useAppSelector(selectTxInput)
-  const updateTx = useAppSelector(selectUpdateTx) ?? false
   const callback = useAppSelector(selectCallback)
   const keyInfo = useAppSelector(selectKeyInfo)
   const chainId = useAppSelector(selectChainId)
   const remote = useAppSelector(selectRemote)
+  const signedTx = useAppSelector(selectSignedTx)
+  const gasWanted = useAppSelector(selectGasWanted)
+  const isLoading = useAppSelector(selectLinkIsLoading)
 
-  const [loading, setLoading] = useState(false)
   const [gnonativeReady, setGnonativeReady] = useState(false)
-  const [signedTx, setSignedTx] = useState<string | undefined>(undefined)
-  const [gasWanted, setGasWanted] = useState<bigint>(BigInt(0))
 
   console.log('txInput', txInput)
   console.log('bech32Address', bech32Address)
@@ -58,7 +57,10 @@ export default function Page() {
 
   useEffect(() => {
     ;(async () => {
-      if (!chainId || !remote || !bech32Address) return
+      if (!chainId || !remote || !bech32Address) {
+        console.log('No chainId, remote, or bech32Address', { chainId, remote, bech32Address })
+        return
+      }
       await gnonative.setChainID(chainId)
       await gnonative.setRemote(remote)
       await gnonative.activateAccount(bech32Address)
@@ -71,21 +73,13 @@ export default function Page() {
     ;(async () => {
       try {
         if (!txInput || !keyInfo || !gnonativeReady) {
-          console.log('No txInput, keyInfo, or gnonativeReady')
+          console.log('No txInput, keyInfo, or gnonativeReady', { txInput, keyInfo, gnonativeReady })
           return
         }
 
         // need to pause to let the Keybase DB close before using it again
         await new Promise((f) => setTimeout(f, 2000))
-
-        const { gasWanted } = await dispatch(estimateGasWanted({ keyInfo, updateTx: updateTx })).unwrap()
-
-        // need to pause to let the Keybase DB close before using it again
-        await new Promise((f) => setTimeout(f, 2000))
-
-        const signedTx = await dispatch(signTx({ keyInfo })).unwrap()
-        setSignedTx(signedTx.signedTxJson)
-        setGasWanted(gasWanted)
+        await dispatch(estimateGasWantedAndSign()).unwrap()
       } catch (error: unknown | Error) {
         console.error(error)
       }
@@ -97,47 +91,25 @@ export default function Page() {
     console.log('signing the tx', keyInfo)
 
     if (!txInput || !keyInfo) throw new Error('No transaction input or keyInfo found.')
-
     if (!callback) throw new Error('No callback found.')
-
-    setLoading(true)
+    if (!signedTx) throw new Error('No signed Tx found.')
 
     try {
-      // let sessionToReturn;
-      // if (session) {
-      //   // TODO: const storedSession = Look up session.key in sessionKeys.
-      //   //   if storedSession.exires_at > new Date(), throw new Error('session expired')
-      // }
-      // else {
-      //   if (sessionWanted) {
-      //     sessionToReturn = await dispatch(newSessionKey({ keyInfo, validityMinutes })).unwrap() as SessionKeyInfo
-      //   }
-      //   // else TODO: ask again for approval (like when there are no account sessions)
-      // }
-
-      const signedTx = await dispatch(signTx({ keyInfo })).unwrap()
-
       const path = new URL(callback)
-      path.searchParams.append('tx', signedTx.signedTxJson)
+      path.searchParams.append('tx', signedTx)
       path.searchParams.append('status', 'success')
-      // sessionToReturn && path.searchParams.append('session', JSON.stringify({ key: sessionToReturn.key, expires_at: sessionToReturn.expires_at.toISOString() }));
-
-      Linking.openURL(path.toString())
-
-      router.push('/home')
       console.log('return URL ' + path.toString())
+      Linking.openURL(path.toString())
+      router.push('/home')
     } catch (error) {
       console.error('Error signing the tx', error)
       const path = new URL(callback)
       path.searchParams.append('status', '' + error)
       Linking.openURL(path.toString())
-    } finally {
-      setLoading(false)
     }
   }
 
-  const onCancel = () => {
-    dispatch(clearLinking())
+  const onCancel = async () => {
     if (callback) {
       Linking.openURL(`${callback}?status=cancelled`) // callback to requester
     }
@@ -152,41 +124,38 @@ export default function Page() {
           <View style={{ width: '100%' }}>
             <BetaVersionMiniBanner />
             <Spacer />
-            <Button color="primary" onPress={signTxAndReturnToRequester} loading={loading}>
-              Approve
+            <Button color="primary" onPress={signTxAndReturnToRequester} loading={isLoading} disabled={!signedTx}>
+              {signedTx ? 'Approve' : 'Loading...'}
             </Button>
             <Spacer />
-            <Button color="secondary" onPress={onCancel} loading={loading}>
+            <Button color="secondary" onPress={onCancel}>
               Cancel
             </Button>
           </View>
         }
       >
         <>
-          {/* <View style={{ flexDirection: 'row', paddingTop: 16 }}>
-            <ButtonText onPress={onCancel}>
-              <Text.ButtonLabelBlack>Cancel</Text.ButtonLabelBlack>
-            </ButtonText>
-          </View> */}
           <>
             <Text.Title3 weight="400">{`${clientName} is requiring permission to ${reason}`}</Text.Title3>
             <Spacer space={24} />
 
             <ScrollView>
               <Ruller />
-              <FormItem label="Client" value={clientName} />
+              <FormItem label="Client" labelStyle={{ minWidth: 120 }} value={clientName} />
               <Ruller />
               <FormItem
                 label="Gas Wanted"
+                labelStyle={{ minWidth: 120 }}
                 value={gasWanted ? <Text.Body_Bold>{gasWanted?.toString()}</Text.Body_Bold> : <ActivityIndicator />}
               />
               <Ruller />
-              <FormItem label="Reason" copyTextValue={reason} value={reason} />
+              <FormItem label="Reason" labelStyle={{ minWidth: 120 }} copyTextValue={reason} value={reason} />
               <Ruller />
-              <FormItem label="Callback" copyTextValue={callback} value={callback} />
+              <FormItem label="Callback" labelStyle={{ minWidth: 120 }} copyTextValue={callback} value={callback} />
               <Ruller />
               <FormItem
                 label="Address"
+                labelStyle={{ minWidth: 120 }}
                 copyTextValue={bech32Address}
                 value={
                   <>
@@ -196,15 +165,21 @@ export default function Page() {
                 }
               />
               <Ruller />
-              <FormItem label="Account" copyTextValue={keyInfo?.name} value={keyInfo?.name} />
+              <FormItem label="Account" labelStyle={{ minWidth: 120 }} copyTextValue={keyInfo?.name} value={keyInfo?.name} />
               <Ruller />
-              <FormItem label="Chain ID" copyTextValue={chainId} value={chainId} />
+              <FormItem label="Chain ID" labelStyle={{ minWidth: 120 }} copyTextValue={chainId} value={chainId} />
               <Ruller />
-              <FormItem label="Remote" copyTextValue={remote} value={<Text.Json>{remote}</Text.Json>} />
+              <FormItem
+                label="Remote"
+                labelStyle={{ minWidth: 120 }}
+                copyTextValue={remote}
+                value={<Text.Json style={{ textAlign: 'left' }}>{remote}</Text.Json>}
+              />
               <Ruller />
               <HiddenGroup>
                 <FormItem
                   label="Raw Tx"
+                  labelStyle={{ minWidth: 120 }}
                   copyTextValue={txInput}
                   value={
                     <>
@@ -216,6 +191,7 @@ export default function Page() {
                 <Ruller />
                 <FormItem
                   label="Signed Tx"
+                  labelStyle={{ minWidth: 120 }}
                   copyTextValue={signedTx}
                   value={
                     signedTx ? (

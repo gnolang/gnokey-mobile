@@ -1,4 +1,4 @@
-import { Button, Spacer, Text, SafeAreaView, HomeLayout, ScreenHeader } from '@/modules/ui-components'
+import { Button, Spacer, Text, HomeLayout, ScreenHeader } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
 import {
   Alert,
@@ -50,59 +50,59 @@ export default function Page() {
   }
 
   return (
-    <HomeLayout
-      header={<ScreenHeader title="Import Seed Phrase" />}
-      footer={
-        <View style={styles.footer}>
-          <Button color="secondary" onPress={pasteClipboard}>
-            Paste
-          </Button>
-          <Spacer />
-          <Button color="primary" onPress={onContinue}>
-            Continue
-          </Button>
-        </View>
-      }
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 240}
     >
-      <SafeAreaView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 240}
-        >
+      <HomeLayout
+        header={<ScreenHeader title="Import Seed Phrase" />}
+        footer={
+          <View style={styles.footer}>
+            <Button color="secondary" onPress={pasteClipboard}>
+              Paste
+            </Button>
+            <Spacer />
+            <Button color="primary" onPress={onContinue}>
+              Continue
+            </Button>
+          </View>
+        }
+      >
+        <>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView
               contentContainerStyle={{
                 flexGrow: 1,
                 alignItems: 'center',
                 justifyContent: 'flex-start',
-                paddingBottom: 220
+                paddingBottom: 180
               }}
               keyboardShouldPersistTaps="handled"
               style={styles.container}
             >
               <Text.H3>Enter your seed phrase</Text.H3>
               <View style={styles.actions}>
-                <SmallButton color="secondary" onPress={() => setMenomicLength(12)}>
+                <SmallButton color="secondary" onPress={() => setMenomicLength(12)} style={{ width: 120 }}>
                   {'12 words'}
                 </SmallButton>
                 <Spacer spaceH={8} />
-                <SmallButton color="secondary" onPress={() => setMenomicLength(24)}>
+                <SmallButton color="secondary" onPress={() => setMenomicLength(24)} style={{ width: 120 }}>
                   {'24 words'}
                 </SmallButton>
                 <Spacer spaceH={8} />
-                <SmallButton color="secondary" onPress={() => dispatch(resetAddVaultState())}>
+                <SmallButton color="secondary" onPress={() => dispatch(resetAddVaultState())} style={{ width: 100 }}>
                   Clear
                 </SmallButton>
               </View>
-              <View style={styles.container}>
+              <View style={styles.seedInputs}>
                 <SeedInputs length={menomicLength} />
               </View>
             </ScrollView>
           </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </HomeLayout>
+        </>
+      </HomeLayout>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  seedInputs: { marginTop: 24 },
   actions: { flexDirection: 'row', padding: 16, justifyContent: 'center' },
   footer: { width: '100%', flexDirection: 'column', justifyContent: 'center' }
 })

@@ -1,4 +1,5 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import TextInput from '../../textinput'
 import Icons from '../../icons'
 import { useTheme } from 'styled-components/native'

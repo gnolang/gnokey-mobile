@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
 import { useState } from 'react'
-import { ModalConfirm, TextCopy } from '@/components'
+import { ModalConfirm } from '@/components'
 import {
   deleteVault,
   fetchBalances,
@@ -31,7 +31,7 @@ const Page = () => {
   const isDevMode = useAppSelector(selectDevMode)
   const hasFaucetPortal = network?.faucetPortalUrl && network?.faucetPortalUrl.length > 0
 
-  const [vaultName, setVaultName] = useState(vault?.keyInfo.name || 'no named vault')
+  const [vaultName] = useState(vault?.keyInfo.name || 'no named vault')
   const [description, setDescription] = useState(vault?.description || '')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [refreshing, setRefreshing] = useState(false)

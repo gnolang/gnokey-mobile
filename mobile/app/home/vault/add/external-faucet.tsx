@@ -1,4 +1,4 @@
-import { Container, CopyIcon, FormItem, HomeLayout, ScreenHeader, Spacer, Text } from '@/modules/ui-components'
+import { CopyIcon, HomeLayout, ScreenHeader, Spacer, Text } from '@/modules/ui-components'
 import { Button } from '@/modules/ui-components'
 import {
   existingAccountSelector,

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import { TextInput, TextInputProps } from 'react-native'
-import { Spacer } from '../../src'
 
 interface ForwardedInputProps extends TextInputProps {
   ref?: React.Ref<TextInput>

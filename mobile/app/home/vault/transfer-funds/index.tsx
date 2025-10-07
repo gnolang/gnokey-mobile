@@ -13,13 +13,11 @@ import { useRouter } from 'expo-router'
 import { useEffect } from 'react'
 import { ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { useTheme } from 'styled-components/native'
 
 const Page = () => {
   const vault = useAppSelector(selectVaultToEditWithBalance)
   const dispatch = useDispatch()
   const router = useRouter()
-  const theme = useTheme()
 
   const memo = useAppSelector(selectTxFormMemo)
   const amount = useAppSelector(selectTxFormAmount)

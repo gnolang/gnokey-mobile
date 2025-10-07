@@ -41,16 +41,20 @@ const Page = () => {
       <ScrollView>
         <Spacer space={32} />
         <Ruller />
+        <Spacer space={8} />
         <FormItem label="From" value={form.fromAddress} />
-        <Ruller />
+        <Spacer space={8} />
+        <Ruller spacer={4} />
         <FormItem label="To" value={form.toAddress} />
-        <Ruller />
+        <Ruller spacer={4} />
         <FormItem label="Amount" value={`${form.amount} GNOT`} />
-        <Ruller />
+        <Ruller spacer={4} />
         <FormItem label="Gas Fee" value={`${formatter.balance(txGasWanted)} GNOT (estimated)`} />
-        <Ruller />
+        <Ruller spacer={4} />
         <FormItem label="Memo" value={form.memo} />
-        <Ruller />
+        <Ruller spacer={4} />
+        <FormItem label="Network" value={vault?.chain?.chainName || 'Unknown'} />
+        <Ruller spacer={4} />
       </ScrollView>
     </HomeLayout>
   )

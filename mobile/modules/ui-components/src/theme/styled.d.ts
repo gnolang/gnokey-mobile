@@ -33,6 +33,10 @@ declare module 'styled-components/native' {
       border: string
       label: string
       background: string
+
+      disabled: {
+        background: string
+      }
     }
 
     colors: {

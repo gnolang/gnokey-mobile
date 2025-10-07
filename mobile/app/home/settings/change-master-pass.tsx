@@ -1,8 +1,9 @@
 import { useRouter } from 'expo-router'
-import { HomeLayout, ScreenHeader } from '@/modules/ui-components'
+import { CheckPassRequirements, HomeLayout, ScreenHeader, TextFieldSecure, TextInputLabel } from '@/modules/ui-components'
 import { useState } from 'react'
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from '@/redux'
-import { Alert, Button, Spacer, TextField } from '@/modules/ui-components'
+import { Alert, Button, Spacer } from '@/modules/ui-components'
+import { TextInputDescription } from '@/modules/ui-components/atoms/input/TextInputDescription'
 
 const Page = () => {
   const router = useRouter()
@@ -12,6 +13,8 @@ const Page = () => {
   const [currentPassword, setCurrentPassword] = useState('')
   const [reenterPassword, setReenterPassword] = useState('')
   const [error, setError] = useState<string | undefined>(undefined)
+  const [secureTextEntry, setSecureTextEntry] = useState(true)
+  const [passwordsCompleted, setPasswordsCompleted] = useState<string | undefined>(undefined)
 
   const masterPassword = useAppSelector(selectMasterPassword)
   const dispatch = useAppDispatch()
@@ -59,8 +62,8 @@ const Page = () => {
       header={<ScreenHeader title="Update Password" />}
       footer={
         <>
-          <Button color="primary" onPress={onConfirm} loading={loadingMasterPassword}>
-            Update Password
+          <Button color="primary" onPress={onConfirm} loading={loadingMasterPassword} disabled={!passwordsCompleted}>
+            {passwordsCompleted ? 'completed' : '(incomplete)'}
           </Button>
           <Spacer />
           <Button color="secondary" onPress={() => onClose()} loading={loadingMasterPassword}>
@@ -71,20 +74,22 @@ const Page = () => {
     >
       <>
         <Spacer />
-        <TextField
-          label="Current password"
-          placeholder={`Current password`}
-          type="password"
-          secureTextEntry={true}
+        <TextInputLabel>Current Password</TextInputLabel>
+        <TextFieldSecure
+          placeholder="Current password"
+          onSecurePress={() => setSecureTextEntry(!secureTextEntry)}
+          secureTextEntry={secureTextEntry}
           onChangeText={setCurrentPassword}
         />
-        <Spacer space={16} />
-        <TextField
-          label="New password"
-          description="Enter your new master password"
+
+        <Spacer space={32} />
+
+        <TextInputLabel>New Password</TextInputLabel>
+        <TextInputDescription>Enter your new master password</TextInputDescription>
+        <TextFieldSecure
           placeholder="Enter your master password"
-          secureTextEntry={true}
-          type="password"
+          onSecurePress={() => setSecureTextEntry(!secureTextEntry)}
+          secureTextEntry={secureTextEntry}
           textContentType="newPassword"
           autoComplete="new-password"
           passwordRules="minlength:8; required:lower; required:digit; required:uppercase; required:symbol"
@@ -92,16 +97,18 @@ const Page = () => {
           onChangeText={setPassword}
         />
         <Spacer space={16} />
-        <TextField
+        <TextFieldSecure
           placeholder="Confirm your new master password"
-          secureTextEntry={true}
-          type="password"
+          onSecurePress={() => setSecureTextEntry(!secureTextEntry)}
+          secureTextEntry={secureTextEntry}
           textContentType="newPassword"
           autoComplete="new-password"
           passwordRules="minlength:8; required:lower; required:digit; required:uppercase; required:symbol"
           value={reenterPassword}
           onChangeText={setReenterPassword}
         />
+        <Spacer space={32} />
+        <CheckPassRequirements password={password} confirmPassword={reenterPassword} onChange={(v) => setPasswordsCompleted(v)} />
         <Spacer space={16} />
         <Alert severity="error" message={error} />
       </>

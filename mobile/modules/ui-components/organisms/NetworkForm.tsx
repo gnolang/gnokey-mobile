@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { Button, Spacer, TextField } from '@/modules/ui-components'
+import { Button } from '@/modules/ui-components'
 import { isEmpty, isInvalidURL } from '@/modules/ui-components/utils/validation'
 import { Ruller } from '../atoms'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import TextFieldForm from './input/TextFieldForm'
 
 export interface Form {
   chainName: string
@@ -82,25 +83,23 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
   return (
     <>
       <View style={{ flex: 1 }}>
-        <TextField
+        <TextFieldForm
           label="Label"
           placeholder="Enter the chain label"
           value={form.chainName}
           onChangeText={(text) => setForm({ ...form, chainName: text })}
           error={errors.chainName}
-          hideError={false}
           autoComplete="off"
           autoCapitalize="none"
           autoCorrect={false}
           editable={canEdit}
-          color="secondary"
         />
-        <Ruller />
-        <Spacer />
-        <TextField
+
+        <Ruller spacer={16} />
+
+        <TextFieldForm
           label="Chain ID"
           placeholder="Chain ID"
-          hideError={false}
           value={form.chainId}
           onChangeText={(text) => setForm({ ...form, chainId: text })}
           autoComplete="off"
@@ -108,14 +107,13 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoCorrect={false}
           error={errors.chainId}
           editable={canEdit}
-          color="secondary"
         />
-        <Ruller />
-        <Spacer />
-        <TextField
+
+        <Ruller spacer={16} />
+
+        <TextFieldForm
           label="RPC URL"
           placeholder="RPC URL"
-          hideError={false}
           value={form.rpcUrl}
           onChangeText={(text) => setForm({ ...form, rpcUrl: text })}
           error={errors.rpcUrl}
@@ -123,14 +121,13 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoCapitalize="none"
           autoCorrect={false}
           editable={canEdit}
-          color="secondary"
         />
-        <Ruller />
-        <Spacer />
-        <TextField
+
+        <Ruller spacer={16} />
+
+        <TextFieldForm
           label="Faucet URL"
           placeholder="Faucet URL"
-          hideError={false}
           value={form.faucetUrl}
           onChangeText={(text) => setForm({ ...form, faucetUrl: text })}
           error={errors.faucetUrl}
@@ -138,10 +135,9 @@ export const NetworkForm = ({ onSubmit, loading, initialData, mode = 'add' }: Pr
           autoCapitalize="none"
           autoCorrect={false}
           editable={canEdit}
-          color="secondary"
         />
-        <Ruller />
-        <Spacer />
+
+        <Ruller spacer={16} />
       </View>
 
       {mode === 'add' ? (

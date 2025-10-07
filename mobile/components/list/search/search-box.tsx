@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native'
-import TextInput from '../../textinput'
 import Icons from '../../icons'
 import { useTheme } from 'styled-components/native'
+import { TextFieldBasic } from '@/modules/ui-components'
 
 type Props = {
   onChangeText: (text: string) => void
@@ -12,7 +12,7 @@ const SearchBox = ({ onChangeText }: Props) => {
   return (
     <SafeAreaView>
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <TextInput
+        <TextFieldBasic
           style={[styles.input, { color: theme.colors.black }]}
           placeholder="Search"
           placeholderTextColor={theme.colors.gray}

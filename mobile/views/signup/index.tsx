@@ -1,5 +1,4 @@
-import TextInput from '@/components/textinput'
-import { Alert, Button, Spacer } from '@/modules/ui-components'
+import { Alert, Button, Spacer, TextFieldBasic } from '@/modules/ui-components'
 import { useState } from 'react'
 
 export interface Props {
@@ -27,8 +26,8 @@ const SignUpView: React.FC<Props> = ({ onCreateMasterPress, error }) => {
 
   return (
     <>
-      <TextInput placeholder="Master password" value={password} onChangeText={setPassword} secureTextEntry={true} />
-      <TextInput
+      <TextFieldBasic placeholder="Master password" value={password} onChangeText={setPassword} secureTextEntry={true} />
+      <TextFieldBasic
         placeholder="Confirm Master password"
         value={confirmPassword}
         onChangeText={setConfirmPassword}

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Spacer, Text, TextField } from '../src'
+import { Spacer, Text } from '../src'
 import { useEffect, useState } from 'react'
 import {
   selectAddVaultDescription,
@@ -17,6 +17,7 @@ import { NetworkSelectionModal } from './NetworkSelectionModal'
 import { useRouter } from 'expo-router'
 import { Alert } from 'react-native'
 import { Ruller } from '../atoms'
+import TextFieldForm from './input/TextFieldForm'
 
 export interface Props {
   error?: string
@@ -68,7 +69,7 @@ export const NewVaultForm = ({ error }: Props) => {
         networks={networks}
         currentNetwork={currentNetwork}
       />
-      <TextField
+      <TextFieldForm
         label="Account name"
         description="Enter your account name, something meaningful"
         placeholder="Enter vault name"
@@ -77,7 +78,6 @@ export const NewVaultForm = ({ error }: Props) => {
         autoCapitalize="none"
         autoCorrect={false}
         autoComplete="off"
-        hideError
       />
       <LeftItems>
         <CheckItem isValid={isMin6Chars}>Minimum 6 characters</CheckItem>
@@ -88,7 +88,7 @@ export const NewVaultForm = ({ error }: Props) => {
       <Spacer space={16} />
       <Ruller />
       <Spacer space={16} />
-      <TextField
+      <TextFieldForm
         label="Account description"
         description="Describe your account, this will help you remember what it is for"
         placeholder="Enter vault description"

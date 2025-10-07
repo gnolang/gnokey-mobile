@@ -35,7 +35,7 @@ export default function Page() {
         </Button>
       }
     >
-      <SetupPassForm onPasswordsCompleted={(pass) => setMasterPassword(pass)} />
+      <SetupPassForm onPasswordDefined={(pass) => setMasterPassword(pass)} />
     </HomeLayout>
   )
 }

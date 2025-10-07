@@ -11,7 +11,7 @@ const slides = [
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   },
   {
-    title: 'Multi-Gno-Chain Support',
+    title: 'Multi-Chain',
     description: 'Easily manage multiple Gno chains and switch between them seamlessly within the app.',
     image: require('../../../assets/images/icon.png') // TODO: Replace with real asset
   },

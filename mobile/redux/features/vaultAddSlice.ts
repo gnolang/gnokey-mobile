@@ -399,7 +399,7 @@ const checkForUserOnBlockchain = async (
   if (addressByName) {
     if (addressByName === addressBech32)
       // Same name and address on the blockchain
-      return undefined;
+      return undefined
     console.log('user %s already exists on the blockchain under the same name', name)
     return { address: addressByName, state: VaultCreationState.user_already_exists_on_blockchain }
   }

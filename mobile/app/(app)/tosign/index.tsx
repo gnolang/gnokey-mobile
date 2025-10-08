@@ -49,11 +49,11 @@ export default function Page() {
 
   const [gnonativeReady, setGnonativeReady] = useState(false)
 
-  console.log('txInput', txInput)
-  console.log('bech32Address', bech32Address)
-  console.log('clientName', clientName)
-  console.log('reason', reason)
-  console.log('callback', callback)
+  // console.log('txInput', txInput)
+  // console.log('bech32Address', bech32Address)
+  // console.log('clientName', clientName)
+  // console.log('reason', reason)
+  // console.log('callback', callback)
 
   useEffect(() => {
     ;(async () => {
@@ -73,12 +73,12 @@ export default function Page() {
     ;(async () => {
       try {
         if (!txInput || !keyInfo || !gnonativeReady) {
-          console.log('No txInput, keyInfo, or gnonativeReady', { txInput, keyInfo, gnonativeReady })
+          console.log('No txInput, keyInfo, or gnonativeReady', gnonativeReady)
           return
         }
 
         // need to pause to let the Keybase DB close before using it again
-        await new Promise((f) => setTimeout(f, 2000))
+        // await new Promise((f) => setTimeout(f, 2000))
         await dispatch(estimateGasWantedAndSign()).unwrap()
       } catch (error: unknown | Error) {
         console.error(error)

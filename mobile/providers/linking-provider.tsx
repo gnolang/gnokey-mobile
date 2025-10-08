@@ -14,10 +14,10 @@ const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
       if (url) {
         const linkingParsedURL = Linking.parse(url)
 
-        console.log('link url', url) // the full URL
-        console.log('link hostname', linkingParsedURL.hostname) // (tosignin | tosign )
-        console.log('link path', linkingParsedURL.path)
-        console.log('link queryParams', linkingParsedURL.queryParams) // address, remote, chain_id, client_name, callback
+        // console.log('link url', url) // the full URL
+        // console.log('link hostname', linkingParsedURL.hostname) // (tosignin | tosign )
+        // console.log('link path', linkingParsedURL.path)
+        // console.log('link queryParams', linkingParsedURL.queryParams) // address, remote, chain_id, client_name, callback
 
         dispatch(setLinkingData(linkingParsedURL))
       }

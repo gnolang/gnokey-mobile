@@ -387,14 +387,24 @@ const checkForUserOnBlockchain = async (
     addressByName = convertToJson(addressByNameStr)
   }
 
+  let addressBech32: string
+  try {
+    const address = await gnonative.addressFromMnemonic(phrase)
+    addressBech32 = await gnonative.addressToBech32(address)
+  } catch (error) {
+    console.error('error on addressFromMnemonic', error)
+    return undefined
+  }
+
   if (addressByName) {
+    if (addressByName == addressBech32)
+      // Same name and address on the blockchain
+      return undefined;
     console.log('user %s already exists on the blockchain under the same name', name)
     return { address: addressByName, state: VaultCreationState.user_already_exists_on_blockchain }
   }
 
   try {
-    const address = await gnonative.addressFromMnemonic(phrase)
-    const addressBech32 = await gnonative.addressToBech32(address)
     console.log('addressBech32', addressBech32)
 
     const accountNameStr = await gnonative.qEval('gno.land/r/sys/users', `ResolveAddress("${addressBech32}")`)

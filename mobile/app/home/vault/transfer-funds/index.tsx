@@ -1,4 +1,5 @@
-import { Button, HomeLayout, ScreenHeader, Spacer, Text, TextField, VaultItem } from '@/modules/ui-components'
+import { Button, HomeLayout, ScreenHeader, Spacer, Text, TextInputLabel, VaultItem } from '@/modules/ui-components'
+import TextFieldForm from '@/modules/ui-components/organisms/input/TextFieldForm'
 import {
   txGasFeeEstimation,
   selectVaultToEditWithBalance,
@@ -54,13 +55,13 @@ const Page = () => {
       header={<ScreenHeader title="Transfer Funds" />}
     >
       <ScrollView>
-        <Spacer space={32} />
-        <Text.Body_Bold>From</Text.Body_Bold>
+        <Spacer space={24} />
+        <TextInputLabel>From</TextInputLabel>
         <VaultItem vault={vault} onVaultPress={() => null} />
-        <Spacer space={32} />
-        <Text.Body_Bold>To</Text.Body_Bold>
-        <Spacer space={8} />
-        <TextField
+
+        <Spacer space={24} />
+        <TextFieldForm
+          label="To Address"
           numberOfLines={2}
           multiline
           style={{ minHeight: 55 }}
@@ -68,23 +69,28 @@ const Page = () => {
           onChangeText={(value) => dispatch(setTxFormField({ field: 'toAddress', value }))}
           placeholder="Enter recipient address"
         />
-        <Spacer space={32} />
-        <Text.Body_Bold>Amount</Text.Body_Bold>
-        <Spacer space={8} />
-        <TextField
+
+        <Spacer space={24} />
+        <TextFieldForm
+          label="Amount"
+          keyboardType="decimal-pad"
           value={amount}
           leftIcon={<Text.BodyCenterGray>GNOT</Text.BodyCenterGray>}
           onChangeText={(value) => dispatch(setTxFormField({ field: 'amount', value }))}
           placeholder="0.00"
         />
-        <Spacer space={32} />
-        <Text.Body_Bold>Memo (Optional)</Text.Body_Bold>
-        <Spacer space={8} />
-        <TextField
+
+        <Spacer space={24} />
+        <TextFieldForm
+          label="Memo (Optional)"
           value={memo}
           onChangeText={(value) => dispatch(setTxFormField({ field: 'memo', value }))}
           placeholder="Add a note for this transfer"
         />
+
+        <Spacer space={24} />
+        <TextInputLabel>Network</TextInputLabel>
+        <TextFieldForm value={vault.chain?.chainName || 'Unknown'} editable={false} style={{ backgroundColor: 'transparent' }} />
       </ScrollView>
     </HomeLayout>
   )

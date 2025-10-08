@@ -1,0 +1,54 @@
+name: Semantic Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  semantic-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@9cd779f40fe38688dd19505ccbc4eaaf018b44e7
+        with:
+          asdf_version: 0.16.7
+
+      - name: Setup Node version
+        working-directory: mobile
+        run: |
+          asdf plugin add nodejs
+          asdf install nodejs
+          echo "node_version=$(asdf current nodejs | xargs | cut -d ' ' -f 6)" >> $GITHUB_ENV
+
+      - name: Set nodejs as global exec
+        run: |
+          asdf set -u nodejs ${{ env.node_version }}
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        id: semantic
+        with:
+          working_directory: ./mobile
+          extra_plugins: |
+            semantic-release-expo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build on EAS
+        working-directory: mobile
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run: |
+          echo ${{ steps.semantic.outputs.new_release_version }}
+          eas build --platform all --non-interactive --no-wait

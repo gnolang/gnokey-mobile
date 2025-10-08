@@ -17,7 +17,7 @@
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.5",
     "@expo/vector-icons": "^15.0.2",
-    "@gnolang/gnonative": "^4.7.1",
+    "@gnolang/gnonative": "^4.7.2",
     "@gorhom/bottom-sheet": "^5.1.8",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-clipboard/clipboard": "^1.16.2",
@@ -69,6 +69,8 @@
     "eslint-plugin-prettier": "^5.2.6",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
+    "semantic-release": "^24.2.9",
+    "semantic-release-expo": "^2.2.3",
     "typescript": "~5.8.3",
     "vitest": "^3.0.9"
   },

@@ -6,7 +6,6 @@ import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import {
   Button,
-  TextField,
   Text,
   Container,
   HomeLayout,
@@ -21,6 +20,7 @@ import {
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { Vault } from '@/types'
+import TextInputStyled from '@/modules/ui-components/organisms/input/TextInputStyled'
 
 export default function Page() {
   const isFirstRender = useRef(true)
@@ -105,13 +105,12 @@ export default function Page() {
             rightComponent={<NetworkButtonModal />}
           >
             <Spacer space={16} />
-            <TextField
+            <TextInputStyled
               placeholder="Search"
               value={nameSearch}
               onChangeText={setNameSearch}
               autoCapitalize="none"
               autoCorrect={false}
-              hideError
               leftIcon={<FontAwesome6 name="magnifying-glass" size={16} color={theme.text.textMuted} />}
             />
           </ScreenHeader>

@@ -1,7 +1,8 @@
 import styled from 'styled-components/native'
-import { TextFieldComp } from '../src'
 import { TouchableOpacity } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
+import { TextInputLabel } from '../atoms'
+import { TextInputDescription } from '../atoms/input/TextInputDescription'
 
 interface Props {
   title: string
@@ -15,10 +16,10 @@ export const NavigationRow = ({ title, description, onPress, footer }: Props) =>
     <TouchableOpacity onPress={onPress}>
       <Container>
         <Row>
-          <TextFieldComp.Label>{title}</TextFieldComp.Label>
+          <TextInputLabel>{title}</TextInputLabel>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#888" />
         </Row>
-        <TextFieldComp.Description>{description}</TextFieldComp.Description>
+        <TextInputDescription>{description}</TextInputDescription>
         {footer}
       </Container>
     </TouchableOpacity>

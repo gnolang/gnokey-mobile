@@ -38,7 +38,8 @@ const ThemeProvider = ({ children }: Props) => {
       },
       border: '#94A0AB',
       label: '#000000',
-      background: '#EBEBEB'
+      background: '#EBEBEB',
+      disabled: { background: '#EBEBEB' }
     },
 
     buttons: {

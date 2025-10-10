@@ -1,6 +1,7 @@
 import React from 'react'
 import { useRouter } from 'expo-router'
-import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from 'styled-components/native'
 import { Spacer, Text } from '../src'
 import HeaderActionButton from '../atoms/button/HeaderActionButton'

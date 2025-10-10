@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
-import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import styled from 'styled-components/native'
 
 interface OnboardingLayoutProps {

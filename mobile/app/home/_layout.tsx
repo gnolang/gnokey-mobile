@@ -83,14 +83,6 @@ export default function AppLayout() {
           headerShown: true
         }}
       />
-      <Stack.Screen
-        name="(modal)/logout"
-        options={{
-          title: 'Logout',
-          presentation: 'modal'
-        }}
-      />
-
       <Stack.Screen name="vault" options={{ headerShown: false }} />
     </Stack>
   )

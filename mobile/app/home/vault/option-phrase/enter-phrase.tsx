@@ -1,4 +1,4 @@
-import { Button, Spacer, Text, SafeAreaView, HomeLayout, ScreenHeader } from '@/modules/ui-components'
+import { Button, Spacer, Text, SafeAreaView, HomeLayout, ScreenHeader, SeedInputs } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
 import {
   Alert,
@@ -11,7 +11,6 @@ import {
   StyleSheet
 } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard'
-import { SeedInputs } from '@/views'
 import { useAppDispatch, setPhrase, resetAddVaultState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 import styled from 'styled-components/native'
@@ -107,7 +106,7 @@ export default function Page() {
 }
 
 const SmallButton = styled(Button)`
-  width: 120px;
+  width: 105px;
 `
 
 const styles = StyleSheet.create({

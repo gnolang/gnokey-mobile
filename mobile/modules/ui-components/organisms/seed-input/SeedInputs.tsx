@@ -14,6 +14,10 @@ export const SeedInputs = ({ length }: Props) => {
   const [mnemonicWords, setMnemonicWords] = useState<string[]>(Array(length).fill(''))
 
   useEffect(() => {
+    console.log('SeedInputs mounted', seed)
+  }, [seed])
+
+  useEffect(() => {
     if (seed && seed.length > 0) {
       setMnemonicWords(seed.split(' '))
     } else {

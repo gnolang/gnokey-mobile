@@ -1,37 +1,15 @@
 import { Alert as RNAlert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
-import {
-  selectMasterPassword,
-  useAppDispatch,
-  useAppSelector,
-  createKey,
-  selectPhrase,
-  generateNewPhrase,
-  resetAddVaultState,
-  selectAddVaultName
-} from '@/redux'
+import { router } from 'expo-router'
+import { useAppDispatch, useAppSelector, createKey, selectPhrase, resetAddVaultState, selectAddVaultName } from '@/redux'
 import { Button, Form, HomeLayout, ScreenHeader, Spacer, NewVaultForm, BetaVersionMiniBanner } from '@/modules/ui-components'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)
   const dispatch = useAppDispatch()
 
-  const masterPassword = useAppSelector(selectMasterPassword)
   const keyName = useAppSelector(selectAddVaultName)
   const phrase = useAppSelector(selectPhrase)
-
-  const params = useLocalSearchParams()
-  const skipNewPhraseGeneration = params.skipNewPhraseGeneration === 'true'
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (!skipNewPhraseGeneration) {
-        dispatch(generateNewPhrase())
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  )
 
   const onCreate = async () => {
     setError(undefined)
@@ -54,14 +32,9 @@ export default function Page() {
       return
     }
 
-    if (!masterPassword) {
-      setError('Master password not found.')
-      return
-    }
-
     try {
-      dispatch(createKey({ name: keyName, password: masterPassword, phrase }))
-      router.navigate('/home/vault/add/new-vault-loading')
+      dispatch(createKey())
+      router.replace('/home/vault/add/new-vault-loading')
       // await dispatch(fetchVaults()).unwrap()
       // dispatch(checkForKeyOnChains())
     } catch (error: any) {

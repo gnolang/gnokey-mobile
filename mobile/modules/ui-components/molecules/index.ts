@@ -1,6 +1,5 @@
 export { InputWithLabel } from './InputWithLabel'
 export { BetaVersionMiniBanner } from './BetaVersionBanner'
-export { ButtonBack } from './ButtonBack'
 export { HomeEmptyBox } from './hero/HomeEmptyBox'
 export { HomeNotFoundBox } from './hero/HomeNotFoundBox'
 export * from './hero'

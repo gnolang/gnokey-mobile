@@ -14,7 +14,7 @@ export const vaultBalanceSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchBalances.fulfilled, (state, action) => {
-      console.log('selectVaultsWithBalances xx:', action.payload)
+      console.log('selectVaultsWithBalances:', action.payload)
       Object.assign(state, action.payload)
     })
   }

@@ -45,7 +45,7 @@ export default function Page() {
       return
     }
 
-    route.push({ pathname: '/home/vault/add', params: { skipNewPhraseGeneration: 'true' } })
+    route.push({ pathname: '/home/vault/add' })
   }
 
   return (

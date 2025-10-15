@@ -32,7 +32,7 @@ const Page = () => {
   useEffect(() => {
     ;(async () => {
       if (signUpState === VaultCreationState.generic_error) {
-        setError('An unexpected error occurred. Please try agaiin.')
+        setError('An unexpected error occurred. Please try again.')
         return
       }
       if (signUpState === VaultCreationState.user_exists_on_blockchain_and_local_storage) {

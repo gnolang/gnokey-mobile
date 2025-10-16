@@ -42,26 +42,14 @@ const Page: React.FC = () => {
   const keyExtractor = (item: any) => item.id
 
   return (
-    <>
-      <Ruller />
-      <ListTemplate<NetworkMetainfo>
-        header={<ScreenHeader title="Settings" />}
-        subHeader={
-          <Form.Section
-            title="Network List"
-            // rightActions={<HeaderActionLink>Delete All</HeaderActionLink>}
-          />
-        }
-        footer={
-          <>
-            <Button onPress={() => route.push('/home/network/new')}>Add Network</Button>
-          </>
-        }
-        data={networks || []}
-        renderItem={renderNetworkItem}
-        keyExtractor={keyExtractor}
-      />
-    </>
+    <ListTemplate<NetworkMetainfo>
+      header={<ScreenHeader title="Settings" />}
+      subHeader={<Form.Section title="Network List" />}
+      footer={<Button onPress={() => route.push('/home/network/new')}>&nbsp;Add Network&nbsp;</Button>} // &nbsp; is a hack for Android to not cut the button label
+      data={networks || []}
+      renderItem={renderNetworkItem}
+      keyExtractor={keyExtractor}
+    />
   )
 }
 

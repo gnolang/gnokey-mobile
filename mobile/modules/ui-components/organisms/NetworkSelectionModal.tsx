@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ModalTemplate } from '../templates'
 import { NetworkMetainfo } from '@/types'
-import { ModalHeaderSearch } from '../molecules/Modal'
 import { Button } from '../src'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { NetworkListItem } from './list'
+import { ModalHeaderSearch } from '../molecules'
 
 interface Props {
   visible: boolean

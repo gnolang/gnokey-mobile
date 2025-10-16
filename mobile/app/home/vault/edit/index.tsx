@@ -1,6 +1,5 @@
 import { Alert } from 'react-native'
 import { useState } from 'react'
-import { ModalConfirm } from '@/components'
 import {
   deleteVault,
   fetchBalances,
@@ -13,7 +12,7 @@ import {
   useAppSelector
 } from '@/redux'
 import { useRouter } from 'expo-router'
-import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, FormItem } from '@/modules/ui-components'
+import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, FormItem, ModalConfirm } from '@/modules/ui-components'
 import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
 import { CopyIcon, Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/ui-components/utils/format'

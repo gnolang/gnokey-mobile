@@ -5,5 +5,3 @@ export const ModalView = {
   Header: ModalHeader,
   Content: ModalContent
 }
-
-export { ModalConfirm } from './ModalConfirm'

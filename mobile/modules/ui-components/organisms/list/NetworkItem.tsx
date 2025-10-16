@@ -29,9 +29,6 @@ export const NetworkItem: React.FC<Props> = ({ network, onEdit, onDelete }) => {
 
   function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
     const styleAnimation = useAnimatedStyle(() => {
-      // console.log('showRightProgress:', prog.value)
-      // console.log('appliedTranslation:', drag.value)
-
       return {
         transform: [{ translateX: drag.value + 160 }]
       }

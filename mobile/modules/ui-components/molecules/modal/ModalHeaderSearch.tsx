@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import { ModalHeaderOvalIcon } from '../atoms/Modal'
+import { ModalHeaderOvalIcon } from '../../atoms/Modal'
 import styled from 'styled-components/native'
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { Ionicons } from '@expo/vector-icons'

@@ -34,7 +34,7 @@ export const WelcomeBackFooter = ({ onUnlockPress: onUnlokPress, error }: Props)
       ) : null}
       <Spacer space={16} />
       <Button color="primary" onPress={() => onUnlokPress(password, isBiometric)}>
-        Unlock GKM
+        Unlock
       </Button>
       <Spacer space={16} />
       <ButtonText onPress={() => router.push('/onboarding/forgot-pass')}>

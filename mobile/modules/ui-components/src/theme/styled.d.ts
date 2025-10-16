@@ -12,12 +12,14 @@ declare module 'styled-components/native' {
       secondary: string
       tertirary: string
       danger: string
+      dangersecondary: string
 
       label: {
         primary: string
         secondary: string
         tertirary: string
         danger: string
+        dangersecondary: string
       }
     }
 

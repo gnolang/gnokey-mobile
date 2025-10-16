@@ -1,8 +1,7 @@
 import { ScrollView } from 'react-native'
-import { HomeLayout, ScreenHeader, Spacer } from '@/modules/ui-components'
+import { HomeLayout, ScreenHeader, Spacer, ModalConfirm } from '@/modules/ui-components'
 import { Form } from '@/modules/ui-components/molecules'
 import { useRouter } from 'expo-router'
-import { ModalConfirm } from '@/components/modal'
 import { useState } from 'react'
 import { signOut, useAppDispatch } from '@/redux'
 

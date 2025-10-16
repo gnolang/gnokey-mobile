@@ -65,6 +65,8 @@ export const ButtonLabel = styled.Text<{ $color?: ButtonColor }>`
   font-size: 17px;
   line-height: 22px;
   letter-spacing: -0.41px;
+  align-self: center;
+  text-align: center;
   color: ${(props) => (props.$color ? props.theme.buttons.label[props.$color] : props.theme.buttons.label.primary)};
 `
 

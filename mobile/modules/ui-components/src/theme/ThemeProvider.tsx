@@ -47,12 +47,14 @@ const ThemeProvider = ({ children }: Props) => {
       secondary: '#E5E5E5',
       tertirary: '#4c8ae7',
       danger: '#FF4647',
+      dangersecondary: '#E5E5E5',
 
       label: {
         primary: '#FFFFFF',
         secondary: '#007AFF',
         tertirary: '#000000',
-        danger: '#ffffff'
+        danger: '#ffffff',
+        dangersecondary: '#FF4647'
       }
     }
   }

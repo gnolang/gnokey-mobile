@@ -1,4 +1,4 @@
-import { HomeLayout, ActivityIndicator } from '@/modules/ui-components'
+import { HomeLayout, ActivityIndicator, ButtonBack, HeroBox, ErrorBox } from '@/modules/ui-components'
 import {
   registerAccount,
   selectLastProgress,
@@ -9,14 +9,14 @@ import {
   VaultCreationState
 } from '@/redux'
 import { useCallback, useEffect, useState } from 'react'
-import { router, useLocalSearchParams } from 'expo-router'
-import { ButtonBack, HeroBox, ErrorBox } from '@/modules/ui-components/molecules'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 
 const Page = () => {
   const signUpState = useAppSelector(signUpStateSelector)
   const currentNetwork = useAppSelector(selectSelectedChain)
   const dispatch = useAppDispatch()
   const progress = useAppSelector(selectLastProgress)
+  const router = useRouter()
 
   const [error, setError] = useState<string | undefined>(undefined)
 
@@ -44,9 +44,8 @@ const Page = () => {
         return
       }
       if (signUpState === VaultCreationState.user_already_exists_on_blockchain_under_different_name) {
-        setError(
-          'This account is already registered on the blockchain under a different name. Please press Back and sign up again with another Seed Phrase, or for a normal sign in with a different account if available.'
-        )
+        // This account is already registered on the blockchain under a different name.
+        router.replace({ pathname: '/home/vault/add/existing-account', params: { existingName: keyName } })
         return
       }
       if (signUpState === VaultCreationState.user_exists_only_on_local_storage) {
@@ -97,7 +96,10 @@ const Page = () => {
   }, [signUpState, dispatch])
 
   return (
-    <HomeLayout header={null} footer={error ? <ButtonBack /> : null}>
+    <HomeLayout
+      header={null}
+      footer={error ? <ButtonBack onPress={() => router.replace({ pathname: '/home/vault/add' })} /> : null}
+    >
       {error ? (
         <ErrorBox title="Error" description={error} errorDetails={progress} />
       ) : (

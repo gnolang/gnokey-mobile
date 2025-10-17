@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Layout } from '@/components/index'
-import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances } from '@/redux'
+import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances, generateNewPhrase } from '@/redux'
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import {
   Button,
@@ -80,6 +80,7 @@ export default function Page() {
   }
 
   const navigateToAddKey = () => {
+    dispatch(generateNewPhrase())
     route.push('home/vault/add')
   }
 

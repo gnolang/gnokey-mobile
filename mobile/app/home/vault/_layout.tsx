@@ -49,6 +49,7 @@ export default function VaultModalLayout() {
           ...defaultOptions
         }}
       />
+      <Stack.Screen name="add/existing-account" options={{ ...defaultOptions }} />
 
       {/* Import a vault stack */}
       <Stack.Screen name="option-phrase/enter-phrase" options={{ ...defaultOptions, title: 'Seed Phrase' }} />

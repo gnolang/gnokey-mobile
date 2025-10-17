@@ -14,7 +14,6 @@ export const vaultBalanceSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchBalances.fulfilled, (state, action) => {
-      console.log('selectVaultsWithBalances:', action.payload)
       Object.assign(state, action.payload)
     })
   }
@@ -37,9 +36,9 @@ export const fetchBalances = createAsyncThunk<{ [address: string]: bigint }, Vau
 
 const getBalance = async (gnonative: GnoNativeApi, address: Uint8Array) => {
   try {
-    console.log('fetching balance for address:', address)
+    // console.log('fetching balance for address:', address)
     const balance = await gnonative.queryAccount(address)
-    console.log('account balance: %s', balance.accountInfo?.coins)
+    // console.log('account balance: %s', balance.accountInfo?.coins)
 
     if (!balance.accountInfo) return 0n
 

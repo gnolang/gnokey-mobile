@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, RootState } from '@reduxjs/toolkit'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { GnoNativeApi, KeyInfo, SignTxResponse } from '@gnolang/gnonative'
+import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
 import { Vault } from '@/types'
 import { getChainById } from '@/providers/database-provider'
@@ -15,7 +15,10 @@ export interface LinkingState {
   bech32Address?: string
   /* The keyinfo of the selected account 'bech32Address' */
   keyinfo?: KeyInfo
+  /* The transaction to be signed, in JSON format */
   txInput?: string
+  signedTxJson?: string
+  gasWanted?: bigint
   /* Update the transaction with the new estimated gas wanted value */
   updateTx?: boolean
   /* The callback URL to return to after each operation */
@@ -26,6 +29,7 @@ export interface LinkingState {
   /* The session key info */
   session?: string
   session_wanted?: boolean
+  isLoading?: boolean
 }
 
 const initialState: LinkingState = {
@@ -35,12 +39,15 @@ const initialState: LinkingState = {
   reason: undefined,
   bech32Address: undefined,
   txInput: undefined,
+  signedTxJson: undefined,
   updateTx: undefined,
   callback: undefined,
   path: undefined,
   hostname: undefined,
   session: undefined,
-  session_wanted: false
+  session_wanted: false,
+  gasWanted: undefined,
+  isLoading: false
 }
 
 /**
@@ -73,68 +80,36 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { vault: Vault }, 
   }
 )
 
-export const signTx = createAsyncThunk<SignTxResponse, { keyInfo: KeyInfo }, ThunkExtra>(
-  'linking/signTx',
-  async ({ keyInfo }, thunkAPI) => {
-    const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
-    const { masterPassword } = (thunkAPI.getState() as RootState).signIn
-
-    if (!masterPassword) {
-      throw new Error('No keyInfo found.')
-    }
-
-    const txJson = decodeURIComponent(txInput || '')
-    console.log('txJson', txJson)
-    console.log('keyInfo', JSON.stringify(keyInfo))
-
-    const res = await gnonative.activateAccount(keyInfo.name)
-    console.log('activateAccount', res)
-
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-    console.log('selected account', keyInfo.name)
-
-    const signedTx = await gnonative.signTx(txJson, keyInfo?.address)
-    console.log('signedTx', signedTx)
-
-    return signedTx
-  }
-)
-
-interface gasEstimation {
-  tx: string
+interface GasEstimationResponse {
+  txJson: string
   gasWanted: bigint
+  signedTxJson: string
 }
 
-// estimateGasWanted estimates the gas wanted value for the transaction.
+// estimateGasWantedAndSign estimates the gas wanted value for the transaction and signs it.
 // If the `update` field is true, the transaction will be updated with the new gas wanted value.
-export const estimateGasWanted = createAsyncThunk<gasEstimation, { keyInfo: KeyInfo; updateTx: boolean }, ThunkExtra>(
-  'linking/estimateGas',
-  async ({ keyInfo, updateTx }, thunkAPI) => {
+export const estimateGasWantedAndSign = createAsyncThunk<GasEstimationResponse, void, ThunkExtra>(
+  'linking/estimateGasAndSign',
+  async (_, thunkAPI) => {
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    const { txInput } = (thunkAPI.getState() as RootState).linking
+    const { txInput, keyinfo } = (thunkAPI.getState() as RootState).linking
     const { masterPassword } = (thunkAPI.getState() as RootState).signIn
 
     if (!masterPassword) {
       throw new Error('No keyInfo found.')
     }
-
-    const txJson = decodeURIComponent(txInput || '')
-
-    await gnonative.activateAccount(keyInfo.name)
-    await gnonative.setPassword(masterPassword, keyInfo.address)
-
-    // Estimate the gas used
-    const response = await gnonative.estimateGas(txJson, keyInfo?.address, DEFAULT_GAS_MARGIN, updateTx)
-    const gasWanted = response.gasWanted as bigint
-    console.log('estimateGas: ', gasWanted)
-
-    // Update the transaction
-    if (updateTx) {
-      return { tx: response.txJson, gasWanted: gasWanted }
+    if (!keyinfo) {
+      throw new Error('No keyInfo found.')
     }
 
-    return { tx: txJson, gasWanted }
+    const txJsonInput = decodeURIComponent(txInput || '')
+    await gnonative.activateAccount(keyinfo.name)
+    await gnonative.setPassword(masterPassword, keyinfo.address)
+
+    const { txJson, gasWanted } = await gnonative.estimateGas(txJsonInput, keyinfo?.address, DEFAULT_GAS_MARGIN, true)
+    const { signedTxJson } = await gnonative.signTx(txJson, keyinfo?.address)
+
+    return { txJson, gasWanted, signedTxJson }
   }
 )
 
@@ -201,52 +176,23 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
   }
 )
 
-// export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedURL, ThunkExtra>(
-//   'linking/setLinkingData',
-//   async (parsedURL, thunkAPI) => {
-//     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-//     const { callback } = (thunkAPI.getState() as RootState).linking
-
-//     console.log('sendAddressToSoliciting', keyInfo, callback)
-
-//     if (!callback) {
-//       throw new Error('No callback found.')
-//     }
-
-//     const bech32 = await gnonative.addressToBech32(keyInfo?.address)
-
-//     return {
-//       chainId: queryParams?.chain_id ? queryParams.chain_id as string : undefined,
-//       remote: queryParams?.remote ? queryParams.remote as string : undefined,
-//       hostname: parsedURL.hostname || undefined,
-//       reason: queryParams?.reason ? queryParams.reason as string : undefined,
-//       clientName: queryParams?.client_name ? queryParams.client_name as string : undefined,
-//       bech32Address,
-//       txInput: queryParams?.tx ? queryParams.tx as string : undefined,
-//       updateTx: updateTx,
-//       callback: queryParams?.callback ? decodeURIComponent(queryParams.callback as string) : undefined,
-//       path: queryParams?.path as string || '',
-//       keyinfo,
-//       session: queryParams?.session ? queryParams.session as string : undefined,
-//       session_wanted: queryParams?.session_wanted ? Boolean(queryParams.session_wanted) : false,
-//     }
-//   }
-// )
-
 export const linkingSlice = createSlice({
   name: 'linking',
   initialState,
   reducers: {
-    clearLinking: (state) => {
-      state = { ...initialState }
-      state.hostname = undefined
-      state.txInput = undefined
-      state.callback = undefined
-    }
+    resetLinkState: () => initialState
   },
   extraReducers: (builder) => {
-    builder.addCase(estimateGasWanted.fulfilled, (state, action) => {
-      state.txInput = action.payload.tx
+    builder.addCase(estimateGasWantedAndSign.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(estimateGasWantedAndSign.rejected, (state) => {
+      state.isLoading = false
+    })
+    builder.addCase(estimateGasWantedAndSign.fulfilled, (state, action) => {
+      state.gasWanted = action.payload.gasWanted
+      state.signedTxJson = action.payload.signedTxJson
+      state.isLoading = false
     })
     builder.addCase(setLinkingData.fulfilled, (state, action) => {
       state.chainId = action.payload.chainId
@@ -276,14 +222,17 @@ export const linkingSlice = createSlice({
     reasonSelector: (state) => state.reason,
     selectAction: (state) => (state.hostname !== expo_default ? state.hostname : undefined),
     selectSession: (state) => state.session,
-    selectSessionWanted: (state) => state.session_wanted
+    selectSessionWanted: (state) => state.session_wanted,
+    selectSignedTx: (state) => state.signedTxJson,
+    selectGasWanted: (state) => state.gasWanted,
+    selectLinkIsLoading: (state) => state.isLoading
   }
 })
 
 // Expo default hostname
 const expo_default = 'expo-development-client'
 
-export const { clearLinking } = linkingSlice.actions
+export const { resetLinkState } = linkingSlice.actions
 
 export const {
   selectTxInput,
@@ -297,5 +246,8 @@ export const {
   selectChainId,
   selectRemote,
   selectSession,
-  selectSessionWanted
+  selectSessionWanted,
+  selectSignedTx,
+  selectGasWanted,
+  selectLinkIsLoading
 } = linkingSlice.selectors

@@ -2,7 +2,7 @@ import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
 import { Layout } from '..'
-import { Text } from '@/modules/ui-components'
+import { Spacer, Text } from '@/modules/ui-components'
 
 type Props = {
   message: string
@@ -14,6 +14,7 @@ export const Loading: React.FC<Props> = ({ message }) => {
       <Layout.Body>
         <ViewCenter>
           <ActivityIndicator size="large" color="#0000ff" />
+          <Spacer />
           <Text.Body>{message}</Text.Body>
         </ViewCenter>
       </Layout.Body>

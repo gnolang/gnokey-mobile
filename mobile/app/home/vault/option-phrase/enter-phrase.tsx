@@ -1,4 +1,4 @@
-import { Button, Spacer, Text, HomeLayout, ScreenHeader } from '@/modules/ui-components'
+import { Button, Spacer, Text, HomeLayout, ScreenHeader, SeedInputs } from '@/modules/ui-components'
 import { useState, useRef } from 'react'
 import {
   Alert,

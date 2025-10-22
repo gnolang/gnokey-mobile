@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { Button, HeroBoxInternal, HomeLayout, ScreenHeader } from '@/modules/ui-components'
-import { ModalConfirm } from '@/components/modal'
+import { Button, HeroBoxInternal, HomeLayout, ScreenHeader, ModalConfirm } from '@/modules/ui-components'
 import { hardReset, selectLoadingReset, useAppDispatch, useAppSelector } from '@/redux'
 import { LeftTopContainer } from '@/modules/ui-components/atoms'
 

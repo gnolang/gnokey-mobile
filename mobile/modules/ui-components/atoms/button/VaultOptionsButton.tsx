@@ -1,5 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
-import { ActionSheetIOS, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
+import { useState } from 'react'
+import CustomActionSheet from '../CustomActionSheet'
 
 type Props = {
   onTransfer: () => void
@@ -10,34 +12,56 @@ type Props = {
 
 const VaultOptionsButton = (props: Props) => {
   const { onTransfer, onDelete, onRefreshBalance, isDevMode } = props
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
-  const options = ['Cancel', 'Refresh Balance']
-  if (isDevMode) options.push('Transfer')
-  options.push('Delete')
+  const buildOptions = () => {
+    const options = [
+      {
+        text: 'Refresh Balance',
+        onPress: onRefreshBalance,
+        isCancel: false,
+        isDestructive: false
+      }
+    ]
+
+    if (isDevMode) {
+      options.push({
+        text: 'Transfer',
+        onPress: onTransfer,
+        isCancel: false,
+        isDestructive: false
+      })
+    }
+
+    options.push({
+      text: 'Delete',
+      onPress: onDelete,
+      isDestructive: true,
+      isCancel: false
+    })
+
+    options.push({
+      text: 'Cancel',
+      onPress: () => {},
+      isCancel: true,
+      isDestructive: false
+    })
+
+    return options
+  }
+
+  const handlePress = () => {
+    setIsSheetOpen(true)
+  }
 
   return (
-    <Pressable
-      onPress={() => {
-        ActionSheetIOS.showActionSheetWithOptions(
-          {
-            options,
-            destructiveButtonIndex: options.length - 1,
-            cancelButtonIndex: 0
-          },
-          (buttonIndex) => {
-            if (buttonIndex === 1) {
-              onRefreshBalance()
-            } else if (isDevMode && buttonIndex === 2) {
-              onTransfer()
-            } else if ((isDevMode && buttonIndex === 3) || (!isDevMode && buttonIndex === 2)) {
-              onDelete()
-            }
-          }
-        )
-      }}
-    >
-      <Ionicons name="ellipsis-horizontal" size={24} color="black" />
-    </Pressable>
+    <>
+      <Pressable onPress={handlePress}>
+        <Ionicons name="ellipsis-horizontal" size={24} color="black" />
+      </Pressable>
+
+      <CustomActionSheet visible={isSheetOpen} options={buildOptions()} onClose={() => setIsSheetOpen(false)} />
+    </>
   )
 }
 

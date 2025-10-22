@@ -8,6 +8,7 @@ const SwipeEditButton = ({ label, color, onPress }: { label: string; color: stri
       style={{
         backgroundColor: color,
         width: 75,
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center'
       }}

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import * as Linking from 'expo-linking'
 import {
-  clearLinking,
   selectCallback,
   selectClientName,
   sendAddressToSoliciting,
@@ -10,7 +9,8 @@ import {
   useAppSelector,
   fetchVaults,
   fetchBalances,
-  selectVaultsWithBalances
+  selectVaultsWithBalances,
+  resetLinkState
 } from '@/redux'
 import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
 import { Vault } from '@/types'
@@ -51,7 +51,7 @@ export default function Page() {
   )
 
   const onCancel = () => {
-    dispatch(clearLinking())
+    dispatch(resetLinkState())
     Linking.openURL(`${callback}?status=cancelled`)
     router.replace('/home')
   }

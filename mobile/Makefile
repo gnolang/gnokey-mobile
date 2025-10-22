@@ -7,6 +7,11 @@ node_modules: package.json package-lock.json
 
 ts_check:
 	npm run ts:check
+.PHONY: ts_check
+
+test:
+	npm run test
+.PHONY: test
 
 ios: node_modules ts_check # Run the iOS app
 	npx expo run:ios

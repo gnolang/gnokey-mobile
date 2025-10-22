@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "prebuild": "expo prebuild",
     "ts:check": "tsc",
-    "test": "vitest",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "lint": "eslint .",
     "prettier:fix": "prettier . --write"
   },

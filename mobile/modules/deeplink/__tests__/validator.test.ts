@@ -12,6 +12,27 @@ vi.mock('react-native', () => ({
   }
 }))
 
+const VALID_TRANSACTION_ENCODED = encodeURIComponent(
+  JSON.stringify({
+    msg: [
+      {
+        '@type': '/vm.m_call',
+        caller: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
+        send: '',
+        pkg_path: 'gno.land/r/berty/social',
+        func: 'PostMessage',
+        args: ['Hello']
+      }
+    ],
+    fee: {
+      gas_wanted: '10000000',
+      gas_fee: '1000000ugnot'
+    },
+    signatures: null,
+    memo: ''
+  })
+)
+
 describe('validateDeepLink', () => {
   describe('tosign action', () => {
     it('should validate a correct sign transaction deep link', () => {
@@ -19,26 +40,7 @@ describe('validateDeepLink', () => {
         hostname: 'tosign',
         path: null,
         queryParams: {
-          tx: encodeURIComponent(
-            JSON.stringify({
-              msg: [
-                {
-                  '@type': '/vm.m_call',
-                  caller: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
-                  send: '',
-                  pkg_path: 'gno.land/r/berty/social',
-                  func: 'PostMessage',
-                  args: ['Hello']
-                }
-              ],
-              fee: {
-                gas_wanted: '10000000',
-                gas_fee: '1000000ugnot'
-              },
-              signatures: null,
-              memo: ''
-            })
-          ),
+          tx: VALID_TRANSACTION_ENCODED,
           address: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
           remote: 'https://api.gno.berty.io:443',
           chain_id: 'dev',
@@ -458,6 +460,65 @@ describe('validateDeepLink', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors.some((e) => e.message.includes('Invalid bech32 address length'))).toBe(true)
+    })
+
+    it('should succeed when remote is tcp', () => {
+      const parsedURL: Linking.ParsedURL = {
+        hostname: 'tosign',
+        path: null,
+        queryParams: {
+          tx: VALID_TRANSACTION_ENCODED,
+          address: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
+          remote: 'tcp://127.0.0.1:26657',
+          chain_id: 'test-chain',
+          callback: 'https://valid.callback.url'
+        },
+        scheme: 'land.gno.gnokey'
+      }
+
+      const result = validateDeepLink(parsedURL)
+      expect(result.isValid).toBe(true)
+      expect(result.errors).toHaveLength(0)
+    })
+
+    it('should fail when remote is not https, http or tcp', () => {
+      const parsedURL: Linking.ParsedURL = {
+        hostname: 'tosign',
+        path: null,
+        queryParams: {
+          tx: VALID_TRANSACTION_ENCODED,
+          address: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
+          remote: 'ftp://invalid.url',
+          chain_id: 'test-chain',
+          callback: 'https://valid.callback.url'
+        },
+        scheme: 'land.gno.gnokey'
+      }
+
+      const result = validateDeepLink(parsedURL)
+
+      expect(result.isValid).toBe(false)
+      expect(result.errors.some((e) => e.message.includes('must use one of the following protocols'))).toBe(true)
+    })
+
+    it('should fail when remote URL is malformed', () => {
+      const parsedURL: Linking.ParsedURL = {
+        hostname: 'tosign',
+        path: null,
+        queryParams: {
+          tx: VALID_TRANSACTION_ENCODED,
+          address: 'g19h0el2p7z8thtqy4rze0n6en94xux9fazf0rp3',
+          remote: 'ht!tp://malformed-url',
+          chain_id: 'test-chain',
+          callback: 'https://valid.callback.url'
+        },
+        scheme: 'land.gno.gnokey'
+      }
+
+      const result = validateDeepLink(parsedURL)
+
+      expect(result.isValid).toBe(false)
+      expect(result.errors.some((e) => e.message.includes('Invalid remote URL format'))).toBe(true)
     })
   })
 })

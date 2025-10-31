@@ -178,11 +178,12 @@ const validateBech32Address = (address: string, errors: ValidationError[]) => {
 
 const validateRemoteURL = (remote: string, errors: ValidationError[]) => {
   try {
+    const allowedProtocols = ['http:', 'https:', 'tcp:']
     const url = new URL(decodeURIComponent(remote))
-    if (!url.protocol.startsWith('http')) {
+    if (!allowedProtocols.includes(url.protocol)) {
       errors.push({
         field: 'remote',
-        message: 'Remote URL must use HTTP or HTTPS protocol'
+        message: `Remote URL must use one of the following protocols: ${allowedProtocols.join(', ')}`
       })
     }
   } catch (e) {

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'expo-router'
 import { getInitialState, selectInitialized, selectMasterPassword, useAppDispatch, useAppSelector, selectSignedIn } from '@/redux'
+import { multiply } from '@gnokeymobile/ui'
 
 export default function Root() {
   const dispatch = useAppDispatch()
@@ -8,6 +9,8 @@ export default function Root() {
   const appInitialized = useAppSelector(selectInitialized)
   const hasMasterPassword = useAppSelector(selectMasterPassword)
   const signedIn = useAppSelector(selectSignedIn)
+  const result = multiply(3, 7)
+  console.log('Multiply result:', result)
 
   useEffect(() => {
     dispatch(getInitialState())

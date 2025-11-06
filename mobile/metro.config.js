@@ -16,10 +16,11 @@ config.resolver.blockList = [
 config.resolver.nodeModulesPaths = [path.resolve(__dirname, './node_modules'), path.resolve(__dirname, '../node_modules')]
 
 config.resolver.extraNodeModules = {
-  '@gnolang/gnonative': '..'
+  '@gnolang/gnonative': '..',
+  '@gnokeymobile/ui': path.resolve(__dirname, './modules/ui')
 }
 
-config.watchFolders = [path.resolve(__dirname, '..')]
+config.watchFolders = [path.resolve(__dirname, '..'), path.resolve(__dirname, './modules/ui')]
 
 config.transformer.getTransformOptions = async () => ({
   transform: {

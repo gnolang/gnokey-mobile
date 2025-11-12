@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { Button, HomeLayout, HeroBox } from '@berty/gnonative-ui'
+import { Button, HomeLayout, HeroBox } from '@/modules/gnonative-ui/dist'
 
 export default function Page() {
   const router = useRouter()

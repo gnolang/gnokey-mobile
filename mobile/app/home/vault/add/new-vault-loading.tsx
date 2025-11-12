@@ -1,5 +1,5 @@
 import { ActivityIndicator, ButtonBack, ErrorBox } from '@/modules/ui-components'
-import { HomeLayout, HeroBox } from '@berty/gnonative-ui'
+import { HomeLayout, HeroBox } from '@/modules/gnonative-ui/dist'
 import {
   registerAccount,
   selectLastProgress,

@@ -1,6 +1,6 @@
 import { ScreenHeader, TextInputLabel, VaultItem } from '@/modules/ui-components'
-import { Button, Spacer, HomeLayout } from '@berty/gnonative-ui'
-import { Text } from '@berty/gnonative-ui'
+import { Button, Spacer, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { Text } from '@/modules/gnonative-ui/dist'
 import TextFieldForm from '@/modules/ui-components/organisms/input/TextFieldForm'
 import {
   txGasFeeEstimation,

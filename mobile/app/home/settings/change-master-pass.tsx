@@ -3,7 +3,7 @@ import { CheckPassRequirements, ScreenHeader, TextFieldSecure, TextInputLabel } 
 import { useState } from 'react'
 import { selectMasterPassword, useAppSelector, useAppDispatch, changeMasterPassword } from '@/redux'
 import { Alert } from '@/modules/ui-components'
-import { Spacer, HomeLayout, Button } from '@berty/gnonative-ui'
+import { Spacer, HomeLayout, Button } from '@/modules/gnonative-ui/dist'
 import { TextInputDescription } from '@/modules/ui-components/atoms/input/TextInputDescription'
 
 const Page = () => {

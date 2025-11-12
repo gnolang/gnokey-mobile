@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { useAppDispatch, useAppSelector, createKey, selectPhrase, resetAddVaultState, selectAddVaultName } from '@/redux'
 import { ScreenHeader, NewVaultForm, BetaVersionMiniBanner } from '@/modules/ui-components'
-import { Spacer, Form, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Spacer, Form, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)

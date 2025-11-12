@@ -13,7 +13,7 @@ import {
   NetworkButtonModal,
   VaultListItem
 } from '@/modules/ui-components'
-import { Text, Spacer, HomeLayout, Button } from '@berty/gnonative-ui'
+import { Text, Spacer, HomeLayout, Button } from '@/modules/gnonative-ui/dist'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { Vault } from '@/types'

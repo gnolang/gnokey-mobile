@@ -1,7 +1,7 @@
 import { Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Button, ListTemplate, ScreenHeader, Ruller, NetworkItem } from '@/modules/ui-components'
-import { Form } from '@berty/gnonative-ui'
+import { Form } from '@/modules/gnonative-ui/dist'
 import { deleteChain, selectChainsAvailable, useAppDispatch, useAppSelector } from '@/redux'
 import { NetworkMetainfo } from '@/types'
 

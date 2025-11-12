@@ -1,5 +1,5 @@
 import { CopyIcon, ScreenHeader } from '@/modules/ui-components'
-import { Text, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 import {
   existingAccountSelector,
   newAccountSelector,

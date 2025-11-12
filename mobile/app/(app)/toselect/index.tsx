@@ -6,7 +6,7 @@ import { router, useNavigation } from 'expo-router'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
 import { VaultListItem } from '@/modules/ui-components'
-import { Text, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 import { Vault } from '@/types'
 
 export default function Page() {

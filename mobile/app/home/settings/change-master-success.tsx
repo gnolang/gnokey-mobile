@@ -1,7 +1,7 @@
 import { ScreenHeader, Template } from '@/modules/ui-components'
 import { useRouter } from 'expo-router'
 import { useTheme } from 'styled-components/native'
-import { Text, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Text, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 
 const Page = () => {
   const router = useRouter()

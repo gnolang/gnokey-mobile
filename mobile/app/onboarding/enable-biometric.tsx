@@ -2,7 +2,7 @@ import { Alert, View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { enableBiometric, useAppDispatch } from '@/redux'
 import { ScreenHeader } from '@/modules/ui-components'
-import { Button, HomeLayout, HeroBox, Spacer } from '@berty/gnonative-ui'
+import { Button, HomeLayout, HeroBox, Spacer } from '@/modules/gnonative-ui/dist'
 import { LocalSvg } from 'react-native-svg/css'
 
 export default function Page() {

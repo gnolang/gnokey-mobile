@@ -13,7 +13,7 @@ import {
 } from '@/redux'
 import { useRouter } from 'expo-router'
 import { Container, ScreenHeader, FormItem } from '@/modules/ui-components'
-import { Text, Form, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Text, Form, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 import { InputWithLabel, ModalConfirm } from '@/modules/ui-components/molecules'
 import { CopyIcon, Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/ui-components/utils/format'

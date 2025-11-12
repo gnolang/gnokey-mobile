@@ -16,7 +16,7 @@
     "prettier:fix": "prettier . --write"
   },
   "dependencies": {
-    "@berty/gnonative-ui": "file:modules/ui4",
+    "@berty/gnonative-ui": "file:modules/gnonative-ui",
     "@bufbuild/protobuf": "^2.2.5",
     "@expo/vector-icons": "^15.0.2",
     "@gnokeymobile/ui": "file:modules/ui",

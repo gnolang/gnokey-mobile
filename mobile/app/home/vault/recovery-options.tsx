@@ -4,7 +4,7 @@ import { ActionItem } from '@/modules/ui-components/src/ui/ActionItem'
 import { View } from 'react-native'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { useRouter } from 'expo-router'
-import { Text, Ruller, Spacer } from '@berty/gnonative-ui'
+import { Text, Ruller, Spacer } from '@/modules/gnonative-ui/dist'
 
 export default function Page() {
   const route = useRouter()

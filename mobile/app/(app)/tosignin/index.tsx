@@ -13,7 +13,7 @@ import {
   resetLinkState
 } from '@/redux'
 import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem } from '@/modules/ui-components'
-import { HeroBoxLeft, Form } from '@berty/gnonative-ui'
+import { HeroBoxLeft, Form } from '@/modules/gnonative-ui/dist'
 import { Vault } from '@/types'
 
 export default function Page() {

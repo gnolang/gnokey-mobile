@@ -20,7 +20,7 @@ import {
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { FormItem, ScreenHeader, BetaVersionMiniBanner, CopyIcon } from '@/modules/ui-components'
-import { Text, Spacer, Ruller, Button, HomeLayout } from '@berty/gnonative-ui'
+import { Text, Spacer, Ruller, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 
 export default function Page() {
   const dispatch = useAppDispatch()

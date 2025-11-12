@@ -1,7 +1,7 @@
 import { Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { ScreenHeader } from '@/modules/ui-components'
-import { Button, HomeLayout } from '@berty/gnonative-ui'
+import { Button, HomeLayout } from '@/modules/gnonative-ui/dist'
 import { SetupPassForm } from '@/modules/ui-components/organisms/SetupPassForm'
 import { useState } from 'react'
 import { createMasterPass, useAppDispatch } from '@/redux'

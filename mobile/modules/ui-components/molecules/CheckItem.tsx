@@ -1,4 +1,4 @@
-import { Text } from '../src'
+import { Text } from '@berty/gnonative-ui'
 
 /**
  * Utility component to display a check item with validation status.

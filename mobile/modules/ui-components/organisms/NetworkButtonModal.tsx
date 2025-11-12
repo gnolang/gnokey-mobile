@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTheme } from 'styled-components/native'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Text } from '../src'
+import { Text } from '@berty/gnonative-ui'
 import { NetworkSelectionModal } from '.'
 import {
   useAppDispatch,

@@ -3,7 +3,7 @@ import { View, Modal, StyleSheet, FlatList, TouchableOpacity, Share } from 'reac
 import { EvilIcons, MaterialIcons } from '@expo/vector-icons'
 import { useAppDispatch, useAppSelector, selectProgress, clearProgress } from '@/redux'
 import { Layout } from '@/components'
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 
 const ProgressViewModal = () => {
   const [modalVisible, setModalVisible] = useState(false)

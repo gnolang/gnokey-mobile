@@ -1,5 +1,5 @@
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 
 const SwipeEditButton = ({ label, color, onPress }: { label: string; color: string; onPress: () => void }) => {
   return (

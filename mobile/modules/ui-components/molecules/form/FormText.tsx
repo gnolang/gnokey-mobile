@@ -1,7 +1,7 @@
 import { TouchableOpacity } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
-import { Spacer, Text } from '../../src'
+import { Spacer, Text } from '@berty/gnonative-ui'
 
 interface FormTextProps {
   hint?: string

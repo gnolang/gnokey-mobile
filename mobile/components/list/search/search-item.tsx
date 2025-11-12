@@ -1,4 +1,4 @@
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 
 type Props = {

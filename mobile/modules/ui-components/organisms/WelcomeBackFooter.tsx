@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { useRouter } from 'expo-router'
 import { selectBiometricEnabled, useAppSelector } from '@/redux'
-import { Button, ButtonText, Spacer, Text } from '../src'
+import { ButtonText, Spacer, Text, Button } from '@berty/gnonative-ui'
 import { TextFieldSecure } from './input'
 import { TextInputLabel } from '../atoms'
 

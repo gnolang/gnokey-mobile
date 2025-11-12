@@ -1,4 +1,4 @@
-import { Text } from '../src'
+import { Text } from '@berty/gnonative-ui'
 import { HeroBox } from './hero'
 
 interface Props {

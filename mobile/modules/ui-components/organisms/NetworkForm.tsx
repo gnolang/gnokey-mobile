@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { Button } from '@/modules/ui-components'
+import { Button } from '@berty/gnonative-ui'
 import { isEmpty, isInvalidURL } from '@/modules/ui-components/utils/validation'
 import { Ruller } from '../atoms'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'

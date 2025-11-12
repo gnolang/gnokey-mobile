@@ -1,6 +1,6 @@
 import { Modal as NativeModal, TouchableWithoutFeedback, TouchableHighlight } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
-import { Text, Button } from '@/modules/ui-components'
+import { Button, Text } from '@berty/gnonative-ui'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export type Props = {

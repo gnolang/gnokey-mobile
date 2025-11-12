@@ -1,4 +1,4 @@
-import * as Text from '../../modules/ui-components/src/text'
+import { Text } from '@berty/gnonative-ui'
 
 export type MenuItemProps = {
   value: any

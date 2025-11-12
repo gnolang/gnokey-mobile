@@ -17,10 +17,10 @@ config.resolver.nodeModulesPaths = [path.resolve(__dirname, './node_modules'), p
 
 config.resolver.extraNodeModules = {
   '@gnolang/gnonative': '..',
-  '@gnokeymobile/ui': path.resolve(__dirname, './modules/ui')
+  '@berty/gnonative-ui': path.resolve(__dirname, './modules/gnonative-ui')
 }
 
-config.watchFolders = [path.resolve(__dirname, '..'), path.resolve(__dirname, './modules/ui')]
+config.watchFolders = [path.resolve(__dirname, '..'), path.resolve(__dirname, './modules/gnonative-ui')]
 
 config.transformer.getTransformOptions = async () => ({
   transform: {

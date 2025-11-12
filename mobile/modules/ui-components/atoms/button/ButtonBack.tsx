@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { Button } from '../../src'
+import { Button } from '@berty/gnonative-ui'
 
 interface Props {
   onPress?: () => void

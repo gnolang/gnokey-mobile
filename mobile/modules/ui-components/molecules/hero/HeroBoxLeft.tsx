@@ -1,4 +1,4 @@
-import { Spacer, Text } from '../../src'
+import { Spacer, Text } from '@berty/gnonative-ui'
 
 interface Props {
   title: string

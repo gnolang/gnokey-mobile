@@ -151,7 +151,6 @@ export const setLinkingData = createAsyncThunk<SetLinkResponse, Linking.ParsedUR
         }
       }
     }
-    console.log('keyinfoxxx', keyinfo)
 
     let updateTx = false
     if (queryParams?.update_tx && (queryParams.update_tx as string) === 'true') {

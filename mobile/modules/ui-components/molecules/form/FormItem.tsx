@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleProp, TextStyle, View } from 'react-native'
 import styled from 'styled-components/native'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 import { ListRow } from '../../atoms/list/ListRow'
 import * as Clipboard from 'expo-clipboard'
 

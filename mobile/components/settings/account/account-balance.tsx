@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { KeyInfo, useGnoNativeContext } from '@gnolang/gnonative'
 import * as Application from 'expo-application'
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 
 interface Props {
   activeAccount: KeyInfo | undefined

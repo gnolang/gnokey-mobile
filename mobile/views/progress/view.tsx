@@ -6,7 +6,7 @@ import { clearProgress, selectProgress } from '@/redux/features/vaultAddSlice'
 import { EvilIcons } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 
 const ProgressView = () => {
   const [modalVisible, setModalVisible] = useState(false)

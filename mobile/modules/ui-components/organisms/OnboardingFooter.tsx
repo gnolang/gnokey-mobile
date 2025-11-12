@@ -1,4 +1,4 @@
-import { Button, ButtonText, Spacer, Text } from '../src'
+import { Button, ButtonText, Spacer, Text } from '@berty/gnonative-ui'
 
 interface Props {
   onStartOnboardingPress: () => void

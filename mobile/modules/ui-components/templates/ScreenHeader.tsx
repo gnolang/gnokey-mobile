@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router'
 import { StatusBar, StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from 'styled-components/native'
-import { Spacer, Text } from '../src'
+import { Spacer, Text } from '@berty/gnonative-ui'
 import HeaderActionButton from '../atoms/button/HeaderActionButton'
 
 export type ScreenHeaderProps = {

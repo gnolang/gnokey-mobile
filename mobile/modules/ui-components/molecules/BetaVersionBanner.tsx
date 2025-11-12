@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 import { useTheme } from 'styled-components/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 

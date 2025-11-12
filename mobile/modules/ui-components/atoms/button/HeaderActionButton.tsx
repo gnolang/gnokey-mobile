@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 
 type Props = {
   onPress: () => void

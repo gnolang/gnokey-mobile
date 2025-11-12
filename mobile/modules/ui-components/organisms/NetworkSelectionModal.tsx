@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { ModalTemplate } from '../templates'
 import { NetworkMetainfo } from '@/types'
-import { Button } from '../src'
+import { Button } from '@berty/gnonative-ui'
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { NetworkListItem } from './list'
 import { ModalHeaderSearch } from '../molecules'

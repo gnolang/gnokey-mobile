@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 import { Ionicons } from '@expo/vector-icons'
 import { ListRow } from '../../atoms'
 

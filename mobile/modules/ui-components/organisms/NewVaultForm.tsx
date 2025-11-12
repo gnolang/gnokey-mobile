@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Spacer, Text } from '../src'
+import { Spacer, Text } from '@berty/gnonative-ui'
 import { useEffect, useState } from 'react'
 import {
   selectAddVaultDescription,

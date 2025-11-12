@@ -1,4 +1,5 @@
-import { Spacer, Text } from '../..'
+import { Text } from '../..'
+import { Spacer } from '../../atoms'
 
 interface Props {
   title: string

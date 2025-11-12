@@ -1,9 +1,8 @@
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { AntDesign } from '@expo/vector-icons'
-import { Text, Ruller } from '@/modules/ui-components'
+import { Text, Ruller } from '@berty/gnonative-ui'
 import { Vault } from '@/types'
-import { weights } from '@/modules/ui-components/src/text'
 import { formatter } from '@/modules/ui-components/utils/format'
 import { sliceString } from '../../utils'
 
@@ -21,7 +20,7 @@ const VaultListItem = ({ vault, onVaultPress, style }: Props) => {
         <PlaceHolder />
         <View style={styles.labels}>
           <HStack>
-            <Text.Callout weight={weights.bold}>{vault.keyInfo.name}</Text.Callout>
+            <Text.Callout weight={Text.weights.bold}>{vault.keyInfo.name}</Text.Callout>
             <Text.CalloutMutedBold>{formatter.balance(vault.balance)} GNOT </Text.CalloutMutedBold>
           </HStack>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

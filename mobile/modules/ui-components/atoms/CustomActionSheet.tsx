@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, Pressable, Dimensions, StyleSheet, View } from 'react-native'
-import { Button } from '../src'
+import { Button } from '@berty/gnonative-ui'
 import { useTheme } from 'styled-components/native'
 
 type ActionSheetOption = {

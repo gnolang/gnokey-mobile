@@ -1,6 +1,6 @@
 import styled, { useTheme } from 'styled-components/native'
 import Icons from '@/components/icons'
-import * as Text from '../../../modules/ui-components/src/text'
+import { Text } from '@berty/gnonative-ui'
 import { View } from 'react-native'
 
 export interface Props {

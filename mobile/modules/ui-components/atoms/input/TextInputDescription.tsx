@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 
 export const TextInputDescription = styled(Text.Subheadline)`
   font-weight: ${Text.weights.regular};

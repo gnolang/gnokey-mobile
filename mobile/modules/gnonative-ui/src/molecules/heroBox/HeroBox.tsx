@@ -1,4 +1,5 @@
-import { ContainerCenter, Spacer, Text } from '../..'
+import { ContainerCenter, Spacer } from '../../atoms'
+import { Text } from '../../text'
 
 interface Props {
   img?: React.ReactNode

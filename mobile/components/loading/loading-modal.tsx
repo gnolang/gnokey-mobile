@@ -1,4 +1,4 @@
-import { Text } from '@/modules/ui-components'
+import { Text } from '@berty/gnonative-ui'
 import React from 'react'
 import { ActivityIndicator, Modal, StyleSheet } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'

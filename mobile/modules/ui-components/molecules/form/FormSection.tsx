@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Spacer, Text } from '../../src'
+import { Spacer, Text } from '@berty/gnonative-ui'
+
 import { Ruller } from '../../atoms'
 
 interface Props {

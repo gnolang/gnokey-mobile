@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Button, ScreenHeader } from '@/modules/ui-components'
+import { ScreenHeader } from '@/modules/ui-components'
+import { Button } from '@berty/gnonative-ui'
 import { importKey, selectAddVaultExistingName, useAppDispatch, useAppSelector } from '@/redux'
 import { useRouter } from 'expo-router'
 import { HomeLayout, Text, Spacer } from '@/modules/gnonative-ui/dist'

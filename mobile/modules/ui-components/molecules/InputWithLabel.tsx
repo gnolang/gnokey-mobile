@@ -1,6 +1,6 @@
 import styled, { useTheme } from 'styled-components/native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import { Text } from '../src'
+import { Text } from '@berty/gnonative-ui'
 
 interface Props {
   label: string

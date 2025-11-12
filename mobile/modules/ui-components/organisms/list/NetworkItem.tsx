@@ -4,7 +4,7 @@ import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeabl
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { Ruller, SwipeEditButton } from '../../atoms'
 import { NetworkMetainfo } from '@/types'
-import { Text } from '../../src'
+import { Text } from '@berty/gnonative-ui'
 
 interface Props {
   network: NetworkMetainfo

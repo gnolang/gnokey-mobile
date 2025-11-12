@@ -2,7 +2,7 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import styled from 'styled-components/native'
 import { Ionicons } from '@expo/vector-icons' // Using Expo icons for checkmark
-import * as Text from '../text'
+import { Text } from '@berty/gnonative-ui'
 
 export interface CheckboxProps {
   label: string

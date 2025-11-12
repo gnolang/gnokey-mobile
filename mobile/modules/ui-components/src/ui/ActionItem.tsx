@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from 'react-native'
-import { Text } from '..'
+import { Text } from '@berty/gnonative-ui'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 interface Props {

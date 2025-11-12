@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { ScreenHeader, ModalConfirm } from '@/modules/ui-components'
-import { Button, HomeLayout, HeroBoxInternal } from '@/modules/gnonative-ui/dist'
+import { ScreenHeader, ModalConfirm } from '@/components'
+import { Button, HomeLayout, HeroBoxInternal } from '@berty/gnonative-ui'
 import { hardReset, selectLoadingReset, useAppDispatch, useAppSelector } from '@/redux'
-import { LeftTopContainer } from '@/modules/ui-components/atoms'
+import { LeftTopContainer } from '@/components'
 
 export default function Page() {
   const router = useRouter()

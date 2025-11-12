@@ -1,23 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity } from 'react-native'
 import { Link, useRouter } from 'expo-router'
-import { Layout } from '@/components/index'
+import { Layout, HorizontalGroup, ScreenHeader, NetworkButtonModal, VaultListItem, TextInputStyled } from '@/components'
 import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances, generateNewPhrase } from '@/redux'
 import { setVaultToEdit, fetchVaults } from '@/redux'
-import {
-  Container,
-  HomeEmptyBox,
-  HomeNotFoundBox,
-  HorizontalGroup,
-  ScreenHeader,
-  NetworkButtonModal,
-  VaultListItem
-} from '@/modules/ui-components'
-import { Text, Spacer, HomeLayout, Button } from '@/modules/gnonative-ui/dist'
+import { Text, Spacer, HomeLayout, Button } from '@berty/gnonative-ui'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { Vault } from '@/types'
-import TextInputStyled from '@/modules/ui-components/organisms/input/TextInputStyled'
+import Container from '@/components/layout/container'
+import { HomeEmptyBox, HomeNotFoundBox } from '@/components'
 
 export default function Page() {
   const isFirstRender = useRef(true)

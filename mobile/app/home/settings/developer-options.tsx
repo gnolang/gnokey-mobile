@@ -1,5 +1,5 @@
-import { ScreenHeader } from '@/modules/ui-components'
-import { Form, HomeLayout, Spacer } from '@/modules/gnonative-ui/dist'
+import { ScreenHeader } from '@/components'
+import { Form, HomeLayout, Spacer } from '@berty/gnonative-ui'
 import { useRouter } from 'expo-router'
 import { Alert, ScrollView } from 'react-native'
 import { hardReset, selectDevMode, toggleDevMode, useAppDispatch, useAppSelector } from '@/redux'

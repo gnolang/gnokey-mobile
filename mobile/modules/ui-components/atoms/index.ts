@@ -1,7 +1,0 @@
-export { default as Ruller } from './Ruller'
-export * from './button'
-export * from './WelcomeSlide'
-export * from './Layout'
-export * from './list'
-export * from './icons'
-export * from './input'

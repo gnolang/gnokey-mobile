@@ -12,9 +12,9 @@ import {
   selectVaultsWithBalances,
   resetLinkState
 } from '@/redux'
-import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem } from '@/modules/ui-components'
-import { HeroBoxLeft, Form } from '@/modules/gnonative-ui/dist'
+import { HeroBoxLeft, Form } from '@berty/gnonative-ui'
 import { Vault } from '@/types'
+import { VaultListItem, ListTemplate, ScreenHeader, NetworkButtonModal } from '@/components'
 
 export default function Page() {
   const navigation = useNavigation()

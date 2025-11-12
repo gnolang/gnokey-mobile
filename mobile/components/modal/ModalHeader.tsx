@@ -1,10 +1,9 @@
-import { Spacer } from '../../modules/ui-components'
-import { Text } from '@berty/gnonative-ui'
-import Icons from 'components/icons'
+import { Spacer, Text } from '@berty/gnonative-ui'
 import React from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import { useTheme } from 'styled-components/native'
+import Icons from '../icons'
 
 export type Props = {
   subtitle?: string

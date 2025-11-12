@@ -1,7 +1,2 @@
 export * from './src'
-export * from './organisms'
-export * from './templates'
 export * from './molecules'
-export * from './atoms'
-export * from './utils/format'
-export * from './utils'

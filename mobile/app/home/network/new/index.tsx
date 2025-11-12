@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { ScreenHeader } from '@/modules/ui-components'
-import { HomeLayout } from '@/modules/gnonative-ui/dist'
-import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
+import { ScreenHeader, NetworkFormType, NetworkForm } from '@/components'
+import { HomeLayout } from '@berty/gnonative-ui'
 import { useAppDispatch, saveChain, setSelectedChain } from '@/redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
@@ -13,7 +12,7 @@ const Page = () => {
   const params = useLocalSearchParams<{ fromScreen: string | 'NewVault' }>()
 
   const [loading, setLoading] = useState(false)
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async (data: NetworkFormType) => {
     if (!data) {
       Alert.alert('No chain provided')
       return

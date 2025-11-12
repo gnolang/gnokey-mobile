@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
-import { OnboardingCarousel, OnboardingFooter, BetaVersionHeader } from '@/modules/ui-components'
-import { HomeLayout } from '@/modules/gnonative-ui/dist'
+import { OnboardingCarousel, OnboardingFooter, BetaVersionHeader } from '@/components'
+import { HomeLayout } from '@berty/gnonative-ui'
 
 export default function Page() {
   const route = useRouter()

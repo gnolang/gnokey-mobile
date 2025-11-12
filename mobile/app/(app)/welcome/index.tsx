@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
 import { selectAction, useAppDispatch, useAppSelector, doSignIn } from '@/redux'
-import { WelcomeBackFooter } from '@/modules/ui-components'
-import { BetaVersionHeader } from '@/modules/ui-components/molecules'
-import { HeroBox, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { HeroBox, HomeLayout } from '@berty/gnonative-ui'
 import { KeyboardAvoidingView, Platform } from 'react-native'
-import { SlideImage } from '@/modules/ui-components/atoms'
 import { useKeyboard } from '@/hooks/useKeyboard'
+import { WelcomeBackFooter, BetaVersionHeader, SlideImage } from '@/components'
 
 export default function Root() {
   const [error, setError] = useState<string | undefined>(undefined)

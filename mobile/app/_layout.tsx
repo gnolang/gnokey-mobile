@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import { Guard } from '@/components/auth/guard'
 import { IndexerProvider, LinkingProvider, ReduxProvider, DatabaseProvider, GnoNativeProvider } from '@/providers'
-import { ThemeProvider } from '@/modules/gnonative-ui/dist'
+import { ThemeProvider } from '@berty/gnonative-ui'
 import { useFonts } from 'expo-font'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 

@@ -7,6 +7,7 @@ import Search from './Search'
 import Profile from './Profile'
 import Gnod from './Gnod'
 import Gnoded from './Gnoded'
+import CopyIcon from './CopyIcon'
 
 const Icons = {
   ArrowLeft,
@@ -17,7 +18,8 @@ const Icons = {
   Search,
   Profile,
   Gnod,
-  Gnoded
+  Gnoded,
+  CopyIcon
 }
 
 export default Icons

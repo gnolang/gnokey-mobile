@@ -1,4 +1,4 @@
-import { Button, Spacer } from '@/modules/gnonative-ui/dist'
+import { Button, Spacer } from '@berty/gnonative-ui'
 import { KeyInfo } from '@gnolang/gnonative'
 
 interface SideMenuAccountItemProps {

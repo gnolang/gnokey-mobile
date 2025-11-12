@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
-import { ScreenHeader } from '@/modules/ui-components'
-import { HomeLayout } from '@/modules/gnonative-ui/dist'
-import { Form, NetworkForm } from '@/modules/ui-components/organisms/NetworkForm'
+import { ScreenHeader, NetworkForm, NetworkFormType } from '@/components'
+import { HomeLayout } from '@berty/gnonative-ui'
 import { selectChainsAvailable, useAppSelector } from '@/redux'
 import { NetworkMetainfo } from '@/types'
 
@@ -35,7 +34,7 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [networkId, chains])
 
-  const onSubmit = async (data: Form) => {
+  const onSubmit = async (data: NetworkFormType) => {
     console.log('TODO: edit', data)
   }
 

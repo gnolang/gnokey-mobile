@@ -4,6 +4,7 @@ import { FormErrorBox } from './FormErrorBox'
 
 export type { FormTextProps, FormLinkProps, FormCheckBoxItemProps, FormButtonProps } from './FormText'
 export type { Props as SectionProps } from './FormSection'
+export { FormItem } from './FormItem'
 
 export const Form = {
   Section,

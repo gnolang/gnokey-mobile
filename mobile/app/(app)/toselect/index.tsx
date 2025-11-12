@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Layout } from '@/components'
+import { Layout, VaultListItem } from '@/components'
 import { fetchBalances, fetchVaults, selectCallback, selectVaults, useAppDispatch, useAppSelector } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { router, useNavigation } from 'expo-router'
 import { FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
-import { VaultListItem } from '@/modules/ui-components'
-import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { Text, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
 import { Vault } from '@/types'
 
 export default function Page() {

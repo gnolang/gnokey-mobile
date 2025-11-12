@@ -1,1 +1,0 @@
-export { TextInputLabel } from './TextInputLabel'

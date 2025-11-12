@@ -1,5 +1,5 @@
-import { ScreenHeader, formatter, FormItem } from '@/modules/ui-components'
-import { Ruller, Button, Spacer, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { ScreenHeader, formatter } from '@/components'
+import { Ruller, Button, Spacer, HomeLayout, FormItem } from '@berty/gnonative-ui'
 import {
   selectTxGasWanted,
   selectVaultToEditWithBalance,

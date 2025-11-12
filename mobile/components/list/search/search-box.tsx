@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icons from '../../icons'
 import { useTheme } from 'styled-components/native'
-import { TextFieldBasic } from '@/modules/ui-components'
+import { TextFieldBasic } from '@/components/input'
 
 type Props = {
   onChangeText: (text: string) => void

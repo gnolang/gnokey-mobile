@@ -1,5 +1,4 @@
-import { CopyIcon, ScreenHeader } from '@/modules/ui-components'
-import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui'
 import {
   existingAccountSelector,
   newAccountSelector,
@@ -10,13 +9,13 @@ import {
   useAppSelector,
   VaultCreationState
 } from '@/redux'
-import { TextCopy } from '@/components'
+import { TextCopy, Icons } from '@/components'
 import { useTheme } from 'styled-components/native'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { LoadingModal } from '@/components/loading'
-import { openFaucet, sliceString } from '@/modules/ui-components'
+import { openFaucet, sliceString, ScreenHeader } from '@/components'
 
 export default function Page() {
   const newAccount = useAppSelector(newAccountSelector)
@@ -75,7 +74,7 @@ export default function Page() {
         <Spacer space={8} />
         <Text.Body style={{ textAlign: 'left' }}>
           {addressBech32 ? sliceString(addressBech32) : 'Loading...'} &nbsp;
-          <CopyIcon />
+          <Icons.CopyIcon />
         </Text.Body>
       </TextCopy>
 

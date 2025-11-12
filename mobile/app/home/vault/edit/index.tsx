@@ -12,14 +12,13 @@ import {
   useAppSelector
 } from '@/redux'
 import { useRouter } from 'expo-router'
-import { Container, ScreenHeader, FormItem } from '@/modules/ui-components'
-import { Text, Form, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui/dist'
-import { InputWithLabel, ModalConfirm } from '@/modules/ui-components/molecules'
-import { CopyIcon, Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
-import { formatter } from '@/modules/ui-components/utils/format'
-import { openFaucet } from '@/modules/ui-components/utils/index'
+import { ScreenHeader, ModalConfirm, openFaucet, formatter } from '@/components'
+import { Text, Form, Spacer, Button, HomeLayout, Ruller } from '@berty/gnonative-ui'
+import { InputWithLabel } from '@/modules/ui-components/molecules'
 import { AntDesign } from '@expo/vector-icons'
-import { useTheme } from 'styled-components/native'
+import styled, { DefaultTheme, useTheme } from 'styled-components/native'
+import { VaultOptionsButton, Icons } from '@/components'
+import { FormItem } from '@berty/gnonative-ui'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -120,7 +119,7 @@ const Page = () => {
           <FormItem
             label="Address"
             copyTextValue={vault.address}
-            endAdornment={<CopyIcon muted />}
+            endAdornment={<Icons.CopyIcon muted />}
             value={<Text.Body>{vault.address}</Text.Body>}
           />
           <Spacer spaceH={4} />
@@ -151,5 +150,10 @@ const Page = () => {
     </>
   )
 }
+
+const Container = styled.View`
+  flex: 1;
+  background-color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.background};
+`
 
 export default Page

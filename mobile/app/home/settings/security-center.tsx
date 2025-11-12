@@ -1,7 +1,7 @@
 import { Alert, Platform, ScrollView } from 'react-native'
 import { useRouter } from 'expo-router'
-import { ScreenHeader } from '@/modules/ui-components'
-import { Form, Spacer, HomeLayout } from '@/modules/gnonative-ui/dist'
+import { ScreenHeader } from '@/components'
+import { Form, Spacer, HomeLayout } from '@berty/gnonative-ui'
 import { enableBiometric, selectBiometricEnabled, useAppDispatch, useAppSelector } from '@/redux'
 
 const Page: React.FC = () => {

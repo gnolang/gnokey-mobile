@@ -21,6 +21,8 @@ export * from './WelcomeSlide'
 export * from './hero'
 export * from './seed-input'
 export * from './vault'
+export * from './ActionItem'
+export * from './SafeAreaView'
 
 export { NetworkFormType } from './NetworkForm'
 

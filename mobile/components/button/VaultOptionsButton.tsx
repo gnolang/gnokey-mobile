@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Pressable } from 'react-native'
 import { useState } from 'react'
-import CustomActionSheet from '../../modules/ui-components/atoms/CustomActionSheet'
+import CustomActionSheet from '../CustomActionSheet'
 
 type Props = {
   onTransfer: () => void

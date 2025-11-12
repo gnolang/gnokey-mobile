@@ -1,6 +1,6 @@
-import { SafeAreaView } from '@/modules/ui-components'
 import React from 'react'
 import styled from 'styled-components/native'
+import { SafeAreaView } from '../SafeAreaView'
 
 const Wrapper = styled.View`
   flex: 1;

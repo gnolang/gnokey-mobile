@@ -1,5 +1,5 @@
 import { Layout } from '@/components'
-import { ActionItem } from '@/modules/ui-components/src/ui/ActionItem'
+import { ActionItem } from '@/components'
 import { View } from 'react-native'
 import Fontisto from '@expo/vector-icons/Fontisto'
 import { useRouter } from 'expo-router'

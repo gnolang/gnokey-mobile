@@ -14,7 +14,7 @@ import {
 import { useRouter } from 'expo-router'
 import { ScreenHeader, ModalConfirm, openFaucet, formatter } from '@/components'
 import { Text, Form, Spacer, Button, HomeLayout, Ruller } from '@berty/gnonative-ui'
-import { InputWithLabel } from '@/modules/ui-components/molecules'
+import { InputWithLabel } from '@/components'
 import { AntDesign } from '@expo/vector-icons'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { VaultOptionsButton, Icons } from '@/components'

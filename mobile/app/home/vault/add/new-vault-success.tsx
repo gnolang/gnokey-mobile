@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router'
-import { Button, HomeLayout, ScreenHeader, Template, Text } from '@/modules/ui-components'
+import { ScreenHeader, Template } from '@/modules/ui-components'
+import { Button, HomeLayout, Text } from '@berty/gnonative-ui'
 import { resetAddVaultState, useAppDispatch } from '@/redux'
 import { useTheme } from 'styled-components/native'
 

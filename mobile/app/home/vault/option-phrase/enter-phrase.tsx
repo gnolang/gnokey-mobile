@@ -1,4 +1,5 @@
-import { Button, Spacer, Text, HomeLayout, ScreenHeader, SeedInputs } from '@/modules/ui-components'
+import { ScreenHeader, SeedInputs } from '@/modules/ui-components'
+import { Text, Button, Spacer, HomeLayout } from '@berty/gnonative-ui'
 import { useState, useRef } from 'react'
 import {
   Alert,

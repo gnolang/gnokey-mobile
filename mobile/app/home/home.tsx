@@ -5,11 +5,7 @@ import { Layout } from '@/components/index'
 import { fetchBalances, useAppDispatch, useAppSelector, selectVaultsWithBalances, generateNewPhrase } from '@/redux'
 import { setVaultToEdit, fetchVaults } from '@/redux'
 import {
-  Button,
-  Text,
   Container,
-  HomeLayout,
-  Spacer,
   HomeEmptyBox,
   HomeNotFoundBox,
   HorizontalGroup,
@@ -17,6 +13,7 @@ import {
   NetworkButtonModal,
   VaultListItem
 } from '@/modules/ui-components'
+import { Text, Spacer, HomeLayout, Button } from '@berty/gnonative-ui'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { useTheme } from 'styled-components/native'
 import { Vault } from '@/types'

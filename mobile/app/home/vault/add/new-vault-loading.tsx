@@ -1,4 +1,5 @@
-import { HomeLayout, ActivityIndicator, ButtonBack, HeroBox, ErrorBox } from '@/modules/ui-components'
+import { ActivityIndicator, ButtonBack, ErrorBox } from '@/modules/ui-components'
+import { HomeLayout, HeroBox } from '@berty/gnonative-ui'
 import {
   registerAccount,
   selectLastProgress,

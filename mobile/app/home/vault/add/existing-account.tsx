@@ -1,8 +1,9 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Button, Text, Spacer, HomeLayout, ScreenHeader } from '@/modules/ui-components'
+import { Button, ScreenHeader } from '@/modules/ui-components'
 import { importKey, selectAddVaultExistingName, useAppDispatch, useAppSelector } from '@/redux'
 import { useRouter } from 'expo-router'
+import { HomeLayout, Text, Spacer } from '@berty/gnonative-ui'
 
 const Page = () => {
   const router = useRouter()

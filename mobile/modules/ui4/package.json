@@ -1,0 +1,44 @@
+{
+    "name": "@berty/gnonative-ui",
+    "version": "0.0.2",
+    "description": "UI component library for React Native",
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepare": "npm run build",
+        "watch": "tsc --watch"
+    },
+    "keywords": [
+        "react-native",
+        "ui",
+        "components",
+        "expo"
+    ],
+    "author": "Iuri Pereira",
+    "license": "MIT",
+    "peerDependencies": {
+        "react": "*",
+        "react-native": "*",
+        "styled-components": "*"
+    },
+    "devDependencies": {
+        "@types/react": "^19.1.13",
+        "react-native": "0.81.4",
+        "styled-components": "^6.1.18",
+        "typescript": "~5.9.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gnolang/gnokey-mobile"
+    },
+    "dependencies": {
+        "react-native-safe-area-context": "^5.6.2"
+    }
+}

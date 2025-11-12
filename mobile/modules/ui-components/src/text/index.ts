@@ -67,7 +67,7 @@ export const ButtonLabel = styled.Text<{ $color?: ButtonColor }>`
   letter-spacing: -0.41px;
   align-self: center;
   text-align: center;
-  color: ${(props) => (props.$color ? props.theme.buttons.label[props.$color] : props.theme.buttons.label.primary)};
+  color: ${(props) => (props.$color ? props.theme.buttons[props.$color].label : props.theme.buttons.primary.label)};
 `
 
 export const ButtonLabelBlack = styled(ButtonLabel)`

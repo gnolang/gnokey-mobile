@@ -19,17 +19,8 @@ import {
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
 import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-native'
-import {
-  Button,
-  FormItem,
-  HomeLayout,
-  ScreenHeader,
-  Spacer,
-  Text,
-  BetaVersionMiniBanner,
-  Ruller,
-  CopyIcon
-} from '@/modules/ui-components'
+import { FormItem, ScreenHeader, BetaVersionMiniBanner, CopyIcon } from '@/modules/ui-components'
+import { Text, Spacer, Ruller, Button, HomeLayout } from '@berty/gnonative-ui'
 
 export default function Page() {
   const dispatch = useAppDispatch()

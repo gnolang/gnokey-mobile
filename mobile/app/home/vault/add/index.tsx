@@ -2,7 +2,8 @@ import { Alert as RNAlert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { useAppDispatch, useAppSelector, createKey, selectPhrase, resetAddVaultState, selectAddVaultName } from '@/redux'
-import { Button, Form, HomeLayout, ScreenHeader, Spacer, NewVaultForm, BetaVersionMiniBanner } from '@/modules/ui-components'
+import { ScreenHeader, NewVaultForm, BetaVersionMiniBanner } from '@/modules/ui-components'
+import { Spacer, Form, Button, HomeLayout } from '@berty/gnonative-ui'
 
 export default function Page() {
   const [error, setError] = useState<string | undefined>(undefined)

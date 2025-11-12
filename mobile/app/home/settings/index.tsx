@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native'
-import { HomeLayout, ScreenHeader, Spacer, ModalConfirm } from '@/modules/ui-components'
-import { Form } from '@/modules/ui-components/molecules'
+import { ScreenHeader, ModalConfirm } from '@/modules/ui-components'
+import { HomeLayout, Form, Spacer } from '@berty/gnonative-ui'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { signOut, useAppDispatch } from '@/redux'

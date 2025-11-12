@@ -1,5 +1,6 @@
 import { useFocusEffect, useRouter } from 'expo-router'
-import { ActivityIndicator, HomeLayout, Spacer, Template, Text } from '@/modules/ui-components'
+import { ActivityIndicator, Template } from '@/modules/ui-components'
+import { Text, Spacer, HomeLayout } from '@berty/gnonative-ui'
 
 export default function Page() {
   const router = useRouter()

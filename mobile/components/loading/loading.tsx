@@ -2,7 +2,7 @@ import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
 import { Layout } from '..'
-import { Spacer, Text } from '@/modules/ui-components'
+import { Spacer, Text } from '@berty/gnonative-ui'
 
 type Props = {
   message: string

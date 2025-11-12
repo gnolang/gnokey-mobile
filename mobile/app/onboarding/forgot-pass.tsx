@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { Button, HeroBoxInternal, HomeLayout, ScreenHeader, ModalConfirm } from '@/modules/ui-components'
+import { ScreenHeader, ModalConfirm } from '@/modules/ui-components'
+import { Button, HomeLayout, HeroBoxInternal } from '@berty/gnonative-ui'
 import { hardReset, selectLoadingReset, useAppDispatch, useAppSelector } from '@/redux'
 import { LeftTopContainer } from '@/modules/ui-components/atoms'
 

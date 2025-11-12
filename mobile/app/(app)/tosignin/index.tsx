@@ -12,7 +12,8 @@ import {
   selectVaultsWithBalances,
   resetLinkState
 } from '@/redux'
-import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem, Form, HeroBoxLeft } from '@/modules/ui-components'
+import { ListTemplate, ScreenHeader, NetworkButtonModal, VaultListItem } from '@/modules/ui-components'
+import { HeroBoxLeft, Form } from '@berty/gnonative-ui'
 import { Vault } from '@/types'
 
 export default function Page() {

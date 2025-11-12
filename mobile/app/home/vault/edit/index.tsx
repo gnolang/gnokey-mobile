@@ -12,8 +12,9 @@ import {
   useAppSelector
 } from '@/redux'
 import { useRouter } from 'expo-router'
-import { Button, Text, Container, Spacer, ScreenHeader, HomeLayout, FormItem, ModalConfirm } from '@/modules/ui-components'
-import { Form, InputWithLabel } from '@/modules/ui-components/molecules'
+import { Container, ScreenHeader, FormItem } from '@/modules/ui-components'
+import { Text, Form, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
+import { InputWithLabel, ModalConfirm } from '@/modules/ui-components/molecules'
 import { CopyIcon, Ruller, VaultOptionsButton } from '@/modules/ui-components/atoms'
 import { formatter } from '@/modules/ui-components/utils/format'
 import { openFaucet } from '@/modules/ui-components/utils/index'

@@ -43,6 +43,7 @@ const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   align-items: center;
   padding-horizontal: 16px;
   border-radius: ${(props) => props.theme.borderRadius || 20}px;
-  background-color: ${(props) => (props.$color ? props.theme.buttons[props.$color] : props.theme.buttons.primary)};
+  background-color: ${(props) =>
+    props.$color ? props.theme.buttons[props.$color].background : props.theme.buttons.primary.background};
   opacity: ${(props) => (props.disabled ? 0.3 : 1)};
 `

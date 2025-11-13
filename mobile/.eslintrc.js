@@ -1,10 +1,13 @@
 // https://docs.expo.dev/guides/using-eslint/
 module.exports = {
   extends: ['expo', 'prettier'],
+  // Ignore built artifacts
+  ignorePatterns: ['/dist/*'],
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
     'no-unused-expressions': 'off',
+    'import/namespace': 'off',
     'import/no-unresolved': [
       'error',
       { ignore: ['@/redux', '^@/modules/.+', '@/components', '@/views', '@/providers', '@/assets', '@/types', '@/hooks'] }

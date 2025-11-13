@@ -1,0 +1,9 @@
+# Ignore build output
+dist/
+build/
+node_modules/
+
+# Optional: ignore coverage, temp, or cache
+coverage/
+.temp/
+.cache/

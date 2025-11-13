@@ -67,7 +67,7 @@ const validateSignTransaction = (queryParams: any, errors: ValidationError[]) =>
           message: 'Transaction must contain fee information'
         })
       }
-    } catch (e) {
+    } catch {
       errors.push({
         field: 'tx',
         message: 'Invalid transaction JSON format'
@@ -186,7 +186,7 @@ const validateRemoteURL = (remote: string, errors: ValidationError[]) => {
         message: `Remote URL must use one of the following protocols: ${allowedProtocols.join(', ')}`
       })
     }
-  } catch (e) {
+  } catch {
     errors.push({
       field: 'remote',
       message: 'Invalid remote URL format'
@@ -204,7 +204,7 @@ const validateCallbackURL = (callback: string, errors: ValidationError[]) => {
         message: 'Invalid callback URL format'
       })
     }
-  } catch (e) {
+  } catch {
     errors.push({
       field: 'callback',
       message: 'Invalid callback URL encoding'

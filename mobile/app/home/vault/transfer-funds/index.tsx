@@ -2,7 +2,7 @@ import { ScreenHeader, TextInputLabel, VaultItem, TextFieldForm } from '@/compon
 import { Button, Spacer, HomeLayout } from '@berty/gnonative-ui'
 import { Text } from '@berty/gnonative-ui'
 import {
-  txGasFeeEstimation,
+  txFeeEstimation,
   selectVaultToEditWithBalance,
   useAppSelector,
   selectTxFormMemo,
@@ -31,7 +31,7 @@ const Page = () => {
   const prepareTransfer = () => {
     if (!vault) return
     try {
-      dispatch(txGasFeeEstimation())
+      dispatch(txFeeEstimation())
       router.push('/home/vault/transfer-funds/confirm')
     } catch (error) {
       console.error('Transfer failed:', error)

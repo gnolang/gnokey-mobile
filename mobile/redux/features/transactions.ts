@@ -1,5 +1,5 @@
 import { ThunkExtra } from '@/providers/redux-provider'
-import { BroadcastTxCommitResponse, Coin, EstimateGasResponse, GnoNativeApi } from '@gnolang/gnonative'
+import { BroadcastTxCommitResponse, Coin, EstimateTxFeesResponse, GnoNativeApi } from '@gnolang/gnonative'
 import { createAsyncThunk, createSlice, RootState } from '@reduxjs/toolkit'
 
 export interface TxState {
@@ -14,7 +14,7 @@ export interface TxState {
   txHash?: string | null
 
   signedTx?: string // signed transaction JSON
-  gasWanted?: bigint // estimated gas wanted
+  txFee?: bigint // estimated transaction fee
 }
 
 const initialState: TxState = {
@@ -29,7 +29,7 @@ const initialState: TxState = {
   txHash: null,
 
   signedTx: undefined,
-  gasWanted: undefined
+  txFee: undefined
 }
 
 export const txSlice = createSlice({
@@ -48,20 +48,20 @@ export const txSlice = createSlice({
     }
   },
   extraReducers(builder) {
-    // txGasFeeEstimation
+    // txFeeEstimation
     builder
-      .addCase(txGasFeeEstimation.fulfilled, (state, action) => {
+      .addCase(txFeeEstimation.fulfilled, (state, action) => {
         state.signedTx = action.payload.txJson
-        state.gasWanted = action.payload.gasWanted
+        state.txFee = action.payload.totalFee!.amount
         state.status = 'success'
       })
-      .addCase(txGasFeeEstimation.pending, (state) => {
+      .addCase(txFeeEstimation.pending, (state) => {
         state.status = 'validating'
         state.error = null
       })
-      .addCase(txGasFeeEstimation.rejected, (state, action) => {
+      .addCase(txFeeEstimation.rejected, (state, action) => {
         state.status = 'error'
-        state.error = action.error.message || 'Gas estimation failed'
+        state.error = action.error.message || 'Fee estimation failed'
       })
     // txBroadcast
     builder
@@ -81,7 +81,7 @@ export const txSlice = createSlice({
       })
   },
   selectors: {
-    selectTxGasWanted: (state) => state.gasWanted,
+    selectTransactionFee: (state) => state.txFee,
     selectTxFormMemo: (state) => state.form.memo,
     selectTxFormAmount: (state) => state.form.amount,
     selectTxFormToAddress: (state) => state.form.toAddress,
@@ -96,7 +96,8 @@ function uint8ArrayToHex(arr: Uint8Array): string {
 }
 
 export const { setTxFormField, resetTxState } = txSlice.actions
-export const { selectTxGasWanted, selectTxFormMemo, selectTxFormAmount, selectTxFormToAddress, selectTxForm } = txSlice.selectors
+export const { selectTransactionFee, selectTxFormMemo, selectTxFormAmount, selectTxFormToAddress, selectTxForm } =
+  txSlice.selectors
 
 interface TxBroadcastProp {
   fromAddress: Uint8Array
@@ -128,11 +129,11 @@ export const txBroadcast = createAsyncThunk<BroadcastTxCommitResponse, TxBroadca
   }
 )
 
-export const txGasFeeEstimation = createAsyncThunk<EstimateGasResponse, void, ThunkExtra>(
-  'tx/gasFeeEstimation',
+export const txFeeEstimation = createAsyncThunk<EstimateTxFeesResponse, void, ThunkExtra>(
+  'tx/feeEstimation',
   async (_, thunkAPI) => {
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
-    console.log('Starting gas fee estimation...')
+    console.log('Starting tx fee estimation...')
 
     const { memo, amount, toAddress, fromAddress } = (thunkAPI.getState() as RootState).tx.form
     console.log('xxx', { fromAddress, toAddress, amount, memo })
@@ -144,7 +145,7 @@ export const txGasFeeEstimation = createAsyncThunk<EstimateGasResponse, void, Th
     console.log('fromAddressUint8Array: ', fromAddressUint8Array)
     const { masterPassword } = (thunkAPI.getState() as RootState).signIn
 
-    console.log('Estimating gas for transfer: ', { fromAddress, toAddress, amount, memo })
+    console.log('Estimating tx fee for transfer: ', { fromAddress, toAddress, amount, memo })
 
     if (!masterPassword) throw new Error('No master password found')
 
@@ -160,12 +161,19 @@ export const txGasFeeEstimation = createAsyncThunk<EstimateGasResponse, void, Th
 
     const res = await gnonative.makeSendTx(toAddressA, [amoun_ugnot], '1000000ugnot', gasWanted, fromAddressUint8Array, memo)
 
-    const DEFAULT_GAS_MARGIN = 110 // 1.1%
+    const DEFAULT_GAS_MARGIN = 110 // 110%
+    const DEFAULT_STORAGE_MARGIN = 100 // 100%
     const updateTx = true
-    const estimateGas = await gnonative.estimateGas(res.txJson, fromAddressUint8Array, DEFAULT_GAS_MARGIN, updateTx)
-    const gasWantedX = estimateGas.gasWanted as bigint
-    console.log('estimateGas  gasWantedX: ', gasWantedX)
-    console.log('estimateGas estimateGas: ', estimateGas.txJson)
-    return estimateGas
+    const fees = await gnonative.estimateTxFees(
+      res.txJson,
+      fromAddressUint8Array,
+      DEFAULT_GAS_MARGIN,
+      DEFAULT_STORAGE_MARGIN,
+      updateTx
+    )
+    const txFee = fees.totalFee!.amount as bigint
+    console.log('estimateTxFees  txFee: ', txFee)
+    console.log('estimateTxFees txJson: ', fees.txJson)
+    return fees
   }
 )

@@ -1,6 +1,6 @@
 import { TouchableOpacity, View } from 'react-native'
-import { Text } from '@berty/gnonative-ui'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { Text } from '@/modules/gnonative-ui/src'
 
 interface Props {
   onPress: () => void

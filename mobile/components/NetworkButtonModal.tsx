@@ -3,7 +3,6 @@ import { TouchableOpacity } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useTheme } from 'styled-components/native'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Text } from '@berty/gnonative-ui'
 import { NetworkSelectionModal } from '.'
 import {
   useAppDispatch,
@@ -14,6 +13,7 @@ import {
   fetchVaults,
   fetchBalances
 } from '@/redux'
+import { Text } from '@/modules/gnonative-ui/src'
 
 const NetworkButtonModal = () => {
   const theme = useTheme()

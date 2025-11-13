@@ -5,7 +5,8 @@ import * as Linking from 'expo-linking'
 import { Vault } from '@/types'
 import { getChainById } from '@/providers/database-provider'
 
-const DEFAULT_GAS_MARGIN = 110 // 1.1%
+const DEFAULT_GAS_MARGIN = 110 // 110%
+const DEFAULT_STORAGE_MARGIN = 100 // 100%
 
 export interface LinkingState {
   chainId?: string
@@ -18,8 +19,8 @@ export interface LinkingState {
   /* The transaction to be signed, in JSON format */
   txInput?: string
   signedTxJson?: string
-  gasWanted?: bigint
-  /* Update the transaction with the new estimated gas wanted value */
+  txFee?: bigint
+  /* Update the transaction with the new estimated gas wanted and gas fee values */
   updateTx?: boolean
   /* The callback URL to return to after each operation */
   callback?: string
@@ -46,7 +47,7 @@ const initialState: LinkingState = {
   hostname: undefined,
   session: undefined,
   session_wanted: false,
-  gasWanted: undefined,
+  txFee: undefined,
   isLoading: false
 }
 
@@ -80,16 +81,16 @@ export const sendAddressToSoliciting = createAsyncThunk<void, { vault: Vault }, 
   }
 )
 
-interface GasEstimationResponse {
+interface FeeEstimationResponse {
   txJson: string
-  gasWanted: bigint
+  txFee: bigint
   signedTxJson: string
 }
 
-// estimateGasWantedAndSign estimates the gas wanted value for the transaction and signs it.
-// If the `update` field is true, the transaction will be updated with the new gas wanted value.
-export const estimateGasWantedAndSign = createAsyncThunk<GasEstimationResponse, void, ThunkExtra>(
-  'linking/estimateGasAndSign',
+// estimateTxFeeAndSign estimates the fee for the transaction and signs it.
+// If the `update` field is true, the transaction will be updated with the new gas wanted and gas fee values.
+export const estimateTxFeeAndSign = createAsyncThunk<FeeEstimationResponse, void, ThunkExtra>(
+  'linking/estimateTxFeeAndSign',
   async (_, thunkAPI) => {
     const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
     const { txInput, keyinfo } = (thunkAPI.getState() as RootState).linking
@@ -106,10 +107,10 @@ export const estimateGasWantedAndSign = createAsyncThunk<GasEstimationResponse, 
     await gnonative.activateAccount(keyinfo.name)
     await gnonative.setPassword(masterPassword, keyinfo.address)
 
-    const { txJson, gasWanted } = await gnonative.estimateGas(txJsonInput, keyinfo?.address, DEFAULT_GAS_MARGIN, true)
-    const { signedTxJson } = await gnonative.signTx(txJson, keyinfo?.address)
+    const fees = await gnonative.estimateTxFees(txJsonInput, keyinfo?.address, DEFAULT_GAS_MARGIN, DEFAULT_STORAGE_MARGIN, true)
+    const { signedTxJson } = await gnonative.signTx(fees.txJson, keyinfo?.address)
 
-    return { txJson, gasWanted, signedTxJson }
+    return { txJson: fees.txJson, txFee: fees.totalFee!.amount, signedTxJson }
   }
 )
 
@@ -182,14 +183,14 @@ export const linkingSlice = createSlice({
     resetLinkState: () => initialState
   },
   extraReducers: (builder) => {
-    builder.addCase(estimateGasWantedAndSign.pending, (state) => {
+    builder.addCase(estimateTxFeeAndSign.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(estimateGasWantedAndSign.rejected, (state) => {
+    builder.addCase(estimateTxFeeAndSign.rejected, (state) => {
       state.isLoading = false
     })
-    builder.addCase(estimateGasWantedAndSign.fulfilled, (state, action) => {
-      state.gasWanted = action.payload.gasWanted
+    builder.addCase(estimateTxFeeAndSign.fulfilled, (state, action) => {
+      state.txFee = action.payload.txFee
       state.signedTxJson = action.payload.signedTxJson
       state.isLoading = false
     })
@@ -223,7 +224,7 @@ export const linkingSlice = createSlice({
     selectSession: (state) => state.session,
     selectSessionWanted: (state) => state.session_wanted,
     selectSignedTx: (state) => state.signedTxJson,
-    selectGasWanted: (state) => state.gasWanted,
+    selectTxFee: (state) => state.txFee,
     selectLinkIsLoading: (state) => state.isLoading
   }
 })
@@ -247,6 +248,6 @@ export const {
   selectSession,
   selectSessionWanted,
   selectSignedTx,
-  selectGasWanted,
+  selectTxFee,
   selectLinkIsLoading
 } = linkingSlice.selectors

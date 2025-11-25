@@ -44,8 +44,9 @@ const ButtonWrapper = styled(TouchableOpacity)<ButtonWrapperProps>`
   align-items: center;
   padding-horizontal: 16px;
   border-radius: ${(props) => props.theme.borderRadius || 20}px;
-  border: 1px solid ${(props) => (props.$color ? props.theme.buttons[props.$color].border : props.theme.buttons.primary.border)};
+  border: 2px solid ${(props) => (props.$color ? props.theme.buttons[props.$color].border : props.theme.buttons.primary.border)};
   background-color: ${(props) =>
     props.$color ? props.theme.buttons[props.$color].background : props.theme.buttons.primary.background};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `
 export default Button

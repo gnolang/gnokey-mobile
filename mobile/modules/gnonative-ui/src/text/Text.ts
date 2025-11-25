@@ -45,12 +45,12 @@ export const H4_Regular = styled.Text`
 //   color: ${(props) => props.theme.colors.black};
 // `
 
-export const Caption = styled.Text<TextProps>`
+export const Caption = styled.Text<TextProps & { color?: string }>`
   font-weight: 400;
   font-size: 13px;
   line-height: 20px;
   letter-spacing: 0.38px;
-  color: ${(props) => props.theme.text.textMuted};
+  color: ${(props) => props.color || props.theme.text.textMuted};
 `
 
 export const Link = styled.Text<TextProps>`
@@ -184,25 +184,29 @@ export const Caption2 = styled(BaseText)`
 `
 
 // iOS Color Variants
-export const Label = styled(BaseText)`
-  font-size: 17px;
-  font-weight: ${(props) => props.weight || '400'};
-  line-height: 22px;
-  letter-spacing: -0.41px;
-  color: ${(props) => props.color || '#000000'};
+
+/**
+ * Label component for form fields
+ */
+export const Label = styled.Text`
+  font-size: ${(props) => props.theme.fonts.size.sm}px;
+  font-family: ${(props) => props.theme.fonts.family.semibold};
+  color: ${(props) => props.theme.components.input.label};
+  font-weight: 600;
+  margin-bottom: 8px;
 `
 
-export const SecondaryLabel = styled(Label)`
+export const SecondaryLabel = styled(Label)<{ color?: string }>`
   color: ${(props) => props.color || '#3C3C43'};
   opacity: 0.6;
 `
 
-export const TertiaryLabel = styled(Label)`
+export const TertiaryLabel = styled(Label)<{ color?: string }>`
   color: ${(props) => props.color || '#3C3C43'};
   opacity: 0.3;
 `
 
-export const QuaternaryLabel = styled(Label)`
+export const QuaternaryLabel = styled(Label)<{ color?: string }>`
   color: ${(props) => props.color || '#3C3C43'};
   opacity: 0.18;
 `

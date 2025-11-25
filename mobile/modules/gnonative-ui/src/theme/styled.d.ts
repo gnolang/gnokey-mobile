@@ -9,6 +9,34 @@ declare module 'styled-components/native' {
   export interface DefaultTheme {
     borderRadius: number
 
+    fonts: {
+      family: {
+        regular: string
+        medium: string
+        semibold: string
+        bold: string
+      }
+      size: {
+        xs: number
+        sm: number
+        base: number
+        lg: number
+        xl: number
+        xxl: number
+      }
+      lineHeight: {
+        tight: number
+        normal: number
+        relaxed: number
+      }
+    }
+
+    components: {
+      input: {
+        label: string
+      }
+    }
+
     error: { background: string; text: string }
     success: { background: string; text: string }
 

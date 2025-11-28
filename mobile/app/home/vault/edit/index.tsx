@@ -19,6 +19,7 @@ import { AntDesign } from '@expo/vector-icons'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { VaultOptionsButton, Icons } from '@/components'
 import { FormItem } from '@berty/gnonative-ui'
+import Clipboard from '@react-native-clipboard/clipboard'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -59,6 +60,59 @@ const Page = () => {
       Alert.alert('Error', `Failed to update vault: ${error.message}`)
       console.error('Update vault error:', error)
     }
+  }
+
+  // Get the command from the clipboard (from the gnoweb help page), parse and return an objects with the fields.
+  // If the text on the clipboard is can't be parsed as a command, return null.
+  const parseCommand = async () => {
+    const command = await Clipboard.getString()
+    let pkgPath:string
+    let func:string
+    let allArgs:string
+    let send:string
+    let chainId:string
+    let remote:string
+    let address:string
+
+    // Try the "Fast" format
+    const commandRegex = /gnokey maketx call -pkgpath "([^"]+)" -func "([^"]+)" (.*)-gas-fee \w+ -gas-wanted \w+ -send "([^"]*)" -broadcast -chainid "([^"]+)" -remote "([^"]+)" (\w+)/g
+    const commandMatch = commandRegex.exec(command)
+    if (commandMatch) {
+      pkgPath = commandMatch![1]
+      func = commandMatch![2]
+      allArgs = commandMatch![3]
+      send = commandMatch![4]
+      chainId = commandMatch![5]
+      remote = commandMatch![6]
+      address = commandMatch![7]
+    } else {
+      // Try the "Full Security" format
+      const commandRegex1 = /gnokey maketx call -pkgpath "([^"]+)" -func "([^"]+)" (.*)-gas-fee \w+ -gas-wanted \w+ -send "([^"]*)" (\w+) > call.tx\ngnokey sign -tx-path call.tx -chainid "([^"]+)"/g
+      const commandRegex2 = /gnokey broadcast -remote "([^"]+)"/g
+      const commandMatch1 = commandRegex1.exec(command)
+      const commandMatch2 = commandRegex2.exec(command)
+      if (commandMatch1 && commandMatch2) {
+        pkgPath = commandMatch1![1]
+        func = commandMatch1![2]
+        allArgs = commandMatch1![3]
+        send = commandMatch1![4]
+        address = commandMatch1![5]
+        remote = commandMatch2![1]
+        chainId = commandMatch1![6]
+      } else {
+        return null
+      }
+    }
+
+    // Get the args list
+    const argsRegex = /-args "([^"]*)" /g
+    let args:string[] = []
+    let match
+    while ((match = argsRegex.exec(allArgs)) !== null) {
+      args.push(match[1])
+    }
+
+    return { pkgPath, func, args, send, chainId, remote, address }
   }
 
   const refreshBalance = async () => {

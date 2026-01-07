@@ -4,6 +4,10 @@ Gnokey Mobile is a mobile (D)app that helps users manage their Gnoland keys and 
 
 ## How to install it?
 
+**The current version of Gnokey Mobile is functional but work in progress. It stills needs a security review, so don't use it yet for real assets.**
+
+Please try it and [https://github.com/gnolang/gnokey-mobile/issues/new/choose](send feedback).
+
 * Android: [Google Play](https://play.google.com/store/apps/details?id=land.gno.keymanager.android)
 * iOS: [TestFlight](https://testflight.apple.com/join/akbJBUhw)
 

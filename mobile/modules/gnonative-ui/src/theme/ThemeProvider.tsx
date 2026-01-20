@@ -53,17 +53,17 @@ const defaultTheme: DefaultTheme = {
       border: 'transparent',
       label: '#000000'
     },
-    tertirary: {
-      background: '#4c8ae7',
-      border: 'transparent',
-      label: '#000000'
+    tertiary: {
+      background: 'transparent',
+      border: '#007AFF',
+      label: '#007AFF'
     },
     danger: {
-      background: '#FF4647',
+      background: '#FFE5E6',
       border: 'transparent',
       label: '#FFFFFF'
     },
-    dangersecondary: {
+    dangerSecondary: {
       background: '#E5E5E5',
       border: 'transparent',
       label: '#FF4647'
@@ -72,9 +72,9 @@ const defaultTheme: DefaultTheme = {
     label: {
       primary: '#FFFFFF',
       secondary: '#007AFF',
-      tertirary: '#000000',
+      tertiary: '#000000',
       danger: '#ffffff',
-      dangersecondary: '#FF4647'
+      dangerSecondary: '#FF4647'
     }
   }
 }

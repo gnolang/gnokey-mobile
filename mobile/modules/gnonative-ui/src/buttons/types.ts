@@ -1,1 +1,1 @@
-export type ButtonColor = 'primary' | 'secondary' | 'tertirary' | 'danger' | 'dangersecondary'
+export type ButtonColor = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'dangerSecondary'

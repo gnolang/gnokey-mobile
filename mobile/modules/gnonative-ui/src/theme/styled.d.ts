@@ -43,9 +43,9 @@ declare module 'styled-components/native' {
     buttons: {
       primary: ButtonStyles
       secondary: ButtonStyles
-      tertirary: ButtonStyles
+      tertiary: ButtonStyles
       danger: ButtonStyles
-      dangersecondary: ButtonStyles
+      dangerSecondary: ButtonStyles
     }
 
     textinputs: {

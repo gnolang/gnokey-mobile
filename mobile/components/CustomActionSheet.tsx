@@ -36,7 +36,7 @@ const CustomActionSheet: React.FC<CustomActionSheetProps> = ({ visible, options,
             {options.map((option, index) => (
               <Button
                 key={index}
-                color={option.isDestructive ? 'dangersecondary' : 'secondary'}
+                color={option.isDestructive ? 'dangerSecondary' : 'secondary'}
                 onPress={() => handleOptionPress(option)}
               >
                 {option.text}

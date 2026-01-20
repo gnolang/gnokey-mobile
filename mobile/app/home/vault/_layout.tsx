@@ -66,6 +66,7 @@ export default function VaultModalLayout() {
         }}
       />
       <Stack.Screen name="command/success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
+      <Stack.Screen name="command/signed-tx" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
     </Stack>
   )
 }

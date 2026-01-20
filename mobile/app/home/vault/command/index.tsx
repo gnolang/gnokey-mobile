@@ -29,7 +29,7 @@ export default function Modal() {
   const onSignOnlyPress = async () => {
     try {
       await dispatch(signTxCommand({ broadcast: false })).unwrap()
-      router.replace('/home/vault/command/success?broadcast=false')
+      router.replace('/home/vault/command/signed-tx')
     } catch (error) {
       console.error('Error signing transaction:', error)
     }

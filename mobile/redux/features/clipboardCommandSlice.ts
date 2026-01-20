@@ -8,6 +8,7 @@ import { selectVaultToEditWithBalance, selectMasterPassword } from '@/redux'
 export interface ClipboardCommandState {
   parsedCommand: ParsedCommand | null
   estimatedTxCommand: EstimateTxFeesResponse | null
+  signedTx: string | null
   loading?: string
   error: string | null
 }
@@ -15,6 +16,7 @@ export interface ClipboardCommandState {
 const initialState: ClipboardCommandState = {
   parsedCommand: null,
   estimatedTxCommand: null,
+  signedTx: null,
   loading: undefined,
   error: null
 }
@@ -29,6 +31,7 @@ export const clipboardCommandSlice = createSlice({
     dismissCommand: (state) => {
       state.parsedCommand = null
       state.estimatedTxCommand = null
+      state.signedTx = null
       state.error = null
     }
   },
@@ -37,6 +40,7 @@ export const clipboardCommandSlice = createSlice({
     builder
       // signTxCommand:
       .addCase(signTxCommand.fulfilled, (state, action) => {
+        state.signedTx = action.payload
         state.loading = undefined
       })
       .addCase(signTxCommand.rejected, (state, action) => {
@@ -64,7 +68,7 @@ export const clipboardCommandSlice = createSlice({
   }
 })
 
-export const signTxCommand = createAsyncThunk<void, { broadcast: boolean }, ThunkExtra>(
+export const signTxCommand = createAsyncThunk<string | null, { broadcast: boolean }, ThunkExtra>(
   'clipboardCommand/signTxCommand',
   async ({ broadcast }, { getState, rejectWithValue, extra }) => {
     try {
@@ -87,6 +91,11 @@ export const signTxCommand = createAsyncThunk<void, { broadcast: boolean }, Thun
       const { signedTxJson } = await gnonative.signTx(extimatedTx.txJson, vault.keyInfo.address)
       console.log('Signed tx: ', signedTxJson)
 
+      if (!broadcast) {
+        // Return signed transaction without broadcasting
+        return signedTxJson
+      }
+
       let res: BroadcastTxCommitResponse | null = null
       for await (res of await gnonative.broadcastTxCommit(signedTxJson)) {
         console.log('Broadcast result: ', res)
@@ -95,7 +104,7 @@ export const signTxCommand = createAsyncThunk<void, { broadcast: boolean }, Thun
         throw new Error('No response from broadcastTxCommit')
       }
 
-      return
+      return null
     } catch (error: any) {
       console.error('Error in signTxCommand:', error)
       return rejectWithValue(error.message)
@@ -151,3 +160,5 @@ export const selectEstimatedTxCommandValue = (state: RootState) => state.clipboa
 export const selectEstimatedTxCommand = (state: RootState) => state.clipboardCommand.estimatedTxCommand
 
 export const selectClipboardCommandLoading = (state: RootState) => state.clipboardCommand.loading
+
+export const selectClipboardSignedTx = (state: RootState) => state.clipboardCommand.signedTx

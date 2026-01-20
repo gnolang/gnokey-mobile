@@ -56,6 +56,8 @@ const Page = () => {
       }
     >
       <ScrollView style={styles.container}>
+        <Spacer space={24} />
+
         <Text.Caption>
           The transaction was signed successfully. You can copy, share, or download the signed transaction below.
         </Text.Caption>

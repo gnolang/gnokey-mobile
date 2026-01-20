@@ -2,6 +2,15 @@
 
 Gnokey Mobile is a mobile (D)app that helps users manage their Gnoland keys and sign their (D)app transactions initiated from other Gnoland mobile (D)apps.
 
+## How to install it?
+
+**The current version of Gnokey Mobile is functional but work in progress. It stills needs a security review, so don't use it yet for real assets.**
+
+Please try it and [send feedback](https://github.com/gnolang/gnokey-mobile/issues/new/choose).
+
+* Android: [Google Play](https://play.google.com/store/apps/details?id=land.gno.keymanager.android)
+* iOS: [TestFlight](https://testflight.apple.com/join/akbJBUhw)
+
 ## What problem does it solve?
 
 It allows Gnoland (D)app builders to offload the burden of having to build inside their (D)apps the functionalities of private key management and transaction signing, including the related security mechanisms.

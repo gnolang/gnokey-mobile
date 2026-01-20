@@ -2,11 +2,13 @@ import { Alert } from 'react-native'
 import { useState } from 'react'
 import {
   deleteVault,
+  estimateTxCommand,
   fetchBalances,
   fetchVaults,
   selectCurrentChain,
   selectDevMode,
   selectVaultToEditWithBalance,
+  setParsedCommand,
   updateVault,
   useAppDispatch,
   useAppSelector
@@ -19,6 +21,8 @@ import { AntDesign } from '@expo/vector-icons'
 import styled, { DefaultTheme, useTheme } from 'styled-components/native'
 import { VaultOptionsButton, Icons } from '@/components'
 import { FormItem } from '@berty/gnonative-ui'
+import * as Clipboard from 'expo-clipboard'
+import { parseCommand } from '@/modules/utils/commandParser'
 
 const Page = () => {
   const dispatch = useAppDispatch()
@@ -73,6 +77,20 @@ const Page = () => {
     }
   }
 
+  const onPasteGnokeyCommand = async () => {
+    const text = await Clipboard.getStringAsync()
+    if (text) {
+      const parsed = parseCommand(text)
+      if (parsed) {
+        dispatch(setParsedCommand(parsed))
+        dispatch(estimateTxCommand())
+        router.navigate({ pathname: '/home/vault/command' })
+      } else {
+        Alert.alert("Please copy a valid Gnokey command and try again. \nEg: 'gnokey maketx call ...'")
+      }
+    }
+  }
+
   if (!vault) {
     return (
       <Container>
@@ -99,6 +117,7 @@ const Page = () => {
                 onTransfer={() => router.navigate({ pathname: '/home/vault/transfer-funds' })}
                 onDelete={() => setShowDeleteModal(true)}
                 onRefreshBalance={refreshBalance}
+                onPasteGnokeyCommand={onPasteGnokeyCommand}
               />
             }
           />

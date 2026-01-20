@@ -64,7 +64,7 @@ export default function Page() {
   }
 
   const onChangeAccountHandler = async (vault: Vault) => {
-    await dispatch(setVaultToEdit({ vault }))
+    await dispatch(setVaultToEdit(vault))
     route.push('/home/vault/edit')
   }
 

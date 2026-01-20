@@ -4,9 +4,7 @@ import { GnoNativeApi, KeyInfo } from '@gnolang/gnonative'
 import * as Linking from 'expo-linking'
 import { Vault } from '@/types'
 import { getChainById } from '@/providers/database-provider'
-
-const DEFAULT_GAS_MARGIN = 110 // 110%
-const DEFAULT_STORAGE_MARGIN = 100 // 100%
+import { DEFAULT_GAS_MARGIN, DEFAULT_STORAGE_MARGIN } from '@/modules/utils/transactions'
 
 export interface LinkingState {
   chainId?: string
@@ -108,6 +106,7 @@ export const estimateTxFeeAndSign = createAsyncThunk<FeeEstimationResponse, void
     await gnonative.setPassword(masterPassword, keyinfo.address)
 
     const fees = await gnonative.estimateTxFees(txJsonInput, keyinfo?.address, DEFAULT_GAS_MARGIN, DEFAULT_STORAGE_MARGIN, true)
+    console.log('xxxx2: ', fees.txJson)
     const { signedTxJson } = await gnonative.signTx(fees.txJson, keyinfo?.address)
 
     return { txJson: fees.txJson, txFee: fees.totalFee!.amount, signedTxJson }

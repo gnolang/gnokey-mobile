@@ -4,8 +4,10 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@berty/gnonative-ui": ["./modules/gnonative-ui/src"],
+      "@berty/gnonative-ui/*": ["./modules/gnonative-ui/src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "modules/gnonative-ui/src/**/*"]
 }

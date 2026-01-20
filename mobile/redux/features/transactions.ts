@@ -136,7 +136,6 @@ export const txFeeEstimation = createAsyncThunk<EstimateTxFeesResponse, void, Th
     console.log('Starting tx fee estimation...')
 
     const { memo, amount, toAddress, fromAddress } = (thunkAPI.getState() as RootState).tx.form
-    console.log('xxx', { fromAddress, toAddress, amount, memo })
 
     console.log('toAddressX: ', toAddress)
     const toAddressA = await gnonative.addressFromBech32(toAddress)

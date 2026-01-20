@@ -18,10 +18,11 @@ import {
   selectLinkIsLoading
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
-import { ScrollView, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { ScrollView, View, ActivityIndicator } from 'react-native'
 import { FormItem } from '@berty/gnonative-ui'
 import { Text, Spacer, Ruller, Button, HomeLayout } from '@berty/gnonative-ui'
 import { Icons, ScreenHeader, BetaVersionMiniBanner, formatter } from '@/components'
+import { Collapsable } from '@/components/form'
 
 export default function Page() {
   const dispatch = useAppDispatch()
@@ -80,8 +81,6 @@ export default function Page() {
   }, [txInput, keyInfo, gnonativeReady])
 
   const signTxAndReturnToRequester = async () => {
-    console.log('signing the tx', keyInfo)
-
     if (!txInput || !keyInfo) throw new Error('No transaction input or keyInfo found.')
     if (!callback) throw new Error('No callback found.')
     if (!signedTx) throw new Error('No signed Tx found.')
@@ -114,8 +113,6 @@ export default function Page() {
         header={<ScreenHeader title="Approval Request" />}
         footer={
           <View style={{ width: '100%' }}>
-            <BetaVersionMiniBanner />
-            <Spacer />
             <Button color="primary" onPress={signTxAndReturnToRequester} loading={isLoading} disabled={!signedTx}>
               {signedTx ? 'Approve' : 'Loading...'}
             </Button>
@@ -174,7 +171,11 @@ export default function Page() {
                 value={<Text.Json style={{ textAlign: 'left' }}>{remote}</Text.Json>}
               />
               <Ruller />
-              <HiddenGroup>
+              <Spacer />
+              <BetaVersionMiniBanner />
+              <Spacer />
+              <Collapsable>
+                <Ruller />
                 <FormItem
                   label="Raw Tx"
                   labelStyle={{ minWidth: 120 }}
@@ -202,35 +203,11 @@ export default function Page() {
                     )
                   }
                 />
-              </HiddenGroup>
+              </Collapsable>
             </ScrollView>
           </>
         </>
       </HomeLayout>
-    </>
-  )
-}
-
-const HiddenGroup = ({ children }: React.PropsWithChildren) => {
-  const [visible, setVisible] = useState(false)
-
-  if (!visible) {
-    return (
-      <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text.Body>Show more details...</Text.Body>
-      </TouchableOpacity>
-    )
-  }
-
-  return (
-    <>
-      {children}
-
-      <Ruller />
-
-      <TouchableOpacity onPress={() => setVisible(false)} style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text.Body>Hide details</Text.Body>
-      </TouchableOpacity>
     </>
   )
 }

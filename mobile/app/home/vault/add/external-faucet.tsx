@@ -1,4 +1,4 @@
-import { Text, Spacer, Button, HomeLayout } from '@/modules/gnonative-ui'
+import { Text, Spacer, Button, HomeLayout } from '@berty/gnonative-ui'
 import {
   existingAccountSelector,
   newAccountSelector,

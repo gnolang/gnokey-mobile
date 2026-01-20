@@ -57,6 +57,14 @@ export default function VaultModalLayout() {
       <Stack.Screen name="transfer-funds/index" options={{ ...defaultOptions }} />
       <Stack.Screen name="transfer-funds/confirm" options={{ ...defaultOptions }} />
       <Stack.Screen name="transfer-funds/transfer-success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
+
+      <Stack.Screen
+        name="command/index"
+        options={{
+          title: 'Approval Request',
+          presentation: 'modal'
+        }}
+      />
     </Stack>
   )
 }

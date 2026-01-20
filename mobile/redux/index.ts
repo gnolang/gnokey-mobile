@@ -19,7 +19,9 @@ import {
   SettingsState,
   vaultBalanceSlice,
   txSlice,
-  TxState
+  TxState,
+  clipboardCommandSlice,
+  ClipboardCommandState
 } from '@/redux/features'
 import { BalanceState, combineSlices, configureStore } from '@reduxjs/toolkit'
 
@@ -33,7 +35,8 @@ export const rootReducer = combineSlices({
   [sessionKeySlice.name]: sessionKeySlice.reducer,
   [settingsSlice.name]: settingsSlice.reducer,
   [vaultBalanceSlice.name]: vaultBalanceSlice.reducer,
-  [txSlice.name]: txSlice.reducer
+  [txSlice.name]: txSlice.reducer,
+  [clipboardCommandSlice.name]: clipboardCommandSlice.reducer
 })
 
 export type RootState = {
@@ -47,6 +50,7 @@ export type RootState = {
   settings: SettingsState
   vaultBalance: BalanceState
   tx: TxState
+  clipboardCommand: ClipboardCommandState
 }
 
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector

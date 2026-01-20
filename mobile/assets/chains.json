@@ -13,9 +13,9 @@
     "faucetPortalUrl": "https://faucet.gno.land"
   },
   {
-    "chainId": "test8",
-    "chainName": "Testnet 8",
-    "rpcUrl": "https://rpc.test8.testnets.gno.land",
+    "chainId": "test9",
+    "chainName": "Testnet 9",
+    "rpcUrl": "https://rpc.test9.testnets.gno.land",
     "faucetUrl": "",
     "faucetPortalUrl": "https://faucet.gno.land"
   }

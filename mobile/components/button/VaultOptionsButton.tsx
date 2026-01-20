@@ -7,11 +7,12 @@ type Props = {
   onTransfer: () => void
   onDelete: () => void
   onRefreshBalance: () => void
+  onPasteGnokeyCommand: () => void
   isDevMode?: boolean
 }
 
 const VaultOptionsButton = (props: Props) => {
-  const { onTransfer, onDelete, onRefreshBalance, isDevMode } = props
+  const { onTransfer, onDelete, onRefreshBalance, onPasteGnokeyCommand, isDevMode } = props
   const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   const buildOptions = () => {
@@ -21,6 +22,10 @@ const VaultOptionsButton = (props: Props) => {
         onPress: onRefreshBalance,
         isCancel: false,
         isDestructive: false
+      },
+      {
+        text: 'Paste Gnokey command',
+        onPress: onPasteGnokeyCommand
       }
     ]
 

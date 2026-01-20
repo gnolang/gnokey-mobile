@@ -15,15 +15,21 @@ const initialState: VaultEditState = {
 export const vaultEditSlice = createSlice({
   name: 'vaultEdit',
   initialState,
-  reducers: {
-    setVaultToEdit: (state, action) => {
-      state.vaultToEdit = action.payload.vault
-    }
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(setVaultToEdit.fulfilled, (state, action) => {
+      state.vaultToEdit = action.payload
+    })
   },
-  extraReducers: (builder) => {},
   selectors: {
     selectVaultToEdit: (state) => state.vaultToEdit
   }
+})
+
+export const setVaultToEdit = createAsyncThunk<Vault, Vault, ThunkExtra>('vault/setVaultToEdit', async (vault, thunkAPI) => {
+  const gnonative = thunkAPI.extra.gnonative as GnoNativeApi
+  await gnonative.activateAccount(vault.address)
+  return vault
 })
 
 interface DeleteVaultParam {
@@ -59,8 +65,6 @@ export const updateVault = createAsyncThunk<boolean, UpdateVaultParam, ThunkExtr
     return true
   }
 )
-
-export const { setVaultToEdit } = vaultEditSlice.actions
 
 export const { selectVaultToEdit } = vaultEditSlice.selectors
 

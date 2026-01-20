@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   StyleSheet
 } from 'react-native'
-import Clipboard from '@react-native-clipboard/clipboard'
+import Clipboard from 'expo-clipboard'
 import { useAppDispatch, setPhrase, resetAddVaultState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 import styled from 'styled-components/native'
@@ -31,7 +31,7 @@ export default function Page() {
   })
 
   const pasteClipboard = async () => {
-    const v = await Clipboard.getString()
+    const v = await Clipboard.getStringAsync()
     dispatch(setPhrase(v))
 
     if (v.length > 0 && v.split(' ').length === 24) {

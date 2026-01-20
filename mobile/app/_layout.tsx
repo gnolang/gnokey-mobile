@@ -4,6 +4,7 @@ import { IndexerProvider, LinkingProvider, ReduxProvider, DatabaseProvider, GnoN
 import { ThemeProvider } from '@berty/gnonative-ui'
 import { useFonts } from 'expo-font'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 // Extend the BigInt interface to include toJSON
 declare global {
@@ -28,28 +29,30 @@ export default function AppLayout() {
   }
 
   return (
-    <DatabaseProvider>
-      <GnoNativeProvider>
-        <IndexerProvider>
-          <ReduxProvider>
-            <KeyboardProvider>
-              <ThemeProvider>
-                <LinkingProvider>
-                  <Guard>
-                    <Stack
-                      screenOptions={{
-                        headerShown: false,
-                        headerLargeTitle: true,
-                        headerBackVisible: false
-                      }}
-                    />
-                  </Guard>
-                </LinkingProvider>
-              </ThemeProvider>
-            </KeyboardProvider>
-          </ReduxProvider>
-        </IndexerProvider>
-      </GnoNativeProvider>
-    </DatabaseProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <DatabaseProvider>
+        <GnoNativeProvider>
+          <IndexerProvider>
+            <ReduxProvider>
+              <KeyboardProvider>
+                <ThemeProvider>
+                  <LinkingProvider>
+                    <Guard>
+                      <Stack
+                        screenOptions={{
+                          headerShown: false,
+                          headerLargeTitle: true,
+                          headerBackVisible: false
+                        }}
+                      />
+                    </Guard>
+                  </LinkingProvider>
+                </ThemeProvider>
+              </KeyboardProvider>
+            </ReduxProvider>
+          </IndexerProvider>
+        </GnoNativeProvider>
+      </DatabaseProvider>
+    </GestureHandlerRootView>
   )
 }

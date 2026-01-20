@@ -26,12 +26,22 @@ export default function Modal() {
     router.back()
   }
 
-  const onSignOnlyPress = () => {
-    dispatch(signTxCommand({ broadcast: false }))
+  const onSignOnlyPress = async () => {
+    try {
+      await dispatch(signTxCommand({ broadcast: false })).unwrap()
+      router.replace('/home/vault/command/success?broadcast=false')
+    } catch (error) {
+      console.error('Error signing transaction:', error)
+    }
   }
 
-  const onSignAndBroadcastPress = () => {
-    dispatch(signTxCommand({ broadcast: true }))
+  const onSignAndBroadcastPress = async () => {
+    try {
+      await dispatch(signTxCommand({ broadcast: true })).unwrap()
+      router.replace('/home/vault/command/success?broadcast=true')
+    } catch (error) {
+      console.error('Error broadcasting transaction:', error)
+    }
   }
 
   return (

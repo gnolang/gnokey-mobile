@@ -65,6 +65,7 @@ export default function VaultModalLayout() {
           presentation: 'modal'
         }}
       />
+      <Stack.Screen name="command/success" options={{ ...defaultOptions, title: '', headerBackVisible: false }} />
     </Stack>
   )
 }

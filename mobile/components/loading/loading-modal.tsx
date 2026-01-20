@@ -4,7 +4,7 @@ import { ActivityIndicator, Modal, StyleSheet } from 'react-native'
 import styled, { useTheme } from 'styled-components/native'
 
 type Props = {
-  visible: boolean
+  visible?: boolean
   message?: string
 }
 

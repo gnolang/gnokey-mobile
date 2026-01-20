@@ -9,7 +9,7 @@ import {
 import { View } from 'react-native'
 import { Text, Spacer, Ruller, FormItem, Button } from '@berty/gnonative-ui'
 import { ScrollView } from 'react-native-gesture-handler'
-import { BetaVersionMiniBanner, Collapsable, formatter, Icons } from '@/components'
+import { BetaVersionMiniBanner, Collapsable, formatter, Icons, LoadingModal } from '@/components'
 import { useRouter } from 'expo-router'
 import { useAppDispatch } from '@/redux'
 import { LoadingSkeleton } from '@/components/skeleton'
@@ -30,6 +30,10 @@ export default function Modal() {
     dispatch(signTxCommand({ broadcast: false }))
   }
 
+  const onSignAndBroadcastPress = () => {
+    dispatch(signTxCommand({ broadcast: true }))
+  }
+
   return (
     <HomeLayout
       header={null}
@@ -40,12 +44,18 @@ export default function Modal() {
               style={{ width: '48%', height: 56 }}
               color="secondary"
               onPress={onSignOnlyPress}
-              disabled={loading}
-              loading={loading}
+              disabled={Boolean(loading)}
+              loading={Boolean(loading)}
             >
               Sign Only
             </Button>
-            <Button style={{ width: '48%', height: 56 }} color="primary" onPress={onCancel} disabled={loading} loading={loading}>
+            <Button
+              style={{ width: '48%', height: 56 }}
+              color="primary"
+              onPress={onSignAndBroadcastPress}
+              disabled={Boolean(loading)}
+              loading={Boolean(loading)}
+            >
               Sign and Broadcast
             </Button>
           </View>
@@ -109,6 +119,7 @@ export default function Modal() {
           </Collapsable>
         </>
       </ScrollView>
+      <LoadingModal visible={Boolean(loading)} message={loading || 'Loading...'} />
     </HomeLayout>
   )
 }

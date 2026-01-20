@@ -1,21 +1,21 @@
 import { ParsedCommand } from '@/modules/utils/commandParser'
 import { DEFAULT_GAS_MARGIN, DEFAULT_STORAGE_MARGIN } from '@/modules/utils/transactions'
 import { ThunkExtra } from '@/providers/redux-provider'
-import { EstimateTxFeesResponse, GnoNativeApi } from '@gnolang/gnonative'
+import { BroadcastTxCommitResponse, EstimateTxFeesResponse, GnoNativeApi } from '@gnolang/gnonative'
 import { createSlice, createAsyncThunk, PayloadAction, RootState } from '@reduxjs/toolkit'
 import { selectVaultToEditWithBalance, selectMasterPassword } from '@/redux'
 
 export interface ClipboardCommandState {
   parsedCommand: ParsedCommand | null
   estimatedTxCommand: EstimateTxFeesResponse | null
-  loading?: boolean
+  loading?: string
   error: string | null
 }
 
 const initialState: ClipboardCommandState = {
   parsedCommand: null,
   estimatedTxCommand: null,
-  loading: false,
+  loading: undefined,
   error: null
 }
 
@@ -37,29 +37,29 @@ export const clipboardCommandSlice = createSlice({
     builder
       // signTxCommand:
       .addCase(signTxCommand.fulfilled, (state, action) => {
-        state.loading = false
+        state.loading = undefined
       })
       .addCase(signTxCommand.rejected, (state, action) => {
         state.error = action.payload as string
-        state.loading = false
+        state.loading = undefined
       })
-      .addCase(signTxCommand.pending, (state) => {
+      .addCase(signTxCommand.pending, (state, action) => {
         state.error = null
-        state.loading = true
+        state.loading = action.meta.arg.broadcast ? 'Signing and broadcasting transaction...' : 'Signing transaction...'
       })
       // estimateTxCommand:
       .addCase(estimateTxCommand.fulfilled, (state, action) => {
         state.estimatedTxCommand = action.payload
         state.error = null
-        state.loading = false
+        state.loading = undefined
       })
       .addCase(estimateTxCommand.rejected, (state, action) => {
         state.error = action.payload as string
-        state.loading = false
+        state.loading = undefined
       })
       .addCase(estimateTxCommand.pending, (state) => {
         state.error = null
-        state.loading = true
+        state.loading = 'Estimating transaction fees...'
       })
   }
 })
@@ -87,13 +87,13 @@ export const signTxCommand = createAsyncThunk<void, { broadcast: boolean }, Thun
       const { signedTxJson } = await gnonative.signTx(extimatedTx.txJson, vault.keyInfo.address)
       console.log('Signed tx: ', signedTxJson)
 
-      // let res: BroadcastTxCommitResponse | null = null
-      // for await (res of await gnonative.broadcastTxCommit(signedTxJson)) {
-      //   console.log('Broadcast result: ', res)
-      // }
-      // if (!res) {
-      //   throw new Error('No response from broadcastTxCommit')
-      // }
+      let res: BroadcastTxCommitResponse | null = null
+      for await (res of await gnonative.broadcastTxCommit(signedTxJson)) {
+        console.log('Broadcast result: ', res)
+      }
+      if (!res) {
+        throw new Error('No response from broadcastTxCommit')
+      }
 
       return
     } catch (error: any) {

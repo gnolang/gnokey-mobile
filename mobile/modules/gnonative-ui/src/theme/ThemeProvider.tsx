@@ -59,7 +59,7 @@ const defaultTheme: DefaultTheme = {
       label: '#007AFF'
     },
     danger: {
-      background: '#FFE5E6',
+      background: '#FF4647',
       border: 'transparent',
       label: '#FFFFFF'
     },

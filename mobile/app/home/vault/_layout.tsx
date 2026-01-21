@@ -7,13 +7,6 @@ const defaultOptions = {
 export default function VaultModalLayout() {
   return (
     <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          title: 'Options',
-          ...defaultOptions
-        }}
-      />
       <Stack.Screen name="recovery-options" options={{ ...defaultOptions, title: '' }} />
 
       {/* Create a new vault stack */}

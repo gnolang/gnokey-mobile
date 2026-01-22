@@ -9,7 +9,7 @@ import {
 import { View } from 'react-native'
 import { Text, Spacer, Ruller, FormItem, Button } from '@berty/gnonative-ui'
 import { ScrollView } from 'react-native-gesture-handler'
-import { BetaVersionMiniBanner, Collapsable, formatter, Icons, LoadingModal } from '@/components'
+import { BetaVersionMiniBanner, Collapsable, formatter, Icons } from '@/components'
 import { useRouter } from 'expo-router'
 import { useAppDispatch } from '@/redux'
 import { LoadingSkeleton } from '@/components/skeleton'
@@ -47,6 +47,8 @@ export default function Modal() {
   return (
     <HomeLayout
       header={null}
+      loading={Boolean(loading)}
+      loadingText={loading || undefined}
       footer={
         <View style={{ width: '100%' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -129,7 +131,6 @@ export default function Modal() {
           </Collapsable>
         </>
       </ScrollView>
-      <LoadingModal visible={Boolean(loading)} message={loading || 'Loading...'} />
     </HomeLayout>
   )
 }

@@ -8,7 +8,7 @@ The gnoKey mobile app uses Expo. You can review the general expo requirements:
 
 Here are specific steps to install the requirements on your platform.
 
-### Install requirements for macOS 13 and macOS 14
+### Install requirements for macOS 15 and macOS 26
 
 (If you are on Ubuntu, see the next section to install requirements.)
 
@@ -26,7 +26,7 @@ first install brew following the instructions at <https://brew.sh> . Then, in
 a terminal enter:
 
 ```sh
-brew install asdf gnu-tar gpg
+brew install asdf gnu-tar gpg libyaml
 ```
 
 If your terminal is zsh, enter:

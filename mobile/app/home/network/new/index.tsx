@@ -27,9 +27,11 @@ const Page = () => {
       // setLoading(false)
       router.back()
     } catch (error) {
-      Alert.alert('Error', 'Failed to save chain. Please try again.', [{ text: 'OK' }])
+      const message = error instanceof Error ? error.message : 'Failed to save chain. Please try again.'
+      Alert.alert('Error', message, [{ text: 'OK' }])
       console.error('Failed to save chain:', error)
-      return
+    } finally {
+      setLoading(false)
     }
   }
 

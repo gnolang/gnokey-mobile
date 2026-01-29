@@ -1,22 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Alert } from 'react-native'
 import { ScreenHeader, NetworkForm, NetworkFormType } from '@/components'
-import { HomeLayout } from '@berty/gnonative-ui'
-import { selectChainsAvailable, useAppSelector } from '@/redux'
+import { Button, HomeLayout } from '@berty/gnonative-ui'
+import { deleteChain, selectChainsAvailable, useAppDispatch, useAppSelector } from '@/redux'
 import { NetworkMetainfo } from '@/types'
 
 const Page = () => {
   const router = useRouter()
   const params = useLocalSearchParams<{ id: string }>()
   const chains = useAppSelector(selectChainsAvailable)
+  const dispatch = useAppDispatch()
 
   const [loading, setLoading] = useState(false)
   const [initialValues, setInitialValues] = useState<NetworkMetainfo | null>(null)
+  const isDeleting = useRef(false)
 
   const networkId = Number(params?.id)
 
+  const handleDelete = () => {
+    if (!initialValues) return
+
+    Alert.alert('Delete Network', `Are you sure you want to delete "${initialValues.chainName}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          isDeleting.current = true
+          await dispatch(deleteChain(networkId))
+          router.back()
+        }
+      }
+    ])
+  }
+
   useEffect(() => {
+    // Skip if we're in the process of deleting this network
+    if (isDeleting.current) return
+
     try {
       setLoading(true)
       const c = chains.find((c) => c.id === networkId)
@@ -43,7 +65,14 @@ const Page = () => {
   }
 
   return (
-    <HomeLayout header={<ScreenHeader title="Network Details" />} footer={null}>
+    <HomeLayout
+      header={<ScreenHeader title="Network Details" />}
+      footer={
+        <Button color="danger" onPress={handleDelete}>
+          Delete Network
+        </Button>
+      }
+    >
       <NetworkForm
         onSubmit={onSubmit}
         mode="edit"

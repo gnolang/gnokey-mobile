@@ -18,7 +18,7 @@ import {
   selectLinkIsLoading
 } from '@/redux'
 import { useGnoNativeContext } from '@gnolang/gnonative'
-import { ScrollView, View, ActivityIndicator } from 'react-native'
+import { ScrollView, View, ActivityIndicator, Alert } from 'react-native'
 import { FormItem } from '@berty/gnonative-ui'
 import { Text, Spacer, Ruller, Button, HomeLayout } from '@berty/gnonative-ui'
 import { Icons, ScreenHeader, BetaVersionMiniBanner, formatter } from '@/components'
@@ -41,6 +41,7 @@ export default function Page() {
   const isLoading = useAppSelector(selectLinkIsLoading)
 
   const [gnonativeReady, setGnonativeReady] = useState(false)
+  const [estimationError, setEstimationError] = useState<string | null>(null)
 
   // console.log('txInput', txInput)
   // console.log('bech32Address', bech32Address)
@@ -54,10 +55,18 @@ export default function Page() {
         console.log('No chainId, remote, or bech32Address', { chainId, remote, bech32Address })
         return
       }
-      await gnonative.setChainID(chainId)
-      await gnonative.setRemote(remote)
-      await gnonative.activateAccount(bech32Address)
-      setGnonativeReady(true)
+      try {
+        await gnonative.setChainID(chainId)
+        await gnonative.setRemote(remote)
+        await gnonative.activateAccount(bech32Address)
+        setGnonativeReady(true)
+      } catch (error) {
+        console.error('Error initializing gnonative', error)
+        const rawError = error instanceof Error ? error.message : String(error)
+        const keyPreview = bech32Address ? `${bech32Address.slice(0, 12)}...` : 'unknown'
+        const errorMessage = rawError.includes('ErrCryptoKeyNotFound') ? `Key not found: ${keyPreview}` : rawError
+        setEstimationError(errorMessage)
+      }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bech32Address])
@@ -75,6 +84,9 @@ export default function Page() {
         await dispatch(estimateTxFeeAndSign()).unwrap()
       } catch (error: unknown | Error) {
         console.error(error)
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        setEstimationError(errorMessage)
+        Alert.alert('Error', `Failed to prepare the transaction: ${errorMessage}`)
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,9 +106,8 @@ export default function Page() {
       router.push('/home')
     } catch (error) {
       console.error('Error signing the tx', error)
-      const path = new URL(callback)
-      path.searchParams.append('status', '' + error)
-      Linking.openURL(path.toString())
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      Alert.alert('Error', `Failed to sign the transaction: ${errorMessage}`)
     }
   }
 
@@ -114,7 +125,7 @@ export default function Page() {
         footer={
           <View style={{ width: '100%' }}>
             <Button color="primary" onPress={signTxAndReturnToRequester} loading={isLoading} disabled={!signedTx}>
-              {signedTx ? 'Approve' : 'Loading...'}
+              {signedTx ? 'Approve' : estimationError ? 'Error' : 'Loading...'}
             </Button>
             <Spacer />
             <Button color="secondary" onPress={onCancel}>
@@ -138,6 +149,8 @@ export default function Page() {
                 value={
                   txFee ? (
                     <Text.Body_Bold>{`${formatter.balance(txFee)} GNOT (estimated)`}</Text.Body_Bold>
+                  ) : estimationError ? (
+                    <Text.Body_Bold style={{ color: 'red' }}>Error: {estimationError}</Text.Body_Bold>
                   ) : (
                     <ActivityIndicator />
                   )
@@ -198,6 +211,8 @@ export default function Page() {
                         <Text.Json>{signedTx?.toString()}</Text.Json>
                         <Icons.CopyIcon />
                       </>
+                    ) : estimationError ? (
+                      <Text.Body_Bold style={{ color: 'red' }}>Failed</Text.Body_Bold>
                     ) : (
                       <ActivityIndicator />
                     )

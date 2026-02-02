@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     justifyContent: 'space-between'
   },
-  horizontalGroup: { marginHorizontal: 20, marginBottom: 12 }
+  horizontalGroup: { marginHorizontal: 20, marginBottom: 2 }
 })
 
 export default ScreenHeader

@@ -1,4 +1,4 @@
-import { Alert } from 'react-native'
+import { Alert, ScrollView, View } from 'react-native'
 import { useState } from 'react'
 import {
   deleteVault,
@@ -15,28 +15,31 @@ import {
 } from '@/redux'
 import { useRouter } from 'expo-router'
 import { ScreenHeader, ModalConfirm, openFaucet, formatter } from '@/components'
-import { Text, Form, Spacer, Button, HomeLayout, Ruller } from '@berty/gnonative-ui'
-import { InputWithLabel } from '@/components'
-import { AntDesign } from '@expo/vector-icons'
-import styled, { DefaultTheme, useTheme } from 'styled-components/native'
-import { VaultOptionsButton, Icons } from '@/components'
-import { FormItem } from '@berty/gnonative-ui'
+import { Button, Spacer, Text, HomeLayout } from '@berty/gnonative-ui'
+import { VaultOptionsButton } from '@/components'
+import { AccountDetailsSection, ActionsRow, ActivityCard, AssetsCard, BalanceCard, walletPalette } from '@/components'
 import * as Clipboard from 'expo-clipboard'
 import { parseCommand } from '@/modules/utils/commandParser'
 
 const Page = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
-  const theme = useTheme()
 
   const vault = useAppSelector(selectVaultToEditWithBalance)
   const network = useAppSelector(selectCurrentChain)
   const isDevMode = useAppSelector(selectDevMode)
-  const hasFaucetPortal = network?.faucetPortalUrl && network?.faucetPortalUrl.length > 0
+  const hasFaucetPortal = !!(network?.faucetPortalUrl && network.faucetPortalUrl.length > 0)
 
   const [description, setDescription] = useState(vault?.description || '')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+
+  const chainLabel = vault?.chain ? String(vault.chain.chainName) : 'No User Registration'
+  const balanceValue = vault?.balance
+  const formattedBalance = refreshing ? 'Refreshing...' : String(formatter.balance(balanceValue) ?? '0')
+  const address = String(vault?.address ?? '')
+  const shortAddress = address.length > 28 ? `${address.slice(0, 16)}...${address.slice(-10)}` : address
+  const createdAtLabel = vault?.createdAt ? formatter.date(vault.createdAt) : ''
 
   const onConfirmDelete = async () => {
     if (!vault) return
@@ -91,15 +94,25 @@ const Page = () => {
     }
   }
 
+  const onCopyAddress = async () => {
+    if (!vault?.address) return
+    await Clipboard.setStringAsync(address)
+    Alert.alert('Copied', 'Address copied to clipboard.')
+  }
+
+  const onReceive = async () => {
+    await onCopyAddress()
+  }
+
   if (!vault) {
     return (
-      <Container>
+      <View style={{ flex: 1, padding: 20 }}>
         <Text.Body>No vault selected.</Text.Body>
         <Spacer />
         <Button onPress={() => router.back()} color="primary">
           Go Back
         </Button>
-      </Container>
+      </View>
     )
   }
 
@@ -107,11 +120,10 @@ const Page = () => {
     <>
       <HomeLayout
         contentPadding={20}
-        header={<ScreenHeader title={vault.keyName} />}
-        subHeader={
-          <Form.Section
-            title="Info"
-            rightActions={
+        header={
+          <ScreenHeader
+            title={vault.keyName}
+            rightComponent={
               <VaultOptionsButton
                 isDevMode={isDevMode}
                 onTransfer={() => router.navigate({ pathname: '/home/vault/transfer-funds' })}
@@ -120,42 +132,37 @@ const Page = () => {
                 onPasteGnokeyCommand={onPasteGnokeyCommand}
               />
             }
-          />
-        }
-        footer={
-          <Button onPress={onUpdateAccount} color="primary">
-            Update Account
-          </Button>
+          >
+            <Text.Body style={{ color: walletPalette.inkMuted }}>{chainLabel}</Text.Body>
+          </ScreenHeader>
         }
       >
-        <Container style={{ flex: 1 }}>
-          <Ruller spacer={4} />
-          <FormItem label="Name" value={vault?.keyInfo.name} />
-          <Ruller spacer={4} />
-          <Spacer spaceH={4} />
-          <InputWithLabel label="Description" placeholder="Description" onChangeText={setDescription} value={description} />
-          <Ruller spacer={16} />
-          <FormItem
-            label="Address"
-            copyTextValue={vault.address}
-            endAdornment={<Icons.CopyIcon muted />}
-            value={<Text.Body>{vault.address}</Text.Body>}
+        <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+          <BalanceCard
+            formattedBalance={formattedBalance}
+            shortAddress={shortAddress}
+            hasFaucetPortal={hasFaucetPortal}
+            refreshing={refreshing}
+            onCopyAddress={onCopyAddress}
+            onOpenFaucet={openFaucet}
+            onRefreshBalance={refreshBalance}
           />
-          <Spacer spaceH={4} />
-          <Ruller spacer={4} />
-          <FormItem label="Chain" value={vault.chain ? vault.chain.chainName : 'No User Registration'} />
-          <Ruller spacer={4} />
-          <FormItem label="Created At" value={vault.createdAt ? formatter.date(vault.createdAt) : ''} />
-          <Ruller spacer={4} />
-          <FormItem
-            label="Balance"
-            value={refreshing ? 'Refreshing...' : `${formatter.balance(vault.balance)} GNOT`}
-            endAdornment={
-              hasFaucetPortal && <AntDesign name="right" size={18} color={theme.colors.border} onPress={openFaucet} />
-            }
+          <ActionsRow
+            onSend={() => router.navigate({ pathname: '/home/vault/transfer-funds' })}
+            onReceive={onReceive}
+            onCommand={onPasteGnokeyCommand}
           />
-          <Ruller spacer={4} />
-        </Container>
+          <AssetsCard formattedBalance={formattedBalance} />
+          <AccountDetailsSection
+            name={String(vault.keyInfo.name)}
+            description={description}
+            onDescriptionChange={setDescription}
+            address={address}
+            createdAtLabel={createdAtLabel}
+            onSave={onUpdateAccount}
+          />
+          <ActivityCard />
+        </ScrollView>
 
         <ModalConfirm
           visible={showDeleteModal}
@@ -169,10 +176,5 @@ const Page = () => {
     </>
   )
 }
-
-const Container = styled.View`
-  flex: 1;
-  background-color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.background};
-`
 
 export default Page

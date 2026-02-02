@@ -1,1 +1,7 @@
 export { VaultItem } from './VaultItem'
+export { BalanceCard } from './BalanceCard'
+export { ActionsRow } from './ActionsRow'
+export { AssetsCard } from './AssetsCard'
+export { ActivityCard } from './ActivityCard'
+export { AccountDetailsSection } from './AccountDetailsSection'
+export { walletPalette } from './walletTheme'

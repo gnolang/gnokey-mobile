@@ -4,7 +4,6 @@
     "slug": "gnokey",
     "platforms": ["ios", "android"],
     "version": "0.0.1",
-    "sdkVersion": "54.0.12",
     "orientation": "portrait",
     "scheme": "land.gno.gnokey",
     "icon": "./assets/images/icon.png",
@@ -27,15 +26,13 @@
       "buildNumber": "1",
       "config": {
         "usesNonExemptEncryption": false
-      },
-      "jsEngine": "hermes"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "package": "land.gno.keymanager.android",
       "versionCode": 1
     },
@@ -80,8 +77,7 @@
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
-      ],
-      "expo-localization"
+      ]
     ],
     "extra": {
       "router": {

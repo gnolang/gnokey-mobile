@@ -24,10 +24,8 @@ config.watchFolders = [path.resolve(__dirname, '..'), path.resolve(__dirname, '.
 
 config.transformer.getTransformOptions = async () => ({
   transform: {
-    experimentalImportSupport: false,
     inlineRequires: true
   }
 })
-// config.resolver.unstable_enablePackageExports = false;
 
 module.exports = config

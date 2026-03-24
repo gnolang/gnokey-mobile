@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   StyleSheet
 } from 'react-native'
-import Clipboard from 'expo-clipboard'
+import * as Clipboard from 'expo-clipboard'
 import { useAppDispatch, setPhrase, resetAddVaultState, checkPhrase } from '@/redux'
 import { useRouter, useFocusEffect } from 'expo-router'
 import styled from 'styled-components/native'
